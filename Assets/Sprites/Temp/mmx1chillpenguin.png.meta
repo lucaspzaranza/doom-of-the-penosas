@@ -1,0 +1,1832 @@
+fileFormatVersion: 2
+guid: e0a3db8dc02a2b24e9aace7328d1194b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8734593582362533321
+    second: mmx1chillpenguin_0
+  - first:
+      213: -7570901138088539519
+    second: mmx1chillpenguin_1
+  - first:
+      213: -187547676491855331
+    second: mmx1chillpenguin_2
+  - first:
+      213: -6766433095029290393
+    second: mmx1chillpenguin_3
+  - first:
+      213: 980322550049405419
+    second: mmx1chillpenguin_4
+  - first:
+      213: 1037909773540702217
+    second: mmx1chillpenguin_5
+  - first:
+      213: 4792101668278059882
+    second: mmx1chillpenguin_6
+  - first:
+      213: 1734821028614179280
+    second: mmx1chillpenguin_7
+  - first:
+      213: -868573349873359859
+    second: mmx1chillpenguin_8
+  - first:
+      213: 6244775337807041646
+    second: mmx1chillpenguin_9
+  - first:
+      213: 5415232305503605549
+    second: mmx1chillpenguin_10
+  - first:
+      213: -9035879965433105320
+    second: mmx1chillpenguin_11
+  - first:
+      213: -5453608183158887270
+    second: mmx1chillpenguin_12
+  - first:
+      213: 4890646602651200471
+    second: mmx1chillpenguin_13
+  - first:
+      213: -7667063004762668044
+    second: mmx1chillpenguin_14
+  - first:
+      213: -6008701602321467712
+    second: mmx1chillpenguin_15
+  - first:
+      213: -5856656947568583895
+    second: mmx1chillpenguin_16
+  - first:
+      213: -8514194637289871166
+    second: mmx1chillpenguin_17
+  - first:
+      213: -8565967583330620902
+    second: mmx1chillpenguin_18
+  - first:
+      213: 6641461119582018128
+    second: mmx1chillpenguin_19
+  - first:
+      213: -5692688778964905730
+    second: mmx1chillpenguin_20
+  - first:
+      213: -5791783965916453556
+    second: mmx1chillpenguin_21
+  - first:
+      213: -2398002582928423068
+    second: mmx1chillpenguin_22
+  - first:
+      213: 833037703957780337
+    second: mmx1chillpenguin_23
+  - first:
+      213: 6807677367323531783
+    second: mmx1chillpenguin_24
+  - first:
+      213: 4547260339061255256
+    second: mmx1chillpenguin_25
+  - first:
+      213: 370441234428143738
+    second: mmx1chillpenguin_26
+  - first:
+      213: -7178330901467317257
+    second: mmx1chillpenguin_27
+  - first:
+      213: 2354683951569355764
+    second: mmx1chillpenguin_28
+  - first:
+      213: -6832934677858971346
+    second: mmx1chillpenguin_29
+  - first:
+      213: 2098990788002598521
+    second: mmx1chillpenguin_30
+  - first:
+      213: 3575865696654151954
+    second: mmx1chillpenguin_31
+  - first:
+      213: 239949868259795308
+    second: mmx1chillpenguin_32
+  - first:
+      213: -3316551102218949136
+    second: mmx1chillpenguin_33
+  - first:
+      213: 2643350152717714904
+    second: mmx1chillpenguin_34
+  - first:
+      213: -5787683800510766415
+    second: mmx1chillpenguin_35
+  - first:
+      213: 8057241324832837617
+    second: mmx1chillpenguin_36
+  - first:
+      213: -1420629014546021207
+    second: mmx1chillpenguin_37
+  - first:
+      213: 8369958431074786480
+    second: mmx1chillpenguin_38
+  - first:
+      213: -6369410242107589295
+    second: mmx1chillpenguin_39
+  - first:
+      213: -2884497163478080613
+    second: mmx1chillpenguin_40
+  - first:
+      213: -2334506524729822281
+    second: mmx1chillpenguin_41
+  - first:
+      213: -2464600656080798693
+    second: mmx1chillpenguin_42
+  - first:
+      213: -933213949242008554
+    second: mmx1chillpenguin_43
+  - first:
+      213: 1576527930168610201
+    second: mmx1chillpenguin_44
+  - first:
+      213: -771326903952198749
+    second: mmx1chillpenguin_45
+  - first:
+      213: -5266822655900228835
+    second: mmx1chillpenguin_46
+  - first:
+      213: -2617732451046436732
+    second: mmx1chillpenguin_47
+  - first:
+      213: -8001007955619053264
+    second: mmx1chillpenguin_48
+  - first:
+      213: -5961536589679988287
+    second: mmx1chillpenguin_49
+  - first:
+      213: 6024850360095431990
+    second: mmx1chillpenguin_50
+  - first:
+      213: -7596075285899528820
+    second: mmx1chillpenguin_51
+  - first:
+      213: 5999880503965767244
+    second: mmx1chillpenguin_52
+  - first:
+      213: -6450217677828437278
+    second: mmx1chillpenguin_53
+  - first:
+      213: -9064403736080513636
+    second: mmx1chillpenguin_54
+  - first:
+      213: -8196397928921413137
+    second: mmx1chillpenguin_55
+  - first:
+      213: -725336053406201445
+    second: mmx1chillpenguin_56
+  - first:
+      213: -1521099644986455447
+    second: mmx1chillpenguin_57
+  - first:
+      213: 4146351688190160253
+    second: mmx1chillpenguin_58
+  - first:
+      213: -2976114489903439447
+    second: mmx1chillpenguin_59
+  - first:
+      213: 9208475730574106410
+    second: mmx1chillpenguin_60
+  - first:
+      213: -8542400742515961110
+    second: mmx1chillpenguin_61
+  - first:
+      213: 5603647149223717739
+    second: mmx1chillpenguin_62
+  - first:
+      213: -2063259816514699112
+    second: mmx1chillpenguin_63
+  - first:
+      213: -3507377026794621775
+    second: mmx1chillpenguin_64
+  - first:
+      213: -1969868914351944760
+    second: mmx1chillpenguin_65
+  - first:
+      213: -4360454881603381295
+    second: mmx1chillpenguin_66
+  - first:
+      213: -7292156644077141415
+    second: mmx1chillpenguin_67
+  - first:
+      213: -3133441269424702119
+    second: mmx1chillpenguin_68
+  - first:
+      213: 2299720168118226808
+    second: mmx1chillpenguin_69
+  - first:
+      213: 5740940810637135891
+    second: mmx1chillpenguin_70
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 50
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: mmx1chillpenguin_0
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 448
+        width: 38
+        height: 36
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9cd1026d592873970800000000000000
+      internalID: 8734593582362533321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_1
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 448
+        width: 39
+        height: 35
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18ac1aaf681cee690800000000000000
+      internalID: -7570901138088539519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_2
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 448
+        width: 38
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1ac044c162b56df0800000000000000
+      internalID: -187547676491855331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_3
+      rect:
+        serializedVersion: 2
+        x: 189
+        y: 448
+        width: 42
+        height: 37
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76a055e33fcc812a0800000000000000
+      internalID: -6766433095029290393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_4
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 448
+        width: 43
+        height: 37
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be9fff05a2eca9d00800000000000000
+      internalID: 980322550049405419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_5
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 448
+        width: 39
+        height: 36
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 908bcc0a075676e00800000000000000
+      internalID: 1037909773540702217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_6
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 448
+        width: 37
+        height: 38
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a634541e317f08240800000000000000
+      internalID: 4792101668278059882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_7
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 448
+        width: 35
+        height: 44
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d90d67b882531810800000000000000
+      internalID: 1734821028614179280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_8
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 431
+        width: 10
+        height: 16
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d046d63e32532f3f0800000000000000
+      internalID: -868573349873359859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_9
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 383
+        width: 38
+        height: 36
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e64db106516e9a650800000000000000
+      internalID: 6244775337807041646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_10
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 383
+        width: 42
+        height: 35
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2313c93715c62b40800000000000000
+      internalID: 5415232305503605549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_11
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 383
+        width: 43
+        height: 35
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8547a4bab0b1a9280800000000000000
+      internalID: -9035879965433105320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_12
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 383
+        width: 37
+        height: 34
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9ca6aa7044e054b0800000000000000
+      internalID: -5453608183158887270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_13
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 383
+        width: 40
+        height: 29
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7dbeef06c211fd340800000000000000
+      internalID: 4890646602651200471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_14
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 383
+        width: 35
+        height: 41
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f3059aa1de199590800000000000000
+      internalID: -7667063004762668044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_15
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 384
+        width: 37
+        height: 38
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c6fe486abdcc9ca0800000000000000
+      internalID: -6008701602321467712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_16
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 322
+        width: 34
+        height: 59
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92bd9dc3989f8bea0800000000000000
+      internalID: -5856656947568583895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_17
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 321
+        width: 36
+        height: 60
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c82dc7661187d980800000000000000
+      internalID: -8514194637289871166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_18
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 321
+        width: 32
+        height: 60
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1a211e0ed19f1980800000000000000
+      internalID: -8565967583330620902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_19
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 321
+        width: 32
+        height: 60
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05a114643b53b2c50800000000000000
+      internalID: 6641461119582018128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_20
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 346
+        width: 6
+        height: 6
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef0d1f877b18ff0b0800000000000000
+      internalID: -5692688778964905730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_21
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 342
+        width: 14
+        height: 14
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c452fbf4b237f9fa0800000000000000
+      internalID: -5791783965916453556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_22
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 286
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46705122b5598bed0800000000000000
+      internalID: -2398002582928423068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_23
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 286
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17719ecc06b8f8b00800000000000000
+      internalID: 833037703957780337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_24
+      rect:
+        serializedVersion: 2
+        x: 446
+        y: 286
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70a19c83f7ab97e50800000000000000
+      internalID: 6807677367323531783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_25
+      rect:
+        serializedVersion: 2
+        x: 452
+        y: 284
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85ce7fa9f2d1b1f30800000000000000
+      internalID: 4547260339061255256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_26
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 253
+        width: 23
+        height: 28
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a782f3c0752142500800000000000000
+      internalID: 370441234428143738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_27
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 253
+        width: 28
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fbb4d9d312716c90800000000000000
+      internalID: -7178330901467317257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_28
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 278
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f3ca9b04948da020800000000000000
+      internalID: 2354683951569355764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_29
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 278
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2194c8ec1a8c21a0800000000000000
+      internalID: -6832934677858971346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_30
+      rect:
+        serializedVersion: 2
+        x: 444
+        y: 280
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97e46b1300d112d10800000000000000
+      internalID: 2098990788002598521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_31
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 278
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2115395c7e600a130800000000000000
+      internalID: 3575865696654151954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_32
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 254
+        width: 8
+        height: 8
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c61e6854229745300800000000000000
+      internalID: 239949868259795308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_33
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 253
+        width: 14
+        height: 14
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0fd2fc8285e39f1d0800000000000000
+      internalID: -3316551102218949136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_34
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 253
+        width: 13
+        height: 16
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d5c6b575f01fa420800000000000000
+      internalID: 2643350152717714904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_35
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 253
+        width: 19
+        height: 24
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b2e5467f340eafa0800000000000000
+      internalID: -5787683800510766415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_36
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 222
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ff424cbb4211df60800000000000000
+      internalID: 8057241324832837617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_37
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 220
+        width: 6
+        height: 6
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a40f562079e84ce0800000000000000
+      internalID: -1420629014546021207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_38
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 220
+        width: 6
+        height: 6
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0bc9ffcd8d0182470800000000000000
+      internalID: 8369958431074786480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_39
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 221
+        width: 6
+        height: 6
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15d3172a12f4b97a0800000000000000
+      internalID: -6369410242107589295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_40
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 221
+        width: 6
+        height: 6
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b93644fcc1538f7d0800000000000000
+      internalID: -2884497163478080613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_41
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 220
+        width: 7
+        height: 7
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b3b5ab3faa2a9fd0800000000000000
+      internalID: -2334506524729822281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_42
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 220
+        width: 7
+        height: 7
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1cfb15e2cafbcdd0800000000000000
+      internalID: -2464600656080798693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_43
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 212
+        width: 15
+        height: 15
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61c9df78bde8c03f0800000000000000
+      internalID: -933213949242008554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_44
+      rect:
+        serializedVersion: 2
+        x: 382
+        y: 211
+        width: 17
+        height: 17
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99d8e28bcc3f0e510800000000000000
+      internalID: 1576527930168610201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_45
+      rect:
+        serializedVersion: 2
+        x: 442
+        y: 223
+        width: 11
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a33a3c7442bb45f0800000000000000
+      internalID: -771326903952198749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_46
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 223
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d13661403bc78e6b0800000000000000
+      internalID: -5266822655900228835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_47
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 217
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4805d528432fbabd0800000000000000
+      internalID: -2617732451046436732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_48
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 217
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0318040d7a5b6f090800000000000000
+      internalID: -8001007955619053264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_49
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 212
+        width: 6
+        height: 6
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c171a8ae0e544da0800000000000000
+      internalID: -5961536589679988287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_50
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 212
+        width: 6
+        height: 6
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63d5f524b719c9350800000000000000
+      internalID: 6024850360095431990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_51
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 216
+        width: 6
+        height: 6
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c85b5d0f5c1559690800000000000000
+      internalID: -7596075285899528820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_52
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 216
+        width: 6
+        height: 6
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c46dba5978bd34350800000000000000
+      internalID: 5999880503965767244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_53
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 216
+        width: 6
+        height: 6
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ea471d52393c76a0800000000000000
+      internalID: -6450217677828437278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_54
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 216
+        width: 6
+        height: 6
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c95823ac3d4c43280800000000000000
+      internalID: -9064403736080513636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_55
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 146
+        width: 16
+        height: 73
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe944e0928b804e80800000000000000
+      internalID: -8196397928921413137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_56
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 212
+        width: 7
+        height: 7
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b9980f1d3b61fe5f0800000000000000
+      internalID: -725336053406201445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_57
+      rect:
+        serializedVersion: 2
+        x: 442
+        y: 211
+        width: 15
+        height: 12
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96a0c989ee7f3eae0800000000000000
+      internalID: -1521099644986455447
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_58
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 215
+        width: 4
+        height: 7
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7d6a6064ecca8930800000000000000
+      internalID: 4146351688190160253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_59
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 212
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a1a96ab3a7b2b6d0800000000000000
+      internalID: -2976114489903439447
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_60
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 147
+        width: 14
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2fdcab63e31bcf70800000000000000
+      internalID: 9208475730574106410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_61
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 147
+        width: 14
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae29d45c8cb437980800000000000000
+      internalID: -8542400742515961110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_62
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 146
+        width: 13
+        height: 16
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6b2c10946724cd40800000000000000
+      internalID: 5603647149223717739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_63
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 156
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 890cd45e024dd53e0800000000000000
+      internalID: -2063259816514699112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_64
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 154
+        width: 9
+        height: 8
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b47a805d2b435fc0800000000000000
+      internalID: -3507377026794621775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_65
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 159
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8cbc7f1c8ae99a4e0800000000000000
+      internalID: -1969868914351944760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_66
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 150
+        width: 5
+        height: 5
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d799ea436d8c73c0800000000000000
+      internalID: -4360454881603381295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_67
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 154
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 952074fea2e0dca90800000000000000
+      internalID: -7292156644077141415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_68
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 154
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95d346364c7c384d0800000000000000
+      internalID: -3133441269424702119
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_69
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 145
+        width: 11
+        height: 9
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87f0d77fe4f3aef10800000000000000
+      internalID: 2299720168118226808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mmx1chillpenguin_70
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 149
+        width: 8
+        height: 5
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 310d19e104bebaf40800000000000000
+      internalID: 5740940810637135891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
