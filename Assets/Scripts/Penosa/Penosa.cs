@@ -11,6 +11,7 @@ class AnimatorHashes
     public readonly int isGrounded = Animator.StringToHash("IsGrounded");   
     public readonly int up = Animator.StringToHash("Up"); 
     public readonly int down = Animator.StringToHash("Down");  
+    public readonly int jetCopter = Animator.StringToHash("JetCopter");
 }
 
 public class Penosa : MonoBehaviour
@@ -67,6 +68,9 @@ public class Penosa : MonoBehaviour
     [Header("Ammo")]
     [SerializeField] private int primaryWeaponAmmo;
     [SerializeField] private int secondaryWeaponAmmo;
+
+    [Header("Items")]
+    [SerializeField] private GameObject jetCopter = null;
     
     private float shotAnimTimeCounter;
     private float continuousTimeCounter;
@@ -155,9 +159,15 @@ public class Penosa : MonoBehaviour
 
     private GameObject Current2ndShot => secondaryShot[secondaryWeaponLvl - 1];
 
+    public GameObject JetCopterObject => jetCopter;
+
     private bool Vertical => Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1;
 
     public Inventory Inventory => _inventory;
+
+    public bool JetCopterActivated {get; set;}
+
+    public Animator Animator => anim;
 
     #endregion
 
@@ -176,11 +186,9 @@ public class Penosa : MonoBehaviour
         Parachute();
         Shoot();
         ChangeSpecialItem();
-        
-        if(Input.GetKeyDown(KeyCode.Return))
-        {
-            TakeDamage(10);
-        }
+    
+        if(Input.GetKeyDown(KeyCode.Return))        
+            TakeDamage(10);        
     }
 
     void FixedUpdate()
@@ -207,24 +215,21 @@ public class Penosa : MonoBehaviour
 
     private void UseSpecialItem()
     {
-        if(Inventory.SelectedSlot != null && Inventory.SelectedSlot.Item != null)
-        {
-            Inventory.SelectedSlot.Item.Use();
-            Inventory.DecreaseItemAmount(Inventory.SelectedSlot);
-        }
+        if(Inventory.SelectedSlot != null && Inventory.SelectedSlot.Item != null)    
+            Inventory.SelectedSlot.Item.Use();            
     }
 
     private void Move()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");                 
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");                 
         if(horizontal > 0 && isLeft) Flip();
         else if (horizontal < 0 && !isLeft) Flip();
 
         if(!HitWall())        
             rb.velocity = new Vector2(speed * horizontal, rb.velocity.y);        
                         
-       SetMovementAnimators(vertical);
+        SetMovementAnimators(vertical);                             
     }
 
     private bool HitWall()
@@ -254,10 +259,23 @@ public class Penosa : MonoBehaviour
 
     private void Jump()
     {
-        if(Input.GetButtonDown("Jump") && isGrounded)
-            rb.AddForce(Vector2.up * jumpForce);        
-        else if(Input.GetButtonUp("Jump") && !isGrounded)                    
-            rb.velocity = new Vector2(rb.velocity.x, 0f);        
+        if(!JetCopterActivated)
+        {
+            if(Input.GetButtonDown("Jump") && isGrounded)
+                rb.AddForce(Vector2.up * jumpForce);        
+            else if(Input.GetButtonUp("Jump") && !isGrounded)                    
+                rb.velocity = new Vector2(rb.velocity.x, 0f);
+        }
+        else       
+        {    
+            if(Input.GetButton("Jump"))     
+                rb.velocity = new Vector2(rb.velocity.x, speed);                                      
+            else 
+            {
+                var newY = rb.velocity.y;
+                rb.velocity = new Vector2(rb.velocity.x, newY > 0? newY : 0);          
+            }
+        }               
     }
 
     private void Parachute()

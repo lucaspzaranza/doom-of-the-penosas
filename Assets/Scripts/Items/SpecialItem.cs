@@ -5,6 +5,8 @@ using UnityEngine;
 
 public abstract class SpecialItem : MonoBehaviour
 {    
+    public ItemSlot parentSlot;
+
     public static event EventHandler<SpriteAddedEventArgs> SpriteAdded;
 
     public abstract void GetItem<T>(Penosa player);
@@ -30,10 +32,9 @@ public abstract class SpecialItem : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         {            
-            Penosa player = other.gameObject.GetComponent<Penosa>();                      
+            var player = other.gameObject.GetComponent<Penosa>();                      
             AddSpriteOnInventory(player);
             GetItem<SpecialItem>(player);
-            print(player.Inventory.Slots.Count);
             if(player.Inventory.Slots.Count == 1) player.Inventory.ShowSlot();
             Destroy(gameObject);
         }

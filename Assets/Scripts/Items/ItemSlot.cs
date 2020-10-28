@@ -7,12 +7,16 @@ public class ItemSlot
 {
     [SerializeField] private SpecialItem _item;
     [SerializeField] private byte _amount;
-    public Penosa Player {get; set; }
+    public Penosa Player {get; set;}
 
     public SpecialItem Item
     {
         get { return _item; }
-        set { _item = value; }        
+        set 
+        {
+            _item = value; 
+            _item.parentSlot = this;
+        }        
     }
 
     public byte Amount

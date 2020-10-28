@@ -1,20 +1,44 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class JetCopter : SpecialItem
 {
     private const byte seconds = 30;
-    public byte duration = seconds;
+    public byte maxDuration = seconds;
+    public float timeCounter;
+    private bool active;
 
     public override void GetItem<T>(Penosa player)
     {
         player.Inventory.AddItem<JetCopter>();
     }
 
-    public override void Use()
+    void Update()
     {
-        // Use the Jet Copter
-        print("Tuco tuco tuco tuco tuco tuco...");
+        if(active)
+        {
+            timeCounter += Time.deltaTime;
+            if(timeCounter >= maxDuration)
+            {
+                timeCounter = 0;
+                SetJetCopterActivation(false);
+                parentSlot.Player.Inventory.DecreaseItemAmount(parentSlot);
+            }
+        }
+    }
+
+    private void SetJetCopterActivation(bool value)
+    {
+        parentSlot.Player.JetCopterObject.SetActive(value);
+        parentSlot.Player.JetCopterActivated = value;
+        parentSlot.Player.Animator.SetBool("JetCopter", value);
+        active = value;
+    }
+
+    public override void Use()
+    { 
+        SetJetCopterActivation(true);
     }
 }

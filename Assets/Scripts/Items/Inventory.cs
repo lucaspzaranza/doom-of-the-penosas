@@ -67,7 +67,7 @@ public class Inventory : MonoBehaviour
             SetItemAmount(matchSlot, (byte)(matchSlot.Amount + 1));
         else
         {             
-            T newItem = gameObject.AddComponent<T>();            
+            T newItem = gameObject.AddComponent<T>();
             var newSlot = new ItemSlot(newItem, player);            
             Slots.Add(newSlot);
             if(Slots.Count == 1) SelectedSlot = newSlot;                
