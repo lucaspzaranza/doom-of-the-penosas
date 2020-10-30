@@ -1,0 +1,32 @@
+ManifestFileVersion: 0
+CRC: 1904563960
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b71edc35bec2a247aa84af1b3b5f9f14
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: a9dfeb79d63144a421a165e0b4e45b35
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: f7d732f458b3b53409c423811261baf2, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/Prefabs/Projectiles/Missile.prefab
+Dependencies: []

@@ -85,17 +85,18 @@ public class Inventory : MonoBehaviour
     public void DecreaseItemAmount(ItemSlot slot)
     {
         SetItemAmount(slot, (byte)(slot.Amount - 1));
-        if(slot.Amount == 0)
-        {
-            int index = Slots.IndexOf(slot);
-            Slots.Remove(slot);
-            itemSprites.RemoveAt(index);
-            Destroy(slot.Item);           
-            int newIndex = index == Slots.Count? index - 1 : index;
-            SelectedSlot = IsEmpty? null : Slots[newIndex];
-            SelectSlotSprite(IsEmpty? null : itemSprites[newIndex]);
-            itemAmount.text = IsEmpty? "0" : SelectedSlot.Amount.ToString();
-        }
+    }
+
+    public void RemoveItem(ItemSlot slot)
+    {
+        int index = Slots.IndexOf(slot);
+        Slots.Remove(slot);
+        itemSprites.RemoveAt(index);
+        Destroy(slot.Item);           
+        int newIndex = index == Slots.Count? index - 1 : index;
+        SelectedSlot = IsEmpty? null : Slots[newIndex];
+        SelectSlotSprite(IsEmpty? null : itemSprites[newIndex]);
+        itemAmount.text = IsEmpty? "0" : SelectedSlot.Amount.ToString();
     }
 
     public void SelectItem(int index)

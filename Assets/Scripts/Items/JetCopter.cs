@@ -24,7 +24,7 @@ public class JetCopter : SpecialItem
             {
                 timeCounter = 0;
                 SetJetCopterActivation(false);
-                parentSlot.Player.Inventory.DecreaseItemAmount(parentSlot);
+                RemoveItemIfAmountEqualsZero();
             }
         }
     }
@@ -39,6 +39,7 @@ public class JetCopter : SpecialItem
 
     public override void Use()
     { 
+        base.Use();
         SetJetCopterActivation(true);
     }
 }

@@ -336,7 +336,7 @@ public class Penosa : MonoBehaviour
     private void InstantiatePrimaryShot()
     {
         if(PrimaryWeaponLevel == 1 || (PrimaryWeaponLevel > 1 && PrimaryWeaponAmmo > 0))
-        {
+        { 
             isShooting = true;    
             anim.SetInteger(animHashes.shotLevel, primaryWeaponLvl); 
             anim.SetTrigger(animHashes.shootTrigger);
@@ -377,7 +377,7 @@ public class Penosa : MonoBehaviour
     private void InstantiatePrimaryShotLv2()
     {
         if(continuousTimeCounter >= machineGunInterval)
-        {
+        {           
             InstantiatePrimaryShot();
             continuousTimeCounter = 0f;
         }

@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 2413048041
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: projectiles
+      Dependencies: {}

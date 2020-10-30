@@ -11,7 +11,16 @@ public abstract class SpecialItem : MonoBehaviour
 
     public abstract void GetItem<T>(Penosa player);
 
-    public abstract void Use();
+    public virtual void Use()
+    {
+        parentSlot.Player.Inventory.DecreaseItemAmount(parentSlot);
+    }
+
+    protected void RemoveItemIfAmountEqualsZero()
+    {
+        if(parentSlot.Player.Inventory.SelectedSlot.Amount == 0) 
+            parentSlot.Player.Inventory.RemoveItem(parentSlot);
+    }
 
     protected virtual void OnSpriteAdded(SpriteAddedEventArgs e)
     {

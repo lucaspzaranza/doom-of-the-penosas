@@ -231,7 +231,7 @@ MonoBehaviour:
   damage: 2
   interactableLayerMask:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 4864
   remoteSpeed: 2
   overlapRadius: 0.01
   bombColliders:

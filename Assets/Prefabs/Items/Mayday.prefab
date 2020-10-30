@@ -143,3 +143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b42820fda3b30894cbeb440529b6eff7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentSlot:
+    _item: {fileID: 0}
+    _amount: 0
+  missile: {fileID: 6507986975763628012, guid: 898606e2b2e11a6458c41ccf886a1708, type: 3}
+  missileHeight: 5

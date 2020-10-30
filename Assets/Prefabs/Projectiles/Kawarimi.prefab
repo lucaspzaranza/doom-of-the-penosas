@@ -121,7 +121,7 @@ MonoBehaviour:
   damage: 2
   interactableLayerMask:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 4864
   torque: 0.375
   penosa: {fileID: 0}
 --- !u!61 &6071608304877252539
