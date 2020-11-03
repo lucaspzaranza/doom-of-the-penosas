@@ -5,8 +5,10 @@ using UnityEngine;
 
 public abstract class SpecialItem : MonoBehaviour
 {    
+    public const byte defaultDuration = 30;
+    public bool ItemInUse {get; protected set;}
     public ItemSlot parentSlot;
-
+    [SerializeField] protected float timeCounter;
     public static event EventHandler<SpriteAddedEventArgs> SpriteAdded;
 
     public abstract void GetItem<T>(Penosa player);

@@ -28,13 +28,16 @@ public class Penosa : MonoBehaviour
     public const byte secondaryWeaponMaxLevel = 2;
     public const byte fstWeaponMaxLvl = 3;
     public const byte scndWeaponMaxLvl = 2;
+    public const byte scndWeaponInitialAmmo = 10;
     public const int maxAmmo = 999;
+    public const float defaultSpeed = 2f;
 
     #endregion
 
     #region Vars
     [Header("Player")]
     public string penosaName;   
+    [Range(0,1)] public byte id;
     [SerializeField] [Range(0, max_life)] private int _life;
     [SerializeField] [Range(0, max_life)] private int _armorLife;
     [SerializeField] [Range(0, max_lives)] private int _lives; 
@@ -102,12 +105,9 @@ public class Penosa : MonoBehaviour
     {
         get { return primaryWeaponAmmo; }
         private set 
-        { 
-            if(value <= maxAmmo && value >= 0)
-            {
-                primaryWeaponAmmo = value; 
-                if(primaryWeaponAmmo == 0) PrimaryWeaponLevel = 1;
-            }
+        {         
+            primaryWeaponAmmo = Mathf.Clamp(value, 0, maxAmmo);
+            if(primaryWeaponAmmo == 0) PrimaryWeaponLevel = 1;
         }
     }
 
@@ -127,19 +127,22 @@ public class Penosa : MonoBehaviour
     public int Life
     {
         get { return _life; }
-        set { if(value >= 0) _life = (value <= max_life)? value : max_life; }
+        set {                                          
+                _life = Mathf.Clamp(value, 0, max_life);
+                if(_life == 0 && !Adrenaline) Death();                                                                                                 
+            }
     }
 
-    public bool HasArmor {get; set;}
+    public bool HasArmor => ArmorLife > 0;
 
     public int ArmorLife
     {
         get => _armorLife;
-        set  
-        {   
-            if(value >= 0) _armorLife = (value <= max_life)? value : max_life; 
-            if(_armorLife == 0) HasArmor = false;
-        }
+        set 
+        {            
+            _armorLife = Mathf.Clamp(value, 0, max_life);                                   
+            if(value < 0) Life -= (Mathf.Abs(value));
+        } 
     }
 
     public int Lives
@@ -169,6 +172,8 @@ public class Penosa : MonoBehaviour
 
     public Animator Animator => anim;
 
+    public bool Adrenaline => speed > defaultSpeed;
+
     #endregion
 
     void Start()
@@ -189,6 +194,8 @@ public class Penosa : MonoBehaviour
     
         if(Input.GetKeyDown(KeyCode.Return))        
             TakeDamage(10);        
+        
+        if(Life == 0 && !Adrenaline) Death();
     }
 
     void FixedUpdate()
@@ -197,6 +204,21 @@ public class Penosa : MonoBehaviour
         anim.SetBool(animHashes.isGrounded, isGrounded);
         
         if(isGrounded && rb.gravityScale != defaultGravity) ResetGravity();      
+    }
+
+    public void Death()
+    {
+        Lives--;
+        if(Lives == 0) GameController.instance.RemovePlayerFromScene(this);
+        else
+        {
+            // Play some death animation...
+            Life = max_life;
+            PrimaryWeaponLevel = 1;
+            SecondaryWeaponLevel = 1;
+            PrimaryWeaponAmmo = 0;
+            SecondaryWeaponAmmo = scndWeaponInitialAmmo;        
+        }
     }
 
     private void ChangeSpecialItem()
@@ -215,8 +237,9 @@ public class Penosa : MonoBehaviour
 
     private void UseSpecialItem()
     {
-        if(Inventory.SelectedSlot != null && Inventory.SelectedSlot.Item != null)    
-            Inventory.SelectedSlot.Item.Use();            
+        if(Inventory.SelectedSlot != null && Inventory.SelectedSlot.Item != null &&
+            !Inventory.SelectedSlot.Item.ItemInUse)    
+            Inventory.SelectedSlot.Item.Use();         
     }
 
     private void Move()
@@ -420,7 +443,7 @@ public class Penosa : MonoBehaviour
     }
 
     public void TakeDamage(int dmg)
-    {
+    {        
         if(HasArmor) ArmorLife -= dmg;
         else Life -= dmg;
     }

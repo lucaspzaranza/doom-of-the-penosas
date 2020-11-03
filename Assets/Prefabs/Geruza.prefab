@@ -1088,10 +1088,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   penosaName: Geruza
-  _life: 100
-  _armorLife: 0
+  id: 0
+  _life: 50
+  _armorLife: 65
   _lives: 5
-  primaryWeaponLvl: 2
+  primaryWeaponLvl: 1
   secondaryWeaponLvl: 1
   speed: 2
   jumpForce: 260

@@ -10,9 +10,6 @@ public enum WeaponType
 
 public class WeaponLvlUp : Item
 {
-    private const int _1stWeaponLv2Ammo = 250;
-    private const int _1stWeaponLv3Ammo = 30;
-    private const int _2ndWeaponLv2Ammo = 10;
     public WeaponType weaponType;
     public byte newLvl;
     public byte ammo;
@@ -24,19 +21,20 @@ public class WeaponLvlUp : Item
             if(player.PrimaryWeaponLevel != newLvl)
             {
                 player.PrimaryWeaponLevel = newLvl;            
-                player.SetAmmo(WeaponType.Primary, newLvl <= 2? _1stWeaponLv2Ammo : _1stWeaponLv3Ammo);
+                player.SetAmmo(WeaponType.Primary, ammo);
             }
-            else player.SetAmmo(WeaponType.Primary, (newLvl <= 2?
-                _1stWeaponLv2Ammo : _1stWeaponLv3Ammo) + player.PrimaryWeaponAmmo);
+            else 
+                player.SetAmmo(WeaponType.Primary, ammo + player.PrimaryWeaponAmmo);
         }
         else if(weaponType == WeaponType.Secondary) 
         {
             if(player.SecondaryWeaponLevel != newLvl)
             {
                 player.SecondaryWeaponLevel = newLvl;
-                player.SetAmmo(WeaponType.Secondary, _2ndWeaponLv2Ammo);
+                player.SetAmmo(WeaponType.Secondary, ammo);
             }
-            else player.SetAmmo(WeaponType.Secondary, player.SecondaryWeaponAmmo + _2ndWeaponLv2Ammo);
+            else
+                player.SetAmmo(WeaponType.Secondary, player.SecondaryWeaponAmmo + ammo);
         }
     }
 }

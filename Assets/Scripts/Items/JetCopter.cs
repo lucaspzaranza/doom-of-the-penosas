@@ -5,10 +5,7 @@ using System.Linq;
 
 public class JetCopter : SpecialItem
 {
-    private const byte seconds = 30;
-    public byte maxDuration = seconds;
-    public float timeCounter;
-    private bool active;
+    public byte maxDuration = defaultDuration;
 
     public override void GetItem<T>(Penosa player)
     {
@@ -17,7 +14,7 @@ public class JetCopter : SpecialItem
 
     void Update()
     {
-        if(active)
+        if(ItemInUse)
         {
             timeCounter += Time.deltaTime;
             if(timeCounter >= maxDuration)
@@ -34,7 +31,7 @@ public class JetCopter : SpecialItem
         parentSlot.Player.JetCopterObject.SetActive(value);
         parentSlot.Player.JetCopterActivated = value;
         parentSlot.Player.Animator.SetBool("JetCopter", value);
-        active = value;
+        ItemInUse = value;
     }
 
     public override void Use()
