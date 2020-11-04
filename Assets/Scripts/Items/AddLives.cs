@@ -8,6 +8,6 @@ public class AddLives : Item
 
     public override void GetItem(Penosa player)
     {
-        player.Lives += amount;
+        player.PlayerData.Lives += amount;
     }
 }

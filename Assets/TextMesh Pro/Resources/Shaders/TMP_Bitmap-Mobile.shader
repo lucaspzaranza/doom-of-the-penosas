@@ -135,7 +135,7 @@ SubShader {
 	}
 	Pass {
 		SetTexture [_MainTex] {
-			constantColor [_Color] combine constant * primary, constant * texture
+			constantColor [_Color] combine constant * _1st, constant * texture
 		}
 	}
 }

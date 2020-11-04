@@ -121,6 +121,24 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &278897150 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3992996407052718607, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
+    type: 3}
+  m_PrefabInstance: {fileID: 1650720907250002559}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &278897153 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2414335089396398199, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
+    type: 3}
+  m_PrefabInstance: {fileID: 1650720907250002559}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278897150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44ee3cf25a32235468184bf7e853f6ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,9 +635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da8980352d84a043bd8549315928457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continueGameCounter: 0505
-  _players:
-  - {fileID: 3992996407052718607, guid: d6b0d9204e9e57c4bbc4e933bdfbc950, type: 3}
+  _playersData: []
 --- !u!4 &1233200614
 Transform:
   m_ObjectHideFlags: 0
@@ -632,7 +648,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1442785437
 GameObject:
@@ -788,7 +804,7 @@ PrefabInstance:
     - target: {fileID: 742759606539004929, guid: ec33c2dfb084f024bbc5ca4fe923a1f8,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 742759606539004929, guid: ec33c2dfb084f024bbc5ca4fe923a1f8,
         type: 3}
@@ -1219,8 +1235,53 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2414335089396398199, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
         type: 3}
-      propertyPath: _lives
-      value: 2
+      propertyPath: _playerData.name
+      value: Geruza
+      objectReference: {fileID: 0}
+    - target: {fileID: 2414335089396398199, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
+        type: 3}
+      propertyPath: _playerData._player
+      value: 
+      objectReference: {fileID: 278897153}
+    - target: {fileID: 2414335089396398199, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
+        type: 3}
+      propertyPath: _playerData._gameObject
+      value: 
+      objectReference: {fileID: 278897150}
+    - target: {fileID: 2414335089396398199, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
+        type: 3}
+      propertyPath: _playerData._countdown
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2414335089396398199, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
+        type: 3}
+      propertyPath: _playerData._continues
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2414335089396398199, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
+        type: 3}
+      propertyPath: _playerData._lives
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2414335089396398199, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
+        type: 3}
+      propertyPath: _playerData._life
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 2414335089396398199, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
+        type: 3}
+      propertyPath: _playerData.__1stWeaponLvl
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2414335089396398199, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
+        type: 3}
+      propertyPath: _playerData.__2ndWeaponLvl
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2414335089396398199, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
+        type: 3}
+      propertyPath: _playerData.__2ndWeaponAmmo
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3992996407052718601, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
         type: 3}

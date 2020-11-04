@@ -8,6 +8,6 @@ public class HealItem : Item
 
     public override void GetItem(Penosa player)
     {
-        player.Life += amount;        
+        player.PlayerData.Life += amount;        
     }
 }

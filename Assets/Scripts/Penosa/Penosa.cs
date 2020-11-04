@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-class AnimatorHashes 
+public class AnimatorHashes 
 {
     public readonly int shootTrigger = Animator.StringToHash("Shoot");  
     public readonly int shotLevel = Animator.StringToHash("Shot Level");
@@ -16,33 +16,8 @@ class AnimatorHashes
 
 public class Penosa : MonoBehaviour
 {
-    #region Consts
-
-    public const float machineGunInterval = 0.1f; 
-    public const float shotLvl3Duration = 0.5f;
-    public const float shotLvl2VariationRate = 0.1f;
-    public const float shotAnimDuration = 0.25f;
-    public const byte max_life = 100;
-    public const byte max_lives = 9;
-    public const byte primaryWeaponMaxLevel = 3;
-    public const byte secondaryWeaponMaxLevel = 2;
-    public const byte fstWeaponMaxLvl = 3;
-    public const byte scndWeaponMaxLvl = 2;
-    public const byte scndWeaponInitialAmmo = 10;
-    public const int maxAmmo = 999;
-    public const float defaultSpeed = 2f;
-
-    #endregion
-
     #region Vars
-    [Header("Player")]
-    public string penosaName;   
-    [Range(0,1)] public byte id;
-    [SerializeField] [Range(0, max_life)] private int _life;
-    [SerializeField] [Range(0, max_life)] private int _armorLife;
-    [SerializeField] [Range(0, max_lives)] private int _lives; 
-    [SerializeField] [Range(1, fstWeaponMaxLvl)] private byte primaryWeaponLvl;
-    [SerializeField] [Range(1, scndWeaponMaxLvl)] private byte secondaryWeaponLvl;
+    [SerializeField] private PlayerData _playerData;
     private Inventory _inventory = null;
 
     [Header("Movement")]
@@ -59,18 +34,11 @@ public class Penosa : MonoBehaviour
     public GameObject parachute;
     public float parachuteGravity;
 
-    [Header("Shot")]
-    public GameObject[] primaryShot;
-    public GameObject[] secondaryShot;
     public float shotspeed;
     private GameObject currentGrenade;
     [SerializeField] private Transform[] horizontalShotSpawnCoordinates = null;
     [SerializeField] private Transform[] verticalShotSpawnCoordinates = null;
     [SerializeField] private Transform secondaryShotSpawnCoordinates = null;
-
-    [Header("Ammo")]
-    [SerializeField] private int primaryWeaponAmmo;
-    [SerializeField] private int secondaryWeaponAmmo;
 
     [Header("Items")]
     [SerializeField] private GameObject jetCopter = null;
@@ -88,79 +56,8 @@ public class Penosa : MonoBehaviour
     #endregion
 
     #region Props
-    
-    public byte PrimaryWeaponLevel 
-    {
-        get { return primaryWeaponLvl; }
-        set { if(value <= primaryWeaponMaxLevel) primaryWeaponLvl = value; }
-    }
 
-    public byte SecondaryWeaponLevel 
-    {
-        get { return secondaryWeaponLvl; }
-        set { if(value <= secondaryWeaponMaxLevel) secondaryWeaponLvl = value; }
-    }
-
-    public int PrimaryWeaponAmmo
-    {
-        get { return primaryWeaponAmmo; }
-        private set 
-        {         
-            primaryWeaponAmmo = Mathf.Clamp(value, 0, maxAmmo);
-            if(primaryWeaponAmmo == 0) PrimaryWeaponLevel = 1;
-        }
-    }
-
-    public int SecondaryWeaponAmmo
-    {
-        get { return secondaryWeaponAmmo; }
-        private set 
-        {
-            if(value <= maxAmmo && value >= 0) 
-            {
-                secondaryWeaponAmmo = value;
-                if(secondaryWeaponAmmo == 0) SecondaryWeaponLevel = 1;
-            }
-        }
-    }
-
-    public int Life
-    {
-        get { return _life; }
-        set {                                          
-                _life = Mathf.Clamp(value, 0, max_life);
-                if(_life == 0 && !Adrenaline) Death();                                                                                                 
-            }
-    }
-
-    public bool HasArmor => ArmorLife > 0;
-
-    public int ArmorLife
-    {
-        get => _armorLife;
-        set 
-        {            
-            _armorLife = Mathf.Clamp(value, 0, max_life);                                   
-            if(value < 0) Life -= (Mathf.Abs(value));
-        } 
-    }
-
-    public int Lives
-    {
-        get { return _lives; }
-        set { _lives = (value <= max_lives)? value : max_lives; }
-    }
-
-    private GameObject Current1stShot
-    {
-        get 
-        {                     
-            byte index = primaryWeaponLvl < 3 && primaryWeaponLvl > 0? (byte) 0 : (byte) 1;
-            return primaryShot[index];
-        }
-    }
-
-    private GameObject Current2ndShot => secondaryShot[secondaryWeaponLvl - 1];
+    public bool HasArmor => PlayerData.ArmorLife > 0;
 
     public GameObject JetCopterObject => jetCopter;
 
@@ -172,9 +69,20 @@ public class Penosa : MonoBehaviour
 
     public Animator Animator => anim;
 
-    public bool Adrenaline => speed > defaultSpeed;
+    public bool Adrenaline => speed > PlayerConsts.defaultSpeed;
+
+    public PlayerData PlayerData
+    {
+        get => _playerData;
+        set => _playerData = value;
+    }
 
     #endregion
+
+    void Awake()
+    {
+        ResetPlayerData();
+    }
 
     void Start()
     {        
@@ -195,7 +103,7 @@ public class Penosa : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Return))        
             TakeDamage(10);        
         
-        if(Life == 0 && !Adrenaline) Death();
+        if(PlayerData.Life == 0 && !Adrenaline) Death();
     }
 
     void FixedUpdate()
@@ -208,17 +116,22 @@ public class Penosa : MonoBehaviour
 
     public void Death()
     {
-        Lives--;
-        if(Lives == 0) GameController.instance.RemovePlayerFromScene(this);
+        PlayerData.Lives--;
+        if(PlayerData.Lives == 0) GameController.instance.RemovePlayerFromScene(PlayerData.ID);
         else
         {
             // Play some death animation...
-            Life = max_life;
-            PrimaryWeaponLevel = 1;
-            SecondaryWeaponLevel = 1;
-            PrimaryWeaponAmmo = 0;
-            SecondaryWeaponAmmo = scndWeaponInitialAmmo;        
+            ResetPlayerData();
         }
+    }
+
+    public void ResetPlayerData()
+    {
+        PlayerData.Life = PlayerConsts.max_life;
+        PlayerData._1stWeaponLevel = 1;
+        PlayerData._2ndWeaponLevel = 1;
+        PlayerData._1stWeaponAmmo = 0;
+        PlayerData._2ndWeaponAmmo = PlayerConsts._2ndWeaponInitialAmmo;    
     }
 
     private void ChangeSpecialItem()
@@ -325,9 +238,9 @@ public class Penosa : MonoBehaviour
             // Se estiver olhando pra baixo, pega os 3 últimos valores do array,
             // onde foram armazenados os Transforms dos frames da galinha mirando pra baixo
             int downShotSpawnPosIndex = Input.GetAxisRaw("Vertical") < 0 ? 3 : 0;                 
-            return verticalShotSpawnCoordinates[primaryWeaponLvl + downShotSpawnPosIndex - 1];
+            return verticalShotSpawnCoordinates[PlayerData._1stWeaponLevel + downShotSpawnPosIndex - 1];
         }
-        else return horizontalShotSpawnCoordinates[primaryWeaponLvl - 1];
+        else return horizontalShotSpawnCoordinates[PlayerData._1stWeaponLevel - 1];
     }
 
     private Quaternion GetShotRotation()
@@ -347,7 +260,8 @@ public class Penosa : MonoBehaviour
 
     private void SetShotLevel2VariationRate(ref GameObject projectile)
     {
-        float posVariationRate = Random.Range(shotLvl2VariationRate, -shotLvl2VariationRate);
+        float posVariationRate = Random.Range(PlayerConsts.shotLvl2VariationRate, 
+                                            -PlayerConsts.shotLvl2VariationRate);
         if(Vertical)        
             projectile.transform.position = new Vector3 
             (projectile.transform.position.x + posVariationRate, projectile.transform.position.y);        
@@ -356,30 +270,30 @@ public class Penosa : MonoBehaviour
             (projectile.transform.position.x, projectile.transform.position.y + posVariationRate);
     }
 
-    private void InstantiatePrimaryShot()
+    private void Instantiate_1stShot()
     {
-        if(PrimaryWeaponLevel == 1 || (PrimaryWeaponLevel > 1 && PrimaryWeaponAmmo > 0))
+        if(PlayerData._1stWeaponLevel == 1 || (PlayerData._1stWeaponLevel > 1 && PlayerData._1stWeaponAmmo > 0))
         { 
             isShooting = true;    
-            anim.SetInteger(animHashes.shotLevel, primaryWeaponLvl); 
+            anim.SetInteger(animHashes.shotLevel, PlayerData._1stWeaponLevel); 
             anim.SetTrigger(animHashes.shootTrigger);
             shotAnimTimeCounter = 0;
 
             var currentTransform = GetShotSpawnCoordinates();
             var currentRotation = GetShotRotation();
-            var newBullet = Instantiate(Current1stShot, currentTransform.position, currentRotation);
-            if(primaryWeaponLvl == 2) SetShotLevel2VariationRate(ref newBullet);
+            var newBullet = Instantiate(PlayerData.Current1stShot, currentTransform.position, currentRotation);
+            if(PlayerData._1stWeaponLevel == 2) SetShotLevel2VariationRate(ref newBullet);
 
             newBullet.GetComponent<Projectile>().speed = shotspeed * GetShotDirection();
 
-            SetAmmo(WeaponType.Primary, PrimaryWeaponAmmo - 1);
+            SetAmmo(WeaponType._1st, PlayerData._1stWeaponAmmo - 1);
         }
     }
 
     private void InstantiateSecondaryShot()
     {        
-        bool canSpawn = secondaryWeaponLvl == 1;
-        canSpawn |= secondaryWeaponLvl == 2 && currentGrenade == null;
+        bool canSpawn = PlayerData._2ndWeaponLevel == 1;
+        canSpawn |= PlayerData._2ndWeaponLevel == 2 && currentGrenade == null;
         if(canSpawn)
         {
             isShooting = true;
@@ -387,21 +301,21 @@ public class Penosa : MonoBehaviour
             anim.SetInteger(animHashes.shotLevel, 4);
             shotAnimTimeCounter = 0;
 
-            currentGrenade = Instantiate(Current2ndShot, 
+            currentGrenade = Instantiate(PlayerData.Current2ndShot, 
                 secondaryShotSpawnCoordinates.position, Quaternion.identity);
             currentGrenade.GetComponent<Projectile>().speed *= isLeft? -1 : 1;
             var kawarimi = currentGrenade.GetComponent<Kawarimi>();
             if(kawarimi != null) kawarimi.penosa = gameObject;
 
-            SetAmmo(WeaponType.Secondary, SecondaryWeaponAmmo - 1);
+            SetAmmo(WeaponType.Secondary, PlayerData._2ndWeaponAmmo - 1);
         }
     }
 
-    private void InstantiatePrimaryShotLv2()
+    private void Instantiate_1stShotLv2()
     {
-        if(continuousTimeCounter >= machineGunInterval)
+        if(continuousTimeCounter >= PlayerConsts.machineGunInterval)
         {           
-            InstantiatePrimaryShot();
+            Instantiate_1stShot();
             continuousTimeCounter = 0f;
         }
         else continuousTimeCounter += Time.deltaTime;
@@ -410,7 +324,8 @@ public class Penosa : MonoBehaviour
     private void ResetShootAnim()
     {
         shotAnimTimeCounter += Time.deltaTime;
-        float timeToResetAnimation = primaryWeaponLvl <= 2? shotAnimDuration : shotLvl3Duration;
+        float timeToResetAnimation = PlayerData._1stWeaponLevel <= 2? PlayerConsts.shotAnimDuration : 
+                                    PlayerConsts.shotLvl3Duration;
         if(shotAnimTimeCounter >= timeToResetAnimation)
         {            
             anim.SetInteger(animHashes.shotLevel, 0);
@@ -421,13 +336,13 @@ public class Penosa : MonoBehaviour
 
     private void Shoot()
     {       
-        if(primaryWeaponLvl == 1 && Input.GetButtonDown("Fire1"))        
-            InstantiatePrimaryShot();
-        else if(primaryWeaponLvl == 2 && Input.GetButton("Fire1"))         
-            InstantiatePrimaryShotLv2();
-        else if(primaryWeaponLvl == 3 && Input.GetButtonDown("Fire1") && !isShooting)
-            InstantiatePrimaryShot();
-        else if(Input.GetButtonDown("Fire2") && SecondaryWeaponAmmo > 0)
+        if(PlayerData._1stWeaponLevel == 1 && Input.GetButtonDown("Fire1"))        
+            Instantiate_1stShot();
+        else if(PlayerData._1stWeaponLevel == 2 && Input.GetButton("Fire1"))         
+            Instantiate_1stShotLv2();
+        else if(PlayerData._1stWeaponLevel == 3 && Input.GetButtonDown("Fire1") && !isShooting)
+            Instantiate_1stShot();
+        else if(Input.GetButtonDown("Fire2") && PlayerData._2ndWeaponAmmo > 0)
             InstantiateSecondaryShot();
         else if(Input.GetButtonDown("Fire3")) UseSpecialItem();
             
@@ -436,16 +351,16 @@ public class Penosa : MonoBehaviour
 
     public void SetAmmo(WeaponType weaponType, int ammo)
     {
-        if(weaponType == WeaponType.Primary && primaryWeaponLvl > 1)           
-            PrimaryWeaponAmmo = ammo;        
+        if(weaponType == WeaponType._1st && PlayerData._1stWeaponLevel > 1)           
+            PlayerData._1stWeaponAmmo = ammo;        
         else if(weaponType == WeaponType.Secondary)
-            SecondaryWeaponAmmo = ammo;
+            PlayerData._2ndWeaponAmmo = ammo;
     }
 
     public void TakeDamage(int dmg)
     {        
-        if(HasArmor) ArmorLife -= dmg;
-        else Life -= dmg;
+        if(HasArmor) PlayerData.ArmorLife -= dmg;
+        else PlayerData.Life -= dmg;
     }
 }
 

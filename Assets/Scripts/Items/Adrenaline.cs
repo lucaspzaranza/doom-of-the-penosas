@@ -23,7 +23,7 @@ public class Adrenaline : SpecialItem
             if(timeCounter >= Duration)
             {
                 timeCounter = 0;
-                parentSlot.Player.speed = Penosa.defaultSpeed;
+                parentSlot.Player.speed = PlayerConsts.defaultSpeed;
                 ItemInUse = false;
                 RemoveItemIfAmountEqualsZero();
             }

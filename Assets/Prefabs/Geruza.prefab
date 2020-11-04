@@ -1007,7 +1007,7 @@ GameObject:
   - component: {fileID: 2414335089258175464}
   - component: {fileID: 1177494046}
   m_Layer: 0
-  m_Name: Penosa
+  m_Name: Geruza
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1087,13 +1087,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ee3cf25a32235468184bf7e853f6ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  penosaName: Geruza
-  id: 0
-  _life: 50
-  _armorLife: 65
-  _lives: 5
-  primaryWeaponLvl: 1
-  secondaryWeaponLvl: 1
+  _playerData:
+    name: 
+    _player: {fileID: 0}
+    _ID: 0
+    _gameObject: {fileID: 0}
+    _countdown: 0
+    _continues: 0
+    _lives: 0
+    _life: 0
+    _armorLife: 0
+    __1stWeaponLvl: 0
+    __2ndWeaponLvl: 0
+    __1stWeaponAmmo: 0
+    __2ndWeaponAmmo: 0
+    _1stShot:
+    - {fileID: 1617454459024769971, guid: 01c60fe339bafbd42aa4817129bfb0ec, type: 3}
+    - {fileID: 813294959795268939, guid: fb6057ddc83ac294f9aa987f82256072, type: 3}
+    _2ndShot:
+    - {fileID: 1092687857533456297, guid: 8b0cb2b6e8c22f64b9c1a0033b9e97f7, type: 3}
+    - {fileID: 4330093296665523782, guid: b3671417bc039294f865d849ca5d3f4b, type: 3}
   speed: 2
   jumpForce: 260
   groundCheck: {fileID: 3992996408814574570}
@@ -1104,12 +1117,6 @@ MonoBehaviour:
   defaultGravity: 1.5
   parachute: {fileID: 3992996408027477942}
   parachuteGravity: 0.25
-  primaryShot:
-  - {fileID: 1617454459024769971, guid: 01c60fe339bafbd42aa4817129bfb0ec, type: 3}
-  - {fileID: 813294959795268939, guid: fb6057ddc83ac294f9aa987f82256072, type: 3}
-  secondaryShot:
-  - {fileID: 1092687857533456297, guid: 8b0cb2b6e8c22f64b9c1a0033b9e97f7, type: 3}
-  - {fileID: 4330093296665523782, guid: b3671417bc039294f865d849ca5d3f4b, type: 3}
   shotspeed: 8
   horizontalShotSpawnCoordinates:
   - {fileID: 3992996407237742660}
@@ -1123,8 +1130,6 @@ MonoBehaviour:
   - {fileID: 3784514075303530481}
   - {fileID: 1299550481740651515}
   secondaryShotSpawnCoordinates: {fileID: 5788333185753350021}
-  primaryWeaponAmmo: 0
-  secondaryWeaponAmmo: 10
   jetCopter: {fileID: 1397246948693551868}
 --- !u!212 &2414335089258175464
 SpriteRenderer:

@@ -6,6 +6,6 @@ public class Armor : Item
 {
     public override void GetItem(Penosa player)
     {     
-        player.ArmorLife = Penosa.max_life;
+        player.PlayerData.ArmorLife = PlayerConsts.max_life;
     }
 }
