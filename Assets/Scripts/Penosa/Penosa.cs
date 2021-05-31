@@ -2,15 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class AnimatorHashes 
+public class AnimatorHashes
 {
-    public readonly int shootTrigger = Animator.StringToHash("Shoot");  
+    public readonly int shootTrigger = Animator.StringToHash("Shoot");
     public readonly int shotLevel = Animator.StringToHash("Shot Level");
     public readonly int XVelocity = Animator.StringToHash("XVelocity");
     public readonly int YVelocity = Animator.StringToHash("YVelocity");
-    public readonly int isGrounded = Animator.StringToHash("IsGrounded");   
-    public readonly int up = Animator.StringToHash("Up"); 
-    public readonly int down = Animator.StringToHash("Down");  
+    public readonly int isGrounded = Animator.StringToHash("IsGrounded");
+    public readonly int up = Animator.StringToHash("Up");
+    public readonly int down = Animator.StringToHash("Down");
     public readonly int jetCopter = Animator.StringToHash("JetCopter");
 }
 
@@ -24,8 +24,8 @@ public class Penosa : MonoBehaviour
     public float speed;
     public float jumpForce;
 
-    [Header("Jump")]
-    [SerializeField] private Transform groundCheck = null; 
+    [Header(InputStrings.Jump)]
+    [SerializeField] private Transform groundCheck = null;
     [SerializeField] private Collider2D wallCheckCollider = null;
     public LayerMask terrainLayerMask;
     public float defaultGravity;
@@ -42,7 +42,7 @@ public class Penosa : MonoBehaviour
 
     [Header("Items")]
     [SerializeField] private GameObject jetCopter = null;
-    
+
     private float shotAnimTimeCounter;
     private float continuousTimeCounter;
     private Animator anim;
@@ -61,11 +61,11 @@ public class Penosa : MonoBehaviour
 
     public GameObject JetCopterObject => jetCopter;
 
-    private bool Vertical => Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1;
+    private bool Vertical => Mathf.Abs(Input.GetAxisRaw(InputStrings.Vertical)) == 1;
 
     public Inventory Inventory => _inventory;
 
-    public bool JetCopterActivated {get; set;}
+    public bool JetCopterActivated { get; set; }
 
     public Animator Animator => anim;
 
@@ -81,43 +81,44 @@ public class Penosa : MonoBehaviour
 
     void Awake()
     {
-        ResetPlayerData();
+        //ResetPlayerData();
     }
 
     void Start()
-    {        
+    {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        rb.gravityScale = defaultGravity;    
+        rb.gravityScale = defaultGravity;
         _inventory = GetComponentInChildren<Inventory>();
     }
 
     void Update()
-    {                
+    {
         Move();
         Jump();
         Parachute();
         Shoot();
         ChangeSpecialItem();
-    
-        if(Input.GetKeyDown(KeyCode.Return))        
-            TakeDamage(10);        
-        
-        if(PlayerData.Life == 0 && !Adrenaline) Death();
+
+        if (Input.GetKeyDown(KeyCode.Return)) // Remove this!   
+            TakeDamage(10);
+
+        if (PlayerData.Life == 0 && !Adrenaline) Death();
     }
 
     void FixedUpdate()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, terrainLayerMask);        
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, terrainLayerMask);
         anim.SetBool(animHashes.isGrounded, isGrounded);
-        
-        if(isGrounded && rb.gravityScale != defaultGravity) ResetGravity();      
+
+        if (isGrounded && rb.gravityScale != defaultGravity) ResetGravity();
     }
 
     public void Death()
     {
         PlayerData.Lives--;
-        if(PlayerData.Lives == 0) GameController.instance.RemovePlayerFromScene(PlayerData.ID);
+        if (PlayerData.Lives == 0)
+            GameController.instance.RemovePlayerFromScene(PlayerData.ID);
         else
         {
             // Play some death animation...
@@ -131,18 +132,18 @@ public class Penosa : MonoBehaviour
         PlayerData._1stWeaponLevel = 1;
         PlayerData._2ndWeaponLevel = 1;
         PlayerData._1stWeaponAmmo = 0;
-        PlayerData._2ndWeaponAmmo = PlayerConsts._2ndWeaponInitialAmmo;    
+        PlayerData._2ndWeaponAmmo = PlayerConsts._2ndWeaponInitialAmmo;
     }
 
     private void ChangeSpecialItem()
     {
-        if(Input.GetButtonDown("ChangeSpecialItem") && !Inventory.IsEmpty)
-        {   
-            float value = Input.GetAxisRaw("ChangeSpecialItem");
+        if (Input.GetButtonDown(InputStrings.ChangeSpecialItem) && !Inventory.IsEmpty)
+        {
+            float value = Input.GetAxisRaw(InputStrings.ChangeSpecialItem);
             int length = Inventory.Slots.Count;
             int index = Inventory.Slots.IndexOf(Inventory.SelectedSlot);
-            if(value > 0 && index < length - 1) index++;
-            else if(value < 0 && index > 0) index--;            
+            if (value > 0 && index < length - 1) index++;
+            else if (value < 0 && index > 0) index--;
             Inventory.SelectItem(index);
             Inventory.ShowSlot();
         }
@@ -150,22 +151,22 @@ public class Penosa : MonoBehaviour
 
     private void UseSpecialItem()
     {
-        if(Inventory.SelectedSlot != null && Inventory.SelectedSlot.Item != null &&
-            !Inventory.SelectedSlot.Item.ItemInUse)    
-            Inventory.SelectedSlot.Item.Use();         
+        if (Inventory.SelectedSlot != null && Inventory.SelectedSlot.Item != null &&
+            !Inventory.SelectedSlot.Item.ItemInUse)
+            Inventory.SelectedSlot.Item.Use();
     }
 
     private void Move()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");                 
-        if(horizontal > 0 && isLeft) Flip();
+        float horizontal = Input.GetAxis(InputStrings.Horizontal);
+        float vertical = Input.GetAxis(InputStrings.Vertical);
+        if (horizontal > 0 && isLeft) Flip();
         else if (horizontal < 0 && !isLeft) Flip();
 
-        if(!HitWall())        
-            rb.velocity = new Vector2(speed * horizontal, rb.velocity.y);        
-                        
-        SetMovementAnimators(vertical);                             
+        if (!HitWall())
+            rb.velocity = new Vector2(speed * horizontal, rb.velocity.y);
+
+        SetMovementAnimators(vertical);
     }
 
     private bool HitWall()
@@ -190,54 +191,54 @@ public class Penosa : MonoBehaviour
         isLeft = !isLeft;
         transform.localScale = new Vector2
             (transform.localScale.x * -1, transform.localScale.y);
-        Inventory.transform.localScale = new Vector2(isLeft? -1f : 1f, 1f);
+        Inventory.transform.localScale = new Vector2(isLeft ? -1f : 1f, 1f);
     }
 
     private void Jump()
     {
-        if(!JetCopterActivated)
+        if (!JetCopterActivated)
         {
-            if(Input.GetButtonDown("Jump") && isGrounded)
-                rb.AddForce(Vector2.up * jumpForce);        
-            else if(Input.GetButtonUp("Jump") && !isGrounded)                    
+            if (Input.GetButtonDown(InputStrings.Jump) && isGrounded)
+                rb.AddForce(Vector2.up * jumpForce);
+            else if (Input.GetButtonUp(InputStrings.Jump) && !isGrounded)
                 rb.velocity = new Vector2(rb.velocity.x, 0f);
         }
-        else       
-        {    
-            if(Input.GetButton("Jump"))     
-                rb.velocity = new Vector2(rb.velocity.x, speed);                                      
-            else 
+        else
+        {
+            if (Input.GetButton(InputStrings.Jump))
+                rb.velocity = new Vector2(rb.velocity.x, speed);
+            else
             {
                 var newY = rb.velocity.y;
-                rb.velocity = new Vector2(rb.velocity.x, newY > 0? newY : 0);          
+                rb.velocity = new Vector2(rb.velocity.x, newY > 0 ? newY : 0);
             }
-        }               
+        }
     }
 
     private void Parachute()
     {
-        if(Input.GetButton("Jump") && !isGrounded && rb.velocity.y < 0)
+        if (Input.GetButton(InputStrings.Jump) && !isGrounded && rb.velocity.y < 0)
         {
             rb.gravityScale = parachuteGravity;
             parachute.SetActive(true);
         }
-        else if (Input.GetButtonUp("Jump")) ResetGravity();
+        else if (Input.GetButtonUp(InputStrings.Jump)) ResetGravity();
     }
 
     private void ResetGravity()
     {
         rb.gravityScale = defaultGravity;
-        if(parachute.activeSelf)        
+        if (parachute.activeSelf)
             parachute.GetComponent<Animator>().SetTrigger("TurnOff");
     }
 
     private Transform GetShotSpawnCoordinates()
     {
-        if(Vertical) 
+        if (Vertical)
         {
             // Se estiver olhando pra baixo, pega os 3 últimos valores do array,
             // onde foram armazenados os Transforms dos frames da galinha mirando pra baixo
-            int downShotSpawnPosIndex = Input.GetAxisRaw("Vertical") < 0 ? 3 : 0;                 
+            int downShotSpawnPosIndex = Input.GetAxisRaw(InputStrings.Vertical) < 0 ? 3 : 0;
             return verticalShotSpawnCoordinates[PlayerData._1stWeaponLevel + downShotSpawnPosIndex - 1];
         }
         else return horizontalShotSpawnCoordinates[PlayerData._1stWeaponLevel - 1];
@@ -245,44 +246,44 @@ public class Penosa : MonoBehaviour
 
     private Quaternion GetShotRotation()
     {
-        return Vertical? Quaternion.AngleAxis(90f, Vector3.forward) : Quaternion.identity;
+        return Vertical ? Quaternion.AngleAxis(90f, Vector3.forward) : Quaternion.identity;
     }
 
     private int GetShotDirection()
     {
         int direction = 0;
-        if(Vertical)
-            direction = Input.GetAxisRaw("Vertical") > 0 ? 1 : -1;
-        else direction = isLeft? -1 : 1;
+        if (Vertical)
+            direction = Input.GetAxisRaw(InputStrings.Vertical) > 0 ? 1 : -1;
+        else direction = isLeft ? -1 : 1;
 
         return direction;
     }
 
     private void SetShotLevel2VariationRate(ref GameObject projectile)
     {
-        float posVariationRate = Random.Range(PlayerConsts.shotLvl2VariationRate, 
+        float posVariationRate = Random.Range(PlayerConsts.shotLvl2VariationRate,
                                             -PlayerConsts.shotLvl2VariationRate);
-        if(Vertical)        
-            projectile.transform.position = new Vector3 
-            (projectile.transform.position.x + posVariationRate, projectile.transform.position.y);        
+        if (Vertical)
+            projectile.transform.position = new Vector3
+            (projectile.transform.position.x + posVariationRate, projectile.transform.position.y);
         else
-            projectile.transform.position = new Vector3 
+            projectile.transform.position = new Vector3
             (projectile.transform.position.x, projectile.transform.position.y + posVariationRate);
     }
 
     private void Instantiate_1stShot()
     {
-        if(PlayerData._1stWeaponLevel == 1 || (PlayerData._1stWeaponLevel > 1 && PlayerData._1stWeaponAmmo > 0))
-        { 
-            isShooting = true;    
-            anim.SetInteger(animHashes.shotLevel, PlayerData._1stWeaponLevel); 
+        if (PlayerData._1stWeaponLevel == 1 || (PlayerData._1stWeaponLevel > 1 && PlayerData._1stWeaponAmmo > 0))
+        {
+            isShooting = true;
+            anim.SetInteger(animHashes.shotLevel, PlayerData._1stWeaponLevel);
             anim.SetTrigger(animHashes.shootTrigger);
             shotAnimTimeCounter = 0;
 
             var currentTransform = GetShotSpawnCoordinates();
             var currentRotation = GetShotRotation();
             var newBullet = Instantiate(PlayerData.Current1stShot, currentTransform.position, currentRotation);
-            if(PlayerData._1stWeaponLevel == 2) SetShotLevel2VariationRate(ref newBullet);
+            if (PlayerData._1stWeaponLevel == 2) SetShotLevel2VariationRate(ref newBullet);
 
             newBullet.GetComponent<Projectile>().speed = shotspeed * GetShotDirection();
 
@@ -291,21 +292,23 @@ public class Penosa : MonoBehaviour
     }
 
     private void InstantiateSecondaryShot()
-    {        
+    {
         bool canSpawn = PlayerData._2ndWeaponLevel == 1;
+        // currentGrenade sendo nula significa que não tem nenhuma granada em tela no momento.
+        // Essa verificação é feita pelo fato de que só pode atirar um 2nd shot por vez.
         canSpawn |= PlayerData._2ndWeaponLevel == 2 && currentGrenade == null;
-        if(canSpawn)
+        if (canSpawn)
         {
             isShooting = true;
             anim.SetTrigger(animHashes.shootTrigger);
             anim.SetInteger(animHashes.shotLevel, 4);
             shotAnimTimeCounter = 0;
 
-            currentGrenade = Instantiate(PlayerData.Current2ndShot, 
+            currentGrenade = Instantiate(PlayerData.Current2ndShot,
                 secondaryShotSpawnCoordinates.position, Quaternion.identity);
-            currentGrenade.GetComponent<Projectile>().speed *= isLeft? -1 : 1;
+            currentGrenade.GetComponent<Projectile>().speed *= isLeft ? -1 : 1;
             var kawarimi = currentGrenade.GetComponent<Kawarimi>();
-            if(kawarimi != null) kawarimi.penosa = gameObject;
+            if (kawarimi != null) kawarimi.penosa = gameObject;
 
             SetAmmo(WeaponType.Secondary, PlayerData._2ndWeaponAmmo - 1);
         }
@@ -313,8 +316,8 @@ public class Penosa : MonoBehaviour
 
     private void Instantiate_1stShotLv2()
     {
-        if(continuousTimeCounter >= PlayerConsts.machineGunInterval)
-        {           
+        if (continuousTimeCounter >= PlayerConsts.machineGunInterval)
+        {
             Instantiate_1stShot();
             continuousTimeCounter = 0f;
         }
@@ -324,42 +327,42 @@ public class Penosa : MonoBehaviour
     private void ResetShootAnim()
     {
         shotAnimTimeCounter += Time.deltaTime;
-        float timeToResetAnimation = PlayerData._1stWeaponLevel <= 2? PlayerConsts.shotAnimDuration : 
+        float timeToResetAnimation = PlayerData._1stWeaponLevel <= 2 ? PlayerConsts.shotAnimDuration :
                                     PlayerConsts.shotLvl3Duration;
-        if(shotAnimTimeCounter >= timeToResetAnimation)
-        {            
+        if (shotAnimTimeCounter >= timeToResetAnimation)
+        {
             anim.SetInteger(animHashes.shotLevel, 0);
             shotAnimTimeCounter = 0;
-            isShooting = false;            
+            isShooting = false;
         }
     }
 
     private void Shoot()
-    {       
-        if(PlayerData._1stWeaponLevel == 1 && Input.GetButtonDown("Fire1"))        
+    {
+        if (PlayerData._1stWeaponLevel == 1 && Input.GetButtonDown(InputStrings.Fire1))
             Instantiate_1stShot();
-        else if(PlayerData._1stWeaponLevel == 2 && Input.GetButton("Fire1"))         
+        else if (PlayerData._1stWeaponLevel == 2 && Input.GetButton(InputStrings.Fire1))
             Instantiate_1stShotLv2();
-        else if(PlayerData._1stWeaponLevel == 3 && Input.GetButtonDown("Fire1") && !isShooting)
+        else if (PlayerData._1stWeaponLevel == 3 && Input.GetButtonDown(InputStrings.Fire1) && !isShooting)
             Instantiate_1stShot();
-        else if(Input.GetButtonDown("Fire2") && PlayerData._2ndWeaponAmmo > 0)
+        else if (Input.GetButtonDown(InputStrings.Fire2) && PlayerData._2ndWeaponAmmo > 0)
             InstantiateSecondaryShot();
-        else if(Input.GetButtonDown("Fire3")) UseSpecialItem();
-            
-        if(isShooting) ResetShootAnim();
+        else if (Input.GetButtonDown(InputStrings.Fire3)) UseSpecialItem();
+
+        if (isShooting) ResetShootAnim();
     }
 
     public void SetAmmo(WeaponType weaponType, int ammo)
     {
-        if(weaponType == WeaponType._1st && PlayerData._1stWeaponLevel > 1)           
-            PlayerData._1stWeaponAmmo = ammo;        
-        else if(weaponType == WeaponType.Secondary)
+        if (weaponType == WeaponType._1st && PlayerData._1stWeaponLevel > 1)
+            PlayerData._1stWeaponAmmo = ammo;
+        else if (weaponType == WeaponType.Secondary)
             PlayerData._2ndWeaponAmmo = ammo;
     }
 
     public void TakeDamage(int dmg)
-    {        
-        if(HasArmor) PlayerData.ArmorLife -= dmg;
+    {
+        if (HasArmor) PlayerData.ArmorLife -= dmg;
         else PlayerData.Life -= dmg;
     }
 }

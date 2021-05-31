@@ -1261,12 +1261,12 @@ PrefabInstance:
     - target: {fileID: 2414335089396398199, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
         type: 3}
       propertyPath: _playerData._lives
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2414335089396398199, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
         type: 3}
       propertyPath: _playerData._life
-      value: 35
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 2414335089396398199, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
         type: 3}

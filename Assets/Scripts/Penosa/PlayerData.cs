@@ -5,14 +5,12 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerData 
 {
+    #region Variables
+
     public string name;
     [SerializeField] private Penosa _player = null;
-    public Penosa Player => _player;
     [SerializeField] private byte _ID;
-   
     [SerializeField] private GameObject _gameObject = null;
-    public GameObject GameObject => _gameObject;
-    public bool OnCountdown {get; set;}
     [SerializeField] private float _countdown;
     [SerializeField] private int _continues;
     [SerializeField] [Range(0, PlayerConsts.max_lives)] private int _lives; 
@@ -24,20 +22,25 @@ public class PlayerData
     [SerializeField] private int __2ndWeaponAmmo;
     public GameObject[] _1stShot;
     public GameObject[] _2ndShot;
-    
+
+    #endregion
+
+    #region Properties
+
+    public Penosa Player => _player;
+    public GameObject GameObject => _gameObject;
+    public bool OnCountdown {get; set;}
     public float Countdown
     {
         get => _countdown;
         set => _countdown = value;
     }
-    
     public int Continues
     {
         get => _continues;
         set => _continues = value;
     }
-     public byte ID { get => _ID; set => _ID = value;}
-    
+    public byte ID { get => _ID; set => _ID = value;}
     public int Lives
     {
         get { return _lives; }
@@ -55,7 +58,6 @@ public class PlayerData
         get { return __2ndWeaponLvl; }
         set { if(value <= PlayerConsts._2ndWeaponMaxLevel) __2ndWeaponLvl = value; }
     }
-
     public int _1stWeaponAmmo
     {
         get { return __1stWeaponAmmo; }
@@ -65,7 +67,6 @@ public class PlayerData
             if(__1stWeaponAmmo == 0) _1stWeaponLevel = 1;
         }
     }
-
     public int _2ndWeaponAmmo
     {
         get { return __2ndWeaponAmmo; }
@@ -78,7 +79,6 @@ public class PlayerData
             }
         }
     }
-
     public int Life
     {
         get { return _life; }
@@ -88,7 +88,6 @@ public class PlayerData
             if(_life == 0 && !Player.Adrenaline) Player.Death();                                                                                                 
         }
     }
-
     public int ArmorLife
     {
         get => _armorLife;
@@ -98,7 +97,6 @@ public class PlayerData
             if(value < 0) Life -= (Mathf.Abs(value));
         } 
     }
-
     public GameObject Current1stShot
     {
         get 
@@ -107,6 +105,7 @@ public class PlayerData
             return _1stShot[index];
         }
     }
-
     public GameObject Current2ndShot => _2ndShot[_2ndWeaponLevel - 1];
+
+    #endregion
 }
