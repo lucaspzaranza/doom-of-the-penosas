@@ -9,9 +9,11 @@ public class WalkTalk : SpecialItem
         player.Inventory.AddItem<WalkTalk>();
     }
 
-   public override void Use()
+    public override void Use()
     {
+        base.Use();
         // Use the Walk Talk
         print("Temptin' temptin' Louis Hampton...");
+        RemoveItemIfAmountEqualsZero();
     }
 }

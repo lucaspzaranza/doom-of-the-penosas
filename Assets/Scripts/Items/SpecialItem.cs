@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class SpecialItem : MonoBehaviour
-{    
+{
     public const byte defaultDuration = 30;
-    public bool ItemInUse {get; protected set;}
+    public bool ItemInUse { get; protected set; }
     public ItemSlot parentSlot;
     [SerializeField] protected float timeCounter;
     public static event EventHandler<SpriteAddedEventArgs> SpriteAdded;
@@ -20,7 +20,7 @@ public abstract class SpecialItem : MonoBehaviour
 
     protected void RemoveItemIfAmountEqualsZero()
     {
-        if(parentSlot.Player.Inventory.SelectedSlot.Amount == 0) 
+        if (parentSlot.Player.Inventory.SelectedSlot.Amount == 0)
             parentSlot.Player.Inventory.RemoveItem(parentSlot);
     }
 
@@ -41,12 +41,12 @@ public abstract class SpecialItem : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D other)
     {
-        if(other.gameObject.tag == "Player")
-        {            
-            var player = other.gameObject.GetComponent<Penosa>();                      
+        if (other.gameObject.tag == "Player")
+        {
+            var player = other.gameObject.GetComponent<Penosa>();
             AddSpriteOnInventory(player);
             GetItem<SpecialItem>(player);
-            if(player.Inventory.Slots.Count == 1) player.Inventory.ShowSlot();
+            if (player.Inventory.Slots.Count == 1) player.Inventory.ShowSlot();
             Destroy(gameObject);
         }
     }

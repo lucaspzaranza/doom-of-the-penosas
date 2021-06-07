@@ -17,6 +17,7 @@ public class AnimatorHashes
 public class Penosa : MonoBehaviour
 {
     #region Vars
+    [SerializeField] private PlayerHUD _HUD = null;
     [SerializeField] private PlayerData _playerData;
     private Inventory _inventory = null;
 
@@ -41,7 +42,7 @@ public class Penosa : MonoBehaviour
     [SerializeField] private Transform secondaryShotSpawnCoordinates = null;
 
     [Header("Items")]
-    [SerializeField] private GameObject jetCopter = null;
+    [SerializeField] private GameObject _jetCopter = null;
 
     private float shotAnimTimeCounter;
     private float continuousTimeCounter;
@@ -57,9 +58,10 @@ public class Penosa : MonoBehaviour
 
     #region Props
 
+    public PlayerHUD HUD => _HUD;
     public bool HasArmor => PlayerData.ArmorLife > 0;
 
-    public GameObject JetCopterObject => jetCopter;
+    public GameObject JetCopterObject => _jetCopter;
 
     private bool Vertical => Mathf.Abs(Input.GetAxisRaw(InputStrings.Vertical)) == 1;
 
@@ -116,7 +118,6 @@ public class Penosa : MonoBehaviour
 
     public void Death()
     {
-        PlayerData.Lives--;
         if (PlayerData.Lives == 0)
             GameController.instance.RemovePlayerFromScene(PlayerData.ID);
         else
@@ -133,6 +134,7 @@ public class Penosa : MonoBehaviour
         PlayerData._2ndWeaponLevel = 1;
         PlayerData._1stWeaponAmmo = 0;
         PlayerData._2ndWeaponAmmo = PlayerConsts._2ndWeaponInitialAmmo;
+        // Fazer jogador piscar...
     }
 
     private void ChangeSpecialItem()

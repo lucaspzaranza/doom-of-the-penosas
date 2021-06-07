@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-[System.Serializable]
+[Serializable]
 public class PlayerData
 {
     #region Variables
@@ -68,6 +69,7 @@ public class PlayerData
         set
         {
             _armorLife = Mathf.Clamp(value, 0, PlayerConsts.max_life);
+            Player.HUD.ArmorLife = _armorLife;
             if (value < 0) Life -= (Mathf.Abs(value));
         }
     }
@@ -105,14 +107,25 @@ public class PlayerData
         set
         {
             _life = Mathf.Clamp(value, 0, PlayerConsts.max_life);
-            if (_life == 0 && !Player.Adrenaline) Player.Death();
+            Player.HUD.Life = _life;
+            if (_life == 0 && !Player.Adrenaline)
+            {
+                Lives--;
+                Player.Death();
+            }
         }
     }
 
     public int Lives
     {
         get => _lives;
-        set => _lives = (value <= PlayerConsts.max_lives) ? value : PlayerConsts.max_lives;
+        set
+        {
+            if (value <= PlayerConsts.max_lives)
+                _lives = value;
+            else _lives = PlayerConsts.max_lives;
+            Player.HUD.Lives = _lives;
+        }
     }
 
     public bool OnCountdown { get; set; }

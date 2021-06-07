@@ -46,9 +46,7 @@ public class GameController : MonoBehaviour
     void Update()
     {
         if (PlayersData[0].OnCountdown && PlayersData[0].Countdown >= 0)
-        {
             Countdown(0);
-        }
     }
 
     private void GetPlayersOnScene()
@@ -62,6 +60,7 @@ public class GameController : MonoBehaviour
         {
             PlayersData.Add(player.PlayerData);
             PlayersData[id].ID = id;
+            player.HUD.GetHUDValues(PlayersData[id]);
             id++;
         });
     }
@@ -70,6 +69,7 @@ public class GameController : MonoBehaviour
     {
         PlayersData[ID].GameObject.SetActive(false);
         PlayersData[ID].Continues--;
+
         if (PlayersData[ID].Continues == 0)
         {
             // Game over...
@@ -105,6 +105,7 @@ public class GameController : MonoBehaviour
                 PlayersData[ID].OnCountdown = false;
                 PlayersData[ID].Lives = PlayerConsts.initial_lives;
                 PlayersData[ID].Player.ResetPlayerData();
+                PlayersData[ID].Player.Inventory.ClearInventory();
                 gameOverCountdownText.text = countdown.ToString();
                 UIController.instance.GameOverContainerObject.gameObject.SetActive(false);
             }
