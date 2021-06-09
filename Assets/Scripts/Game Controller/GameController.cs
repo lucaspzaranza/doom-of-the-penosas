@@ -13,6 +13,7 @@ public class InputStrings
     public const string Horizontal = "Horizontal";
     public const string Vertical = "Vertical";
     public const string ChangeSpecialItem = "ChangeSpecialItem";
+    public const string Start = "Start";
 }
 
 public class GameController : MonoBehaviour
@@ -46,7 +47,7 @@ public class GameController : MonoBehaviour
     void Update()
     {
         if (PlayersData[0].OnCountdown && PlayersData[0].Countdown >= 0)
-            Countdown(0);
+            GameOverCountdown(0);
     }
 
     private void GetPlayersOnScene()
@@ -89,7 +90,7 @@ public class GameController : MonoBehaviour
         UIController.instance.GameOverContainerObject.gameObject.SetActive(true);
     }
 
-    private void Countdown(byte ID)
+    private void GameOverCountdown(byte ID)
     {
         PlayersData[ID].Countdown -= Time.deltaTime;
         if (PlayersData[ID].Countdown >= 0)
@@ -98,7 +99,7 @@ public class GameController : MonoBehaviour
             if (currentCountdown.ToString() != gameOverCountdownText.text)
                 gameOverCountdownText.text = currentCountdown.ToString();
 
-            if (Input.GetKeyDown(KeyCode.Space)) // Respawn Penosa
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown(InputStrings.Start)) // Respawn Penosa
             {
                 PlayersData[ID].GameObject.SetActive(true);
                 PlayersData[ID].Countdown = countdown;
@@ -106,6 +107,7 @@ public class GameController : MonoBehaviour
                 PlayersData[ID].Lives = PlayerConsts.initial_lives;
                 PlayersData[ID].Player.ResetPlayerData();
                 PlayersData[ID].Player.Inventory.ClearInventory();
+                PlayersData[ID].Player.InitiateBlink();
                 gameOverCountdownText.text = countdown.ToString();
                 UIController.instance.GameOverContainerObject.gameObject.SetActive(false);
             }

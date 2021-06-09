@@ -108,7 +108,7 @@ public class PlayerData
         {
             _life = Mathf.Clamp(value, 0, PlayerConsts.max_life);
             Player.HUD.Life = _life;
-            if (_life == 0 && !Player.Adrenaline)
+            if (_life == 0 && !Player.Adrenaline && !Player.IsBlinking)
             {
                 Lives--;
                 Player.Death();
@@ -121,9 +121,7 @@ public class PlayerData
         get => _lives;
         set
         {
-            if (value <= PlayerConsts.max_lives)
-                _lives = value;
-            else _lives = PlayerConsts.max_lives;
+            _lives = Mathf.Clamp(value, 0, PlayerConsts.max_lives);
             Player.HUD.Lives = _lives;
         }
     }

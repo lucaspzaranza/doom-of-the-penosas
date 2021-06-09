@@ -54,6 +54,14 @@ public class Penosa : MonoBehaviour
     private bool isGrounded;
     private AnimatorHashes animHashes = new AnimatorHashes();
 
+    [Header("Blink")]
+    public float blinkDuration;
+    private float blinkTimeCounter;
+    private float blinkIntervalTimeCounter;
+    private const float blinkFrameInterval = 0.05f;
+    [SerializeField] private SpriteRenderer body;
+    [SerializeField] private SpriteRenderer legs;
+    [SerializeField] private bool isBlinking = false;
     #endregion
 
     #region Props
@@ -79,6 +87,8 @@ public class Penosa : MonoBehaviour
         set => _playerData = value;
     }
 
+    public bool IsBlinking => isBlinking;
+
     #endregion
 
     void Awake()
@@ -103,9 +113,13 @@ public class Penosa : MonoBehaviour
         ChangeSpecialItem();
 
         if (Input.GetKeyDown(KeyCode.Return)) // Remove this!   
-            TakeDamage(10);
+            TakeDamage(40, true);
 
-        if (PlayerData.Life == 0 && !Adrenaline) Death();
+        if (PlayerData.Life <= 0 && !Adrenaline && !IsBlinking)
+        {
+            PlayerData.Lives--;
+            Death();
+        }
     }
 
     void FixedUpdate()
@@ -114,6 +128,40 @@ public class Penosa : MonoBehaviour
         anim.SetBool(animHashes.isGrounded, isGrounded);
 
         if (isGrounded && rb.gravityScale != defaultGravity) ResetGravity();
+
+        if (isBlinking)
+        {
+            blinkIntervalTimeCounter += Time.fixedDeltaTime;
+            blinkTimeCounter += Time.fixedDeltaTime;
+            if (blinkIntervalTimeCounter >= blinkFrameInterval)
+            {
+                Blink();
+                blinkIntervalTimeCounter = 0f;
+            }
+        }
+    }
+
+    public void Blink()
+    {
+        if (blinkTimeCounter < blinkDuration)
+        {
+            float alpha = body.color.a;
+            float transparency = alpha == 1 ? 0f : 1f;
+            body.color = new Color(255f, 255f, 255f, transparency);
+            legs.color = new Color(255f, 255f, 255f, transparency);
+        }
+        else
+        {
+            isBlinking = false;
+            body.color = new Color(255f, 255f, 255f, 1f);
+            legs.color = new Color(255f, 255f, 255f, 1f);
+            blinkTimeCounter = 0f;
+        }
+    }
+
+    public void InitiateBlink()
+    {
+        isBlinking = true;
     }
 
     public void Death()
@@ -124,6 +172,7 @@ public class Penosa : MonoBehaviour
         {
             // Play some death animation...
             ResetPlayerData();
+            InitiateBlink();
         }
     }
 
@@ -134,7 +183,6 @@ public class Penosa : MonoBehaviour
         PlayerData._2ndWeaponLevel = 1;
         PlayerData._1stWeaponAmmo = 0;
         PlayerData._2ndWeaponAmmo = PlayerConsts._2ndWeaponInitialAmmo;
-        // Fazer jogador piscar...
     }
 
     private void ChangeSpecialItem()
@@ -362,10 +410,13 @@ public class Penosa : MonoBehaviour
             PlayerData._2ndWeaponAmmo = ammo;
     }
 
-    public void TakeDamage(int dmg)
+    public void TakeDamage(int dmg, bool force = false) // Remove this default parameter. It's for test usage only.
     {
-        if (HasArmor) PlayerData.ArmorLife -= dmg;
-        else PlayerData.Life -= dmg;
+        if (!IsBlinking || force)
+        {
+            if (HasArmor) PlayerData.ArmorLife -= dmg;
+            else PlayerData.Life -= dmg;
+        }
     }
 }
 
