@@ -31,6 +31,10 @@ public class JetCopter : SpecialItem
         parentSlot.Player.JetCopterObject.SetActive(value);
         parentSlot.Player.JetCopterActivated = value;
         parentSlot.Player.Animator.SetBool("JetCopter", value);
+
+        // Se true, coloca o dobro da velocidade do paraquedas, senão, a gravidade normal
+        parentSlot.Player.GetComponent<Rigidbody2D>().gravityScale = 
+            value? parentSlot.Player.parachuteGravity * 2 : parentSlot.Player.defaultGravity;
         ItemInUse = value;
     }
 

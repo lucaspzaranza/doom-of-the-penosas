@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 public class AnimatorHashes
 {
@@ -17,6 +18,10 @@ public class AnimatorHashes
 public class Penosa : MonoBehaviour
 {
     #region Vars
+
+    private PlayerInput playerInputActions;
+    private InputAction jumpAction;
+
     [SerializeField] private PlayerHUD _HUD = null;
     [SerializeField] private PlayerData _playerData;
     private Inventory _inventory = null;
@@ -94,6 +99,20 @@ public class Penosa : MonoBehaviour
     void Awake()
     {
         //ResetPlayerData();
+        playerInputActions = new PlayerInput();
+    }
+
+    private void OnEnable()
+    {
+        jumpAction = playerInputActions.Player.Jump;
+        jumpAction.performed += Jump;
+        jumpAction.canceled += Fall;
+        jumpAction.Enable();
+    }
+
+    private void OnDisable()
+    {
+        jumpAction.Disable();
     }
 
     void Start()
@@ -107,10 +126,10 @@ public class Penosa : MonoBehaviour
     void Update()
     {
         Move();
-        Jump();
+        //Jump();
         Parachute();
         Shoot();
-        ChangeSpecialItem();
+        //ChangeSpecialItem();
 
         if (Input.GetKeyDown(KeyCode.Return)) // Remove this!   
             TakeDamage(40, true);
@@ -127,7 +146,7 @@ public class Penosa : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, terrainLayerMask);
         anim.SetBool(animHashes.isGrounded, isGrounded);
 
-        if (isGrounded && rb.gravityScale != defaultGravity) ResetGravity();
+        if (isGrounded && rb.gravityScale != defaultGravity && !JetCopterActivated) ResetGravity();
 
         if (isBlinking)
         {
@@ -244,35 +263,38 @@ public class Penosa : MonoBehaviour
         Inventory.transform.localScale = new Vector2(isLeft ? -1f : 1f, 1f);
     }
 
-    private void Jump()
+    private void Jump(InputAction.CallbackContext context) 
     {
         if (!JetCopterActivated)
         {
-            if (Input.GetButtonDown(InputStrings.Jump) && isGrounded)
+            if (isGrounded)
                 rb.AddForce(Vector2.up * jumpForce);
-            else if (Input.GetButtonUp(InputStrings.Jump) && !isGrounded)
-                rb.velocity = new Vector2(rb.velocity.x, 0f);
         }
         else
-        {
-            if (Input.GetButton(InputStrings.Jump))
-                rb.velocity = new Vector2(rb.velocity.x, speed);
-            else
-            {
-                var newY = rb.velocity.y;
-                rb.velocity = new Vector2(rb.velocity.x, newY > 0 ? newY : 0);
-            }
-        }
+            rb.velocity = new Vector2(rb.velocity.x, speed * 2);
+    }
+
+    private void Fall(InputAction.CallbackContext context)
+    {
+        float yVelocity = rb.velocity.y;
+        float newY = yVelocity < 0 ? yVelocity : 0;
+
+        rb.velocity = new Vector2(rb.velocity.x, newY);
     }
 
     private void Parachute()
     {
-        if (Input.GetButton(InputStrings.Jump) && !isGrounded && rb.velocity.y < 0)
+        if (JetCopterActivated) return;
+
+        bool buttonPressed = Gamepad.current.buttonSouth.isPressed || Keyboard.current.spaceKey.isPressed;
+        bool buttonRelease = Gamepad.current.buttonSouth.wasReleasedThisFrame || Keyboard.current.spaceKey.wasReleasedThisFrame;
+
+        if (buttonPressed && !parachute.activeSelf && !isGrounded && rb.velocity.y < 0)
         {
             rb.gravityScale = parachuteGravity;
             parachute.SetActive(true);
         }
-        else if (Input.GetButtonUp(InputStrings.Jump)) ResetGravity();
+        else if (buttonRelease) ResetGravity();
     }
 
     private void ResetGravity()
