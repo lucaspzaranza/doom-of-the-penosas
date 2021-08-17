@@ -33,10 +33,16 @@ public class Inventory : MonoBehaviour
     private Penosa player;
     #endregion
 
-    void Start()
+    private void OnEnable()
     {
         SpecialItem.SpriteAdded += SpriteAdded;
         player = GetComponentInParent<Penosa>();
+    }
+
+    private void OnDisable()
+    {
+        SpecialItem.SpriteAdded -= SpriteAdded;
+        player = null;
     }
 
     void Update()

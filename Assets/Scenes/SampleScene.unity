@@ -1817,6 +1817,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: JetCopter Item
       objectReference: {fileID: 0}
+    - target: {fileID: 5485981932484947328, guid: f63c14b2c49b1ab4faf526b885493058,
+        type: 3}
+      propertyPath: gravity
+      value: 0.05
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f63c14b2c49b1ab4faf526b885493058, type: 3}
 --- !u!1001 &1612349218

@@ -27,9 +27,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Movement"",
-                    ""type"": ""Button"",
-                    ""id"": ""8de51811-9799-43fa-8858-60469fc93112"",
+                    ""name"": ""ChangeSpecialItem"",
+                    ""type"": ""Value"",
+                    ""id"": ""6facd9bd-8bf1-47c7-811f-f5f33c9273e9"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -59,15 +59,70 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""2a8f4dbc-2962-4072-9e69-67f7f86276aa"",
-                    ""path"": ""<Gamepad>/leftStick"",
+                    ""name"": ""Gamepad RL"",
+                    ""id"": ""c9c6b616-96ca-431b-bb45-51fc1438be03"",
+                    ""path"": ""1DAxis(whichSideWins=1)"",
+                    ""interactions"": """",
+                    ""processors"": ""Normalize(min=-1,max=1),Scale"",
+                    ""groups"": """",
+                    ""action"": ""ChangeSpecialItem"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""177a4fb7-ed56-4675-a99b-a3ee5c4631b9"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""ChangeSpecialItem"",
                     ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""50e978a7-03e3-43e1-80ad-eaeac69b7f12"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeSpecialItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""a8490052-66da-4db8-a316-30fd255010ae"",
+                    ""path"": ""1DAxis(whichSideWins=1)"",
+                    ""interactions"": """",
+                    ""processors"": ""Normalize(min=-1,max=1),Scale"",
+                    ""groups"": """",
+                    ""action"": ""ChangeSpecialItem"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""2d5a6264-4673-4e41-8d63-4728bc6a225d"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeSpecialItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""f4aa60ce-b467-4db1-bd89-ae57e923b55c"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeSpecialItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -99,7 +154,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
+        m_Player_ChangeSpecialItem = m_Player.FindAction("ChangeSpecialItem", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -150,13 +205,13 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_Movement;
+    private readonly InputAction m_Player_ChangeSpecialItem;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
         public PlayerActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @Movement => m_Wrapper.m_Player_Movement;
+        public InputAction @ChangeSpecialItem => m_Wrapper.m_Player_ChangeSpecialItem;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -169,9 +224,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                @Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                @Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                @ChangeSpecialItem.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeSpecialItem;
+                @ChangeSpecialItem.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeSpecialItem;
+                @ChangeSpecialItem.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeSpecialItem;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -179,9 +234,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
-                @Movement.started += instance.OnMovement;
-                @Movement.performed += instance.OnMovement;
-                @Movement.canceled += instance.OnMovement;
+                @ChangeSpecialItem.started += instance.OnChangeSpecialItem;
+                @ChangeSpecialItem.performed += instance.OnChangeSpecialItem;
+                @ChangeSpecialItem.canceled += instance.OnChangeSpecialItem;
             }
         }
     }
@@ -198,6 +253,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     public interface IPlayerActions
     {
         void OnJump(InputAction.CallbackContext context);
-        void OnMovement(InputAction.CallbackContext context);
+        void OnChangeSpecialItem(InputAction.CallbackContext context);
     }
 }

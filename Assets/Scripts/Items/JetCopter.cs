@@ -6,10 +6,12 @@ using System.Linq;
 public class JetCopter : SpecialItem
 {
     public byte maxDuration = defaultDuration;
+    [SerializeField] private float gravity = 0.1f;
 
     public override void GetItem<T>(Penosa player)
     {
         player.Inventory.AddItem<JetCopter>();
+        player.Inventory.GetComponent<JetCopter>().gravity = gravity;
     }
 
     void Update()
@@ -32,9 +34,9 @@ public class JetCopter : SpecialItem
         parentSlot.Player.JetCopterActivated = value;
         parentSlot.Player.Animator.SetBool("JetCopter", value);
 
-        // Se true, coloca o dobro da velocidade do paraquedas, senão, a gravidade normal
+        // Se true, coloca uma gravidade menor, senão, a gravidade normal
         parentSlot.Player.GetComponent<Rigidbody2D>().gravityScale = 
-            value? parentSlot.Player.parachuteGravity * 2 : parentSlot.Player.defaultGravity;
+            value? gravity : parentSlot.Player.defaultGravity;
         ItemInUse = value;
     }
 

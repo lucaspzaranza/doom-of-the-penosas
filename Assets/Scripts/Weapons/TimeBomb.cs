@@ -5,7 +5,7 @@ public class TimeBomb : Grenade
     public float remoteSpeed;
     public float overlapRadius;
     private bool isLeft = false;
-    private bool sticked = false;
+    private bool fixedOnTheGround = false;
     [SerializeField] private Collider2D[] bombColliders = null;
     [SerializeField] private Transform cornerTransform = null;
     private Collider2D previousCollider;
@@ -19,7 +19,7 @@ public class TimeBomb : Grenade
     public override void Update()
     {
         CheckBombContact();
-        if(sticked)
+        if(fixedOnTheGround)
             RemoteMove(); 
 
         if(Input.GetButtonDown("Fire2")) Explode();
@@ -34,7 +34,7 @@ public class TimeBomb : Grenade
             if(other == null) // Check if has collision with the layers from the Layer Mask (Enemy and Map)
             { //If other is null, the bomb has collided with nothing, and it will rotate 
               // to stick on the other map corner
-                if(i == 0 && sticked) // Bottom collider          
+                if(i == 0 && fixedOnTheGround) // Bottom collider          
                 {                                                                                        
                     transform.position = cornerTransform.position;
                     transform.Rotate(Vector3.forward, isLeft? 90f : -90f);                                   
@@ -43,7 +43,7 @@ public class TimeBomb : Grenade
             }   
             else
             {
-                StickBomb(other.gameObject);
+                FixBombOnGround(other.gameObject);
                 if(i == 1) // Frontal collider                                                   
                     transform.Rotate(Vector3.forward, isLeft? -90f : 90f); 
                 previousCollider = other;
@@ -67,9 +67,9 @@ public class TimeBomb : Grenade
             (transform.localScale.x * -1, transform.localScale.y);
     }
 
-    private void StickBomb(GameObject other)
+    private void FixBombOnGround(GameObject other)
     {
         rb2D.constraints = RigidbodyConstraints2D.FreezePosition;        
-        sticked = true;
+        fixedOnTheGround = true;
     }
 }

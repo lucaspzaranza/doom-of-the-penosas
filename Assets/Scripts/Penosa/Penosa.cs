@@ -21,6 +21,7 @@ public class Penosa : MonoBehaviour
 
     private PlayerInput playerInputActions;
     private InputAction jumpAction;
+    private InputAction changespecialItemAction;
 
     [SerializeField] private PlayerHUD _HUD = null;
     [SerializeField] private PlayerData _playerData;
@@ -94,6 +95,47 @@ public class Penosa : MonoBehaviour
 
     public bool IsBlinking => isBlinking;
 
+    private bool Fire1ButtonPressed
+    {
+        get
+        {
+            bool result = Keyboard.current.ctrlKey.wasPressedThisFrame;
+            if (PlayerData._1stWeaponLevel == 2) result = Keyboard.current.ctrlKey.isPressed;
+
+            if (Gamepad.current != null)
+            {
+                result |= Gamepad.current.buttonWest.wasPressedThisFrame;
+                if (PlayerData._1stWeaponLevel == 2) result |= Gamepad.current.buttonWest.isPressed;
+            }
+
+            return result;
+        }
+    }
+
+    private bool Fire2ButtonPressed
+    {
+        get
+        {
+            bool result = Keyboard.current.shiftKey.wasPressedThisFrame;
+            if (Gamepad.current != null)
+                result |= Gamepad.current.buttonEast.wasPressedThisFrame;
+
+            return result;
+        }
+    }
+
+    private bool Fire3ButtonPressed
+    {
+        get
+        {
+            bool result = Keyboard.current.altKey.wasPressedThisFrame;
+            if (Gamepad.current != null)
+                result |= Gamepad.current.buttonNorth.wasPressedThisFrame;
+
+            return result;
+        }
+    }
+
     #endregion
 
     void Awake()
@@ -108,11 +150,20 @@ public class Penosa : MonoBehaviour
         jumpAction.performed += Jump;
         jumpAction.canceled += Fall;
         jumpAction.Enable();
+
+        changespecialItemAction = playerInputActions.Player.ChangeSpecialItem;
+        changespecialItemAction.performed += ChangeSpecialItem;
+        changespecialItemAction.Enable();
     }
 
     private void OnDisable()
     {
+        jumpAction.performed -= Jump;
+        jumpAction.canceled -= Fall;
         jumpAction.Disable();
+
+        changespecialItemAction.performed -= ChangeSpecialItem;
+        changespecialItemAction.Disable();
     }
 
     void Start()
@@ -126,10 +177,8 @@ public class Penosa : MonoBehaviour
     void Update()
     {
         Move();
-        //Jump();
         Parachute();
         Shoot();
-        //ChangeSpecialItem();
 
         if (Input.GetKeyDown(KeyCode.Return)) // Remove this!   
             TakeDamage(40, true);
@@ -204,11 +253,11 @@ public class Penosa : MonoBehaviour
         PlayerData._2ndWeaponAmmo = PlayerConsts._2ndWeaponInitialAmmo;
     }
 
-    private void ChangeSpecialItem()
+    private void ChangeSpecialItem(InputAction.CallbackContext context)
     {
-        if (Input.GetButtonDown(InputStrings.ChangeSpecialItem) && !Inventory.IsEmpty)
+        if (!Inventory.IsEmpty)
         {
-            float value = Input.GetAxisRaw(InputStrings.ChangeSpecialItem);
+            float value = changespecialItemAction.ReadValue<float>();
             int length = Inventory.Slots.Count;
             int index = Inventory.Slots.IndexOf(Inventory.SelectedSlot);
             if (value > 0 && index < length - 1) index++;
@@ -271,7 +320,7 @@ public class Penosa : MonoBehaviour
                 rb.AddForce(Vector2.up * jumpForce);
         }
         else
-            rb.velocity = new Vector2(rb.velocity.x, speed * 2);
+            rb.velocity = new Vector2(rb.velocity.x, speed);
     }
 
     private void Fall(InputAction.CallbackContext context)
@@ -286,8 +335,14 @@ public class Penosa : MonoBehaviour
     {
         if (JetCopterActivated) return;
 
-        bool buttonPressed = Gamepad.current.buttonSouth.isPressed || Keyboard.current.spaceKey.isPressed;
-        bool buttonRelease = Gamepad.current.buttonSouth.wasReleasedThisFrame || Keyboard.current.spaceKey.wasReleasedThisFrame;
+        bool buttonPressed = Keyboard.current.spaceKey.isPressed;
+        bool buttonRelease = Keyboard.current.spaceKey.wasReleasedThisFrame;
+
+        if (Gamepad.current != null)
+        {
+            buttonPressed |= Gamepad.current.buttonSouth.isPressed;
+            buttonRelease |= Gamepad.current.buttonSouth.wasReleasedThisFrame;
+        }
 
         if (buttonPressed && !parachute.activeSelf && !isGrounded && rb.velocity.y < 0)
         {
@@ -411,15 +466,15 @@ public class Penosa : MonoBehaviour
 
     private void Shoot()
     {
-        if (PlayerData._1stWeaponLevel == 1 && Input.GetButtonDown(InputStrings.Fire1))
+        if (PlayerData._1stWeaponLevel == 1 && Fire1ButtonPressed)
             Instantiate_1stShot();
-        else if (PlayerData._1stWeaponLevel == 2 && Input.GetButton(InputStrings.Fire1))
+        else if (PlayerData._1stWeaponLevel == 2 && Fire1ButtonPressed)
             Instantiate_1stShotLv2();
-        else if (PlayerData._1stWeaponLevel == 3 && Input.GetButtonDown(InputStrings.Fire1) && !isShooting)
+        else if (PlayerData._1stWeaponLevel == 3 && Fire1ButtonPressed && !isShooting)
             Instantiate_1stShot();
-        else if (Input.GetButtonDown(InputStrings.Fire2) && PlayerData._2ndWeaponAmmo > 0)
+        else if (Fire2ButtonPressed && PlayerData._2ndWeaponAmmo > 0)
             InstantiateSecondaryShot();
-        else if (Input.GetButtonDown(InputStrings.Fire3)) UseSpecialItem();
+        else if (Fire3ButtonPressed) UseSpecialItem();
 
         if (isShooting) ResetShootAnim();
     }
