@@ -113,7 +113,7 @@ public class Penosa : MonoBehaviour
         _inventory = GetComponentInChildren<Inventory>();
     }
 
-    private void OnDisable()
+    private void OnDisable() 
     {
         DisableInputSystem();
     }
