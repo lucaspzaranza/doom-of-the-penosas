@@ -3,7 +3,7 @@
 public class Grenade : Projectile
 {
     protected Rigidbody2D rb2D;
-    private float YDecreaseOffset = 2f;
+    protected float YDecreaseOffset = 2f;
 
     protected bool IsOnAir
     {
@@ -12,8 +12,7 @@ public class Grenade : Projectile
 
     public override void Start()
     {
-        base.Start();        
-        ThrowGrenade(speed, Mathf.Abs(speed) - YDecreaseOffset);
+        base.Start();
     }
 
     public override void Update()
@@ -21,7 +20,7 @@ public class Grenade : Projectile
         if(TouchedProjectileInteractable) Explode();
     }
 
-    public virtual void ThrowGrenade(float x, float y)
+    protected void ThrowGrenade(float x, float y)
     {
         rb2D = GetComponent<Rigidbody2D>();
         Vector2 force = new Vector2(x, y);
@@ -30,6 +29,17 @@ public class Grenade : Projectile
 
     public virtual void Explode()
     {
-        Destroy(this.gameObject);
+        // Adicionar aqui lógica de animação de explosão...
+        ObjectPool.instance.ReturnGameObject(gameObject);
+    }
+
+    public void CallThrowGrenade()
+    {
+        ThrowGrenade(Speed, Mathf.Abs(Speed) - YDecreaseOffset);
+    }
+
+    public virtual void OnDisable()
+    {
+        Speed = Mathf.Abs(Speed); // Resetando a velocidade pro seu valor positivo.
     }
 }

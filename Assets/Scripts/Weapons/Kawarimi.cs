@@ -25,14 +25,15 @@ public class Kawarimi : Grenade
         kawarimiExplosionAction.Enable();
     }
 
-    private void OnDisable()
+    public override void OnDisable()
     {
+        base.OnDisable();
         kawarimiExplosionAction.Disable();
     }
 
     public override void Start()
     {      
-        ThrowGrenade(speed, Mathf.Abs(speed));
+        ThrowGrenade(Speed, Mathf.Abs(Speed));
         rb2D.AddTorque(torque, ForceMode2D.Impulse);
         coll2D = GetComponent<Collider2D>();
     }

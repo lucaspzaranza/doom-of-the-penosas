@@ -2,9 +2,16 @@
 
 public class Projectile : MonoBehaviour
 {
-    public float speed;
+    [SerializeField] private float _speed;
     public int damage;
     public LayerMask interactableLayerMask;
+
+    public float Speed 
+    {
+        get => _speed;
+
+        set => _speed = value;
+    }
 
     protected bool TouchedProjectileInteractable
     {
@@ -13,14 +20,15 @@ public class Projectile : MonoBehaviour
 
     public virtual void Start()
     {
-        if(speed < 0)
+        if(Speed < 0)
             transform.localScale = new Vector2
             (-transform.localScale.x, transform.localScale.y);
     }
 
     public virtual void Update()
     {
-        transform.Translate(Vector3.right * speed * Time.deltaTime);
-        if(TouchedProjectileInteractable) Destroy(this.gameObject);
+        transform.Translate(Vector3.right * Speed * Time.deltaTime);
+        if (TouchedProjectileInteractable)
+            ObjectPool.instance.ReturnGameObject(gameObject);
     }
 }

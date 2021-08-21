@@ -412,13 +412,34 @@ public class Penosa : MonoBehaviour
 
             var currentTransform = GetShotSpawnCoordinates();
             var currentRotation = GetShotRotation();
-            var newBullet = Instantiate(PlayerData.Current1stShot, currentTransform.position, currentRotation);
+
+            GameObject newBullet = ObjectPool.instance.GetObject(PlayerData.Current1stShot);
+            newBullet.transform.position = currentTransform.position;
+            newBullet.transform.rotation = currentRotation;
+
             if (PlayerData._1stWeaponLevel == 2) SetShotLevel2VariationRate(ref newBullet);
 
-            newBullet.GetComponent<Projectile>().speed = shotspeed * GetShotDirection();
+            newBullet.GetComponent<Projectile>().Speed = shotspeed * GetShotDirection();
 
             SetAmmo(WeaponType._1st, PlayerData._1stWeaponAmmo - 1);
         }
+    }
+
+    private void InitializeShot2Animators()
+    {
+        isShooting = true;
+        anim.SetTrigger(animHashes.shootTrigger);
+        anim.SetInteger(animHashes.shotLevel, 4);
+        shotAnimTimeCounter = 0;
+    }
+
+    private GameObject GetProjectileFromPool(GameObject insanceToSearch)
+    {
+        GameObject result = ObjectPool.instance.GetObject(PlayerData.Current2ndShot);
+        result.transform.position = secondaryShotSpawnCoordinates.position;
+        result.transform.rotation = Quaternion.identity;
+
+        return result;
     }
 
     private void InstantiateSecondaryShot()
@@ -426,19 +447,29 @@ public class Penosa : MonoBehaviour
         bool canSpawn = PlayerData._2ndWeaponLevel == 1;
         // currentGrenade sendo nula significa que não tem nenhuma granada em tela no momento.
         // Essa verificação é feita pelo fato de que só pode atirar um 2nd shot por vez.
-        canSpawn |= PlayerData._2ndWeaponLevel == 2 && currentGrenade == null;
+
+        bool fire2Level2Logic = PlayerData._2ndWeaponLevel == 2 && currentGrenade == null;
+        canSpawn |= fire2Level2Logic;
         if (canSpawn)
         {
-            isShooting = true;
-            anim.SetTrigger(animHashes.shootTrigger);
-            anim.SetInteger(animHashes.shotLevel, 4);
-            shotAnimTimeCounter = 0;
+            InitializeShot2Animators();
 
-            currentGrenade = Instantiate(PlayerData.Current2ndShot,
-                secondaryShotSpawnCoordinates.position, Quaternion.identity);
-            currentGrenade.GetComponent<Projectile>().speed *= isLeft ? -1 : 1;
+            // Somente o nível 1 do Tiro 2 terá Pooling, já que o nível 2 só tem uma instância por vez na tela.
+            if (PlayerData._2ndWeaponLevel == 1)
+                currentGrenade = GetProjectileFromPool(PlayerData.Current2ndShot);
+            else if(fire2Level2Logic)
+                currentGrenade = Instantiate(PlayerData.Current2ndShot, secondaryShotSpawnCoordinates.position, Quaternion.identity);
+
+            var currentGrenadeScript = currentGrenade.GetComponent<Grenade>();
+            currentGrenadeScript.Speed *= isLeft ? -1 : 1;
+            currentGrenadeScript.CallThrowGrenade();
+
             var kawarimi = currentGrenade.GetComponent<Kawarimi>();
             if (kawarimi != null) kawarimi.penosa = gameObject;
+
+            // Se a bomba for nivel 2, precisamos guardar a referência dela para futuras verificações
+            if(PlayerData._2ndWeaponLevel == 1 && currentGrenade != null) 
+                currentGrenade = null;
 
             SetAmmo(WeaponType.Secondary, PlayerData._2ndWeaponAmmo - 1);
         }

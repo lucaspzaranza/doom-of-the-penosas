@@ -42,12 +42,21 @@ public class GameController : MonoBehaviour
         if (instance == null) instance = this;
         else Destroy(gameObject);
         GetPlayersOnScene();
+
+        InitiateProjectilesPools();
     }
 
     void Update()
     {
         if (PlayersData[0].OnCountdown && PlayersData[0].Countdown >= 0)
             GameOverCountdown(0);
+    }
+
+    private void InitiateProjectilesPools()
+    {
+        StartCoroutine(ObjectPool.instance.InitializePool("Egg Shot"));
+        StartCoroutine(ObjectPool.instance.InitializePool("Big Egg Shot"));
+        StartCoroutine(ObjectPool.instance.InitializePool("Grenade"));
     }
 
     private void GetPlayersOnScene()

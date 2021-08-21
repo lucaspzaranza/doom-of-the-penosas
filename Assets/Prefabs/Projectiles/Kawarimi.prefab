@@ -118,14 +118,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efe87f262ade4af4a9265d423ac9f9b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3.5
+  _speed: 5
   damage: 2
   interactableLayerMask:
     serializedVersion: 2
     m_Bits: 4864
   torque: 0.375
   penosa: {fileID: 0}
-  yOffset: 0.22
 --- !u!61 &6071608304877252539
 BoxCollider2D:
   m_ObjectHideFlags: 0

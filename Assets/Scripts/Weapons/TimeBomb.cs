@@ -6,12 +6,12 @@ public class TimeBomb : Grenade
 {   
     public float remoteSpeed;
     public float overlapRadius;
-    private bool isLeft = false;
-    private bool fixedOnTheGround = false;
     [SerializeField] private Collider2D[] bombColliders = null;
     [SerializeField] private Transform cornerTransform = null;
-    private Collider2D previousCollider;
 
+    private bool fixedOnTheGround = false;
+    private Collider2D previousCollider;
+    private bool isLeft = false;
     private PlayerInput playerInputActions;
     private InputAction timeBombExplosionAction;
 
@@ -20,7 +20,7 @@ public class TimeBomb : Grenade
         playerInputActions = new PlayerInput();
     }
 
-    private void OnEnable()
+    public void OnEnable()
     {
         playerInputActions.Player.TimeBombMovement.Enable();
 
@@ -28,8 +28,9 @@ public class TimeBomb : Grenade
         timeBombExplosionAction.Enable();
     }
 
-    private void OnDisable()
+    public override void OnDisable()
     {
+        base.OnDisable();
         timeBombExplosionAction.Disable();
     }
 
@@ -52,6 +53,12 @@ public class TimeBomb : Grenade
     {
         if(timeBombExplosionAction.triggered)
             Explode();
+    }
+
+    // Sobrescrevendo o método de explosão porque as bombas nível 2 não estão utilizando pooling
+    public override void Explode()
+    {
+        Destroy(gameObject);
     }
 
     private void CheckBombContact()
