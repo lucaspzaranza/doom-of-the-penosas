@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 
 public class TimeBomb : Grenade
 {   
@@ -10,6 +12,27 @@ public class TimeBomb : Grenade
     [SerializeField] private Transform cornerTransform = null;
     private Collider2D previousCollider;
 
+    private PlayerInput playerInputActions;
+    private InputAction timeBombExplosionAction;
+
+    private void Awake()
+    {
+        playerInputActions = new PlayerInput();
+    }
+
+    private void OnEnable()
+    {
+        playerInputActions.Player.TimeBombMovement.Enable();
+
+        timeBombExplosionAction = playerInputActions.Player.Fire2Shot;
+        timeBombExplosionAction.Enable();
+    }
+
+    private void OnDisable()
+    {
+        timeBombExplosionAction.Disable();
+    }
+
     public override void Start()
     {
         base.Start();
@@ -19,10 +42,16 @@ public class TimeBomb : Grenade
     public override void Update()
     {
         CheckBombContact();
-        if(fixedOnTheGround)
-            RemoteMove(); 
+        if (fixedOnTheGround)
+            RemoteMove();
 
-        if(Input.GetButtonDown("Fire2")) Explode();
+        BombExplosionVerification();
+    }
+
+    private void BombExplosionVerification()
+    {
+        if(timeBombExplosionAction.triggered)
+            Explode();
     }
 
     private void CheckBombContact()
@@ -52,13 +81,14 @@ public class TimeBomb : Grenade
     }
 
     private void RemoteMove()
-    {       
-        float DPad = Input.GetAxisRaw("D Pad");
-        if(DPad > 0 && isLeft) Flip();
-        else if (DPad < 0 && !isLeft) Flip();        
- 
+    {
+        float DPad = playerInputActions.Player.TimeBombMovement.ReadValue<float>();
+
+        if (DPad > 0 && isLeft) Flip();
+        else if (DPad < 0 && !isLeft) Flip();
+
         transform.Translate(Vector2.right * remoteSpeed * DPad * Time.deltaTime);
-    }    
+    }
 
     private void Flip()
     {

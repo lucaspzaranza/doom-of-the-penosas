@@ -61,7 +61,6 @@ public class GameController : MonoBehaviour
         {
             PlayersData.Add(player.PlayerData);
             PlayersData[id].ID = id;
-            player.HUD.GetHUDValues(PlayersData[id]);
             id++;
         });
     }
@@ -118,10 +117,5 @@ public class GameController : MonoBehaviour
             // Mais pra frente, adicionar funcionalidade de navegar de volta ao 
             // menu inicial.
         }
-    }
-
-    void DontDestroyOnLoad()
-    {
-
     }
 }

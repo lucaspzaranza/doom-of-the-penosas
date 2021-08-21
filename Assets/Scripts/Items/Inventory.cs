@@ -31,6 +31,9 @@ public class Inventory : MonoBehaviour
     private float timeCounter;
 
     private Penosa player;
+
+    public delegate void PlayerDataSpriteEvent(Sprite newSprite);
+    public event PlayerDataSpriteEvent OnSpecialItemIconChanged;
     #endregion
 
     private void OnEnable()
@@ -137,6 +140,6 @@ public class Inventory : MonoBehaviour
         currentItemSprite = newSprite;
         itemChildSR.sprite = newSprite;
 
-        player.HUD.SetSpecialItemIconSprite(currentItemSprite);
+        OnSpecialItemIconChanged?.Invoke(currentItemSprite);
     }
 }

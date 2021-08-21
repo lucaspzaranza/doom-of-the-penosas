@@ -1,12 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Kawarimi : Grenade
 {
     public float torque;
     [HideInInspector] public GameObject penosa;
     private Collider2D coll2D;
+
+    private PlayerInput playerInputActions;
+    private InputAction kawarimiExplosionAction;
+
+    private void Awake()
+    {
+        playerInputActions = new PlayerInput();
+    }
+
+    private void OnEnable()
+    {
+        playerInputActions.Player.TimeBombMovement.Enable();
+
+        kawarimiExplosionAction = playerInputActions.Player.Fire2Shot;
+        kawarimiExplosionAction.Enable();
+    }
+
+    private void OnDisable()
+    {
+        kawarimiExplosionAction.Disable();
+    }
+
     public override void Start()
     {      
         ThrowGrenade(speed, Mathf.Abs(speed));
@@ -16,7 +39,7 @@ public class Kawarimi : Grenade
 
     public override void Update()
     {
-        if(Input.GetButtonDown("Fire2")) KawarimiNoJutsu();
+        if(kawarimiExplosionAction.triggered) KawarimiNoJutsu();
         if(rb2D.velocity == Vector2.zero)
         {
             if(!coll2D.isTrigger) coll2D.isTrigger = true;
@@ -24,9 +47,23 @@ public class Kawarimi : Grenade
         }
     }
 
+    private void DestroyKawarimi()
+    {
+        Destroy(gameObject);
+    }
+
     private void KawarimiNoJutsu()
     {
-        if(penosa != null) penosa.transform.position = transform.position;
-        Destroy(gameObject);
+        if (penosa != null)
+        {
+            rb2D.bodyType = RigidbodyType2D.Dynamic;
+            coll2D.isTrigger = false;
+            Vector3 penosaPosition = penosa.transform.position;
+            penosa.transform.position = transform.position;
+            transform.position = new Vector2(penosaPosition.x, penosaPosition.y);
+            kawarimiExplosionAction.Disable();
+        }
+
+        Invoke(nameof(DestroyKawarimi), 2f);
     }
 }

@@ -18,14 +18,4 @@ public class UIController : MonoBehaviour
         if (instance == null) instance = this;
         else Destroy(gameObject);
     }
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
 }

@@ -20,10 +20,14 @@ public class Penosa : MonoBehaviour
     #region Vars
 
     private PlayerInput playerInputActions;
+    private InputAction moveAction;
     private InputAction jumpAction;
+    private InputAction parachuteAction;
     private InputAction changespecialItemAction;
+    private InputAction fire1Action;
+    private InputAction fire2Action;
+    private InputAction fire3Action;
 
-    [SerializeField] private PlayerHUD _HUD = null;
     [SerializeField] private PlayerData _playerData;
     private Inventory _inventory = null;
 
@@ -72,12 +76,11 @@ public class Penosa : MonoBehaviour
 
     #region Props
 
-    public PlayerHUD HUD => _HUD;
     public bool HasArmor => PlayerData.ArmorLife > 0;
 
     public GameObject JetCopterObject => _jetCopter;
 
-    private bool Vertical => Mathf.Abs(Input.GetAxisRaw(InputStrings.Vertical)) == 1;
+    private bool Vertical => Mathf.Abs(moveAction.ReadValue<Vector2>().y) > 0;
 
     public Inventory Inventory => _inventory;
 
@@ -95,47 +98,6 @@ public class Penosa : MonoBehaviour
 
     public bool IsBlinking => isBlinking;
 
-    private bool Fire1ButtonPressed
-    {
-        get
-        {
-            bool result = Keyboard.current.ctrlKey.wasPressedThisFrame;
-            if (PlayerData._1stWeaponLevel == 2) result = Keyboard.current.ctrlKey.isPressed;
-
-            if (Gamepad.current != null)
-            {
-                result |= Gamepad.current.buttonWest.wasPressedThisFrame;
-                if (PlayerData._1stWeaponLevel == 2) result |= Gamepad.current.buttonWest.isPressed;
-            }
-
-            return result;
-        }
-    }
-
-    private bool Fire2ButtonPressed
-    {
-        get
-        {
-            bool result = Keyboard.current.shiftKey.wasPressedThisFrame;
-            if (Gamepad.current != null)
-                result |= Gamepad.current.buttonEast.wasPressedThisFrame;
-
-            return result;
-        }
-    }
-
-    private bool Fire3ButtonPressed
-    {
-        get
-        {
-            bool result = Keyboard.current.altKey.wasPressedThisFrame;
-            if (Gamepad.current != null)
-                result |= Gamepad.current.buttonNorth.wasPressedThisFrame;
-
-            return result;
-        }
-    }
-
     #endregion
 
     void Awake()
@@ -146,24 +108,14 @@ public class Penosa : MonoBehaviour
 
     private void OnEnable()
     {
-        jumpAction = playerInputActions.Player.Jump;
-        jumpAction.performed += Jump;
-        jumpAction.canceled += Fall;
-        jumpAction.Enable();
+        InputSystemSetup();
 
-        changespecialItemAction = playerInputActions.Player.ChangeSpecialItem;
-        changespecialItemAction.performed += ChangeSpecialItem;
-        changespecialItemAction.Enable();
+        _inventory = GetComponentInChildren<Inventory>();
     }
 
     private void OnDisable()
     {
-        jumpAction.performed -= Jump;
-        jumpAction.canceled -= Fall;
-        jumpAction.Disable();
-
-        changespecialItemAction.performed -= ChangeSpecialItem;
-        changespecialItemAction.Disable();
+        DisableInputSystem();
     }
 
     void Start()
@@ -171,7 +123,6 @@ public class Penosa : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         rb.gravityScale = defaultGravity;
-        _inventory = GetComponentInChildren<Inventory>();
     }
 
     void Update()
@@ -207,6 +158,53 @@ public class Penosa : MonoBehaviour
                 blinkIntervalTimeCounter = 0f;
             }
         }
+    }
+
+    private void InputSystemSetup()
+    {
+        moveAction = playerInputActions.Player.MoveAim;
+        moveAction.Enable();
+
+        jumpAction = playerInputActions.Player.Jump;
+        jumpAction.performed += Jump;
+        jumpAction.canceled += Fall;
+        jumpAction.Enable();
+
+        parachuteAction = playerInputActions.Player.Parachute;
+        parachuteAction.Enable();
+
+        changespecialItemAction = playerInputActions.Player.ChangeSpecialItem;
+        changespecialItemAction.performed += ChangeSpecialItem;
+        changespecialItemAction.Enable();
+
+        fire1Action = playerInputActions.Player.Fire1Shot;
+        fire1Action.Enable();
+
+        fire2Action = playerInputActions.Player.Fire2Shot;
+        fire2Action.Enable();
+
+        fire3Action = playerInputActions.Player.Fire3SpecialItem;
+        fire3Action.Enable();
+    }
+
+    private void DisableInputSystem()
+    {
+        moveAction.Disable();
+
+        jumpAction.performed -= Jump;
+        jumpAction.canceled -= Fall;
+        jumpAction.Disable();
+
+        parachuteAction.Disable();
+
+        changespecialItemAction.performed -= ChangeSpecialItem;
+        changespecialItemAction.Disable();
+
+        playerInputActions.Player.TimeBombMovement.Disable();
+
+        fire1Action.Disable();
+        fire2Action.Disable();
+        fire3Action.Disable();
     }
 
     public void Blink()
@@ -276,8 +274,11 @@ public class Penosa : MonoBehaviour
 
     private void Move()
     {
-        float horizontal = Input.GetAxis(InputStrings.Horizontal);
-        float vertical = Input.GetAxis(InputStrings.Vertical);
+        Vector2 moveVector = moveAction.ReadValue<Vector2>();
+
+        float horizontal = GetNormalizedMovementValue(moveVector.x);
+        float vertical = GetNormalizedMovementValue(moveVector.y);
+
         if (horizontal > 0 && isLeft) Flip();
         else if (horizontal < 0 && !isLeft) Flip();
 
@@ -285,6 +286,14 @@ public class Penosa : MonoBehaviour
             rb.velocity = new Vector2(speed * horizontal, rb.velocity.y);
 
         SetMovementAnimators(vertical);
+    }
+
+    private float GetNormalizedMovementValue(float raw)
+    {
+        if (raw > 0) return 1f;
+        else if (raw < 0) return -1f;
+
+        return 0f;
     }
 
     private bool HitWall()
@@ -300,8 +309,9 @@ public class Penosa : MonoBehaviour
     {
         anim.SetInteger(animHashes.XVelocity, (int)rb.velocity.x);
         anim.SetFloat(animHashes.YVelocity, rb.velocity.y);
-        anim.SetBool(animHashes.up, vertical == 1);
-        anim.SetBool(animHashes.down, vertical == -1);
+
+        anim.SetBool(animHashes.up, vertical > 0);
+        anim.SetBool(animHashes.down, vertical < 0);
     }
 
     private void Flip()
@@ -333,23 +343,16 @@ public class Penosa : MonoBehaviour
 
     private void Parachute()
     {
+        bool buttonPressed = parachuteAction.ReadValue<float>() > 0f;
+
         if (JetCopterActivated) return;
-
-        bool buttonPressed = Keyboard.current.spaceKey.isPressed;
-        bool buttonRelease = Keyboard.current.spaceKey.wasReleasedThisFrame;
-
-        if (Gamepad.current != null)
-        {
-            buttonPressed |= Gamepad.current.buttonSouth.isPressed;
-            buttonRelease |= Gamepad.current.buttonSouth.wasReleasedThisFrame;
-        }
 
         if (buttonPressed && !parachute.activeSelf && !isGrounded && rb.velocity.y < 0)
         {
             rb.gravityScale = parachuteGravity;
             parachute.SetActive(true);
         }
-        else if (buttonRelease) ResetGravity();
+        else if (!buttonPressed) ResetGravity();
     }
 
     private void ResetGravity()
@@ -466,15 +469,24 @@ public class Penosa : MonoBehaviour
 
     private void Shoot()
     {
-        if (PlayerData._1stWeaponLevel == 1 && Fire1ButtonPressed)
+        bool fire1ButtonPressed = fire1Action.ReadValue<float>() > 0;
+        // Lvl Diferente de 2, porque com o nível 2, o comportamento do tiro é diferente,
+        // precisa verificar se está pressionado a cada frame, enquanto que nos lvls 1 e 3 
+        // a função de tiro só deve ser chamada no frame em que o botão foi pressionado.
+        if (PlayerData._1stWeaponLevel != 2) fire1ButtonPressed &= fire1Action.triggered;
+
+        bool fire2ButtonPressed = fire2Action.ReadValue<float>() > 0 && fire2Action.triggered;
+        bool fire3ButtonPressed = fire3Action.ReadValue<float>() > 0 && fire3Action.triggered;
+
+        if (fire1ButtonPressed && PlayerData._1stWeaponLevel == 1)
             Instantiate_1stShot();
-        else if (PlayerData._1stWeaponLevel == 2 && Fire1ButtonPressed)
+        else if (fire1ButtonPressed && PlayerData._1stWeaponLevel == 2 && fire1ButtonPressed)
             Instantiate_1stShotLv2();
-        else if (PlayerData._1stWeaponLevel == 3 && Fire1ButtonPressed && !isShooting)
+        else if (fire1ButtonPressed && !isShooting && PlayerData._1stWeaponLevel == 3)
             Instantiate_1stShot();
-        else if (Fire2ButtonPressed && PlayerData._2ndWeaponAmmo > 0)
+        else if (fire2ButtonPressed && PlayerData._2ndWeaponAmmo > 0)
             InstantiateSecondaryShot();
-        else if (Fire3ButtonPressed) UseSpecialItem();
+        else if (fire3ButtonPressed) UseSpecialItem();
 
         if (isShooting) ResetShootAnim();
     }

@@ -26,6 +26,15 @@ public class PlayerData
 
     #endregion
 
+    #region Events
+
+    public delegate void PlayerDataEvent(int newValue);
+    public event PlayerDataEvent OnLifeChanged;
+    public event PlayerDataEvent OnArmorLifeChanged;
+    public event PlayerDataEvent OnLivesChanged;
+
+    #endregion
+
     #region Properties
 
     public int _1stWeaponAmmo
@@ -69,7 +78,7 @@ public class PlayerData
         set
         {
             _armorLife = Mathf.Clamp(value, 0, PlayerConsts.max_life);
-            Player.HUD.ArmorLife = _armorLife;
+            OnArmorLifeChanged?.Invoke(_armorLife);
             if (value < 0) Life -= (Mathf.Abs(value));
         }
     }
@@ -107,7 +116,7 @@ public class PlayerData
         set
         {
             _life = Mathf.Clamp(value, 0, PlayerConsts.max_life);
-            Player.HUD.Life = _life;
+            OnLifeChanged?.Invoke(_life);
             if (_life == 0 && !Player.Adrenaline && !Player.IsBlinking)
             {
                 Lives--;
@@ -122,7 +131,7 @@ public class PlayerData
         set
         {
             _lives = Mathf.Clamp(value, 0, PlayerConsts.max_lives);
-            Player.HUD.Lives = _lives;
+            OnLivesChanged?.Invoke(_lives);
         }
     }
 
