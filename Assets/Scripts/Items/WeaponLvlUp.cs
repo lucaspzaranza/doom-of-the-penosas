@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum WeaponType
 {
-    _1st,
+    Primary,
     Secondary
 }
 
@@ -16,15 +16,15 @@ public class WeaponLvlUp : Item
 
     public override void GetItem(Penosa player)
     {
-        if(weaponType == WeaponType._1st)
+        if(weaponType == WeaponType.Primary)
         {
             if(player.PlayerData._1stWeaponLevel != newLvl)
             {
                 player.PlayerData._1stWeaponLevel = newLvl;            
-                player.SetAmmo(WeaponType._1st, ammo);
+                player.SetAmmo(WeaponType.Primary, ammo);
             }
             else 
-                player.SetAmmo(WeaponType._1st, ammo + player.PlayerData._1stWeaponAmmo);
+                player.SetAmmo(WeaponType.Primary, ammo + player.PlayerData._1stWeaponAmmo);
         }
         else if(weaponType == WeaponType.Secondary) 
         {

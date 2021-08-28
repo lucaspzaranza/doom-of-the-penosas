@@ -9,7 +9,7 @@ public class Mayday : SpecialItem
     private const float missileHeight = 4f;
     private const float xOffset = 1.5f;
     public GameObject missile;
-    private AssetBundle missileBundle;
+    //private AssetBundle missileBundle;
 
     public override void GetItem<T>(Penosa player)
     {
@@ -19,21 +19,21 @@ public class Mayday : SpecialItem
     private IEnumerator InstantiateMissiles(float interval)
     {
         ItemInUse = true;
-        float min = Camera.main.ViewportToWorldPoint(Camera.main.rect.min).x;
-        float max = Camera.main.ViewportToWorldPoint(Camera.main.rect.max).x;
         float x = Camera.main.ViewportToWorldPoint(Camera.main.rect.min).x;        
 
         for(int i = 0; i < maxMissiles; i++)
         {
             Vector2 newPos = new Vector2(x, missileHeight);
-            Instantiate(missile, newPos, missile.transform.rotation); 
+            Instantiate(missile, newPos, missile.transform.rotation);
             yield return new WaitForSeconds(interval);
             x += xOffset;
         }
+
         ItemInUse = false;            
+
         if(parentSlot.Player.Inventory.SelectedSlot.Amount == 0) 
         {
-            missileBundle.Unload(true);
+            //missileBundle.Unload(true);
             RemoveItemIfAmountEqualsZero();
         }
     }
@@ -41,9 +41,9 @@ public class Mayday : SpecialItem
     public override void Use()
     {     
         base.Use();
-        if(missileBundle == null)
-            missileBundle = AssetBundle.LoadFromFile("Assets/AssetBundles/projectiles");
-        missile = missileBundle.LoadAsset<GameObject>("Missile");
+        //if(missileBundle == null)
+        //    missileBundle = AssetBundle.LoadFromFile("Assets/AssetBundles/projectiles");
+        //missile = missileBundle.LoadAsset<GameObject>("Missile");
         StartCoroutine(InstantiateMissiles(0.5f));            
     }
 }

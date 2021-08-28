@@ -421,7 +421,7 @@ public class Penosa : MonoBehaviour
 
             newBullet.GetComponent<Projectile>().Speed = shotspeed * GetShotDirection();
 
-            SetAmmo(WeaponType._1st, PlayerData._1stWeaponAmmo - 1);
+            SetAmmo(WeaponType.Primary, PlayerData._1stWeaponAmmo - 1);
         }
     }
 
@@ -524,7 +524,7 @@ public class Penosa : MonoBehaviour
 
     public void SetAmmo(WeaponType weaponType, int ammo)
     {
-        if (weaponType == WeaponType._1st && PlayerData._1stWeaponLevel > 1)
+        if (weaponType == WeaponType.Primary && PlayerData._1stWeaponLevel > 1)
             PlayerData._1stWeaponAmmo = ammo;
         else if (weaponType == WeaponType.Secondary)
             PlayerData._2ndWeaponAmmo = ammo;

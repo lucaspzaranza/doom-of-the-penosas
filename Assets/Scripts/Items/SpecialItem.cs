@@ -8,8 +8,30 @@ public abstract class SpecialItem : MonoBehaviour
     public const byte defaultDuration = 30;
     public bool ItemInUse { get; protected set; }
     public ItemSlot parentSlot;
+
+    private Rigidbody2D currentRigidBody2D = null;
+    private bool isGrounded;
+
     [SerializeField] protected float timeCounter;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask terrainLayerMask;
+
     public static event EventHandler<SpriteAddedEventArgs> SpriteAdded;
+    private void Start()
+    {
+        currentRigidBody2D = GetComponent<Rigidbody2D>();
+    }
+
+    private void FixedUpdate()
+    {
+        if (groundCheck == null) return;
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, terrainLayerMask);
+
+        if (isGrounded && currentRigidBody2D?.bodyType != RigidbodyType2D.Static)
+            currentRigidBody2D.bodyType = RigidbodyType2D.Static;
+        else if (!isGrounded && currentRigidBody2D?.bodyType != RigidbodyType2D.Dynamic)
+            currentRigidBody2D.bodyType = RigidbodyType2D.Dynamic;
+    }
 
     public abstract void GetItem<T>(Penosa player);
 
@@ -39,7 +61,7 @@ public abstract class SpecialItem : MonoBehaviour
         OnSpriteAdded(e);
     }
 
-    public void OnCollisionEnter2D(Collision2D other)
+    public void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Player")
         {

@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1904563960
+CRC: 2545261480
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b71edc35bec2a247aa84af1b3b5f9f14
+    Hash: 2e1726cb55abc45db591118d98e49ccd
   TypeTreeHash:
     serializedVersion: 2
-    Hash: a9dfeb79d63144a421a165e0b4e45b35
+    Hash: 3d6cf284d24e326ee1d25b75b256d9e7
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -27,6 +27,7 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Prefabs/Projectiles/Missile.prefab
 Dependencies: []

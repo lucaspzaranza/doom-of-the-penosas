@@ -47,6 +47,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -94,8 +95,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7d732f458b3b53409c423811261baf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 7.5
+  _speed: 2
   damage: 50
+  isMissile: 1
   interactableLayerMask:
     serializedVersion: 2
     m_Bits: 768

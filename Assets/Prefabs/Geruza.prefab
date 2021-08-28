@@ -176,7 +176,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectedItem: {fileID: 0}
   _slots: []
-  itemSprites: []
+  itemSprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   itemChildSR: {fileID: 5257087421366373176}
   itemAmount: {fileID: 5257087422245677716}
   slotTemporizer: 2.5

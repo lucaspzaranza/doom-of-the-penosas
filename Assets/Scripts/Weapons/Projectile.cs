@@ -4,6 +4,7 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] private float _speed;
     public int damage;
+    public bool isMissile = false;
     public LayerMask interactableLayerMask;
 
     public float Speed 
@@ -28,7 +29,9 @@ public class Projectile : MonoBehaviour
     public virtual void Update()
     {
         transform.Translate(Vector3.right * Speed * Time.deltaTime);
-        if (TouchedProjectileInteractable)
+        if (TouchedProjectileInteractable && !isMissile)
             ObjectPool.instance.ReturnGameObject(gameObject);
+        else if (isMissile)
+            Destroy(gameObject);
     }
 }

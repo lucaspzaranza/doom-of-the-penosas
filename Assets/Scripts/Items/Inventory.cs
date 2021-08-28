@@ -24,13 +24,23 @@ public class Inventory : MonoBehaviour
     // Sprite Add Event data
     public List<Sprite> itemSprites;
     private Sprite currentItemSprite;
+
+    [Header("Inventory Data")]
+    [SerializeField] private int itemEffectDuration;
+    [SerializeField] private int itemTimeCounter;
+    [SerializeField] private float jetCopterGravity;
+    [SerializeField] private GameObject missilePrefab;
+
+    [Space(20)]
     [SerializeField] private SpriteRenderer itemChildSR = null;
     public TextMeshPro itemAmount;
     public float slotTemporizer;
     public GameObject slotGameObject;
-    private float timeCounter;
+    private float temporizerTimeCounter;
 
     private Penosa player;
+
+    
 
     public delegate void PlayerDataSpriteEvent(Sprite newSprite);
     public event PlayerDataSpriteEvent OnSpecialItemIconChanged;
@@ -52,10 +62,10 @@ public class Inventory : MonoBehaviour
     {
         if (slotGameObject.activeSelf)
         {
-            timeCounter += Time.deltaTime;
-            if (timeCounter >= slotTemporizer)
+            temporizerTimeCounter += Time.deltaTime;
+            if (temporizerTimeCounter >= slotTemporizer)
             {
-                timeCounter = 0;
+                temporizerTimeCounter = 0;
                 slotGameObject.SetActive(false);
             }
         }
@@ -75,7 +85,7 @@ public class Inventory : MonoBehaviour
     public void ShowSlot()
     {
         slotGameObject.SetActive(true);
-        timeCounter = 0;
+        temporizerTimeCounter = 0;
     }
 
     public void AddItem<T>() where T : SpecialItem, new()
