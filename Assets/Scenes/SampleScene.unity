@@ -190,6 +190,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: JetCopter Item
       objectReference: {fileID: 0}
+    - target: {fileID: 742759606539004931, guid: f63c14b2c49b1ab4faf526b885493058,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f63c14b2c49b1ab4faf526b885493058, type: 3}
 --- !u!1 &134793290
@@ -728,7 +733,7 @@ PrefabInstance:
     - target: {fileID: 742759606539004929, guid: ec33c2dfb084f024bbc5ca4fe923a1f8,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.6124659
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 742759606539004929, guid: ec33c2dfb084f024bbc5ca4fe923a1f8,
         type: 3}
@@ -2170,6 +2175,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mayday
       objectReference: {fileID: 0}
+    - target: {fileID: 742759606539004931, guid: 09d40828159cf7645bea664c1262f9ab,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 09d40828159cf7645bea664c1262f9ab, type: 3}
 --- !u!1 &1807384360
@@ -2395,6 +2405,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Walk Talk
+      objectReference: {fileID: 0}
+    - target: {fileID: 742759606539004931, guid: 54f11de70eea196468bf5d8408b554b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54f11de70eea196468bf5d8408b554b7, type: 3}
@@ -2685,7 +2700,7 @@ PrefabInstance:
     - target: {fileID: 5257087421294409733, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
         type: 3}
       propertyPath: _slots.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5257087421294409733, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
         type: 3}

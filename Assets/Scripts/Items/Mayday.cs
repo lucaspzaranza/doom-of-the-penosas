@@ -8,13 +8,7 @@ public class Mayday : SpecialItem
     public const byte maxMissiles = 5;
     private const float missileHeight = 4f;
     private const float xOffset = 1.5f;
-    public GameObject missile;
-    //private AssetBundle missileBundle;
-
-    public override void GetItem<T>(Penosa player)
-    {
-        player.Inventory.AddItem<Mayday>();
-    }
+    private GameObject missile;
 
     private IEnumerator InstantiateMissiles(float interval)
     {
@@ -31,19 +25,19 @@ public class Mayday : SpecialItem
 
         ItemInUse = false;            
 
-        if(parentSlot.Player.Inventory.SelectedSlot.Amount == 0) 
-        {
-            //missileBundle.Unload(true);
+        if(itemSlot.Player.Inventory.SelectedSlot.Amount == 0) 
             RemoveItemIfAmountEqualsZero();
-        }
     }
 
     public override void Use()
-    {     
+    {
+        missile = Inventory.MissilePrefab;
         base.Use();
-        //if(missileBundle == null)
-        //    missileBundle = AssetBundle.LoadFromFile("Assets/AssetBundles/projectiles");
-        //missile = missileBundle.LoadAsset<GameObject>("Missile");
         StartCoroutine(InstantiateMissiles(0.5f));            
+    }
+
+    public override void GetPlayerValues()
+    {
+        throw new System.NotImplementedException();
     }
 }

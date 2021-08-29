@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Runtime.Remoting;
+
 public class Inventory : MonoBehaviour
 {
     #region Vars & Props
@@ -26,9 +28,10 @@ public class Inventory : MonoBehaviour
     private Sprite currentItemSprite;
 
     [Header("Inventory Data")]
-    [SerializeField] private int itemEffectDuration;
+    [SerializeField] private byte itemEffectDuration;
     [SerializeField] private int itemTimeCounter;
     [SerializeField] private float jetCopterGravity;
+    [SerializeField] private float adrenalineSpeedEnhancindRate;
     [SerializeField] private GameObject missilePrefab;
 
     [Space(20)]
@@ -40,7 +43,10 @@ public class Inventory : MonoBehaviour
 
     private Penosa player;
 
-    
+    public byte ItemEffectDuration => itemEffectDuration;
+    public float JetCopterGravity => jetCopterGravity;
+    public float AdrenalineSpeedEnhancingRate => adrenalineSpeedEnhancindRate;
+    public GameObject MissilePrefab => missilePrefab;
 
     public delegate void PlayerDataSpriteEvent(Sprite newSprite);
     public event PlayerDataSpriteEvent OnSpecialItemIconChanged;
@@ -48,17 +54,15 @@ public class Inventory : MonoBehaviour
 
     private void OnEnable()
     {
-        SpecialItem.SpriteAdded += SpriteAdded;
         player = GetComponentInParent<Penosa>();
     }
 
     private void OnDisable()
     {
-        SpecialItem.SpriteAdded -= SpriteAdded;
         player = null;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (slotGameObject.activeSelf)
         {
@@ -88,19 +92,23 @@ public class Inventory : MonoBehaviour
         temporizerTimeCounter = 0;
     }
 
-    public void AddItem<T>() where T : SpecialItem, new()
+    public void AddItem(string itemType, byte amount, Penosa player, Sprite itemSprite)
     {
-        var matchSlot =
-            Slots.Find(slot => slot.Item == null || slot.Item.GetType() == typeof(T));
+        var matchSlot = Slots.Find(slot => slot.Item == null || slot.Item.GetType().ToString() == itemType);
 
         if (matchSlot != null)
-            SetItemAmount(matchSlot, (byte)(matchSlot.Amount + 1));
+            SetItemAmount(matchSlot, (byte)(matchSlot.Amount + amount));
         else
         {
-            T newItem = gameObject.AddComponent<T>();
-            var newSlot = new ItemSlot(newItem, player);
+            SpecialItem specialItem = (SpecialItem)GetComponent(itemType);
+            var newSlot = new ItemSlot(specialItem, amount, player, itemSprite);
             Slots.Add(newSlot);
-            if (Slots.Count == 1) SelectedSlot = newSlot;
+            if (Slots.Count == 1)
+            {
+                SelectedSlot = newSlot;
+                SelectSlotSprite(Slots[0].Sprite);
+                ShowSlot();
+            }
             SetItemAmount(newSlot, 1);
         }
     }
@@ -115,34 +123,27 @@ public class Inventory : MonoBehaviour
     public void DecreaseItemAmount(ItemSlot slot)
     {
         SetItemAmount(slot, (byte)(slot.Amount - 1));
+        ShowSlot();
     }
 
     public void RemoveItem(ItemSlot slot)
     {
         int index = Slots.IndexOf(slot);
         Slots.Remove(slot);
-        itemSprites.RemoveAt(index);
+        //itemSprites.RemoveAt(index);
         Destroy(slot.Item);
         int newIndex = index == Slots.Count ? index - 1 : index;
         SelectedSlot = IsEmpty ? null : Slots[newIndex];
-        SelectSlotSprite(IsEmpty ? null : itemSprites[newIndex]);
+        //SelectSlotSprite(IsEmpty ? null : itemSprites[newIndex]);
+        SelectSlotSprite(IsEmpty ? null : Slots[newIndex].Sprite);
         itemAmount.text = IsEmpty ? "0" : SelectedSlot.Amount.ToString();
     }
 
     public void SelectItem(int index)
     {
         SelectedSlot = Slots[index];
-        SelectSlotSprite(itemSprites[index]);
+        SelectSlotSprite(Slots[index].Sprite);
         itemAmount.text = SelectedSlot.Amount.ToString();
-    }
-
-    private void SpriteAdded(object sender, SpriteAddedEventArgs e)
-    {
-        if (!itemSprites.Contains(e.NewSprite))
-            itemSprites.Add(e.NewSprite);
-
-        if (itemSprites.Count == 1)
-            SelectSlotSprite(itemSprites[0]);
     }
 
     public void SelectSlotSprite(Sprite newSprite)

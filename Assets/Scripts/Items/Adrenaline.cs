@@ -4,26 +4,24 @@ using UnityEngine;
 
 public class Adrenaline : SpecialItem
 {
-    public const float defaultSpeedEnhancingRate = 2f;
+    private float speedEnhancingRate;
+    private byte duration;
 
-    private float speedEnhancingRate = defaultSpeedEnhancingRate;
-    [SerializeField] private byte _duration = defaultDuration;
-    public byte Duration => _duration;
-
-    public override void GetItem<T>(Penosa player)
+    public override void GetPlayerValues()
     {
-        player.Inventory.AddItem<Adrenaline>();
+        duration = Inventory.ItemEffectDuration;
+        speedEnhancingRate = Inventory.AdrenalineSpeedEnhancingRate;
     }
-
+   
     void Update()
     {
         if(ItemInUse)
         {
             timeCounter += Time.deltaTime;
-            if(timeCounter >= Duration)
+            if(timeCounter >= duration)
             {
                 timeCounter = 0;
-                parentSlot.Player.speed = PlayerConsts.defaultSpeed;
+                Player.speed = PlayerConsts.defaultSpeed;
                 ItemInUse = false;
                 RemoveItemIfAmountEqualsZero();
             }
@@ -32,8 +30,9 @@ public class Adrenaline : SpecialItem
 
     public override void Use()
     {
+        GetPlayerValues();
         base.Use();
         ItemInUse = true;
-        parentSlot.Player.speed *= speedEnhancingRate;
+        Player.speed *= speedEnhancingRate;
     }
 }

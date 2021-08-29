@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public class ItemSlot
 {
     [SerializeField] private SpecialItem _item;
     [SerializeField] private byte _amount;
+    [SerializeField] private Sprite _sprite;
+
     public Penosa Player {get; set;}
 
     public SpecialItem Item
@@ -15,7 +18,7 @@ public class ItemSlot
         set 
         {
             _item = value; 
-            _item.parentSlot = this;
+            _item.itemSlot = this;
         }        
     }
 
@@ -23,6 +26,22 @@ public class ItemSlot
     {
         get { return _amount; }
         set { _amount = value; } 
+    }
+
+
+    public Sprite Sprite
+    {
+        get => _sprite;
+        set => _sprite = value;
+    }
+
+    public ItemSlot(SpecialItem specialItem, byte amount, Penosa currentPlayer, Sprite newSprite = null)
+    {
+        Item = specialItem;
+        Amount = amount;
+        Player = currentPlayer;
+        if (newSprite != null)
+            Sprite = newSprite;
     }
 
     public ItemSlot(SpecialItem specialItem, byte amount, Penosa currentPlayer)

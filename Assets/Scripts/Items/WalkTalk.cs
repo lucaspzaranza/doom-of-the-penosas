@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class WalkTalk : SpecialItem
 {
-    public override void GetItem<T>(Penosa player)
+    public override void GetPlayerValues()
     {
-        player.Inventory.AddItem<WalkTalk>();
+        throw new System.NotImplementedException();
     }
 
     public override void Use()

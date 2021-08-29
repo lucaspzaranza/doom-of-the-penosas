@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 742759606539004930}
   - component: {fileID: 742759606539004942}
   - component: {fileID: 742759606539004928}
-  - component: {fileID: 969139417510136721}
+  - component: {fileID: 695971102321495479}
   m_Layer: 10
   m_Name: Mayday
   m_TagString: Untagged
@@ -133,7 +133,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.5, y: 2.5}
   m_EdgeRadius: 0
---- !u!114 &969139417510136721
+--- !u!114 &695971102321495479
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142,18 +142,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 742759606539004931}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b42820fda3b30894cbeb440529b6eff7, type: 3}
+  m_Script: {fileID: 11500000, guid: ea6244dfc45c5814ea7eb09bcb3b47b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentSlot:
-    _item: {fileID: 0}
-    _amount: 0
-  timeCounter: 0
+  itemScript: {fileID: 11500000, guid: b42820fda3b30894cbeb440529b6eff7, type: 3}
   groundCheck: {fileID: 530155235497337206}
   terrainLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  missile: {fileID: 6507986975763628012, guid: 898606e2b2e11a6458c41ccf886a1708, type: 3}
+  amount: 1
 --- !u!1 &6107737857245407071
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,14 +5,7 @@ using System.Linq;
 
 public class JetCopter : SpecialItem
 {
-    public byte maxDuration = defaultDuration;
-    [SerializeField] private float gravity = 0.1f;
-
-    public override void GetItem<T>(Penosa player)
-    {
-        player.Inventory.AddItem<JetCopter>();
-        player.Inventory.GetComponent<JetCopter>().gravity = gravity;
-    }
+    private byte maxDuration;
 
     void Update()
     {
@@ -30,19 +23,25 @@ public class JetCopter : SpecialItem
 
     private void SetJetCopterActivation(bool value)
     {
-        parentSlot.Player.JetCopterObject.SetActive(value);
-        parentSlot.Player.JetCopterActivated = value;
-        parentSlot.Player.Animator.SetBool("JetCopter", value);
+        itemSlot.Player.JetCopterObject.SetActive(value);
+        itemSlot.Player.JetCopterActivated = value;
+        itemSlot.Player.Animator.SetBool("JetCopter", value);
 
         // Se true, coloca uma gravidade menor, senão, a gravidade normal
-        parentSlot.Player.GetComponent<Rigidbody2D>().gravityScale = 
-            value? gravity : parentSlot.Player.defaultGravity;
+        itemSlot.Player.GetComponent<Rigidbody2D>().gravityScale = 
+            value? itemSlot.Player.Inventory.JetCopterGravity : itemSlot.Player.defaultGravity;
         ItemInUse = value;
     }
 
     public override void Use()
-    { 
+    {
+        GetPlayerValues();
         base.Use();
         SetJetCopterActivation(true);
+    }
+
+    public override void GetPlayerValues()
+    {
+        maxDuration = Inventory.ItemEffectDuration;
     }
 }

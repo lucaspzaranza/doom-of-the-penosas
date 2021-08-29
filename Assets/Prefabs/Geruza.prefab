@@ -140,6 +140,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5257087421294409786}
   - component: {fileID: 5257087421294409733}
+  - component: {fileID: 239848485877067980}
+  - component: {fileID: 8097774232073822744}
+  - component: {fileID: 7336664865580295715}
+  - component: {fileID: 6993876478730571605}
   m_Layer: 0
   m_Name: Inventory
   m_TagString: Untagged
@@ -176,15 +180,81 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectedItem: {fileID: 0}
   _slots: []
-  itemSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  itemSprites: []
+  itemEffectDuration: 30
+  itemTimeCounter: 0
+  jetCopterGravity: 0.1
+  adrenalineSpeedEnhancindRate: 2
+  missilePrefab: {fileID: 6507986975763628012, guid: 898606e2b2e11a6458c41ccf886a1708,
+    type: 3}
   itemChildSR: {fileID: 5257087421366373176}
   itemAmount: {fileID: 5257087422245677716}
   slotTemporizer: 2.5
   slotGameObject: {fileID: 5257087421905590034}
+--- !u!114 &239848485877067980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5257087421294409787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8926676113069df4eae32938eb902722, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemSlot:
+    _item: {fileID: 0}
+    _amount: 0
+    _sprite: {fileID: 0}
+--- !u!114 &8097774232073822744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5257087421294409787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ace5c9db745390548ac8a4c9fdecb857, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemSlot:
+    _item: {fileID: 0}
+    _amount: 0
+    _sprite: {fileID: 0}
+--- !u!114 &7336664865580295715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5257087421294409787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25e98ad925516914ea4d759581f10ee8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemSlot:
+    _item: {fileID: 0}
+    _amount: 0
+    _sprite: {fileID: 0}
+--- !u!114 &6993876478730571605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5257087421294409787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b42820fda3b30894cbeb440529b6eff7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemSlot:
+    _item: {fileID: 0}
+    _amount: 0
+    _sprite: {fileID: 0}
 --- !u!1 &5257087421366373182
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,7 +326,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 7db6bc2c4e293244da5ed7c777788988, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -264,7 +334,7 @@ SpriteRenderer:
   m_Size: {x: 2.5, y: 2.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &5257087421388655161
@@ -670,7 +740,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5257087422245677717}
   - component: {fileID: 5257087422245677718}
-  - component: {fileID: 5257087422245677719}
   - component: {fileID: 5257087422245677716}
   m_Layer: 0
   m_Name: Item Amount Txt
@@ -739,14 +808,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &5257087422245677719
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5257087422245677706}
-  m_Mesh: {fileID: 0}
 --- !u!114 &5257087422245677716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -791,7 +852,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -803,9 +864,9 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 256
-  m_textAlignment: 260
+  m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0

@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 742759606539004930}
   - component: {fileID: 742759606539004942}
   - component: {fileID: 742759606539004928}
-  - component: {fileID: 5183379842445893910}
+  - component: {fileID: 6689093490204170069}
   m_Layer: 10
   m_Name: Walk Talk
   m_TagString: Untagged
@@ -180,7 +180,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.62, y: 2.44}
   m_EdgeRadius: 0
---- !u!114 &5183379842445893910
+--- !u!114 &6689093490204170069
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -189,14 +189,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 742759606539004931}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25e98ad925516914ea4d759581f10ee8, type: 3}
+  m_Script: {fileID: 11500000, guid: ea6244dfc45c5814ea7eb09bcb3b47b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentSlot:
-    _item: {fileID: 0}
-    _amount: 0
-  timeCounter: 0
+  itemScript: {fileID: 11500000, guid: 25e98ad925516914ea4d759581f10ee8, type: 3}
   groundCheck: {fileID: 5031963851822504339}
   terrainLayerMask:
     serializedVersion: 2
     m_Bits: 256
+  amount: 1
