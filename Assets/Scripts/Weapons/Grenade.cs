@@ -10,11 +10,6 @@ public class Grenade : Projectile
         get { return rb2D.velocity.y != 0; }
     }
 
-    public override void Start()
-    {
-        base.Start();
-    }
-
     public override void Update()
     {
         if(TouchedProjectileInteractable) Explode();

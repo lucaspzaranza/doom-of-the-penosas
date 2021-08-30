@@ -31,7 +31,7 @@ Transform:
   m_LocalPosition: {x: 0.32211673, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1029124217163312123}
+  - {fileID: 2101575214008161561}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -101,7 +101,8 @@ MonoBehaviour:
   terrainLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  groundCheck: {fileID: 1029124217163312123}
+  groundCheck: {fileID: 2101575214008161561}
+  overlapRadius: 0.05
   amount: 50
 --- !u!50 &742759606539004942
 Rigidbody2D:
@@ -150,7 +151,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.26, y: 0.27}
   m_EdgeRadius: 0
---- !u!1 &5189359935529802547
+--- !u!1 &5686287260617419492
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,8 +159,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1029124217163312123}
-  - component: {fileID: 851653365815558195}
+  - component: {fileID: 2101575214008161561}
+  - component: {fileID: 4850646850408767000}
   m_Layer: 10
   m_Name: GroundCheck
   m_TagString: Untagged
@@ -167,27 +168,27 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1029124217163312123
+--- !u!4 &2101575214008161561
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5189359935529802547}
+  m_GameObject: {fileID: 5686287260617419492}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.0956, z: 0}
+  m_LocalPosition: {x: 0, y: -0.097, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 742759606539004929}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &851653365815558195
+--- !u!58 &4850646850408767000
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5189359935529802547}
+  m_GameObject: {fileID: 5686287260617419492}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}

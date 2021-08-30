@@ -31,7 +31,7 @@ public class Kawarimi : Grenade
         kawarimiExplosionAction.Disable();
     }
 
-    public override void Start()
+    public void Start()
     {      
         ThrowGrenade(Speed, Mathf.Abs(Speed));
         rb2D.AddTorque(torque, ForceMode2D.Impulse);

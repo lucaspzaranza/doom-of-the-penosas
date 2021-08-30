@@ -21,15 +21,6 @@ public class ObjectPool : MonoBehaviour
             Destroy(gameObject);
     }
 
-    private void Start()
-    {
-        
-        foreach (var queue in objectPool)
-        {
-            print(queue);
-        }
-    }
-
     public GameObject GetObject(GameObject gameObj)
     {
         if (objectPool.TryGetValue(gameObj.name, out Queue<GameObject> objectList))
@@ -97,6 +88,10 @@ public class ObjectPool : MonoBehaviour
             objectPool.Add(gameObj.name, newObjectQueue);
         }
 
+        float xScale = gameObj.transform.localScale.x;
+        float yScale = gameObj.transform.localScale.y;
+
+        gameObj.transform.localScale = new Vector2(Mathf.Abs(xScale), Mathf.Abs(yScale));
         gameObj.SetActive(false);
     }
 }

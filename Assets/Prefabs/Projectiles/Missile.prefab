@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7d732f458b3b53409c423811261baf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 2
+  _speed: 5
   damage: 50
   isMissile: 1
   interactableLayerMask:

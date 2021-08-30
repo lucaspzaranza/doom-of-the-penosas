@@ -20,7 +20,7 @@ public class TimeBomb : Grenade
         playerInputActions = new PlayerInput();
     }
 
-    public void OnEnable()
+    private void OnEnable()
     {
         playerInputActions.Player.TimeBombMovement.Enable();
 
@@ -34,10 +34,9 @@ public class TimeBomb : Grenade
         timeBombExplosionAction.Disable();
     }
 
-    public override void Start()
+    private void Start()
     {
-        base.Start();
-        if(transform.localScale.x < 0) isLeft = true;
+        isLeft = transform.localScale.x < 0;
     }
 
     public override void Update()
@@ -66,12 +65,15 @@ public class TimeBomb : Grenade
         for (int i = 0; i < bombColliders.Length ; i++)
         {
             Vector2 pos = bombColliders[i].transform.position;
+
+            // Checa se tem colisão com os layers Enemy ou Map. Se for nulo, a bomba não colidiu com nada,
+            // e sofrerá uma rotação pra se adaptar ao terreno.
             var other = Physics2D.OverlapCircle(pos, overlapRadius, interactableLayerMask);                   
-            if(other == null) // Check if has collision with the layers from the Layer Mask (Enemy and Map)
-            { //If other is null, the bomb has collided with nothing, and it will rotate 
-              // to stick on the other map corner
+            if(other == null)
+            {
                 if(i == 0 && fixedOnTheGround) // Bottom collider          
-                {                                                                                        
+                {                         
+                    // Parou de ter colisão no chão, com o Bottom Collider não tendo encontrado nenhum Collider por ter retornado nulo.
                     transform.position = cornerTransform.position;
                     transform.Rotate(Vector3.forward, isLeft? 90f : -90f);                                   
                     return;
@@ -80,6 +82,7 @@ public class TimeBomb : Grenade
             else
             {
                 FixBombOnGround(other.gameObject);
+                // Teve colisão com o Frontal Collider, e sofrerá a rotação necessária.
                 if(i == 1) // Frontal collider                                                   
                     transform.Rotate(Vector3.forward, isLeft? -90f : 90f); 
                 previousCollider = other;

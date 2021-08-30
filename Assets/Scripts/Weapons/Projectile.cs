@@ -18,20 +18,16 @@ public class Projectile : MonoBehaviour
     {
         get { return Physics2D.OverlapCircle(transform.position, 0.1f, interactableLayerMask);}
     }
-
-    public virtual void Start()
-    {
-        if(Speed < 0)
-            transform.localScale = new Vector2
-            (-transform.localScale.x, transform.localScale.y);
-    }
-
+    
     public virtual void Update()
     {
         transform.Translate(Vector3.right * Speed * Time.deltaTime);
-        if (TouchedProjectileInteractable && !isMissile)
-            ObjectPool.instance.ReturnGameObject(gameObject);
-        else if (isMissile)
-            Destroy(gameObject);
+        if (TouchedProjectileInteractable)
+        {
+            if(!isMissile)
+                ObjectPool.instance.ReturnGameObject(gameObject);
+            else
+                Destroy(gameObject);
+        }
     }
 }

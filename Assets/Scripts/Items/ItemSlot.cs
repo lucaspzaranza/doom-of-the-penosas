@@ -12,6 +12,8 @@ public class ItemSlot
 
     public Penosa Player {get; set;}
 
+    public const byte maxItemAmount = 99;
+
     public SpecialItem Item
     {
         get { return _item; }
@@ -25,7 +27,7 @@ public class ItemSlot
     public byte Amount
     {
         get { return _amount; }
-        set { _amount = value; } 
+        set { _amount = (byte)Mathf.Clamp(value, 0, maxItemAmount); } 
     }
 
 

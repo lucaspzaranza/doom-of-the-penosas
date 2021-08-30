@@ -412,14 +412,17 @@ public class Penosa : MonoBehaviour
 
             var currentTransform = GetShotSpawnCoordinates();
             var currentRotation = GetShotRotation();
+            int currentDirection = GetShotDirection();
 
             GameObject newBullet = ObjectPool.instance.GetObject(PlayerData.Current1stShot);
             newBullet.transform.position = currentTransform.position;
             newBullet.transform.rotation = currentRotation;
+            newBullet.transform.localScale = 
+                new Vector2(newBullet.transform.localScale.x * currentDirection, newBullet.transform.localScale.y);
 
             if (PlayerData._1stWeaponLevel == 2) SetShotLevel2VariationRate(ref newBullet);
 
-            newBullet.GetComponent<Projectile>().Speed = shotspeed * GetShotDirection();
+            newBullet.GetComponent<Projectile>().Speed = shotspeed * currentDirection;
 
             SetAmmo(WeaponType.Primary, PlayerData._1stWeaponAmmo - 1);
         }
@@ -433,9 +436,9 @@ public class Penosa : MonoBehaviour
         shotAnimTimeCounter = 0;
     }
 
-    private GameObject GetProjectileFromPool(GameObject insanceToSearch)
+    private GameObject GetProjectileFromPool(GameObject instanceToSearch)
     {
-        GameObject result = ObjectPool.instance.GetObject(PlayerData.Current2ndShot);
+        GameObject result = ObjectPool.instance.GetObject(instanceToSearch);
         result.transform.position = secondaryShotSpawnCoordinates.position;
         result.transform.rotation = Quaternion.identity;
 
@@ -447,13 +450,11 @@ public class Penosa : MonoBehaviour
         bool canSpawn = PlayerData._2ndWeaponLevel == 1;
         // currentGrenade sendo nula significa que não tem nenhuma granada em tela no momento.
         // Essa verificação é feita pelo fato de que só pode atirar um 2nd shot por vez.
-
         bool fire2Level2Logic = PlayerData._2ndWeaponLevel == 2 && currentGrenade == null;
         canSpawn |= fire2Level2Logic;
         if (canSpawn)
         {
             InitializeShot2Animators();
-
             // Somente o nível 1 do Tiro 2 terá Pooling, já que o nível 2 só tem uma instância por vez na tela.
             if (PlayerData._2ndWeaponLevel == 1)
                 currentGrenade = GetProjectileFromPool(PlayerData.Current2ndShot);
@@ -462,8 +463,9 @@ public class Penosa : MonoBehaviour
 
             var currentGrenadeScript = currentGrenade.GetComponent<Grenade>();
             currentGrenadeScript.Speed *= isLeft ? -1 : 1;
+            currentGrenade.transform.localScale = new Vector2(currentGrenade.transform.localScale.x * (isLeft ? -1 : 1),
+                                                                                currentGrenade.transform.localScale.y);
             currentGrenadeScript.CallThrowGrenade();
-
             var kawarimi = currentGrenade.GetComponent<Kawarimi>();
             if (kawarimi != null) kawarimi.penosa = gameObject;
 
@@ -544,7 +546,7 @@ public class Penosa : MonoBehaviour
     DEFAULT VALUES:
     speed: 2
     jumpForce: 26
-    defaultGravity: 150
-    parachuteGravity: 0.25f
+    defaultGravity: 1.5f
+    parachuteGravity: 0.2f
     shotSpeed: 8
 */

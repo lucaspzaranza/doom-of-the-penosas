@@ -101,7 +101,7 @@ MonoBehaviour:
   terrainLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  groundCheck: {fileID: 742759606539004929}
+  groundCheck: {fileID: 2601070389547848297}
   amount: 10
 --- !u!50 &742759606539004942
 Rigidbody2D:

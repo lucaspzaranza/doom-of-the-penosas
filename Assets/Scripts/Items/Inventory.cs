@@ -4,12 +4,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Runtime.Remoting;
+using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
-    #region Vars & Props
+    #region Vars
+
     [SerializeField] private SpecialItem _selectedItem;
+    [SerializeField] private List<ItemSlot> _slots = null;
+    
+    [Header("Inventory Data")]
+    [SerializeField] private byte itemEffectDuration;
+    [SerializeField] private int itemTimeCounter;
+    [SerializeField] private float jetCopterGravity;
+    [SerializeField] private float adrenalineSpeedEnhancindRate;
+    [SerializeField] private GameObject missilePrefab;
+    [SerializeField] private SpriteRenderer itemChildSR = null;
+    [SerializeField] private Text itemAmount;
+    [SerializeField] private float slotTemporizer;
+    [SerializeField] private GameObject slotGameObject;
+
+    private float temporizerTimeCounter;
+    private Sprite currentItemSprite;
     private ItemSlot _selectedSlot = null;
+
+    #endregion
+
+    #region Props
+
+    public byte ItemEffectDuration => itemEffectDuration;
+    public float JetCopterGravity => jetCopterGravity;
+    public float AdrenalineSpeedEnhancingRate => adrenalineSpeedEnhancindRate;
+    public GameObject MissilePrefab => missilePrefab;
+
+    public List<ItemSlot> Slots => _slots;
+    public bool IsEmpty => Slots.Count == 0;
+
     public ItemSlot SelectedSlot
     {
         get => _selectedSlot;
@@ -19,48 +49,11 @@ public class Inventory : MonoBehaviour
             _selectedItem = _selectedSlot == null ? null : _selectedSlot.Item;
         }
     }
-    [SerializeField] private List<ItemSlot> _slots = null;
-    public List<ItemSlot> Slots { get => _slots; }
-    public bool IsEmpty => Slots.Count == 0;
 
-    // Sprite Add Event data
-    public List<Sprite> itemSprites;
-    private Sprite currentItemSprite;
-
-    [Header("Inventory Data")]
-    [SerializeField] private byte itemEffectDuration;
-    [SerializeField] private int itemTimeCounter;
-    [SerializeField] private float jetCopterGravity;
-    [SerializeField] private float adrenalineSpeedEnhancindRate;
-    [SerializeField] private GameObject missilePrefab;
-
-    [Space(20)]
-    [SerializeField] private SpriteRenderer itemChildSR = null;
-    public TextMeshPro itemAmount;
-    public float slotTemporizer;
-    public GameObject slotGameObject;
-    private float temporizerTimeCounter;
-
-    private Penosa player;
-
-    public byte ItemEffectDuration => itemEffectDuration;
-    public float JetCopterGravity => jetCopterGravity;
-    public float AdrenalineSpeedEnhancingRate => adrenalineSpeedEnhancindRate;
-    public GameObject MissilePrefab => missilePrefab;
+    #endregion
 
     public delegate void PlayerDataSpriteEvent(Sprite newSprite);
     public event PlayerDataSpriteEvent OnSpecialItemIconChanged;
-    #endregion
-
-    private void OnEnable()
-    {
-        player = GetComponentInParent<Penosa>();
-    }
-
-    private void OnDisable()
-    {
-        player = null;
-    }
 
     void FixedUpdate()
     {
@@ -79,7 +72,6 @@ public class Inventory : MonoBehaviour
     {
         var items = new List<SpecialItem>(GetComponents<SpecialItem>());
         Slots.RemoveRange(0, Slots.Count);
-        itemSprites.RemoveRange(0, itemSprites.Count);
         items.ForEach(item => Destroy(item));
         SelectedSlot = null;
         SelectSlotSprite(null);
@@ -109,7 +101,7 @@ public class Inventory : MonoBehaviour
                 SelectSlotSprite(Slots[0].Sprite);
                 ShowSlot();
             }
-            SetItemAmount(newSlot, 1);
+            SetItemAmount(newSlot, amount);
         }
     }
 
