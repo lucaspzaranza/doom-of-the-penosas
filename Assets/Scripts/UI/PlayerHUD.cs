@@ -80,7 +80,7 @@ public class PlayerHUD : MonoBehaviour
         Name = player.PlayerData.name;
         Lives = player.PlayerData.Lives;
         Life = player.PlayerData.Life;
-        ArmorLife = player.PlayerData.ArmorLife;
+        ArmorLife = player.PlayerData.ArmorLife; 
     }
 
     private void OnEnable()
