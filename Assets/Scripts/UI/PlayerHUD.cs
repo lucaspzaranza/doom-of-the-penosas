@@ -2,17 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerHUD : MonoBehaviour
 {
+    [SerializeField] private Penosa player;
     [SerializeField] private Text _nameTxt = null;
     [SerializeField] private Text _livesTxt = null;
     [SerializeField] private Image _lifebarImg = null;
     [SerializeField] private Image _armorLifebarImg = null;
     [SerializeField] private Image _iconImg = null;
     [SerializeField] private Image _specialItemImg = null;
-    [SerializeField] private Penosa player;
     [SerializeField] private GameObject _hudContainer = null;
+    [Header("Ammo Text")]
+    [SerializeField] private TMP_Text PrimaryWeaponText;
+    [SerializeField] private TMP_Text PrimaryWeaponAmmoText;
+    [SerializeField] private TMP_Text SecondaryWeaponText;
+    [SerializeField] private TMP_Text SecondaryWeaponAmmoText;
 
     private string _name;
     private int _lives;
@@ -82,12 +88,36 @@ public class PlayerHUD : MonoBehaviour
         player.PlayerData.OnArmorLifeChanged += newValue => ArmorLife = newValue;
         player.PlayerData.OnLifeChanged += newValue => Life = newValue;
         player.PlayerData.OnLivesChanged += newValue => Lives = newValue;
+        player.PlayerData.OnWeaponLevelChanged += UpdateWeaponLevelText;
+        player.PlayerData.OnWeaponAmmoChanged += UpdateWeaponAmmoText;
 
         SetHUDValues();
+    }
+
+    private void OnDisable()
+    {
+        player.PlayerData.OnWeaponLevelChanged -= UpdateWeaponLevelText;
+        player.PlayerData.OnWeaponAmmoChanged -= UpdateWeaponAmmoText;
     }
 
     private void Start()
     {
         player.Inventory.OnSpecialItemIconChanged += SetSpecialItemIconSprite;
+    }
+
+    public void UpdateWeaponLevelText(WeaponType weaponType, int newLvl)
+    {
+        if (weaponType == WeaponType.Primary)
+            PrimaryWeaponText.text = $"1st  Lvl {newLvl}:";
+        else //Secondary
+            SecondaryWeaponText.text = $"2nd Lvl {newLvl}:";
+    }
+
+    private void UpdateWeaponAmmoText(WeaponType weaponType, int newAmmo)
+    {
+        if (weaponType == WeaponType.Primary)
+            PrimaryWeaponAmmoText.text = player.PlayerData._1stWeaponLevel > 1? newAmmo.ToString() : "---";
+        else //Secondary
+            SecondaryWeaponAmmoText.text = newAmmo.ToString();
     }
 }

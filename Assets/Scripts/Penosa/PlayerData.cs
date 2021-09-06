@@ -29,9 +29,12 @@ public class PlayerData
     #region Events
 
     public delegate void PlayerDataEvent(int newValue);
+    public delegate void PlayerAmmoDataEvent(WeaponType weaponType, int newValue);
     public event PlayerDataEvent OnLifeChanged;
     public event PlayerDataEvent OnArmorLifeChanged;
     public event PlayerDataEvent OnLivesChanged;
+    public event PlayerAmmoDataEvent OnWeaponLevelChanged;
+    public event PlayerAmmoDataEvent OnWeaponAmmoChanged;
 
     #endregion
 
@@ -44,13 +47,21 @@ public class PlayerData
         {
             __1stWeaponAmmo = Mathf.Clamp(value, 0, PlayerConsts.maxAmmo);
             if (__1stWeaponAmmo == 0) _1stWeaponLevel = 1;
+            OnWeaponAmmoChanged?.Invoke(WeaponType.Primary, __1stWeaponAmmo);
         }
     }
 
     public byte _1stWeaponLevel
     {
         get => __1stWeaponLvl;
-        set { if (value <= PlayerConsts._1stWeaponMaxLevel) __1stWeaponLvl = value; }
+        set 
+        {
+            if (value <= PlayerConsts._1stWeaponMaxLevel)
+            {
+                __1stWeaponLvl = value;
+                OnWeaponLevelChanged?.Invoke(WeaponType.Primary, __1stWeaponLvl);
+            }
+        }
     }
 
     public int _2ndWeaponAmmo
@@ -62,6 +73,7 @@ public class PlayerData
             {
                 __2ndWeaponAmmo = value;
                 if (__2ndWeaponAmmo == 0) _2ndWeaponLevel = 1;
+                OnWeaponAmmoChanged?.Invoke(WeaponType.Secondary, __2ndWeaponAmmo);
             }
         }
     }
@@ -69,7 +81,14 @@ public class PlayerData
     public byte _2ndWeaponLevel
     {
         get => __2ndWeaponLvl;
-        set { if (value <= PlayerConsts._2ndWeaponMaxLevel) __2ndWeaponLvl = value; }
+        set 
+        { 
+            if (value <= PlayerConsts._2ndWeaponMaxLevel)
+            {
+                __2ndWeaponLvl = value;
+                OnWeaponLevelChanged?.Invoke(WeaponType.Secondary, __2ndWeaponLvl);
+            }
+        }
     }
 
     public int ArmorLife
