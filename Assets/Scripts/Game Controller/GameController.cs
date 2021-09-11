@@ -63,7 +63,7 @@ public class GameController : MonoBehaviour
     {
         var players = GameObject.FindGameObjectsWithTag("Player")
             .Select(player => player.GetComponent<Penosa>())
-            .ToList<Penosa>();
+            .ToList();
         _playersData = new List<PlayerData>();
         byte id = 0;
         players.ForEach(player =>
