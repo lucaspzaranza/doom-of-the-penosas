@@ -57,6 +57,8 @@ public class GameController : MonoBehaviour
         StartCoroutine(ObjectPool.instance.InitializePool("Egg Shot"));
         StartCoroutine(ObjectPool.instance.InitializePool("Big Egg Shot"));
         StartCoroutine(ObjectPool.instance.InitializePool("Grenade"));
+        StartCoroutine(ObjectPool.instance.InitializePool("Shuriken"));
+        StartCoroutine(ObjectPool.instance.InitializePool("Fuuma Shuriken"));
     }
 
     private void GetPlayersOnScene()
@@ -65,12 +67,9 @@ public class GameController : MonoBehaviour
             .Select(player => player.GetComponent<Penosa>())
             .ToList();
         _playersData = new List<PlayerData>();
-        byte id = 0;
         players.ForEach(player =>
         {
             PlayersData.Add(player.PlayerData);
-            PlayersData[id].ID = id;
-            id++;
         });
     }
 

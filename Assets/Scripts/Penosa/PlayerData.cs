@@ -10,7 +10,7 @@ public class PlayerData
 
     public string name;
     [SerializeField] private Penosa _player = null;
-    [SerializeField] private byte _ID;
+    [SerializeField] private byte _localID;
     [SerializeField] private GameObject _gameObject = null;
     [SerializeField] private float _countdown;
     [SerializeField] private int _continues;
@@ -127,7 +127,8 @@ public class PlayerData
 
     public GameObject GameObject => _gameObject;
 
-    public byte ID { get => _ID; set => _ID = value; }
+    // Local ID difere do ID para network. Esse serve apenas pra diferenciar o player 1 do player 2.
+    public byte LocalID { get => _localID; set => _localID = value; }
 
     public int Life
     {

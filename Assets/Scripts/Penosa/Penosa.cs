@@ -233,7 +233,7 @@ public class Penosa : MonoBehaviour
     public void Death()
     {
         if (PlayerData.Lives == 0)
-            GameController.instance.RemovePlayerFromScene(PlayerData.ID);
+            GameController.instance.RemovePlayerFromScene(PlayerData.LocalID);
         else
         {
             // Play some death animation...
