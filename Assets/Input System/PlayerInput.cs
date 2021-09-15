@@ -404,6 +404,154 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""PlayerSelectionMenu"",
+            ""id"": ""2be61ff9-8b7a-4f01-a777-d339665abd12"",
+            ""actions"": [
+                {
+                    ""name"": ""Arrow Navigation"",
+                    ""type"": ""Value"",
+                    ""id"": ""5e5f63ac-eb60-4666-b268-4af32ca1146e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""DPad Navigation"",
+                    ""id"": ""d6ab7ebf-e4f6-40c6-8fde-aece03958212"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow Navigation"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""37f1d53b-e68a-44fe-b822-55d0ac108bfd"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow Navigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""916f9ba6-9768-4e60-a45b-3fa662b95c51"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow Navigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Stick Navigation"",
+                    ""id"": ""1fbc2b9a-c554-45fb-8766-0d6c3f1cd402"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow Navigation"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""895098d2-b8d2-4cdf-95eb-9fe5b3cc385a"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow Navigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""74d01284-c568-49d9-a88d-8218d10f9380"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow Navigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""AD Navigation"",
+                    ""id"": ""a5a83021-960d-4ca7-baab-86dd44dcac62"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow Navigation"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""3b26d8a3-4854-49df-91e9-6a6e6e53db1e"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow Navigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""640bf045-0263-438e-93a6-ca7c8fe45584"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow Navigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Left/Right Navigation"",
+                    ""id"": ""13a97317-9a75-498b-a22f-b1148d9a0b5f"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow Navigation"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""f34814eb-c808-449a-b21a-4bf35080394c"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow Navigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""de21a909-2166-4c43-8d8e-07c1422969c7"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Arrow Navigation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -440,6 +588,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_Player_Fire1Shot = m_Player.FindAction("Fire1 Shot", throwIfNotFound: true);
         m_Player_Fire2Shot = m_Player.FindAction("Fire2 Shot", throwIfNotFound: true);
         m_Player_Fire3SpecialItem = m_Player.FindAction("Fire3 SpecialItem", throwIfNotFound: true);
+        // PlayerSelectionMenu
+        m_PlayerSelectionMenu = asset.FindActionMap("PlayerSelectionMenu", throwIfNotFound: true);
+        m_PlayerSelectionMenu_ArrowNavigation = m_PlayerSelectionMenu.FindAction("Arrow Navigation", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -574,6 +725,39 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // PlayerSelectionMenu
+    private readonly InputActionMap m_PlayerSelectionMenu;
+    private IPlayerSelectionMenuActions m_PlayerSelectionMenuActionsCallbackInterface;
+    private readonly InputAction m_PlayerSelectionMenu_ArrowNavigation;
+    public struct PlayerSelectionMenuActions
+    {
+        private @PlayerInput m_Wrapper;
+        public PlayerSelectionMenuActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ArrowNavigation => m_Wrapper.m_PlayerSelectionMenu_ArrowNavigation;
+        public InputActionMap Get() { return m_Wrapper.m_PlayerSelectionMenu; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PlayerSelectionMenuActions set) { return set.Get(); }
+        public void SetCallbacks(IPlayerSelectionMenuActions instance)
+        {
+            if (m_Wrapper.m_PlayerSelectionMenuActionsCallbackInterface != null)
+            {
+                @ArrowNavigation.started -= m_Wrapper.m_PlayerSelectionMenuActionsCallbackInterface.OnArrowNavigation;
+                @ArrowNavigation.performed -= m_Wrapper.m_PlayerSelectionMenuActionsCallbackInterface.OnArrowNavigation;
+                @ArrowNavigation.canceled -= m_Wrapper.m_PlayerSelectionMenuActionsCallbackInterface.OnArrowNavigation;
+            }
+            m_Wrapper.m_PlayerSelectionMenuActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @ArrowNavigation.started += instance.OnArrowNavigation;
+                @ArrowNavigation.performed += instance.OnArrowNavigation;
+                @ArrowNavigation.canceled += instance.OnArrowNavigation;
+            }
+        }
+    }
+    public PlayerSelectionMenuActions @PlayerSelectionMenu => new PlayerSelectionMenuActions(this);
     private int m_KeyboardJoystickSchemeIndex = -1;
     public InputControlScheme KeyboardJoystickScheme
     {
@@ -593,5 +777,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnFire1Shot(InputAction.CallbackContext context);
         void OnFire2Shot(InputAction.CallbackContext context);
         void OnFire3SpecialItem(InputAction.CallbackContext context);
+    }
+    public interface IPlayerSelectionMenuActions
+    {
+        void OnArrowNavigation(InputAction.CallbackContext context);
     }
 }
