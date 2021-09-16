@@ -46,7 +46,7 @@ public class GameController : MonoBehaviour
 
         InitiateProjectilesPools();
 
-        // Not working yet ;~ 
+        // Not working yet ;~
         //var PlayerSelectionController = PlayerSelectionInputController.instance;
 
         //if(PlayerSelectionController?.PlayerCount == 1)
