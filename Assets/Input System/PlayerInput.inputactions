@@ -403,6 +403,22 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Select Player",
+                    "type": "Button",
+                    "id": "ec513d45-b862-4d3c-befb-6b1374ee86fb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Cancel or Back",
+                    "type": "Button",
+                    "id": "8dba8bba-3eda-449a-9127-9b273a0f6fe2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -537,6 +553,28 @@
                     "action": "Arrow Navigation",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "578143ab-89de-4a83-9216-6ccfcb375c84",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select Player",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "12b23b73-7352-4264-8939-32ecd05f1bcb",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cancel or Back",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

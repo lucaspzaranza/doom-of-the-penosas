@@ -27,6 +27,7 @@ public class GameController : MonoBehaviour
     #region Variables
     public static GameController instance;
     [SerializeField] private List<PlayerData> _playersData = null;
+    [SerializeField] private Transform playerStartPosition = null;
     private Text gameOverCountdownText;
 
     #endregion
@@ -44,6 +45,15 @@ public class GameController : MonoBehaviour
         GetPlayersOnScene();
 
         InitiateProjectilesPools();
+
+        // Not working yet ;~ 
+        //var PlayerSelectionController = PlayerSelectionInputController.instance;
+
+        //if(PlayerSelectionController?.PlayerCount == 1)
+        //{
+        //    var penosa = PlayerSelectionController.PlayersSelectionData[0].Prefab;
+        //    Instantiate(penosa, playerStartPosition.position, Quaternion.identity);
+        //}
     }
 
     void Update()
