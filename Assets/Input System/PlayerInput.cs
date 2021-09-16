@@ -416,6 +416,22 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Select Player"",
+                    ""type"": ""Button"",
+                    ""id"": ""ec513d45-b862-4d3c-befb-6b1374ee86fb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Cancel or Back"",
+                    ""type"": ""Button"",
+                    ""id"": ""8dba8bba-3eda-449a-9127-9b273a0f6fe2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -550,6 +566,28 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""action"": ""Arrow Navigation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""578143ab-89de-4a83-9216-6ccfcb375c84"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select Player"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""12b23b73-7352-4264-8939-32ecd05f1bcb"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancel or Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -591,6 +629,8 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         // PlayerSelectionMenu
         m_PlayerSelectionMenu = asset.FindActionMap("PlayerSelectionMenu", throwIfNotFound: true);
         m_PlayerSelectionMenu_ArrowNavigation = m_PlayerSelectionMenu.FindAction("Arrow Navigation", throwIfNotFound: true);
+        m_PlayerSelectionMenu_SelectPlayer = m_PlayerSelectionMenu.FindAction("Select Player", throwIfNotFound: true);
+        m_PlayerSelectionMenu_CancelorBack = m_PlayerSelectionMenu.FindAction("Cancel or Back", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -730,11 +770,15 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputActionMap m_PlayerSelectionMenu;
     private IPlayerSelectionMenuActions m_PlayerSelectionMenuActionsCallbackInterface;
     private readonly InputAction m_PlayerSelectionMenu_ArrowNavigation;
+    private readonly InputAction m_PlayerSelectionMenu_SelectPlayer;
+    private readonly InputAction m_PlayerSelectionMenu_CancelorBack;
     public struct PlayerSelectionMenuActions
     {
         private @PlayerInput m_Wrapper;
         public PlayerSelectionMenuActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @ArrowNavigation => m_Wrapper.m_PlayerSelectionMenu_ArrowNavigation;
+        public InputAction @SelectPlayer => m_Wrapper.m_PlayerSelectionMenu_SelectPlayer;
+        public InputAction @CancelorBack => m_Wrapper.m_PlayerSelectionMenu_CancelorBack;
         public InputActionMap Get() { return m_Wrapper.m_PlayerSelectionMenu; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -747,6 +791,12 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @ArrowNavigation.started -= m_Wrapper.m_PlayerSelectionMenuActionsCallbackInterface.OnArrowNavigation;
                 @ArrowNavigation.performed -= m_Wrapper.m_PlayerSelectionMenuActionsCallbackInterface.OnArrowNavigation;
                 @ArrowNavigation.canceled -= m_Wrapper.m_PlayerSelectionMenuActionsCallbackInterface.OnArrowNavigation;
+                @SelectPlayer.started -= m_Wrapper.m_PlayerSelectionMenuActionsCallbackInterface.OnSelectPlayer;
+                @SelectPlayer.performed -= m_Wrapper.m_PlayerSelectionMenuActionsCallbackInterface.OnSelectPlayer;
+                @SelectPlayer.canceled -= m_Wrapper.m_PlayerSelectionMenuActionsCallbackInterface.OnSelectPlayer;
+                @CancelorBack.started -= m_Wrapper.m_PlayerSelectionMenuActionsCallbackInterface.OnCancelorBack;
+                @CancelorBack.performed -= m_Wrapper.m_PlayerSelectionMenuActionsCallbackInterface.OnCancelorBack;
+                @CancelorBack.canceled -= m_Wrapper.m_PlayerSelectionMenuActionsCallbackInterface.OnCancelorBack;
             }
             m_Wrapper.m_PlayerSelectionMenuActionsCallbackInterface = instance;
             if (instance != null)
@@ -754,6 +804,12 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @ArrowNavigation.started += instance.OnArrowNavigation;
                 @ArrowNavigation.performed += instance.OnArrowNavigation;
                 @ArrowNavigation.canceled += instance.OnArrowNavigation;
+                @SelectPlayer.started += instance.OnSelectPlayer;
+                @SelectPlayer.performed += instance.OnSelectPlayer;
+                @SelectPlayer.canceled += instance.OnSelectPlayer;
+                @CancelorBack.started += instance.OnCancelorBack;
+                @CancelorBack.performed += instance.OnCancelorBack;
+                @CancelorBack.canceled += instance.OnCancelorBack;
             }
         }
     }
@@ -781,5 +837,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     public interface IPlayerSelectionMenuActions
     {
         void OnArrowNavigation(InputAction.CallbackContext context);
+        void OnSelectPlayer(InputAction.CallbackContext context);
+        void OnCancelorBack(InputAction.CallbackContext context);
     }
 }
