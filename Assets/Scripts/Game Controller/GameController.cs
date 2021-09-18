@@ -35,7 +35,6 @@ public class GameController : MonoBehaviour
     #region #Properties
 
     public List<PlayerData> PlayersData => _playersData;
-
     #endregion
 
     void Start()
@@ -45,19 +44,11 @@ public class GameController : MonoBehaviour
         GetPlayersOnScene();
 
         InitiateProjectilesPools();
-
-        // Not working yet ;~
-        //var PlayerSelectionController = PlayerSelectionInputController.instance;
-
-        //if(PlayerSelectionController?.PlayerCount == 1)
-        //{
-        //    var penosa = PlayerSelectionController.PlayersSelectionData[0].Prefab;
-        //    Instantiate(penosa, playerStartPosition.position, Quaternion.identity);
-        //}
     }
 
     void Update()
     {
+        if (PlayersData.Count == 0) return;
         if (PlayersData[0].OnCountdown && PlayersData[0].Countdown >= 0)
             GameOverCountdown(0);
     }
@@ -77,9 +68,12 @@ public class GameController : MonoBehaviour
             .Select(player => player.GetComponent<Penosa>())
             .ToList();
         _playersData = new List<PlayerData>();
+        float xOffset = 0f;
         players.ForEach(player =>
         {
             PlayersData.Add(player.PlayerData);
+            player.transform.position = new Vector2(playerStartPosition.position.x + xOffset, playerStartPosition.position.y);
+            xOffset++;
         });
     }
 

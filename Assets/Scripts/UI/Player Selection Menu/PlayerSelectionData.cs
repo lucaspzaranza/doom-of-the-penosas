@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SharedData.Enumerations;
 
 [System.Serializable]
 public class PlayerSelectionData

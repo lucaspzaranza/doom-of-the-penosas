@@ -771,6 +771,7 @@ MonoBehaviour:
   - {fileID: 219001693}
   - {fileID: 1116342516}
   _startTxt: {fileID: 1155036315}
+  _menuState: 0
 --- !u!1 &965334987
 GameObject:
   m_ObjectHideFlags: 0
@@ -999,7 +1000,7 @@ GameObject:
   - component: {fileID: 1120206358}
   - component: {fileID: 1120206357}
   m_Layer: 0
-  m_Name: InputController
+  m_Name: SelectionController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1041,7 +1042,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1120206356}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.29973254, y: -0.37475297, z: -12.231062}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

@@ -96,8 +96,10 @@ public class PlayerHUD : MonoBehaviour
         if(player == null)
         {
             var players = FindObjectsOfType<Penosa>().OrderBy(penosa => penosa.PlayerData.LocalID).ToArray();
-            player = players[playerID];
+            player = players.Length > 0? players[playerID] : null;
         }
+
+        if (player == null) return;
 
         player.PlayerData.OnArmorLifeChanged += newValue => ArmorLife = newValue;
         player.PlayerData.OnLifeChanged += newValue => Life = newValue;
@@ -110,12 +112,14 @@ public class PlayerHUD : MonoBehaviour
 
     private void OnDisable()
     {
+        if (player == null) return;
         player.PlayerData.OnWeaponLevelChanged -= UpdateWeaponLevelText;
         player.PlayerData.OnWeaponAmmoChanged -= UpdateWeaponAmmoText;
     }
 
     private void Start()
     {
+        if (player == null) return;
         player.Inventory.OnSpecialItemIconChanged += SetSpecialItemIconSprite;
     }
 

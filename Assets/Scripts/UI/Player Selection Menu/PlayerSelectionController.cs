@@ -4,27 +4,24 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using static UnityEngine.InputSystem.InputAction;
+using SharedData.Enumerations;
 
-public enum Penosas
-{
-    None = -1,
-    Geruza = 0,
-    Dolores = 1
-}
 
-public class PlayerSelectionInputController : MonoBehaviour
+public class PlayerSelectionController : MonoBehaviour
 {
-    public static PlayerSelectionInputController instance;
+    public static PlayerSelectionController instance;
     [SerializeField] private PlayerSelectionData[] playersSelectionData;
     [SerializeField] private float arrowXOffset;
+
 
     private PlayerInput playerInputActions;
     private InputAction navigation;
     private InputAction selectPlayer;
     private InputAction cancelOrBack;
-    private bool playersAreSelected = false;
     private int current1PPlayerIndex = 0;
 
+    // Alias pra encurtar o comprimento das linhas.
+    private PlayerSelectionMenuState MenuState => PlayerSelectionUIController.instance.MenuState;
     public int PlayerCount { get; set; } = 1;
     public PlayerSelectionData[] PlayersSelectionData => playersSelectionData;
 
@@ -67,21 +64,21 @@ public class PlayerSelectionInputController : MonoBehaviour
         cancelOrBack.Disable();
     }
 
-    private void SetArrowPosition(int arrowIndex, Vector2 newPos)
+    private void SetArrowPosition(Vector2 newPos)
     {
-        playersSelectionData[arrowIndex].Arrow.transform.localPosition = newPos;
+        PlayersSelectionData[0].Arrow.transform.localPosition = newPos;
     }
 
     private void ChangePlayerSelection(CallbackContext context)
     {
-        if (playersAreSelected) return;
+        if (MenuState == PlayerSelectionMenuState.ReadyToStart) return;
 
         float direction = navigation.ReadValue<float>();
         if (direction < 0) // Left
         {
             if (PlayerCount == 1)
             {
-                SetArrowPosition(0, new Vector2(playersSelectionData[0].ArrowXInitCoord, transform.localPosition.y));
+                SetArrowPosition(new Vector2(PlayersSelectionData[0].ArrowXInitCoord, transform.localPosition.y));
                 current1PPlayerIndex = 0; // Index do jogador 1 indo pra segunda penosa.
             }
         }
@@ -89,7 +86,7 @@ public class PlayerSelectionInputController : MonoBehaviour
         {
             if (PlayerCount == 1)
             {
-                SetArrowPosition(0, new Vector2(playersSelectionData[1].ArrowXInitCoord, transform.localPosition.y));
+                SetArrowPosition(new Vector2(PlayersSelectionData[1].ArrowXInitCoord, transform.localPosition.y));
                 current1PPlayerIndex = 1; // Index do jogador 1 indo pra primeira penosa.
             }
         }
@@ -97,37 +94,44 @@ public class PlayerSelectionInputController : MonoBehaviour
 
     private void Cancel(CallbackContext context)
     {
-        if(playersAreSelected)
+        if(MenuState == PlayerSelectionMenuState.ReadyToStart)
         {
-            playersAreSelected = false;
-            SetArrowPosition(0, new Vector2(playersSelectionData[current1PPlayerIndex].ArrowXInitCoord, transform.localPosition.y));
+            SetPlayerNameTextColor(current1PPlayerIndex, Color.white);
+            SetArrowPosition(new Vector2(PlayersSelectionData[current1PPlayerIndex].ArrowXInitCoord, transform.localPosition.y));
+            PlayerSelectionUIController.instance.SetState(PlayerSelectionMenuState.PlayerSelection);
         }
-        else
-        {
+        else if(MenuState == PlayerSelectionMenuState.PlayerSelection)
             print("Voltar ao menu principal.");
-        }
+    }
+
+    private void SetPlayerNameTextColor(int index, Color newColor)
+    {
+        PlayerSelectionUIController.instance.PenosasTexts[index].color = newColor;
     }
 
     private void Select(CallbackContext context)
     {
-        if (!playersAreSelected)
+        //if (!playersAreSelected)
+        if (MenuState == PlayerSelectionMenuState.PlayerSelection)
         {
             if (PlayerCount == 1)
             {
-                playersSelectionData[0].SelectedPenosa = (Penosas)current1PPlayerIndex;
+                PlayersSelectionData[0].SelectedPenosa = (Penosas)current1PPlayerIndex;
 
                 // Forma de pegar o índice complementar. Se f(0) = (0 + 1) % 2 = 1. Se f(1) = (1 + 1) % 2 = 0;
-                PlayerSelectionUIController.instance.PenosasTexts[(current1PPlayerIndex + 1) % 2].color = Color.white;
-                PlayerSelectionUIController.instance.PenosasTexts[current1PPlayerIndex].color = Color.red;
+                SetPlayerNameTextColor((current1PPlayerIndex + 1) % 2, Color.white);
+                SetPlayerNameTextColor(current1PPlayerIndex, Color.red);
+
                 PlayerSelectionUIController.instance.StartText.SetActive(true);
                 Vector2 startTxtPos = PlayerSelectionUIController.instance.StartText.transform.localPosition;
-                SetArrowPosition(0, startTxtPos);
-                playersAreSelected = true;
+                SetArrowPosition(startTxtPos);
+                PlayerSelectionUIController.instance.SetState(PlayerSelectionMenuState.ReadyToStart);
             }
         }
-        else
+        else if(MenuState == PlayerSelectionMenuState.ReadyToStart)
         {
-            DontDestroyOnLoad(gameObject);
+            var newPenosa = Instantiate(PlayersSelectionData[current1PPlayerIndex].Prefab, transform.position, Quaternion.identity);
+            DontDestroyOnLoad(newPenosa);
             SceneManager.LoadScene("SampleScene");
         }
     }
