@@ -13,7 +13,6 @@ public class PlayerSelectionController : MonoBehaviour
     [SerializeField] private PlayerSelectionData[] playersSelectionData;
     [SerializeField] private float arrowXOffset;
 
-
     private PlayerInput playerInputActions;
     private InputAction navigation;
     private InputAction selectPlayer;
@@ -48,8 +47,8 @@ public class PlayerSelectionController : MonoBehaviour
         cancelOrBack.performed += Cancel;
         cancelOrBack.Enable();
 
-        playersSelectionData[0].SetArrowXInitCoordValue(playersSelectionData[0].Arrow.transform.localPosition.x);
-        playersSelectionData[1].SetArrowXInitCoordValue(playersSelectionData[1].Arrow.transform.localPosition.x);
+        //playersSelectionData[0].SetArrowXInitCoordValue(playersSelectionData[0].Arrow.transform.localPosition.x);
+        //playersSelectionData[1].SetArrowXInitCoordValue(playersSelectionData[1].Arrow.transform.localPosition.x);
     }
 
     private void OnDisable()
