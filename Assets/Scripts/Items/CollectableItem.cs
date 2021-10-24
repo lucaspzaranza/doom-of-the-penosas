@@ -1,3 +1,4 @@
+using SharedData.Enumerations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +7,8 @@ using UnityEngine;
 
 public class CollectableItem : MonoBehaviour
 {
-    [SerializeField] private MonoScript itemScript;
+    //[SerializeField] private MonoScript itemScript;
+    [SerializeField] private SpecialItemType itemType;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask terrainLayerMask;
     [SerializeField] private byte amount = 1;
@@ -35,7 +37,8 @@ public class CollectableItem : MonoBehaviour
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         Sprite sprite = sr.sprite;
 
-        player.Inventory.AddItem(itemScript.GetClass().ToString(), amount, player, sprite);
+        //player.Inventory.AddItem(itemScript.GetClass().ToString(), amount, player, sprite);
+        player.Inventory.AddItem(itemType.ToString(), amount, player, sprite);
     }
 
     public void OnTriggerEnter2D(Collider2D other)

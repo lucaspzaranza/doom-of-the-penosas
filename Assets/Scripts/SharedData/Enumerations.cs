@@ -15,4 +15,12 @@ namespace SharedData.Enumerations
         Geruza = 0,
         Dolores = 1
     }
+
+    public enum SpecialItemType
+    {
+        Adrenaline,
+        JetCopter,
+        Mayday,
+        WalkTalk
+    }
 }

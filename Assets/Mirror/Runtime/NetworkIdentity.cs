@@ -139,7 +139,7 @@ namespace Mirror
             new Dictionary<uint, NetworkIdentity>();
 
         // get all NetworkBehaviour components
-        public NetworkBehaviour[] NetworkBehaviours { get; private set; }
+        public NetworkBehaviour[] NetworkBehaviours { get; private set; } = new NetworkBehaviour[] { }; 
 
 #pragma warning disable 618
         [Obsolete(NetworkVisibilityObsoleteMessage.Message)]

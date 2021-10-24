@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea6244dfc45c5814ea7eb09bcb3b47b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemScript: {fileID: 11500000, guid: ace5c9db745390548ac8a4c9fdecb857, type: 3}
+  itemType: 1
   groundCheck: {fileID: 5751157262314411713}
   terrainLayerMask:
     serializedVersion: 2
