@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Projectile
   - Enemy
+  - NetworkArrow
   layers:
   - Default
   - TransparentFX

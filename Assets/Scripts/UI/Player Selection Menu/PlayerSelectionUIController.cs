@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class PlayerSelectionUIController : NetworkBehaviour
 {
@@ -71,6 +72,17 @@ public class PlayerSelectionUIController : NetworkBehaviour
     {
         EventSystem.current.SetSelectedGameObject(buttonToSelect);
         LocalArrow.UpdateArrowPosition(buttonToSelect);
+    }
+
+    public void NetworkSelectButton(GameObject buttonToSelect)
+    {
+        print("Arrow Connection: " + connectionToClient.connectionId);
+        print("Player Connection: " + NetworkClient.localPlayer.connectionToServer.connectionId);
+        var networkArrow = FindObjectsOfType<NetworkArrowPosition>()
+            .SingleOrDefault(arrow => arrow.connectionToClient.connectionId == NetworkClient.localPlayer.connectionToServer.connectionId);
+        EventSystem.current.SetSelectedGameObject(buttonToSelect);
+        if (networkArrow != null)
+            networkArrow.CmdUpdateArrowPosition(buttonToSelect);
     }
 
     public void HostLobby()

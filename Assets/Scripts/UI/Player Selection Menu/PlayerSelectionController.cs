@@ -211,29 +211,30 @@ public class PlayerSelectionController : NetworkBehaviour
     }
 
     [Command(requiresAuthority = false)]
-    private void CmdSelect()
+    public void CmdSelect()
     {
+        print("CmdSelect");
         int index = NetworkPlayerIndex;
         if (MenuState == PlayerSelectionMenuState.PlayerSelection)
         {
             PlayersSelectionData[index].SelectedPenosa = (Penosas)SelectedPlayersIndexes[index];
             SetPlayerNameTextColor(SelectedPlayersIndexes[index], Color.red);
-            Vector2 startTxtPos = new Vector2(
-                PlayerSelectionUIController.instance.StartButton.transform.Find(PlayerSelectionUIController.ArrowPositionName).transform.localPosition.x,
-                PlayerSelectionUIController.instance.StartButton.transform.localPosition.y);
+            //Vector2 startTxtPos = new Vector2(
+            //    PlayerSelectionUIController.instance.StartButton.transform.Find(PlayerSelectionUIController.ArrowPositionName).transform.localPosition.x,
+            //    PlayerSelectionUIController.instance.StartButton.transform.localPosition.y);
 
             if (PlayerCount == 2)
             {
                 int complementary = GetComplementaryPlayerIndex(index);
                 PlayersSelectionData[complementary].SelectedPenosa = (Penosas)SelectedPlayersIndexes[complementary];
                 SetPlayerNameTextColor(SelectedPlayersIndexes[complementary], Color.yellow);
-                SetArrowPosition(1, new Vector2(startTxtPos.x, startTxtPos.y));
+                //SetArrowPosition(1, new Vector2(startTxtPos.x, startTxtPos.y));
             }
 
             PlayerSelectionUIController.instance.SetStartButtonGameObjectInteractable(true);
             PlayerSelectionUIController.instance.SetCancelButtonGameObjectInteractable(false);
-            SetArrowPosition(0, startTxtPos);
-            SetMenuState(PlayerSelectionMenuState.ReadyToStart);
+            //SetArrowPosition(0, startTxtPos);
+            //SetMenuState(PlayerSelectionMenuState.ReadyToStart);
         }
         else if (MenuState == PlayerSelectionMenuState.ReadyToStart)
         {

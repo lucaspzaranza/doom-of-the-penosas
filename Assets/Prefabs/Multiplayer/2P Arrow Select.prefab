@@ -147,10 +147,10 @@ GameObject:
   - component: {fileID: 5531988841753917355}
   - component: {fileID: 5531988841753917352}
   - component: {fileID: 5531988841753917353}
-  - component: {fileID: 5531988841753917351}
+  - component: {fileID: -7783821219723267662}
   m_Layer: 5
   m_Name: 2P Arrow Select
-  m_TagString: Untagged
+  m_TagString: NetworkArrow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -254,7 +254,7 @@ MonoBehaviour:
   interpolateRotation: 1
   interpolatePosition: 1
   syncScale: 1
---- !u!114 &5531988841753917351
+--- !u!114 &-7783821219723267662
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -263,7 +263,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5531988841753917357}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c84faf8720655b746bfd26693e65e8e2, type: 3}
+  m_Script: {fileID: 11500000, guid: f02f17cdc54926c479da793eb3063fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0

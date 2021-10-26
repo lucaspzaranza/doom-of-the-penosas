@@ -9,8 +9,10 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class NetworkArrowPosition : NetworkBehaviour
 {
+    private RectTransform lobbyMenuTransform;
     private PlayerInput playerInputActions;
     private InputAction navigation;
+    private GameObject selectedButton;
     private bool isPressing;
 
     void Awake()
@@ -43,31 +45,50 @@ public class NetworkArrowPosition : NetworkBehaviour
         }
     }
 
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        print("CurrentSelectedGameObject: " + EventSystem.current.currentSelectedGameObject);
+        if(hasAuthority)
+            StartCoroutine(nameof(UpdateArrowPosition));
+        else
+        {
+            // Tudo errado!
+            //print(connectionToServer == null);
+            //CmdUpdateArrowPosition(selectedButton);
+        }
+    }
+
     private void UpdateArrowPositionWrapper(CallbackContext callbackContext)
     {
-        StartCoroutine(nameof(UpdateArrowPosition));
-        isPressing = callbackContext.started;
+        if(hasAuthority)
+        {
+            StartCoroutine(nameof(UpdateArrowPosition));
+            isPressing = callbackContext.started;
+        }
     }
 
     private IEnumerator UpdateArrowPosition()
     {
         yield return new WaitForEndOfFrame();
         var selectedBtn = EventSystem.current.currentSelectedGameObject;
-        UpdateArrowPosition(selectedBtn);
+        CmdUpdateArrowPosition(selectedBtn);
     }
 
-    public void UpdateArrowPosition(GameObject buttonToNavigate)
+    [Command(requiresAuthority = false)]
+    public void CmdUpdateArrowPosition(GameObject buttonToNavigate)
     {
+        RpcUpdateArrowPosition(buttonToNavigate);
+    }
+
+    [ClientRpc]
+    public void RpcUpdateArrowPosition(GameObject buttonToNavigate)
+    {
+        selectedButton = buttonToNavigate;
         var btnTransform = buttonToNavigate.transform;
-        try
-        {
-            var arrowPosition = btnTransform.Find(PlayerSelectionUIController.ArrowPositionName).GetComponent<RectTransform>().localPosition;
-            gameObject.transform.SetParent(btnTransform, false);
-            gameObject.transform.localPosition = arrowPosition;
-        }
-        catch (Exception ex)
-        {
-            Debug.LogWarning("Could not find the ArrowPosition.");
-        }
+        var arrowPosition = btnTransform.Find(PlayerSelectionUIController.ArrowPositionName).GetComponent<RectTransform>().localPosition;
+        gameObject.transform.SetParent(btnTransform, false);
+        gameObject.transform.localPosition = arrowPosition;
     }
 }
