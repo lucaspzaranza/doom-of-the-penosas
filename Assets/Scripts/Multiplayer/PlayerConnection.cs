@@ -10,8 +10,6 @@ public class PlayerConnection : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
-
-        print("OnStartLocalPlayer");
     }
 
     [Server]

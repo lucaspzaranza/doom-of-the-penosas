@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
+using static UnityEngine.InputSystem.InputAction;
 
 public class PlayerSelectionUIController : NetworkBehaviour
 {
@@ -61,11 +62,18 @@ public class PlayerSelectionUIController : NetworkBehaviour
     {
         startBtnComponent = StartButton.GetComponent<Button>();
         cancelBtnComponent = CancelButton.GetComponent<Button>();
+
+        NetworkArrowPosition.OnChangeArrowPositionButtonPressed += () => print("Aloha!");
     }
 
     private void OnEnable()
     {
         _menuState = PlayerSelectionMenuState.PlayerSelection;
+    }
+
+    private void HandleOnChangeArrowPositionButtonPressed(CallbackContext context)
+    {
+
     }
 
     public void SelectButton(GameObject buttonToSelect)

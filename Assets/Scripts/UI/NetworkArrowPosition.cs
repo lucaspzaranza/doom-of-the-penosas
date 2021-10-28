@@ -9,11 +9,15 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class NetworkArrowPosition : NetworkBehaviour
 {
+    [SyncVar]
+    private GameObject selectedButton;
+
     private RectTransform lobbyMenuTransform;
     private PlayerInput playerInputActions;
     private InputAction navigation;
-    private GameObject selectedButton;
     private bool isPressing;
+
+    public static event Action OnChangeArrowPositionButtonPressed;
 
     void Awake()
     {
@@ -24,6 +28,7 @@ public class NetworkArrowPosition : NetworkBehaviour
     {
         navigation = playerInputActions.PlayerSelectionMenu.ArrowNavigation;
         navigation.started += UpdateArrowPositionWrapper;
+        //navigation.started += updateArrowButtonPressed;
         navigation.canceled += UpdateArrowPositionWrapper;
         navigation.Enable();
     }
@@ -49,15 +54,15 @@ public class NetworkArrowPosition : NetworkBehaviour
     {
         base.OnStartClient();
 
-        print("CurrentSelectedGameObject: " + EventSystem.current.currentSelectedGameObject);
-        if(hasAuthority)
-            StartCoroutine(nameof(UpdateArrowPosition));
+        if (selectedButton == null)
+            selectedButton = EventSystem.current.currentSelectedGameObject;
+
+        if (hasAuthority && isClientOnly)
+            CmdUpdateArrowPosition(EventSystem.current.currentSelectedGameObject);
+        // Quando rodar no cliente também rodará no host, então farei essa chamada pra atualizar
+        // a posiçao no host de acordo com o que foi selecionado no host.
         else
-        {
-            // Tudo errado!
-            //print(connectionToServer == null);
-            //CmdUpdateArrowPosition(selectedButton);
-        }
+            CmdUpdateArrowPosition(selectedButton);
     }
 
     private void UpdateArrowPositionWrapper(CallbackContext callbackContext)
@@ -66,6 +71,7 @@ public class NetworkArrowPosition : NetworkBehaviour
         {
             StartCoroutine(nameof(UpdateArrowPosition));
             isPressing = callbackContext.started;
+            OnChangeArrowPositionButtonPressed?.Invoke();
         }
     }
 
@@ -86,6 +92,7 @@ public class NetworkArrowPosition : NetworkBehaviour
     public void RpcUpdateArrowPosition(GameObject buttonToNavigate)
     {
         selectedButton = buttonToNavigate;
+
         var btnTransform = buttonToNavigate.transform;
         var arrowPosition = btnTransform.Find(PlayerSelectionUIController.ArrowPositionName).GetComponent<RectTransform>().localPosition;
         gameObject.transform.SetParent(btnTransform, false);
