@@ -71,13 +71,13 @@ public class PlayerSelectionController : NetworkBehaviour
 
     private void OnEnable()
     {
-        navigation = playerInputActions.PlayerSelectionMenu.ArrowNavigation;
-        navigation.performed += ChangePlayerArrowPosition;
-        navigation.Enable();
+        //navigation = playerInputActions.PlayerSelectionMenu.ArrowNavigation;
+        //navigation.performed += ChangePlayerArrowPosition;
+        //navigation.Enable();
 
-        selectPlayer = playerInputActions.PlayerSelectionMenu.SelectPlayer;
-        selectPlayer.performed += Select;
-        selectPlayer.Enable();
+        //selectPlayer = playerInputActions.PlayerSelectionMenu.SelectPlayer;
+        //selectPlayer.performed += Select;
+        //selectPlayer.Enable();
 
         cancelOrBack = playerInputActions.PlayerSelectionMenu.CancelorBack;
         cancelOrBack.performed += Cancel;
@@ -86,11 +86,11 @@ public class PlayerSelectionController : NetworkBehaviour
 
     private void OnDisable()
     {
-        navigation.performed -= ChangePlayerArrowPosition;
-        navigation.Disable();
+        //navigation.performed -= ChangePlayerArrowPosition;
+        //navigation.Disable();
 
-        selectPlayer.performed -= Select;
-        selectPlayer.Disable();
+        //selectPlayer.performed -= Select;
+        //selectPlayer.Disable();
 
         cancelOrBack.performed -= Cancel;
         cancelOrBack.Disable();
@@ -133,26 +133,26 @@ public class PlayerSelectionController : NetworkBehaviour
 
     private void Cancel(CallbackContext context)
     {
-        int index = SelectedPlayersIndexes[NetworkPlayerIndex];
-        if (MenuState == PlayerSelectionMenuState.ReadyToStart)
-        {
-            SetPlayerNameTextColor(SelectedPlayersIndexes[index], Color.white);
-            SetArrowPosition(index, PlayersSelectionData[index].PreviousCoordinate);
+        //int index = SelectedPlayersIndexes[NetworkPlayerIndex];
+        //if (MenuState == PlayerSelectionMenuState.ReadyToStart)
+        //{
+        //    SetPlayerNameTextColor(SelectedPlayersIndexes[index], Color.white);
+        //    SetArrowPosition(index, PlayersSelectionData[index].PreviousCoordinate);
 
-            if (PlayerCount == 2)
-            {
-                int complementary = GetComplementaryPlayerIndex(index);
-                //if(isServer) LogSelectedPlayersIndexes();
-                SetPlayerNameTextColor(SelectedPlayersIndexes[complementary], Color.white);
-                SetArrowPosition(complementary, PlayersSelectionData[complementary].PreviousCoordinate);
-            }
+        //    if (PlayerCount == 2)
+        //    {
+        //        int complementary = GetComplementaryPlayerIndex(index);
+        //        //if(isServer) LogSelectedPlayersIndexes();
+        //        SetPlayerNameTextColor(SelectedPlayersIndexes[complementary], Color.white);
+        //        SetArrowPosition(complementary, PlayersSelectionData[complementary].PreviousCoordinate);
+        //    }
 
-            PlayerSelectionUIController.instance.SetStartButtonGameObjectInteractable(false);
-            PlayerSelectionUIController.instance.SetCancelButtonGameObjectInteractable(true);
-            SetMenuState(PlayerSelectionMenuState.PlayerSelection);
-        }
-        else if (MenuState == PlayerSelectionMenuState.PlayerSelection)
-            print("Voltar ao menu principal.");
+        //    PlayerSelectionUIController.instance.SetStartButtonGameObjectInteractable(false);
+        //    PlayerSelectionUIController.instance.SetCancelButtonGameObjectInteractable(true);
+        //    SetMenuState(PlayerSelectionMenuState.PlayerSelection);
+        //}
+        //else if (MenuState == PlayerSelectionMenuState.PlayerSelection)
+        //    print("Voltar ao menu principal.");
     }
 
     private void Select(CallbackContext context)
@@ -194,8 +194,8 @@ public class PlayerSelectionController : NetworkBehaviour
     [Command(requiresAuthority = false)]
     private void SetArrowPosition(int arrowIndex, Vector2 newPos)
     {
-        PlayersSelectionData[arrowIndex].PreviousCoordinate = PlayersSelectionData[arrowIndex].Arrow.transform.localPosition;
-        PlayersSelectionData[arrowIndex].Arrow.transform.localPosition = newPos;
+        //PlayersSelectionData[arrowIndex].PreviousCoordinate = PlayersSelectionData[arrowIndex].Arrow.transform.localPosition;
+        //PlayersSelectionData[arrowIndex].Arrow.transform.localPosition = newPos;
     }
 
     [Command(requiresAuthority = false)]
@@ -207,7 +207,7 @@ public class PlayerSelectionController : NetworkBehaviour
     [Command(requiresAuthority = false)]
     private void SetPlayerNameTextColor(int index, Color newColor)
     {
-        PlayerSelectionUIController.instance.SetPlayerTextColor(index, newColor);
+        PlayerSelectionUIController.instance.RpcSetPlayerTextColor(index, newColor);
     }
 
     [Command(requiresAuthority = false)]
@@ -240,7 +240,7 @@ public class PlayerSelectionController : NetworkBehaviour
         {
             var networkManager = FindObjectOfType<PenosasNetworkManager>();
             PlayerConnection playerConnection = PlayerConnections[NetworkPlayerIndex];
-            playerConnection.playerPrefab = PlayersSelectionData[SelectedPlayersIndexes[NetworkPlayerIndex]].Prefab;
+            //playerConnection.playerPrefab = PlayersSelectionData[SelectedPlayersIndexes[NetworkPlayerIndex]].Prefab;
             playerConnection.InstantiatePlayerPrefab();
             //var player1 = Instantiate(PlayersSelectionData[SelectedPlayersIndexes[0]].Prefab, transform.position, Quaternion.identity);
             //var player1 = networkManager.InstantiatePlayer((Penosas)SelectedPlayersIndexes[0], connectionToClient);

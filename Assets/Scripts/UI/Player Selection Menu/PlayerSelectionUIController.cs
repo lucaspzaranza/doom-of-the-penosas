@@ -30,6 +30,7 @@ public class PlayerSelectionUIController : NetworkBehaviour
     [SerializeField] private Text networkAdress;
     [SerializeField] private LocalArrowPosition _localArrow;
     [SerializeField] private List<GameObject> _menuButtons;
+    [SerializeField] private List<PlayerSelectionData> _playerDataList;
 
     private Button startBtnComponent;
     private Button cancelBtnComponent;
@@ -46,6 +47,21 @@ public class PlayerSelectionUIController : NetworkBehaviour
     public List<GameObject> MenuButtons => _menuButtons;
     public LocalArrowPosition LocalArrow => _localArrow;
     public PlayerSelectionMenuState MenuState => _menuState;
+    public List<PlayerSelectionData> PlayerDataList => _playerDataList;
+
+    /// <summary>
+    /// Escolhe a seta do jogador da sua conexão.
+    /// </summary>
+    public NetworkArrowPosition CurrentPlayerArrow => FindObjectsOfType<NetworkArrowPosition>()
+            .SingleOrDefault(arrow => arrow.netIdentity.hasAuthority);
+
+    /// <summary>
+    /// Escolhe a seta do outro jogador que está jogando com você. Se for single player, retornará nulo.
+    /// </summary>
+    public NetworkArrowPosition OtherPlayerArrow => FindObjectsOfType<NetworkArrowPosition>()
+            .SingleOrDefault(arrow => !arrow.netIdentity.hasAuthority);
+
+    public int CurrentPlayerIndex => NetworkClient.isHostClient ? 0 : 1;
 
     #endregion
 
@@ -58,39 +74,56 @@ public class PlayerSelectionUIController : NetworkBehaviour
         else Destroy(gameObject);
     }
 
-    private void Start()
-    {
-        startBtnComponent = StartButton.GetComponent<Button>();
-        cancelBtnComponent = CancelButton.GetComponent<Button>();
-
-        NetworkArrowPosition.OnChangeArrowPositionButtonPressed += () => print("Aloha!");
-    }
-
     private void OnEnable()
     {
         _menuState = PlayerSelectionMenuState.PlayerSelection;
     }
 
-    private void HandleOnChangeArrowPositionButtonPressed(CallbackContext context)
+    private void Start()
     {
+        startBtnComponent = StartButton.GetComponent<Button>();
+        cancelBtnComponent = CancelButton.GetComponent<Button>();
 
+        NetworkArrowPosition.OnChangeArrowPositionButtonPressed += HandleOnChangeArrowPositionButtonPressed;
+    }
+
+    void OnDestroy()
+    {
+        NetworkArrowPosition.OnChangeArrowPositionButtonPressed -= HandleOnChangeArrowPositionButtonPressed;
+    }
+
+    private void HandleOnChangeArrowPositionButtonPressed(UpdateArrowPositionEventArgs eventArgs)
+    {
+        //print($"Quem chamou: {eventArgs.NetworkArrowPosition.gameObject.name}. " +
+        //    $"É pra ir pro botão: {eventArgs.PreviousButton.name}");
+
+        NetworkArrowPosition playerArrow = OtherPlayerArrow;
+
+        if (playerArrow != null)
+        {
+            EventSystem.current.SetSelectedGameObject(eventArgs.PreviousButton);
+            playerArrow.CmdUpdateArrowPosition(eventArgs.PreviousButton);
+        }
+    }
+
+    /// <summary>
+    /// Se passar o índice 0, retorna o índice 1, e vice-versa.
+    /// </summary>
+    private int GetComplementaryPlayerIndex(int currentIndex)
+    {
+        return (currentIndex + 1) % 2;
+    }
+
+    public void SelectCharacter(int characterID)
+    {
+        int index = CurrentPlayerIndex;
+        CmdUpdateSelectPlayerDataListWrapper(index, characterID);
     }
 
     public void SelectButton(GameObject buttonToSelect)
     {
         EventSystem.current.SetSelectedGameObject(buttonToSelect);
         LocalArrow.UpdateArrowPosition(buttonToSelect);
-    }
-
-    public void NetworkSelectButton(GameObject buttonToSelect)
-    {
-        print("Arrow Connection: " + connectionToClient.connectionId);
-        print("Player Connection: " + NetworkClient.localPlayer.connectionToServer.connectionId);
-        var networkArrow = FindObjectsOfType<NetworkArrowPosition>()
-            .SingleOrDefault(arrow => arrow.connectionToClient.connectionId == NetworkClient.localPlayer.connectionToServer.connectionId);
-        EventSystem.current.SetSelectedGameObject(buttonToSelect);
-        if (networkArrow != null)
-            networkArrow.CmdUpdateArrowPosition(buttonToSelect);
     }
 
     public void HostLobby()
@@ -111,7 +144,6 @@ public class PlayerSelectionUIController : NetworkBehaviour
             NetworkManager.singleton.StopClient();
             connectionTypeMenu.SetActive(true);
             lobbyMenu.SetActive(false);
-            print("StopClient...");
         }
         else if(isServer)
         {
@@ -169,7 +201,7 @@ public class PlayerSelectionUIController : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void SetPlayerTextColor(int index, Color newColor)
+    public void RpcSetPlayerTextColor(int index, Color newColor)
     {
         PenosasTexts[index].color = newColor;
     }
@@ -178,6 +210,49 @@ public class PlayerSelectionUIController : NetworkBehaviour
 
     #region Server
 
-    #endregion
+    [ClientRpc]
+    public void RpcUpdatePlayerDataList(int index, PlayerSelectionData data)
+    {
+        PlayerDataList[index] = data;
+    }
 
+    [Command(requiresAuthority = false)]
+    private void CmdUpdateCharactersNameColors(int index, int characterIndex)
+    {
+        Color baseColor = index == 0 ? Color.red : Color.yellow;
+        RpcSetPlayerTextColor(characterIndex, baseColor);
+        int complementaryPlayerIndex = GetComplementaryPlayerIndex(characterIndex);
+
+        if(NetworkManager.singleton.numPlayers > 1)
+        {
+            Color complementaryColor = index == 0 ? Color.yellow : Color.red;
+            RpcSetPlayerTextColor(complementaryPlayerIndex, complementaryColor);
+        }
+        else
+            RpcSetPlayerTextColor(complementaryPlayerIndex, Color.white);
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdUpdateSelectPlayerDataListWrapper(int index, int characterIndex)
+    {
+        RpcUpdateSelectPlayerDataList(index, characterIndex);
+        CmdUpdateCharactersNameColors(index, characterIndex);
+    }
+
+    [ClientRpc]
+    public void RpcUpdateSelectPlayerDataList(int index, int chosenCharacterIndex)
+    {
+        // Índice complementar para escolher o outro jogador.
+        int complementaryPlayerIndex = GetComplementaryPlayerIndex(index);
+        // Índice pra escolher a galinha que sobrou.
+        int complementaryPenosaIndex = GetComplementaryPlayerIndex(chosenCharacterIndex);
+
+        Penosas newCharacter = (Penosas)chosenCharacterIndex;
+        Penosas remainingPenosa = (Penosas)complementaryPenosaIndex;
+
+        PlayerDataList[index].SelectedPenosa = newCharacter;
+        PlayerDataList[complementaryPlayerIndex].SelectedPenosa = remainingPenosa;
+    }
+
+    #endregion
 }

@@ -45,17 +45,13 @@ public class PenosasNetworkManager : NetworkManager
     [Server]
     private void InstantiateArrowEgg(int index, NetworkConnection conn)
     {
-        if(selectionController == null)
-            selectionController = FindObjectOfType<PlayerSelectionController>();
-
-        selectionController.PlayerConnections[index] = conn.identity.GetComponent<PlayerConnection>();
         var playerArrow = Instantiate(spawnPrefabs[index]);
-        selectionController.PlayersSelectionData[index].Arrow = playerArrow;
         NetworkServer.Spawn(playerArrow, conn);
         playerCount++;
-        selectionController.PlayerCount = playerCount;
-        if (playerCount == 2 && index == 1)
-            selectionController.SelectedPlayersIndexes[1] = 1;
+
+        var playerconnection = conn.identity.GetComponent<PlayerConnection>();
+        var networkArrow = playerArrow.GetComponent<NetworkArrowPosition>();
+        playerconnection.CmdSetNetworkArrow(networkArrow, index);
     }
 
     [Server]

@@ -58,15 +58,8 @@ public class LocalArrowPosition : MonoBehaviour
     public void UpdateArrowPosition(GameObject buttonToNavigate)
     {
         var btnTransform = buttonToNavigate.transform;
-        try
-        {
-            var arrowPosition = btnTransform.Find(PlayerSelectionUIController.ArrowPositionName).GetComponent<RectTransform>().localPosition;
-            gameObject.transform.SetParent(btnTransform, false);
-            gameObject.transform.localPosition = arrowPosition;
-        }
-        catch(Exception ex)
-        {
-            Debug.LogWarning("Could not find the ArrowPosition.");
-        }
+        var arrowPosition = btnTransform.Find(PlayerSelectionUIController.ArrowPositionName).GetComponent<RectTransform>().localPosition;
+        gameObject.transform.SetParent(btnTransform, false);
+        gameObject.transform.localPosition = arrowPosition;
     }
 }
