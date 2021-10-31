@@ -10,22 +10,22 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class NetworkArrowPosition : NetworkBehaviour
 {
-    [SyncVar] [SerializeField]
-    private GameObject selectedButton;
+    [SyncVar] [SerializeField] private GameObject _selectedButton;
+    [SyncVar] [SerializeField] private GameObject _previousSelectedButton;
 
     [SerializeField] private int _index;
 
     private RectTransform lobbyMenuTransform;
     private PlayerInput playerInputActions;
     private InputAction navigation;
-    //private InputAction selection;
     private bool isPressing;
 
     public static event Action<UpdateArrowPositionEventArgs> OnChangeArrowPositionButtonPressed;
-    //public static event Action<NetworkArrowPosition, Button> OnArrowSelectButtonPressed;
-    //public static event Action<SelectButtonEventArgs> OnArrowSelectButtonPressed;
 
     public int Index => NetworkClient.isHostClient? 0 : 1;
+
+    public GameObject SelectedButton => _selectedButton;
+    public GameObject PreviousSelectedButton => _previousSelectedButton;
 
     void Awake()
     {
@@ -37,19 +37,12 @@ public class NetworkArrowPosition : NetworkBehaviour
         navigation = playerInputActions.PlayerSelectionMenu.ArrowNavigation;
         navigation.started += UpdateArrowPositionWrapper;
         navigation.Enable();
-
-        //selection = playerInputActions.PlayerSelectionMenu.SelectPlayer;
-        //selection.started += OnArrowSelectedWrapper;
-        //selection.Enable();
     }
 
     private void OnDisable()
     {
         navigation.started -= UpdateArrowPositionWrapper;
         navigation.Disable();
-
-        //selection.started -= OnArrowSelectedWrapper;
-        //selection.Disable();
     }
 
     void Update()
@@ -66,22 +59,22 @@ public class NetworkArrowPosition : NetworkBehaviour
     {
         base.OnStartClient();
 
-        if (selectedButton == null)
-            selectedButton = EventSystem.current.currentSelectedGameObject;
+        if (_selectedButton == null)
+            _selectedButton = EventSystem.current.currentSelectedGameObject;
 
         if (hasAuthority && isClientOnly) 
             CmdUpdateArrowPosition(EventSystem.current.currentSelectedGameObject);
         // Quando rodar no cliente também rodará no host, então farei essa chamada pra atualizar
         // a posiçao no host de acordo com o que foi selecionado no host .
         else
-            CmdUpdateArrowPosition(selectedButton);
+            CmdUpdateArrowPosition(_selectedButton);
     }
 
     private void UpdateArrowPositionWrapper(CallbackContext callbackContext)
     {
         if(hasAuthority)
         {
-            var eventArgs = new UpdateArrowPositionEventArgs(this, selectedButton);
+            var eventArgs = new UpdateArrowPositionEventArgs(this, _selectedButton);
             StartCoroutine(nameof(UpdateArrowPosition));
             isPressing = callbackContext.started;
             OnChangeArrowPositionButtonPressed?.Invoke(eventArgs);
@@ -104,24 +97,12 @@ public class NetworkArrowPosition : NetworkBehaviour
     [ClientRpc]
     public void RpcUpdateArrowPosition(GameObject buttonToNavigate)
     {
-        selectedButton = buttonToNavigate;
+        _previousSelectedButton = _selectedButton;
+        _selectedButton = buttonToNavigate;
 
         var btnTransform = buttonToNavigate.transform;
         var arrowPosition = btnTransform.Find(PlayerSelectionUIController.ArrowPositionName).GetComponent<RectTransform>().localPosition;
         gameObject.transform.SetParent(btnTransform, false);
         gameObject.transform.localPosition = arrowPosition;
     }
-
-    //public void OnArrowSelectedWrapper(CallbackContext context)
-    //{
-    //    CmdOnArrowSelected(Index);
-    //}
-
-    //[Command]
-    //public void CmdOnArrowSelected(int index)
-    //{
-    //    //print("Calling event with index: " + index);
-    //    SelectButtonEventArgs eventArgs = new SelectButtonEventArgs(index, transform.parent.GetComponent<Button>());
-    //    //OnArrowSelectButtonPressed?.Invoke(eventArgs);
-    //}
 }

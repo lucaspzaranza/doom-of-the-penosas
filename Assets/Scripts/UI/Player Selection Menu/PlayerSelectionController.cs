@@ -213,48 +213,48 @@ public class PlayerSelectionController : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdSelect()
     {
-        print("CmdSelect");
-        int index = NetworkPlayerIndex;
-        if (MenuState == PlayerSelectionMenuState.PlayerSelection)
-        {
-            PlayersSelectionData[index].SelectedPenosa = (Penosas)SelectedPlayersIndexes[index];
-            SetPlayerNameTextColor(SelectedPlayersIndexes[index], Color.red);
-            //Vector2 startTxtPos = new Vector2(
-            //    PlayerSelectionUIController.instance.StartButton.transform.Find(PlayerSelectionUIController.ArrowPositionName).transform.localPosition.x,
-            //    PlayerSelectionUIController.instance.StartButton.transform.localPosition.y);
+        //print("CmdSelect");
+        //int index = NetworkPlayerIndex;
+        //if (MenuState == PlayerSelectionMenuState.PlayerSelection)
+        //{
+        //    PlayersSelectionData[index].SelectedPenosa = (Penosas)SelectedPlayersIndexes[index];
+        //    SetPlayerNameTextColor(SelectedPlayersIndexes[index], Color.red);
+        //    Vector2 startTxtPos = new Vector2(
+        //        PlayerSelectionUIController.instance.StartButton.transform.Find(PlayerSelectionUIController.ArrowPositionName).transform.localPosition.x,
+        //        PlayerSelectionUIController.instance.StartButton.transform.localPosition.y);
 
-            if (PlayerCount == 2)
-            {
-                int complementary = GetComplementaryPlayerIndex(index);
-                PlayersSelectionData[complementary].SelectedPenosa = (Penosas)SelectedPlayersIndexes[complementary];
-                SetPlayerNameTextColor(SelectedPlayersIndexes[complementary], Color.yellow);
-                //SetArrowPosition(1, new Vector2(startTxtPos.x, startTxtPos.y));
-            }
+        //    if (PlayerCount == 2)
+        //    {
+        //        int complementary = GetComplementaryPlayerIndex(index);
+        //        PlayersSelectionData[complementary].SelectedPenosa = (Penosas)SelectedPlayersIndexes[complementary];
+        //        SetPlayerNameTextColor(SelectedPlayersIndexes[complementary], Color.yellow);
+        //        SetArrowPosition(1, new Vector2(startTxtPos.x, startTxtPos.y));
+        //    }
 
-            PlayerSelectionUIController.instance.SetStartButtonGameObjectInteractable(true);
-            PlayerSelectionUIController.instance.SetCancelButtonGameObjectInteractable(false);
-            //SetArrowPosition(0, startTxtPos);
-            //SetMenuState(PlayerSelectionMenuState.ReadyToStart);
-        }
-        else if (MenuState == PlayerSelectionMenuState.ReadyToStart)
-        {
-            var networkManager = FindObjectOfType<PenosasNetworkManager>();
-            PlayerConnection playerConnection = PlayerConnections[NetworkPlayerIndex];
-            //playerConnection.playerPrefab = PlayersSelectionData[SelectedPlayersIndexes[NetworkPlayerIndex]].Prefab;
-            playerConnection.InstantiatePlayerPrefab();
-            //var player1 = Instantiate(PlayersSelectionData[SelectedPlayersIndexes[0]].Prefab, transform.position, Quaternion.identity);
-            //var player1 = networkManager.InstantiatePlayer((Penosas)SelectedPlayersIndexes[0], connectionToClient);
-            //if (PlayerCount == 2)
-            //{
-            //    //var player2 = Instantiate(PlayersSelectionData[SelectedPlayersIndexes[1]].Prefab, transform.position, Quaternion.identity);
-            //    //DontDestroyOnLoad(player2);
-            //    playerConnection = PlayerConnections[NetworkPlayerIndex];
-            //    playerConnection.playerPrefab = PlayersSelectionData[SelectedPlayersIndexes[NetworkPlayerIndex]].Prefab;
-            //    playerConnection.InstantiatePlayerPrefab();
-            //}
+        //    PlayerSelectionUIController.instance.SetStartButtonGameObjectInteractable(true);
+        //    PlayerSelectionUIController.instance.SetBackToMainMenuButtonGameObjectInteractable(false);
+        //    SetArrowPosition(0, startTxtPos);
+        //    SetMenuState(PlayerSelectionMenuState.ReadyToStart);
+        //}
+        //else if (MenuState == PlayerSelectionMenuState.ReadyToStart)
+        //{
+        //    var networkManager = FindObjectOfType<PenosasNetworkManager>();
+        //    PlayerConnection playerConnection = PlayerConnections[NetworkPlayerIndex];
+        //    playerConnection.playerPrefab = PlayersSelectionData[SelectedPlayersIndexes[NetworkPlayerIndex]].Prefab;
+        //    playerConnection.InstantiatePlayerPrefab();
+        //    var player1 = Instantiate(PlayersSelectionData[SelectedPlayersIndexes[0]].Prefab, transform.position, Quaternion.identity);
+        //    var player1 = networkManager.InstantiatePlayer((Penosas)SelectedPlayersIndexes[0], connectionToClient);
+        //    if (PlayerCount == 2)
+        //    {
+        //        //var player2 = Instantiate(PlayersSelectionData[SelectedPlayersIndexes[1]].Prefab, transform.position, Quaternion.identity);
+        //        //DontDestroyOnLoad(player2);
+        //        playerConnection = PlayerConnections[NetworkPlayerIndex];
+        //        playerConnection.playerPrefab = PlayersSelectionData[SelectedPlayersIndexes[NetworkPlayerIndex]].Prefab;
+        //        playerConnection.InstantiatePlayerPrefab();
+        //    }
 
-            networkManager?.StartGame();
-        }
+        //    networkManager?.StartGame();
+        //}
     }
 
     #endregion

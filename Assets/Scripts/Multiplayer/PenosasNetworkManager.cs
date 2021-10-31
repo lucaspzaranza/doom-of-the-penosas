@@ -27,7 +27,7 @@ public class PenosasNetworkManager : NetworkManager
         else if(playerCount == 1) // Player 2
             InstantiateArrowEgg(1, conn);
     }
-   
+
     public override void OnServerDisconnect(NetworkConnection conn)
     {
         base.OnServerDisconnect(conn);
@@ -49,9 +49,9 @@ public class PenosasNetworkManager : NetworkManager
         NetworkServer.Spawn(playerArrow, conn);
         playerCount++;
 
-        var playerconnection = conn.identity.GetComponent<PlayerConnection>();
-        var networkArrow = playerArrow.GetComponent<NetworkArrowPosition>();
-        playerconnection.CmdSetNetworkArrow(networkArrow, index);
+        //var playerconnection = conn.identity.GetComponent<PlayerConnection>();
+        //var networkArrow = playerArrow.GetComponent<NetworkArrowPosition>();
+        //playerconnection.CmdSetNetworkArrow(networkArrow, index);
     }
 
     [Server]

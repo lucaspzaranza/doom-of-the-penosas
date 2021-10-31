@@ -5,12 +5,28 @@ using SharedData.Enumerations;
 using Mirror;
 using System;
 
-[System.Serializable]
+[Serializable]
 public class PlayerSelectionData
 {
-    [SerializeField] private string name;
-    [SerializeField] private Penosas _selectedPenosa;
     [SerializeField] private NetworkArrowPosition _networkArrow;
+    [SerializeField] private Penosas _selectedPenosa;
+
+    public PlayerSelectionData()
+    {
+        _selectedPenosa = (Penosas)(-1);
+    }
+
+    public PlayerSelectionData(NetworkArrowPosition networkArrow, Penosas selectedCharacter)
+    {
+        _networkArrow = networkArrow;
+        _selectedPenosa = selectedCharacter;
+    }
+
+    public PlayerSelectionData(PlayerSelectionData newData)
+    {
+        _networkArrow = newData.NetworkArrow;
+        _selectedPenosa = newData.SelectedPenosa;
+    }
 
     public NetworkArrowPosition NetworkArrow
     {

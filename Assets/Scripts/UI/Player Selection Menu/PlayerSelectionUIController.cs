@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
 using static UnityEngine.InputSystem.InputAction;
+using System;
 
 public class PlayerSelectionUIController : NetworkBehaviour
 {
@@ -20,7 +21,10 @@ public class PlayerSelectionUIController : NetworkBehaviour
     [SerializeField] private TMP_Text[] _penosasTexts;
     [SerializeField] private GameObject localArrow;
     [SerializeField] private GameObject _startButton;
-    [SerializeField] private GameObject _cancelButton;
+    [SerializeField] private GameObject _backToMainMenuButton;
+    [SerializeField] private GameObject _cancelCharacterSelectionButton;
+    [SerializeField] private GameObject _1stCharacterButton;
+    [SerializeField] private GameObject _2ndCharacterButton;
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject connectionTypeMenu;
     [SerializeField] private GameObject lobbyMenu;
@@ -30,7 +34,6 @@ public class PlayerSelectionUIController : NetworkBehaviour
     [SerializeField] private Text networkAdress;
     [SerializeField] private LocalArrowPosition _localArrow;
     [SerializeField] private List<GameObject> _menuButtons;
-    [SerializeField] private List<PlayerSelectionData> _playerDataList;
 
     private Button startBtnComponent;
     private Button cancelBtnComponent;
@@ -41,13 +44,13 @@ public class PlayerSelectionUIController : NetworkBehaviour
 
     public TMP_Text[] PenosasTexts => _penosasTexts;
     public GameObject StartButton => _startButton;
-    public GameObject CancelButton => _cancelButton;
+    public GameObject BackToMainMenuButton => _backToMainMenuButton;
+    public GameObject CancelCharacterSelectionButton => _cancelCharacterSelectionButton;
     public GameObject DisconnectedMenuPanel => _clientDisconnectedMenu;
     public GameObject DisconnectConfirmationPanel => _clientDisconnectConfirmationMenu;
     public List<GameObject> MenuButtons => _menuButtons;
     public LocalArrowPosition LocalArrow => _localArrow;
     public PlayerSelectionMenuState MenuState => _menuState;
-    public List<PlayerSelectionData> PlayerDataList => _playerDataList;
 
     /// <summary>
     /// Escolhe a seta do jogador da sua conexão.
@@ -82,9 +85,15 @@ public class PlayerSelectionUIController : NetworkBehaviour
     private void Start()
     {
         startBtnComponent = StartButton.GetComponent<Button>();
-        cancelBtnComponent = CancelButton.GetComponent<Button>();
+        cancelBtnComponent = BackToMainMenuButton.GetComponent<Button>();
 
         NetworkArrowPosition.OnChangeArrowPositionButtonPressed += HandleOnChangeArrowPositionButtonPressed;
+    }
+    
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        CmdSetCancelCharacterSelectionButtonActivation(false);
     }
 
     void OnDestroy()
@@ -137,7 +146,7 @@ public class PlayerSelectionUIController : NetworkBehaviour
         NetworkManager.singleton.StartClient();
     }
 
-    public void StopConnection()
+    public void DisconnectAndBackToMainMenu()
     {
         if (isClientOnly)
         {
@@ -178,6 +187,18 @@ public class PlayerSelectionUIController : NetworkBehaviour
         DisconnectConfirmationPanel.SetActive(val);
     }
 
+    public bool TryGetSelectedPenosaFromButton(NetworkArrowPosition networkArrow, out Penosas selectedPenosa)
+    {
+        selectedPenosa = Penosas.None;
+        Transform parent = networkArrow.gameObject.transform.parent;
+        if(parent != null)
+        {
+            TextMeshProUGUI buttonText = parent.GetComponentInChildren<TextMeshProUGUI>();
+            return Enum.TryParse(buttonText.text, out selectedPenosa);
+        }
+        return false;
+    }
+
     #endregion
 
     #region Client
@@ -189,31 +210,108 @@ public class PlayerSelectionUIController : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void SetStartButtonGameObjectInteractable(bool val)
-    {
-        StartButton.GetComponent<Button>().interactable = val;
-    }
-
-    [ClientRpc]
-    public void SetCancelButtonGameObjectInteractable(bool val)
-    {
-        CancelButton.GetComponent<Button>().interactable = val;
-    }
-
-    [ClientRpc]
     public void RpcSetPlayerTextColor(int index, Color newColor)
     {
         PenosasTexts[index].color = newColor;
+    }
+
+    [ClientRpc]
+    public void RpcUpdateSelectPlayerDataList(int index, int chosenCharacterIndex)
+    {
+        // Índice complementar para escolher o outro jogador.
+        int complementaryPlayerIndex = GetComplementaryPlayerIndex(index);
+        // Índice pra escolher a galinha que sobrou.
+        int complementaryPenosaIndex = GetComplementaryPlayerIndex(chosenCharacterIndex);
+
+        Penosas newCharacter = (Penosas)chosenCharacterIndex;
+        Penosas remainingCharacter = (Penosas)complementaryPenosaIndex;
+
+        // Trocar pra conexão do jogador
+        var playerConnections = FindObjectsOfType<PlayerConnection>().OrderBy(x => x.netId).ToList();
+
+        print("index: " + index + " newCharacter: " + newCharacter + " Player: " + 
+            playerConnections[index].PlayerSelectionData.NetworkArrow.gameObject.name);
+        print("complementaryPlayerIndex: " + complementaryPlayerIndex + " remainingCharacter: " + remainingCharacter + " Player: " +
+            playerConnections[complementaryPlayerIndex].PlayerSelectionData.NetworkArrow.gameObject.name);
+
+        playerConnections[index].PlayerSelectionData.SelectedPenosa = newCharacter;
+        playerConnections[complementaryPlayerIndex].PlayerSelectionData.SelectedPenosa = remainingCharacter;
+        //foreach (var playerConn in playerConnections)
+        //{
+        //    if (NetworkClient.localPlayer.connectionToClient == netIdentity.connectionToClient)
+        //    {
+
+        //    }
+        //    if (playerConn.netIdentity.connectionToClient == netIdentity.connectionToClient)
+        //        playerConn.PlayerSelectionData.SelectedPenosa = newCharacter;
+        //    else
+        //        playerConn.PlayerSelectionData.SelectedPenosa = remainingCharacter;
+        //}
+        //PlayerDataList[index].SelectedPenosa = newCharacter;
+        //PlayerDataList[complementaryPlayerIndex].SelectedPenosa = remainingPenosa;
+    }
+
+    [ClientRpc]
+    private void RpcCancelCharacterSelection()
+    {
+        var arrows = FindObjectsOfType<NetworkArrowPosition>();
+        foreach (var arrow in arrows)
+        {
+            arrow.CmdUpdateArrowPosition(arrow.PreviousSelectedButton);
+        }
+    }
+    
+    [ClientRpc]
+    private void RpcSetBackToMainMenuButtonActivation(bool value)
+    {
+        BackToMainMenuButton.SetActive(value);
+    }
+
+    [ClientRpc]
+    private void RpcSetBackToMainMenuButtonInteractable(bool value)
+    {
+        BackToMainMenuButton.GetComponent<Button>().interactable = value;
+    }
+
+    [ClientRpc]
+    private void RpcSetCancelCharacterSelectionButtonInteractable(bool value)
+    {
+        CancelCharacterSelectionButton.GetComponent<Button>().interactable = value;
+    }
+
+    [ClientRpc]
+    private void RpcSetCancelCharacterSelectionButtonActivation(bool value)
+    {
+        CancelCharacterSelectionButton.SetActive(value);
+    }
+
+    [ClientRpc]
+    public void RpcSetStartButtonGameObjectInteractable(bool value)
+    {
+        StartButton.GetComponent<Button>().interactable = value;
+    }
+
+    [ClientRpc]
+    public void RpcSetChooseCharacterButtonInteractable(bool value)
+    {
+        _1stCharacterButton.GetComponent<Button>().interactable = value;
+        _2ndCharacterButton.GetComponent<Button>().interactable = value;
     }
 
     #endregion
 
     #region Server
 
-    [ClientRpc]
-    public void RpcUpdatePlayerDataList(int index, PlayerSelectionData data)
+    [Command(requiresAuthority = false)]
+    public void CmdCancelCharacterSelection()
     {
-        PlayerDataList[index] = data;
+        RpcCancelCharacterSelection();
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdSetBackToMainMenuButtonActivation(bool value)
+    {
+        RpcSetBackToMainMenuButtonActivation(value);
     }
 
     [Command(requiresAuthority = false)]
@@ -239,19 +337,55 @@ public class PlayerSelectionUIController : NetworkBehaviour
         CmdUpdateCharactersNameColors(index, characterIndex);
     }
 
-    [ClientRpc]
-    public void RpcUpdateSelectPlayerDataList(int index, int chosenCharacterIndex)
+    [Command(requiresAuthority = false)]
+    public void CmdSetBackToMainMenuButtonInteractable(bool value)
     {
-        // Índice complementar para escolher o outro jogador.
-        int complementaryPlayerIndex = GetComplementaryPlayerIndex(index);
-        // Índice pra escolher a galinha que sobrou.
-        int complementaryPenosaIndex = GetComplementaryPlayerIndex(chosenCharacterIndex);
+        RpcSetBackToMainMenuButtonInteractable(value);
+    }
 
-        Penosas newCharacter = (Penosas)chosenCharacterIndex;
-        Penosas remainingPenosa = (Penosas)complementaryPenosaIndex;
+    [Command(requiresAuthority = false)]
+    public void CmdSetCancelCharacterSelectionButtonInteractable(bool value)
+    {
+        RpcSetCancelCharacterSelectionButtonInteractable(value);
+    }
 
-        PlayerDataList[index].SelectedPenosa = newCharacter;
-        PlayerDataList[complementaryPlayerIndex].SelectedPenosa = remainingPenosa;
+    [Command(requiresAuthority = false)]
+    public void CmdSetCancelCharacterSelectionButtonActivation(bool value)
+    {
+        RpcSetCancelCharacterSelectionButtonActivation(value);
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdSetStartButtonGameObjectInteractable(bool value)
+    {
+        RpcSetStartButtonGameObjectInteractable(value);
+    }
+
+    
+    [Command(requiresAuthority = false)]
+    public void CmdSetChooseCharacterButtonInteractable(bool value)
+    {
+        _1stCharacterButton.GetComponent<Button>().interactable = value;
+        _2ndCharacterButton.GetComponent<Button>().interactable = value;
+        RpcSetChooseCharacterButtonInteractable(value);
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdNetworkSelectCharacterButton(GameObject buttonToNavigate)
+    {
+        NetworkArrowPosition playerArrow = CurrentPlayerArrow;
+
+        if (playerArrow != null)
+        {
+            EventSystem.current.SetSelectedGameObject(buttonToNavigate);
+            playerArrow.CmdUpdateArrowPosition(buttonToNavigate);
+
+            if (NetworkManager.singleton.numPlayers > 1)
+            {
+                var otherArrow = OtherPlayerArrow;
+                otherArrow?.CmdUpdateArrowPosition(buttonToNavigate);
+            }
+        }
     }
 
     #endregion

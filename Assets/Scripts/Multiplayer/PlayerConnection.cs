@@ -1,6 +1,8 @@
 using Mirror;
+using SharedData.Enumerations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
@@ -9,12 +11,16 @@ public class PlayerConnection : NetworkBehaviour
 {
     public GameObject playerPrefab;
 
-    [SyncVar] [SerializeField] private NetworkArrowPosition _networkArrow;
-    public NetworkArrowPosition NetworkArrow => _networkArrow;
-
-    public override void OnStartLocalPlayer()
+    [SyncVar] [SerializeField] private PlayerSelectionData _playerSelectionData;
+    public PlayerSelectionData PlayerSelectionData
     {
-        base.OnStartLocalPlayer();
+        get => _playerSelectionData;
+        private set => _playerSelectionData = value;
+    }
+
+    private void Start()
+    {
+        CmdGetNetworkArrow();
     }
 
     [Server]
@@ -27,9 +33,20 @@ public class PlayerConnection : NetworkBehaviour
     }
 
     [Command(requiresAuthority = false)]
-    public void CmdSetNetworkArrow(NetworkArrowPosition arrow, int playerIndex)
+    public void CmdGetNetworkArrow()
     {
-        _networkArrow = arrow;
-        PlayerSelectionUIController.instance.PlayerDataList[playerIndex].NetworkArrow = _networkArrow;
+        var networkArrow = FindObjectsOfType<NetworkArrowPosition>()
+            .SingleOrDefault(arrow => arrow.connectionToClient == netIdentity.connectionToClient);
+       RpcSetNetworkArrow(networkArrow);
+    }
+   
+    [ClientRpc]
+    private void RpcSetNetworkArrow(NetworkArrowPosition newArrow)
+    {
+        if(PlayerSelectionUIController.instance.TryGetSelectedPenosaFromButton(newArrow, out Penosas selectedPenosa))
+        {
+            PlayerSelectionData.NetworkArrow = newArrow;
+            PlayerSelectionData.SelectedPenosa = selectedPenosa;
+        }
     }
 }
