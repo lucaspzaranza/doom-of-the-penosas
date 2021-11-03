@@ -1850,10 +1850,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 2
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 1057846044}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -2434,6 +2434,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  eventSystem: {fileID: 0}
   _menuState: 0
   _penosasTexts:
   - {fileID: 1494630976}
@@ -2466,13 +2467,10 @@ MonoBehaviour:
   - {fileID: 636683299}
   - {fileID: 1852529798}
   - {fileID: 317447713}
-  _playerDataList:
-  - name: Player 1
-    _networkArrow: {fileID: 0}
-    _selectedPenosa: 0
-  - name: Player 2
-    _networkArrow: {fileID: 0}
-    _selectedPenosa: 1
+  _characterButtons:
+  - {fileID: 962455090}
+  - {fileID: 2020544236}
+  _networkArrows: []
 --- !u!114 &507676151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3712,7 +3710,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 2
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -4117,6 +4115,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 507676150}
+        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
+        m_MethodName: SetState
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &962455093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4389,7 +4399,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 2
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -4483,86 +4493,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 644308007
-  serverOnly: 0
-  visible: 0
-  m_AssetId: 
-  hasSpawned: 0
---- !u!1 &1120206356
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1120206358}
-  - component: {fileID: 1120206357}
-  - component: {fileID: 1120206359}
-  m_Layer: 0
-  m_Name: PlayerSelectionController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1120206357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1120206356}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2de40ca4ea84d2d4cb7d2e53f025d762, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  playersSelectionData:
-  - name: 
-    _networkArrow: {fileID: 0}
-    _selectedPenosa: 0
-  - name: 
-    _networkArrow: {fileID: 0}
-    _selectedPenosa: 0
-  arrowXOffset: 40
-  arrowParent: {fileID: 1179575835}
-  _2PArrow: {fileID: 5531988841753917357, guid: 8643959d7b7b0d9479482f216e95ec66,
-    type: 3}
-  _arrowPositions:
-  - {fileID: 1820374791}
-  - {fileID: 1283003675}
-  _playerConnections:
-  - {fileID: 0}
-  - {fileID: 0}
---- !u!4 &1120206358
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1120206356}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1120206359
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1120206356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 4276850657
   serverOnly: 0
   visible: 0
   m_AssetId: 
@@ -5129,13 +5059,6 @@ MonoBehaviour:
   - {fileID: 5531988841753917357, guid: 8643959d7b7b0d9479482f216e95ec66, type: 3}
   - {fileID: 7547286324134434304, guid: 2c79abf394d7b4d4fb317063126957af, type: 3}
   - {fileID: 6435880766563690141, guid: 1a95f3dc5d906b74aa036acdfa83ec85, type: 3}
-  _playerSelectionData:
-  - name: Player 1
-    _networkArrow: {fileID: 0}
-    _selectedPenosa: 0
-  - name: Playe 2
-    _networkArrow: {fileID: 0}
-    _selectedPenosa: 1
 --- !u!4 &1284675791
 Transform:
   m_ObjectHideFlags: 0
@@ -5148,7 +5071,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1306407580
 GameObject:
@@ -8006,6 +7929,18 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 507676150}
+        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
+        m_MethodName: SetState
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1

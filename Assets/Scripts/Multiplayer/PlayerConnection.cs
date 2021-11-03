@@ -1,9 +1,11 @@
 using Mirror;
 using SharedData.Enumerations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 
@@ -21,6 +23,11 @@ public class PlayerConnection : NetworkBehaviour
     private void Start()
     {
         CmdGetNetworkArrow();
+    }
+
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
     }
 
     [Server]

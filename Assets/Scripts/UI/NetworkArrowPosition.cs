@@ -18,9 +18,8 @@ public class NetworkArrowPosition : NetworkBehaviour
     private RectTransform lobbyMenuTransform;
     private PlayerInput playerInputActions;
     private InputAction navigation;
-    private bool isPressing;
 
-    public static event Action<UpdateArrowPositionEventArgs> OnChangeArrowPositionButtonPressed;
+    public static event Action OnChangeArrowPositionButtonPressed;
 
     public int Index => NetworkClient.isHostClient? 0 : 1;
 
@@ -36,6 +35,7 @@ public class NetworkArrowPosition : NetworkBehaviour
     {
         navigation = playerInputActions.PlayerSelectionMenu.ArrowNavigation;
         navigation.started += UpdateArrowPositionWrapper;
+
         navigation.Enable();
     }
 
@@ -45,47 +45,43 @@ public class NetworkArrowPosition : NetworkBehaviour
         navigation.Disable();
     }
 
-    void Update()
-    {
-        if (isPressing)
-        {
-            Vector2 pressed = navigation.ReadValue<Vector2>();
-            if (pressed != Vector2.zero)
-                StartCoroutine(nameof(UpdateArrowPosition));
-        }
-    }
-
     public override void OnStartClient()
     {
         base.OnStartClient();
 
+        PlayerSelectionUIController.instance.NetworkArrows.Add(this);
+
         if (_selectedButton == null)
             _selectedButton = EventSystem.current.currentSelectedGameObject;
 
-        if (hasAuthority && isClientOnly) 
-            CmdUpdateArrowPosition(EventSystem.current.currentSelectedGameObject);
+        if (hasAuthority && isClientOnly)
+        {
+            var arrowSibling = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponentInChildren<NetworkArrowPosition>();
+            print(arrowSibling);
+            if (arrowSibling == null)
+                CmdUpdateArrowPosition(EventSystem.current.currentSelectedGameObject);
+            else
+                print("tem que botar na outra galinha, ÓRR...");
+        }
         // Quando rodar no cliente também rodará no host, então farei essa chamada pra atualizar
         // a posiçao no host de acordo com o que foi selecionado no host .
-        else
+        else // HOST
             CmdUpdateArrowPosition(_selectedButton);
     }
 
     private void UpdateArrowPositionWrapper(CallbackContext callbackContext)
     {
-        if(hasAuthority)
-        {
-            var eventArgs = new UpdateArrowPositionEventArgs(this, _selectedButton);
-            StartCoroutine(nameof(UpdateArrowPosition));
-            isPressing = callbackContext.started;
-            OnChangeArrowPositionButtonPressed?.Invoke(eventArgs);
-        }
+        if (hasAuthority)
+            StartCoroutine(nameof(UpdateArrowPositionCoroutine));
     }
 
-    private IEnumerator UpdateArrowPosition()
+    private IEnumerator UpdateArrowPositionCoroutine()
     {
         yield return new WaitForEndOfFrame();
         var selectedBtn = EventSystem.current.currentSelectedGameObject;
+        EventSystem.current.SetSelectedGameObject(selectedBtn);
         CmdUpdateArrowPosition(selectedBtn);
+        OnChangeArrowPositionButtonPressed?.Invoke();
     }
 
     [Command(requiresAuthority = false)]

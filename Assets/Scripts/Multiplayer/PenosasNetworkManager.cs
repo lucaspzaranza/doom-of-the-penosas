@@ -8,7 +8,6 @@ using System.Linq;
 public class PenosasNetworkManager : NetworkManager
 {
     private int playerCount = 0;
-    private PlayerSelectionController selectionController;
 
     public override void OnClientConnect(NetworkConnection conn)
     {
