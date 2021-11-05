@@ -1,4 +1,5 @@
 using Mirror;
+using SharedData.Enumerations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,14 +11,15 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class NetworkArrowPosition : NetworkBehaviour
 {
-    [SyncVar] [SerializeField] private GameObject _selectedButton;
-    [SyncVar] [SerializeField] private GameObject _previousSelectedButton;
+    [SerializeField] private GameObject _selectedButton;
+    [SerializeField] private GameObject _previousSelectedButton;
 
     [SerializeField] private int _index;
 
     private RectTransform lobbyMenuTransform;
     private PlayerInput playerInputActions;
     private InputAction navigation;
+    private bool updatedPosition = false;
 
     public static event Action OnChangeArrowPositionButtonPressed;
 
@@ -54,6 +56,27 @@ public class NetworkArrowPosition : NetworkBehaviour
         if (_selectedButton == null)
             _selectedButton = EventSystem.current.currentSelectedGameObject;
 
+        //CmdUpdateArrowPosition(_selectedButton);
+    }
+
+    //[ClientCallback]
+    //private void Update()
+    //{
+    //    if(isClientOnly)
+    //    {
+    //        var arrowSibling = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponentInChildren<NetworkArrowPosition>();
+    //        print(arrowSibling);
+    //        if (arrowSibling != null && !updatedPosition)
+    //        {
+    //            //print("tira isso daqui");
+    //            Get1stPlayerCharacterButton();
+    //            updatedPosition = true;
+    //        }
+    //    }
+    //}
+
+    private void SetNetworkArrowInitialPosition()
+    {
         if (hasAuthority && isClientOnly)
         {
             var arrowSibling = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponentInChildren<NetworkArrowPosition>();
@@ -96,9 +119,19 @@ public class NetworkArrowPosition : NetworkBehaviour
         _previousSelectedButton = _selectedButton;
         _selectedButton = buttonToNavigate;
 
+        var buttonNetworkArrow = buttonToNavigate.GetComponentInChildren<NetworkArrowPosition>();
+        
+        bool invertPosition = false;
+        if(buttonNetworkArrow != null)
+            invertPosition = !Equals(this, buttonNetworkArrow);
+
         var btnTransform = buttonToNavigate.transform;
         var arrowPosition = btnTransform.Find(PlayerSelectionUIController.ArrowPositionName).GetComponent<RectTransform>().localPosition;
         gameObject.transform.SetParent(btnTransform, false);
-        gameObject.transform.localPosition = arrowPosition;
+
+        if(invertPosition) // Fazer a inversão do sprite da 2P NetworkArrow
+            print("Já tem gente aqui! Fazer a inversão do sprite da 2P NetworkArrow...");
+
+        gameObject.transform.localPosition = !invertPosition? arrowPosition : arrowPosition * -1;
     }
 }

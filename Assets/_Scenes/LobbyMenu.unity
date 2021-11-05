@@ -2434,7 +2434,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  eventSystem: {fileID: 0}
   _menuState: 0
   _penosasTexts:
   - {fileID: 1494630976}
@@ -2471,6 +2470,10 @@ MonoBehaviour:
   - {fileID: 962455090}
   - {fileID: 2020544236}
   _networkArrows: []
+  _navButtons:
+  - {fileID: 335418664}
+  - {fileID: 1057846042}
+  - {fileID: 916149578}
 --- !u!114 &507676151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5059,6 +5062,7 @@ MonoBehaviour:
   - {fileID: 5531988841753917357, guid: 8643959d7b7b0d9479482f216e95ec66, type: 3}
   - {fileID: 7547286324134434304, guid: 2c79abf394d7b4d4fb317063126957af, type: 3}
   - {fileID: 6435880766563690141, guid: 1a95f3dc5d906b74aa036acdfa83ec85, type: 3}
+  _playerConnections: []
 --- !u!4 &1284675791
 Transform:
   m_ObjectHideFlags: 0

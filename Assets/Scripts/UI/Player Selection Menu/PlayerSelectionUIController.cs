@@ -17,8 +17,6 @@ public class PlayerSelectionUIController : NetworkBehaviour
     public static PlayerSelectionUIController instance;
     public const string ArrowPositionName = "ArrowPosition";
 
-    public EventSystem eventSystem;
-
     [SerializeField] private PlayerSelectionMenuState _menuState;
     [SerializeField] private TMP_Text[] _penosasTexts;
     [SerializeField] private GameObject localArrow;
@@ -38,6 +36,7 @@ public class PlayerSelectionUIController : NetworkBehaviour
     [SerializeField] private List<GameObject> _menuButtons;
     [SerializeField] private List<GameObject> _characterButtons;
     [SerializeField] private List<NetworkArrowPosition> _networkArrows;
+    [SerializeField] private List<GameObject> _navButtons;
 
     private Button startBtnComponent;
     private Button cancelBtnComponent;
@@ -56,6 +55,7 @@ public class PlayerSelectionUIController : NetworkBehaviour
     public LocalArrowPosition LocalArrow => _localArrow;
     public PlayerSelectionMenuState MenuState => _menuState;
     public List<GameObject> CharacterButtons => _characterButtons;  
+    public List<GameObject> NavButtons => _navButtons;  
     public List<NetworkArrowPosition> NetworkArrows => _networkArrows;  
 
     /// <summary>
@@ -94,7 +94,6 @@ public class PlayerSelectionUIController : NetworkBehaviour
         cancelBtnComponent = BackToMainMenuButton.GetComponent<Button>();
 
         NetworkArrowPosition.OnChangeArrowPositionButtonPressed += HandleOnChangeArrowPositionButtonPressed;
-        eventSystem = EventSystem.current;
     }
     
     public override void OnStartClient()
@@ -202,6 +201,19 @@ public class PlayerSelectionUIController : NetworkBehaviour
 
     #region Client
 
+    [TargetRpc]
+    public void TargetGetServerPlayerCharacterSelectionData(NetworkConnection target, List<GameObject> playerCharacterOrderList)
+    {
+        _characterButtons = new List<GameObject>(playerCharacterOrderList);
+    }
+
+    [TargetRpc]
+    public void TargetGetServerPlayerConnectionsData(NetworkConnection target, List<PlayerConnection> newData)
+    {
+        var networkManager = FindObjectOfType<PenosasNetworkManager>();
+        networkManager.SetPlayersConnection(newData);
+    }
+
     [ClientRpc]
     private void RpcAlternateSelectCharactersArrowPositions()
     {
@@ -305,7 +317,7 @@ public class PlayerSelectionUIController : NetworkBehaviour
     #region Server
 
     [Command(requiresAuthority = false)]
-    private void CmdAlternateSelectCharactersArrowPositions()
+    public void CmdAlternateSelectCharactersArrowPositions()
     {
         RpcAlternateSelectCharactersArrowPositions();
     }
@@ -390,6 +402,7 @@ public class PlayerSelectionUIController : NetworkBehaviour
 
             if (NetworkManager.singleton.numPlayers > 1)
             {
+                //print("manda pro lado direito!");
                 var otherArrow = OtherPlayerArrow;
                 otherArrow?.CmdUpdateArrowPosition(buttonToNavigate);
             }

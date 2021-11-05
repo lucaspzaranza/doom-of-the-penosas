@@ -4,10 +4,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.EventSystems;
 
 public class PenosasNetworkManager : NetworkManager
 {
     private int playerCount = 0;
+
+    [SerializeField] private List<PlayerConnection> _playerConnections;
+    public List<PlayerConnection> PlayerConnections => _playerConnections;
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        _playerConnections = new List<PlayerConnection>();
+    }
 
     public override void OnClientConnect(NetworkConnection conn)
     {
@@ -20,11 +30,8 @@ public class PenosasNetworkManager : NetworkManager
     {
         base.OnServerAddPlayer(conn);
 
-        // Player 1
-        if(playerCount == 0)
-            InstantiateArrowEgg(0, conn);
-        else if(playerCount == 1) // Player 2
-            InstantiateArrowEgg(1, conn);
+        PlayerConnections.Add(conn.identity.gameObject.GetComponent<PlayerConnection>());
+        InstantiateNetworkArrowEgg(playerCount, conn);      
     }
 
     public override void OnServerDisconnect(NetworkConnection conn)
@@ -41,16 +48,29 @@ public class PenosasNetworkManager : NetworkManager
             PlayerSelectionUIController.instance.SetDisconnectedMenuActivation(true);
     }
 
+    public void SetPlayersConnection(List<PlayerConnection> newData)
+    {
+        _playerConnections = new List<PlayerConnection>(newData);
+    }
+
     [Server]
-    private void InstantiateArrowEgg(int index, NetworkConnection conn)
+    private void InstantiateNetworkArrowEgg(int index, NetworkConnection conn)
     {
         var playerArrow = Instantiate(spawnPrefabs[index]);
         NetworkServer.Spawn(playerArrow, conn);
         playerCount++;
 
-        //var playerconnection = conn.identity.GetComponent<PlayerConnection>();
-        //var networkArrow = playerArrow.GetComponent<NetworkArrowPosition>();
-        //playerconnection.CmdSetNetworkArrow(networkArrow, index);
+        var networkArrow = playerArrow.GetComponent<NetworkArrowPosition>();
+        if (playerCount < 2)
+            networkArrow.CmdUpdateArrowPosition(EventSystem.current.currentSelectedGameObject);
+        else
+        {
+            PlayerSelectionUIController.instance.TargetGetServerPlayerCharacterSelectionData(conn, PlayerSelectionUIController.instance.CharacterButtons);
+            var complementaryCharacterBtn = PlayerSelectionUIController.instance.CharacterButtons[1];
+            PlayerConnections[0].PlayerSelectionData.NetworkArrow.CmdUpdateArrowPosition(PlayerSelectionUIController.instance.CharacterButtons[0]);
+            networkArrow.CmdUpdateArrowPosition(complementaryCharacterBtn);
+            PlayerSelectionUIController.instance.TargetGetServerPlayerConnectionsData(conn, PlayerConnections);
+        }
     }
 
     [Server]
