@@ -1851,7 +1851,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 2
-    m_WrapAround: 0
+    m_WrapAround: 1
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 1057846044}
     m_SelectOnLeft: {fileID: 0}
@@ -2466,6 +2466,9 @@ MonoBehaviour:
   - {fileID: 636683299}
   - {fileID: 1852529798}
   - {fileID: 317447713}
+  - {fileID: 916149578}
+  - {fileID: 962455090}
+  - {fileID: 2020544236}
   _characterButtons:
   - {fileID: 962455090}
   - {fileID: 2020544236}
@@ -3676,7 +3679,7 @@ RectTransform:
   - {fileID: 614986515}
   - {fileID: 1477871901}
   m_Father: {fileID: 1247976030}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -3714,7 +3717,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 2
-    m_WrapAround: 0
+    m_WrapAround: 1
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -4036,19 +4039,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 507676150}
         m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: CmdSetStartButtonGameObjectInteractable
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 507676150}
-        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: SelectCharacter
+        m_MethodName: CmdSelectCharacter
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4056,79 +4047,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 507676150}
-        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: CmdNetworkSelectCharacterButton
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 335418664}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 507676150}
-        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: CmdSetChooseCharacterButtonInteractable
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 507676150}
-        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: CmdSetBackToMainMenuButtonActivation
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 507676150}
-        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: CmdSetCancelCharacterSelectionButtonActivation
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 507676150}
-        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: CmdSetCancelCharacterSelectionButtonInteractable
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 507676150}
-        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: SetState
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &962455093
 MonoBehaviour:
@@ -4382,7 +4301,7 @@ RectTransform:
   - {fileID: 1543787215}
   - {fileID: 679665771}
   m_Father: {fileID: 1247976030}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -4403,7 +4322,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 2
-    m_WrapAround: 0
+    m_WrapAround: 1
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -4936,8 +4855,8 @@ RectTransform:
   - {fileID: 1678556428}
   - {fileID: 1495292034}
   - {fileID: 335418665}
-  - {fileID: 1057846043}
   - {fileID: 916149579}
+  - {fileID: 1057846043}
   - {fileID: 421410877}
   - {fileID: 1884662344}
   - {fileID: 962455091}
@@ -7855,19 +7774,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 507676150}
         m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: CmdSetStartButtonGameObjectInteractable
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 507676150}
-        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: SelectCharacter
+        m_MethodName: CmdSelectCharacter
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7876,78 +7783,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 507676150}
-        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: CmdNetworkSelectCharacterButton
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 335418664}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 507676150}
-        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: CmdSetChooseCharacterButtonInteractable
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 507676150}
-        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: CmdSetBackToMainMenuButtonActivation
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 507676150}
-        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: CmdSetCancelCharacterSelectionButtonActivation
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 507676150}
-        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: CmdSetCancelCharacterSelectionButtonInteractable
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 507676150}
-        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
-        m_MethodName: SetState
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &2020544239
 MonoBehaviour:

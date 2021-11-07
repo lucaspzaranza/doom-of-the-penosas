@@ -268,3 +268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  _selectedButton: {fileID: 0}
+  _previousSelectedButton: {fileID: 0}
+  arrowText: {fileID: 5531988841128129238}
+  _index: 0

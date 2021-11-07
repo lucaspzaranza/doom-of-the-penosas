@@ -61,6 +61,8 @@ public class PenosasNetworkManager : NetworkManager
         playerCount++;
 
         var networkArrow = playerArrow.GetComponent<NetworkArrowPosition>();
+        networkArrow.CmdSetArrowPlayerConnection(PlayerConnections[playerCount - 1]);
+
         if (playerCount < 2)
             networkArrow.CmdUpdateArrowPosition(EventSystem.current.currentSelectedGameObject);
         else

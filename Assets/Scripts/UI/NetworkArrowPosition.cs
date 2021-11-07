@@ -3,6 +3,7 @@ using SharedData.Enumerations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -11,8 +12,12 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class NetworkArrowPosition : NetworkBehaviour
 {
-    [SerializeField] private GameObject _selectedButton;
+    #region Vars
+
+    [SerializeField] [SyncVar] private PlayerConnection _localPlayerConnection;
+    [SerializeField] [SyncVar] private GameObject _selectedButton;
     [SerializeField] private GameObject _previousSelectedButton;
+    [SerializeField] private GameObject arrowText;
 
     [SerializeField] private int _index;
 
@@ -23,10 +28,17 @@ public class NetworkArrowPosition : NetworkBehaviour
 
     public static event Action OnChangeArrowPositionButtonPressed;
 
-    public int Index => NetworkClient.isHostClient? 0 : 1;
+    #endregion
 
+    #region Props
+    public int Index => NetworkClient.isHostClient? 0 : 1;
     public GameObject SelectedButton => _selectedButton;
     public GameObject PreviousSelectedButton => _previousSelectedButton;
+    public PlayerConnection LocalPlayerConnection => _localPlayerConnection;
+
+    #endregion
+
+    #region Local
 
     void Awake()
     {
@@ -53,85 +65,109 @@ public class NetworkArrowPosition : NetworkBehaviour
 
         PlayerSelectionUIController.instance.NetworkArrows.Add(this);
 
-        if (_selectedButton == null)
+        if (_selectedButton == null) 
             _selectedButton = EventSystem.current.currentSelectedGameObject;
-
-        //CmdUpdateArrowPosition(_selectedButton);
-    }
-
-    //[ClientCallback]
-    //private void Update()
-    //{
-    //    if(isClientOnly)
-    //    {
-    //        var arrowSibling = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponentInChildren<NetworkArrowPosition>();
-    //        print(arrowSibling);
-    //        if (arrowSibling != null && !updatedPosition)
-    //        {
-    //            //print("tira isso daqui");
-    //            Get1stPlayerCharacterButton();
-    //            updatedPosition = true;
-    //        }
-    //    }
-    //}
-
-    private void SetNetworkArrowInitialPosition()
-    {
-        if (hasAuthority && isClientOnly)
-        {
-            var arrowSibling = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponentInChildren<NetworkArrowPosition>();
-            print(arrowSibling);
-            if (arrowSibling == null)
-                CmdUpdateArrowPosition(EventSystem.current.currentSelectedGameObject);
-            else
-                print("tem que botar na outra galinha, ÓRR...");
-        }
-        // Quando rodar no cliente também rodará no host, então farei essa chamada pra atualizar
-        // a posiçao no host de acordo com o que foi selecionado no host .
-        else // HOST
-            CmdUpdateArrowPosition(_selectedButton);
     }
 
     private void UpdateArrowPositionWrapper(CallbackContext callbackContext)
     {
-        if (hasAuthority)
+        if (LocalPlayerConnection.isLocalPlayer)
             StartCoroutine(nameof(UpdateArrowPositionCoroutine));
     }
 
     private IEnumerator UpdateArrowPositionCoroutine()
     {
+        _previousSelectedButton = EventSystem.current.currentSelectedGameObject;
         yield return new WaitForEndOfFrame();
-        var selectedBtn = EventSystem.current.currentSelectedGameObject;
-        EventSystem.current.SetSelectedGameObject(selectedBtn);
-        CmdUpdateArrowPosition(selectedBtn);
+        _selectedButton = EventSystem.current.currentSelectedGameObject;
+        EventSystem.current.SetSelectedGameObject(_selectedButton);
+        CmdUpdateArrowPosition(_selectedButton);
         OnChangeArrowPositionButtonPressed?.Invoke();
+    }
+
+    #endregion
+
+    #region Client
+
+    [ClientRpc]
+    public void RpcUpdateArrowPosition(int buttonIndex)
+    {
+        GameObject buttonToNavigate = PlayerSelectionUIController.instance.MenuButtons[buttonIndex];
+
+        var btnTransform = buttonToNavigate.transform;
+        var arrowPosition = btnTransform.Find(PlayerSelectionUIController.ArrowPositionName).GetComponent<RectTransform>().localPosition;
+        gameObject.transform.SetParent(btnTransform, false);
+        gameObject.transform.localPosition = arrowPosition;
+
+        if (isClientOnly)
+            CmdTryFlipArrowPosition();
+    }
+
+    [ClientRpc]
+    private void RpcFlipArrowHorizontal()
+    {
+        RectTransform rectTransform = transform.GetComponent<RectTransform>();
+        Vector3 localScale = rectTransform.localScale;
+        rectTransform.localScale = new Vector3(localScale.x * -1, localScale.y, localScale.z);
+        arrowText.transform.localScale = new Vector3(localScale.x * -1, localScale.y, localScale.z);
+    }
+
+    [ClientRpc]
+    private void RpcSetArrowPlayerConnection(PlayerConnection playerConn)
+    {
+        _localPlayerConnection = playerConn;
+    }
+
+    #endregion
+
+    #region Server
+
+    [Command(requiresAuthority = false)]
+    public void CmdSetArrowPlayerConnection(PlayerConnection playerConn)
+    {
+        RpcSetArrowPlayerConnection(playerConn);
+    }
+
+    [Command(requiresAuthority = false)]
+    private void CmdUpdateSelectedGameObject(GameObject newGObj)
+    {
+        PlayerSelectionUIController.instance.RpcSetSelectedGameObject(newGObj);
     }
 
     [Command(requiresAuthority = false)]
     public void CmdUpdateArrowPosition(GameObject buttonToNavigate)
     {
-        RpcUpdateArrowPosition(buttonToNavigate);
+        GameObject menuBtn = PlayerSelectionUIController.instance.MenuButtons.SingleOrDefault(button => button.name == buttonToNavigate.name);
+        int btnIndex = PlayerSelectionUIController.instance.MenuButtons.IndexOf(menuBtn);
+        RpcUpdateArrowPosition(btnIndex);
     }
 
-    [ClientRpc]
-    public void RpcUpdateArrowPosition(GameObject buttonToNavigate)
+    [ServerCallback]
+    private void CmdFlipArrowHorizontal()
     {
-        _previousSelectedButton = _selectedButton;
-        _selectedButton = buttonToNavigate;
+        RpcFlipArrowHorizontal();
+    }
 
-        var buttonNetworkArrow = buttonToNavigate.GetComponentInChildren<NetworkArrowPosition>();
-        
+    [Command(requiresAuthority = false)]
+    private void CmdTryFlipArrowPosition()
+    {
         bool invertPosition = false;
-        if(buttonNetworkArrow != null)
+        var buttonNetworkArrow = transform.parent.gameObject.GetComponentInChildren<NetworkArrowPosition>();
+
+        if (buttonNetworkArrow != null)
             invertPosition = !Equals(this, buttonNetworkArrow);
 
-        var btnTransform = buttonToNavigate.transform;
-        var arrowPosition = btnTransform.Find(PlayerSelectionUIController.ArrowPositionName).GetComponent<RectTransform>().localPosition;
-        gameObject.transform.SetParent(btnTransform, false);
-
-        if(invertPosition) // Fazer a inversão do sprite da 2P NetworkArrow
-            print("Já tem gente aqui! Fazer a inversão do sprite da 2P NetworkArrow...");
-
-        gameObject.transform.localPosition = !invertPosition? arrowPosition : arrowPosition * -1;
+        //Fazer a inversão do sprite da 2P NetworkArrow
+        if (invertPosition)
+        {
+            if(PlayerSelectionUIController.instance.MenuState != PlayerSelectionMenuState.PlayerSelection)
+            {
+                CmdFlipArrowHorizontal();
+                transform.localPosition = new Vector2(transform.localPosition.x * -1, transform.localPosition.y);
+            }
+        }
     }
+
+    #endregion
 }
+    

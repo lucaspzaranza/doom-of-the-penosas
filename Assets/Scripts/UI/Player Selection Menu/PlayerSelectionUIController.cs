@@ -226,6 +226,7 @@ public class PlayerSelectionUIController : NetworkBehaviour
 
         if (NetworkArrows.Count > 1)
             NetworkArrows[complementary].CmdUpdateArrowPosition(CharacterButtons[complementary]);
+        EventSystem.current.SetSelectedGameObject(CharacterButtons[CurrentPlayerIndex]);
     }
 
     [ClientRpc]
@@ -237,6 +238,11 @@ public class PlayerSelectionUIController : NetworkBehaviour
     public void SetState(int newState)
     {
         RpcSetState((PlayerSelectionMenuState)newState);
+    }
+
+    public void SetState(PlayerSelectionMenuState newState)
+    {
+        RpcSetState(newState);
     }
 
     [ClientRpc]
@@ -312,6 +318,12 @@ public class PlayerSelectionUIController : NetworkBehaviour
         _2ndCharacterButton.GetComponent<Button>().interactable = value;
     }
 
+    [ClientRpc]
+    public void RpcSetSelectedGameObject(GameObject objToSet)
+    {
+        EventSystem.current.SetSelectedGameObject(objToSet);
+    }
+
     #endregion
 
     #region Server
@@ -381,7 +393,6 @@ public class PlayerSelectionUIController : NetworkBehaviour
         RpcSetStartButtonGameObjectInteractable(value);
     }
 
-    
     [Command(requiresAuthority = false)]
     public void CmdSetChooseCharacterButtonInteractable(bool value)
     {
@@ -397,16 +408,28 @@ public class PlayerSelectionUIController : NetworkBehaviour
 
         if (playerArrow != null)
         {
-            EventSystem.current.SetSelectedGameObject(buttonToNavigate);
+            RpcSetSelectedGameObject(buttonToNavigate);
             playerArrow.CmdUpdateArrowPosition(buttonToNavigate);
 
             if (NetworkManager.singleton.numPlayers > 1)
             {
-                //print("manda pro lado direito!");
                 var otherArrow = OtherPlayerArrow;
                 otherArrow?.CmdUpdateArrowPosition(buttonToNavigate);
             }
         }
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdSelectCharacter(int characterID)
+    {
+        SetState(PlayerSelectionMenuState.ReadyToStart);
+        CmdSetStartButtonGameObjectInteractable(true);
+        SelectCharacter(characterID);
+        CmdNetworkSelectCharacterButton(StartButton);
+        CmdSetChooseCharacterButtonInteractable(false);
+        CmdSetBackToMainMenuButtonActivation(false);
+        CmdSetCancelCharacterSelectionButtonActivation(true);
+        CmdSetCancelCharacterSelectionButtonInteractable(true);
     }
 
     #endregion
