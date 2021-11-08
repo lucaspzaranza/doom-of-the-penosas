@@ -8,7 +8,7 @@ using System;
 [Serializable]
 public class PlayerSelectionData
 {
-    [SerializeField] private NetworkArrowPosition _networkArrow;
+    [SerializeField] private NetworkArrow _networkArrow;
     [SerializeField] private Penosas _selectedPenosa;
 
     public PlayerSelectionData()
@@ -16,7 +16,7 @@ public class PlayerSelectionData
         _selectedPenosa = (Penosas)(-1);
     }
 
-    public PlayerSelectionData(NetworkArrowPosition networkArrow, Penosas selectedCharacter)
+    public PlayerSelectionData(NetworkArrow networkArrow, Penosas selectedCharacter)
     {
         _networkArrow = networkArrow;
         _selectedPenosa = selectedCharacter;
@@ -28,7 +28,7 @@ public class PlayerSelectionData
         _selectedPenosa = newData.SelectedPenosa;
     }
 
-    public NetworkArrowPosition NetworkArrow
+    public NetworkArrow NetworkArrow
     {
         get => _networkArrow;
         set => _networkArrow = value;

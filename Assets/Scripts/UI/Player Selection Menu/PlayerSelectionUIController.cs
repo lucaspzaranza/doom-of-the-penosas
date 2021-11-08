@@ -35,7 +35,7 @@ public class PlayerSelectionUIController : NetworkBehaviour
     [SerializeField] private LocalArrowPosition _localArrow;
     [SerializeField] private List<GameObject> _menuButtons;
     [SerializeField] private List<GameObject> _characterButtons;
-    [SerializeField] private List<NetworkArrowPosition> _networkArrows;
+    [SerializeField] private List<NetworkArrow> _networkArrows;
     [SerializeField] private List<GameObject> _navButtons;
 
     private Button startBtnComponent;
@@ -54,20 +54,20 @@ public class PlayerSelectionUIController : NetworkBehaviour
     public List<GameObject> MenuButtons => _menuButtons;
     public LocalArrowPosition LocalArrow => _localArrow;
     public PlayerSelectionMenuState MenuState => _menuState;
-    public List<GameObject> CharacterButtons => _characterButtons;  
-    public List<GameObject> NavButtons => _navButtons;  
-    public List<NetworkArrowPosition> NetworkArrows => _networkArrows;  
+    public List<GameObject> CharacterButtons => _characterButtons;
+    public List<GameObject> NavButtons => _navButtons;
+    public List<NetworkArrow> NetworkArrows => _networkArrows;  
 
     /// <summary>
-    /// Escolhe a seta do jogador da sua conex„o.
+    /// Escolhe a seta do jogador da sua conexÔøΩo.
     /// </summary>
-    public NetworkArrowPosition CurrentPlayerArrow => FindObjectsOfType<NetworkArrowPosition>()
+    public NetworkArrow CurrentPlayerArrow => FindObjectsOfType<NetworkArrow>()
             .SingleOrDefault(arrow => arrow.netIdentity.hasAuthority);
 
     /// <summary>
-    /// Escolhe a seta do outro jogador que est· jogando com vocÍ. Se for single player, retornar· nulo.
+    /// Escolhe a seta do outro jogador que estÔøΩ jogando com vocÔøΩ. Se for single player, retornarÔøΩ nulo.
     /// </summary>
-    public NetworkArrowPosition OtherPlayerArrow => FindObjectsOfType<NetworkArrowPosition>()
+    public NetworkArrow OtherPlayerArrow => FindObjectsOfType<NetworkArrow>()
             .SingleOrDefault(arrow => !arrow.netIdentity.hasAuthority);
 
     public int CurrentPlayerIndex => NetworkClient.isHostClient ? 0 : 1;
@@ -93,9 +93,11 @@ public class PlayerSelectionUIController : NetworkBehaviour
         startBtnComponent = StartButton.GetComponent<Button>();
         cancelBtnComponent = BackToMainMenuButton.GetComponent<Button>();
 
-        NetworkArrowPosition.OnChangeArrowPositionButtonPressed += HandleOnChangeArrowPositionButtonPressed;
+        NetworkArrow.OnChangeArrowPositionButtonPressed += HandleOnChangeArrowPositionButtonPressed;
+        NetworkArrow.OnArrowPositionChanged += HandleOnArrowPositionChanged;
+        NetworkArrow.OnSelectButtonPressed += HandleOnSelectButtonPressed;
     }
-    
+
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -104,17 +106,36 @@ public class PlayerSelectionUIController : NetworkBehaviour
 
     void OnDestroy()
     {
-        NetworkArrowPosition.OnChangeArrowPositionButtonPressed -= HandleOnChangeArrowPositionButtonPressed;
+        NetworkArrow.OnChangeArrowPositionButtonPressed -= HandleOnChangeArrowPositionButtonPressed;
+        NetworkArrow.OnSelectButtonPressed -= HandleOnSelectButtonPressed;
     }
 
-    private void HandleOnChangeArrowPositionButtonPressed()
+    private void HandleOnArrowPositionChanged(NetworkArrow networkArrow)
     {
-        if(MenuState == PlayerSelectionMenuState.PlayerSelection)
+        if (MenuState == PlayerSelectionMenuState.ReadyToStart && isClientOnly)
+            CmdFlip2PArrowPosition(networkArrow);
+    }
+
+    private void HandleOnChangeArrowPositionButtonPressed(NetworkArrow networkArrow)
+    {
+        if (MenuState == PlayerSelectionMenuState.PlayerSelection)
             CmdAlternateSelectCharactersArrowPositions();
     }
 
+    private void HandleOnSelectButtonPressed(NetworkArrow networkArrow)
+    {
+        bool isPlayer2 = !Equals(NetworkArrows[0], networkArrow);
+        
+        if (MenuState == PlayerSelectionMenuState.ReadyToStart)
+        {
+            // For 2P only
+            if(isPlayer2)
+                CmdFlip2PArrowPosition(networkArrow);
+        }
+    }
+
     /// <summary>
-    /// Se passar o Ìndice 0, retorna o Ìndice 1, e vice-versa.
+    /// Se passar o √≠ndice 0, retorna o √≠ndice 1, e vice-versa.
     /// </summary>
     private int GetComplementaryPlayerIndex(int currentIndex)
     {
@@ -140,7 +161,7 @@ public class PlayerSelectionUIController : NetworkBehaviour
 
     public void ClientLobby()
     {
-        NetworkManager.singleton.networkAddress = !string.IsNullOrEmpty(networkAdress.text)? networkAdress.text : "localhost";
+        NetworkManager.singleton.networkAddress = !string.IsNullOrEmpty(networkAdress.text) ? networkAdress.text : "localhost";
         NetworkManager.singleton.StartClient();
     }
 
@@ -152,7 +173,7 @@ public class PlayerSelectionUIController : NetworkBehaviour
             connectionTypeMenu.SetActive(true);
             lobbyMenu.SetActive(false);
         }
-        else if(isServer)
+        else if (isServer)
         {
             if (NetworkManager.singleton.numPlayers > 1)
                 SetDisconnectConfirmationActivation(true);
@@ -178,18 +199,18 @@ public class PlayerSelectionUIController : NetworkBehaviour
 
     public void SetDisconnectConfirmationActivation(bool val)
     {
-        if(!val && startBtnComponent.interactable)
+        if (!val && startBtnComponent.interactable)
             startBtnComponent.interactable = !val;
 
         cancelBtnComponent.interactable = !val;
         DisconnectConfirmationPanel.SetActive(val);
     }
 
-    public bool TryGetSelectedPenosaFromButton(NetworkArrowPosition networkArrow, out Penosas selectedPenosa)
+    public bool TryGetSelectedPenosaFromButton(NetworkArrow networkArrow, out Penosas selectedPenosa)
     {
         selectedPenosa = Penosas.None;
         Transform parent = networkArrow.gameObject.transform.parent;
-        if(parent != null)
+        if (parent != null)
         {
             TextMeshProUGUI buttonText = parent.GetComponentInChildren<TextMeshProUGUI>();
             return Enum.TryParse(buttonText.text, out selectedPenosa);
@@ -225,7 +246,7 @@ public class PlayerSelectionUIController : NetworkBehaviour
         CharacterButtons[complementary] = charBtnsCopy[index];
 
         if (NetworkArrows.Count > 1)
-            NetworkArrows[complementary].CmdUpdateArrowPosition(CharacterButtons[complementary]);
+            NetworkArrows[complementary].CmdUpdateArrowPosition(CharacterButtons[complementary].name);
         EventSystem.current.SetSelectedGameObject(CharacterButtons[CurrentPlayerIndex]);
     }
 
@@ -254,33 +275,33 @@ public class PlayerSelectionUIController : NetworkBehaviour
     [ClientRpc]
     public void RpcUpdateSelectPlayerDataList(int index, int chosenCharacterIndex)
     {
-        // Õndice complementar para escolher o outro jogador.
+        // √çndice complementar para escolher o outro jogador.
         int complementaryPlayerIndex = GetComplementaryPlayerIndex(index);
-        // Õndice pra escolher a galinha que sobrou.
+        // √çndice pra escolher a galinha que sobrou.
         int complementaryPenosaIndex = GetComplementaryPlayerIndex(chosenCharacterIndex);
 
         Penosas newCharacter = (Penosas)chosenCharacterIndex;
         Penosas remainingCharacter = (Penosas)complementaryPenosaIndex;
 
-        // Trocar pra conex„o do jogador
+        // Trocar pra conex√£o do jogador
         var playerConnections = FindObjectsOfType<PlayerConnection>().OrderBy(x => x.netId).ToList();
 
         playerConnections[index].PlayerSelectionData.SelectedPenosa = newCharacter;
 
-        if(playerConnections.Count > 1)
+        if (playerConnections.Count > 1)
             playerConnections[complementaryPlayerIndex].PlayerSelectionData.SelectedPenosa = remainingCharacter;
     }
 
     [ClientRpc]
     private void RpcCancelCharacterSelection()
     {
-        var arrows = FindObjectsOfType<NetworkArrowPosition>();
+        var arrows = FindObjectsOfType<NetworkArrow>();
         foreach (var arrow in arrows)
         {
-            arrow.CmdUpdateArrowPosition(arrow.PreviousSelectedButton);
+            arrow.CmdUpdateArrowPosition(arrow.PreviousSelectedButton.name);
         }
     }
-    
+
     [ClientRpc]
     private void RpcSetBackToMainMenuButtonActivation(bool value)
     {
@@ -329,6 +350,24 @@ public class PlayerSelectionUIController : NetworkBehaviour
     #region Server
 
     [Command(requiresAuthority = false)]
+    public void CmdFlip2PArrowPosition(NetworkArrow networkArrow)
+    {
+        // Flip Position
+        float inverseX = NetworkArrows[0].transform.localPosition.x * -1f;
+        Vector2 newPos = new Vector2(inverseX, transform.localPosition.y);
+        networkArrow.CmdUpdateArrowPositionByPosition(newPos);
+
+        // Flip Scale if it is in normal (positive) scale
+        if(networkArrow.transform.localScale.x > 0)
+        {
+            RectTransform rectTransform = networkArrow.transform.GetComponent<RectTransform>();
+            Vector3 localScale = rectTransform.localScale;
+            rectTransform.localScale = new Vector3(localScale.x * -1, localScale.y, localScale.z);
+            networkArrow.ArrowText.transform.localScale = new Vector3(localScale.x * -1, localScale.y, localScale.z);
+        }
+    }
+
+    [Command(requiresAuthority = false)]
     public void CmdAlternateSelectCharactersArrowPositions()
     {
         RpcAlternateSelectCharactersArrowPositions();
@@ -353,7 +392,7 @@ public class PlayerSelectionUIController : NetworkBehaviour
         RpcSetPlayerTextColor(characterIndex, baseColor);
         int complementaryPlayerIndex = GetComplementaryPlayerIndex(characterIndex);
 
-        if(NetworkManager.singleton.numPlayers > 1)
+        if (NetworkManager.singleton.numPlayers > 1)
         {
             Color complementaryColor = index == 0 ? Color.yellow : Color.red;
             RpcSetPlayerTextColor(complementaryPlayerIndex, complementaryColor);
@@ -404,17 +443,17 @@ public class PlayerSelectionUIController : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdNetworkSelectCharacterButton(GameObject buttonToNavigate)
     {
-        NetworkArrowPosition playerArrow = CurrentPlayerArrow;
+        NetworkArrow playerArrow = CurrentPlayerArrow;
 
         if (playerArrow != null)
         {
             RpcSetSelectedGameObject(buttonToNavigate);
-            playerArrow.CmdUpdateArrowPosition(buttonToNavigate);
+            playerArrow.CmdUpdateArrowPosition(buttonToNavigate.name);
 
             if (NetworkManager.singleton.numPlayers > 1)
             {
                 var otherArrow = OtherPlayerArrow;
-                otherArrow?.CmdUpdateArrowPosition(buttonToNavigate);
+                otherArrow?.CmdUpdateArrowPosition(buttonToNavigate.name);
             }
         }
     }

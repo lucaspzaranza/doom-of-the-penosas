@@ -42,15 +42,15 @@ public class PlayerConnection : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdGetNetworkArrow()
     {
-        var networkArrow = FindObjectsOfType<NetworkArrowPosition>()
+        var networkArrow = FindObjectsOfType<NetworkArrow>()
             .SingleOrDefault(arrow => arrow.connectionToClient == netIdentity.connectionToClient);
-       RpcSetNetworkArrow(networkArrow);
+        RpcSetNetworkArrow(networkArrow);
     }
-   
+
     [ClientRpc]
-    private void RpcSetNetworkArrow(NetworkArrowPosition newArrow)
+    private void RpcSetNetworkArrow(NetworkArrow newArrow)
     {
-        if(PlayerSelectionUIController.instance.TryGetSelectedPenosaFromButton(newArrow, out Penosas selectedPenosa))
+        if (PlayerSelectionUIController.instance.TryGetSelectedPenosaFromButton(newArrow, out Penosas selectedPenosa))
         {
             PlayerSelectionData.NetworkArrow = newArrow;
             PlayerSelectionData.SelectedPenosa = selectedPenosa;

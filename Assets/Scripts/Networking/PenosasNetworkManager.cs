@@ -31,7 +31,7 @@ public class PenosasNetworkManager : NetworkManager
         base.OnServerAddPlayer(conn);
 
         PlayerConnections.Add(conn.identity.gameObject.GetComponent<PlayerConnection>());
-        InstantiateNetworkArrowEgg(playerCount, conn);      
+        InstantiateNetworkArrowEgg(playerCount, conn);
     }
 
     public override void OnServerDisconnect(NetworkConnection conn)
@@ -60,17 +60,17 @@ public class PenosasNetworkManager : NetworkManager
         NetworkServer.Spawn(playerArrow, conn);
         playerCount++;
 
-        var networkArrow = playerArrow.GetComponent<NetworkArrowPosition>();
+        var networkArrow = playerArrow.GetComponent<NetworkArrow>();
         networkArrow.CmdSetArrowPlayerConnection(PlayerConnections[playerCount - 1]);
 
         if (playerCount < 2)
-            networkArrow.CmdUpdateArrowPosition(EventSystem.current.currentSelectedGameObject);
+            networkArrow.CmdUpdateArrowPosition(EventSystem.current.currentSelectedGameObject.name);
         else
         {
             PlayerSelectionUIController.instance.TargetGetServerPlayerCharacterSelectionData(conn, PlayerSelectionUIController.instance.CharacterButtons);
             var complementaryCharacterBtn = PlayerSelectionUIController.instance.CharacterButtons[1];
-            PlayerConnections[0].PlayerSelectionData.NetworkArrow.CmdUpdateArrowPosition(PlayerSelectionUIController.instance.CharacterButtons[0]);
-            networkArrow.CmdUpdateArrowPosition(complementaryCharacterBtn);
+            PlayerConnections[0].PlayerSelectionData.NetworkArrow.CmdUpdateArrowPosition(PlayerSelectionUIController.instance.CharacterButtons[0].name);
+            networkArrow.CmdUpdateArrowPosition(complementaryCharacterBtn.name);
             PlayerSelectionUIController.instance.TargetGetServerPlayerConnectionsData(conn, PlayerConnections);
         }
     }
