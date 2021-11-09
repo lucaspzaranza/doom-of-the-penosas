@@ -295,11 +295,22 @@ public class PlayerSelectionUIController : NetworkBehaviour
     [ClientRpc]
     private void RpcCancelCharacterSelection()
     {
-        var arrows = FindObjectsOfType<NetworkArrow>();
-        foreach (var arrow in arrows)
+        CmdSetChooseCharacterButtonInteractable(true);
+        CmdSetCancelCharacterSelectionButtonActivation(false);
+        CmdSetBackToMainMenuButtonActivation(true);
+        CmdSetBackToMainMenuButtonInteractable(false);
+        CmdSetStartButtonGameObjectInteractable(false);
+
+        // Não funfou, ver qual é.
+        CmdFlip2PArrowPosition(NetworkArrows[1]);
+
+        foreach (var arrow in NetworkArrows)
         {
-            arrow.CmdUpdateArrowPosition(arrow.PreviousSelectedButton.name);
+            string charName = arrow.LocalPlayerConnection.PlayerSelectionData.SelectedPenosa.ToString();
+            GameObject charButton = CharacterButtons.SingleOrDefault(btn => btn.name.Contains(charName));
+            arrow.CmdUpdateArrowPosition(charButton.name);
         }
+        _menuState = PlayerSelectionMenuState.PlayerSelection;
     }
 
     [ClientRpc]

@@ -73,9 +73,12 @@ public class NetworkArrow : NetworkBehaviour
         base.OnStartClient();
 
         PlayerSelectionUIController.instance.NetworkArrows.Add(this);
+    }
 
-        if (_selectedButton == null)
-            _selectedButton = EventSystem.current.currentSelectedGameObject;
+    private void Update()
+    {
+        if (_selectedButton == null && transform.parent?.gameObject != null)
+            _selectedButton = transform.parent.gameObject;
     }
 
     private void UpdateArrowPositionWrapper(CallbackContext callbackContext)
@@ -94,16 +97,25 @@ public class NetworkArrow : NetworkBehaviour
         CmdUpdateArrowPosition(_selectedButton.name);
         OnChangeArrowPositionButtonPressed?.Invoke(this);
         OnArrowPositionChanged?.Invoke(this);
+        CmdSetPrevAndCurrentSelectedButtons(_previousSelectedButton.name, _selectedButton.name);
     }
 
     private void SelectButtonPressed(CallbackContext callbackContext)
     {
         OnSelectButtonPressed?.Invoke(this);
+        CmdSetPrevAndCurrentSelectedButtons(_selectedButton.name, EventSystem.current.currentSelectedGameObject.name);
     }
 
     #endregion
 
     #region Client
+
+    [ClientRpc]
+    private void RpcSetPrevAndCurrentSelectedButtons(string prevButtonName, string currentButtonName)
+    {
+        _previousSelectedButton = GameObject.Find(prevButtonName);
+        _selectedButton = GameObject.Find(currentButtonName);
+    }
 
     [ClientRpc]
     public void RpcUpdateArrowPosition(int buttonIndex)
@@ -114,8 +126,6 @@ public class NetworkArrow : NetworkBehaviour
         var arrowPosition = btnTransform.Find(PlayerSelectionUIController.ArrowPositionName).GetComponent<RectTransform>().localPosition;
         gameObject.transform.SetParent(btnTransform, false);
         gameObject.transform.localPosition = arrowPosition;
-
-        //print("mudei pos! " + gameObject.transform.localPosition);
     }
 
     [ClientRpc]
@@ -133,15 +143,21 @@ public class NetworkArrow : NetworkBehaviour
         _localPlayerConnection = playerConn;
     }
 
-    #endregion
-
     [ClientRpc]
     private void RpcUpdateArrowPositionByPosition(Vector2 newPosition)
     {
         transform.localPosition = newPosition;
     }
 
+    #endregion
+
     #region Server
+
+    [Command(requiresAuthority = false)]
+    private void CmdSetPrevAndCurrentSelectedButtons(string prevButtonName, string currentButtonName)
+    {
+        RpcSetPrevAndCurrentSelectedButtons(prevButtonName, currentButtonName);
+    }
 
     [Command(requiresAuthority = false)]
     public void CmdUpdateArrowPositionByPosition(Vector2 newPosition)
@@ -166,35 +182,6 @@ public class NetworkArrow : NetworkBehaviour
     {
         int btnIndex = PlayerSelectionUIController.instance.MenuButtons.FindIndex(button => button.name == buttonName);
         RpcUpdateArrowPosition(btnIndex);
-    }
-
-    [ServerCallback]
-    private void CmdFlipArrowHorizontal()
-    {
-        RpcFlipArrowHorizontal();
-    }
-
-    [Command(requiresAuthority = false)]
-    private void CmdTryFlipArrowPosition()
-    {
-        bool invertPosition = false;
-        var buttonNetworkArrow = transform.parent.gameObject.GetComponentInChildren<NetworkArrow>();
-
-        if (buttonNetworkArrow != null)
-        {
-            print(buttonNetworkArrow);
-            invertPosition = !Equals(this, buttonNetworkArrow);
-        }
-
-        //Fazer a invers�o do sprite da 2P NetworkArrow
-        if (invertPosition)
-        {
-            if (PlayerSelectionUIController.instance.MenuState != PlayerSelectionMenuState.PlayerSelection)
-            {
-                CmdFlipArrowHorizontal();
-                transform.localPosition = new Vector2(transform.localPosition.x * -1, transform.localPosition.y);
-            }
-        }
     }
 
     #endregion
