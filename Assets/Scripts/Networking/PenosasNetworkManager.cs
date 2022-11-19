@@ -8,10 +8,14 @@ using UnityEngine.EventSystems;
 
 public class PenosasNetworkManager : NetworkManager
 {
+    public static PenosasNetworkManager instance;
+
     private int playerCount = 0;
 
     [SerializeField] private List<PlayerConnection> _playerConnections;
     public List<PlayerConnection> PlayerConnections => _playerConnections;
+
+    public int PlayerCount => playerCount;
 
     public override void OnStartServer()
     {

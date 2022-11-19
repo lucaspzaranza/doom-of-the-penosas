@@ -25,14 +25,23 @@ public class NetworkArrow : NetworkBehaviour
     private PlayerInput playerInputActions;
     private InputAction navigation;
     private InputAction selection;
+    private InputAction cancelation;
+
+    [SyncVar] [SerializeField] private bool _canChangePosition;
 
     public static event Action<NetworkArrow> OnChangeArrowPositionButtonPressed;
     public static event Action<NetworkArrow> OnSelectButtonPressed;
+    public static event Action<NetworkArrow> OnCancelButtonPressed;
     public static event Action<NetworkArrow> OnArrowPositionChanged;
 
     #endregion
 
     #region Props
+    public bool CanChangePosition 
+    {
+        get => _canChangePosition;
+        set => _canChangePosition = value;
+    }
     public int Index => NetworkClient.isHostClient ? 0 : 1;
     public GameObject SelectedButton => _selectedButton;
     public GameObject PreviousSelectedButton => _previousSelectedButton;
@@ -57,6 +66,10 @@ public class NetworkArrow : NetworkBehaviour
         selection = playerInputActions.PlayerSelectionMenu.SelectPlayer;
         selection.canceled += SelectButtonPressed;
         selection.Enable();
+
+        cancelation = playerInputActions.PlayerSelectionMenu.CancelorBack;
+        cancelation.started += Cancel;
+        cancelation.Enable();
     }
 
     private void OnDisable()
@@ -66,6 +79,9 @@ public class NetworkArrow : NetworkBehaviour
 
         selection.canceled -= SelectButtonPressed;
         selection.Disable();
+
+        cancelation.started -= Cancel;
+        cancelation.Disable();
     }
 
     public override void OnStartClient()
@@ -73,17 +89,18 @@ public class NetworkArrow : NetworkBehaviour
         base.OnStartClient();
 
         PlayerSelectionUIController.instance.NetworkArrows.Add(this);
+        _canChangePosition = true;
     }
 
     private void Update()
     {
-        if (_selectedButton == null && transform.parent?.gameObject != null)
+        if(_selectedButton == null && transform.parent?.gameObject != null)
             _selectedButton = transform.parent.gameObject;
     }
 
     private void UpdateArrowPositionWrapper(CallbackContext callbackContext)
     {
-        if (LocalPlayerConnection.isLocalPlayer)
+        if(CanChangePosition && LocalPlayerConnection.isLocalPlayer)
             StartCoroutine(nameof(UpdateArrowPositionCoroutine));
     }
 
@@ -104,6 +121,13 @@ public class NetworkArrow : NetworkBehaviour
     {
         OnSelectButtonPressed?.Invoke(this);
         CmdSetPrevAndCurrentSelectedButtons(_selectedButton.name, EventSystem.current.currentSelectedGameObject.name);
+    }
+
+    private void Cancel(CallbackContext callbackContext)
+    {
+        //print(LocalPlayerConnection + " is Local Player? " + LocalPlayerConnection.isLocalPlayer);
+        if (LocalPlayerConnection.isLocalPlayer)
+            OnCancelButtonPressed?.Invoke(this);
     }
 
     #endregion
