@@ -5,14 +5,12 @@ using UnityEngine.UI;
 
 public class UpdateArrowPositionEventArgs
 {
-    public NetworkArrow NetworkArrow { get; private set; }
     public GameObject PreviousButton { get; private set; }
 
     public UpdateArrowPositionEventArgs() { }
 
-    public UpdateArrowPositionEventArgs(NetworkArrow networkArrow, GameObject previousButton)
+    public UpdateArrowPositionEventArgs(GameObject previousButton)
     {
-        NetworkArrow = networkArrow;
         PreviousButton = previousButton;
     }
 }
