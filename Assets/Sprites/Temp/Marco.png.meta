@@ -294,7 +294,7 @@ TextureImporter:
       213: 6865903147809350818
     second: Marco_96
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -315,6 +315,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -353,6 +354,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -368,6 +370,30 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -2428,6 +2454,104 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      Marco_2: 6219961838627577627
+      Marco_50: -3145736224503121558
+      Marco_35: 1697576877312830166
+      Marco_93: -1113181183245060850
+      Marco_52: 1947002808753432066
+      Marco_83: 7974644552324725020
+      Marco_36: 4776166573149903420
+      Marco_90: -2547157544268311433
+      Marco_39: 6032147822248420947
+      Marco_45: 1665408852106293816
+      Marco_70: 9050605992121499714
+      Marco_5: 7621687009608250145
+      Marco_0: -5898572833816749705
+      Marco_42: 8986045132377228524
+      Marco_1: 6495446970679550999
+      Marco_34: 4566123503963082953
+      Marco_28: 6518669155869268473
+      Marco_41: -5708974967338009311
+      Marco_53: -8537011897373425026
+      Marco_81: -5651149939932253216
+      Marco_16: -2276634131919081503
+      Marco_92: 4600913169623631605
+      Marco_8: 163538171432680860
+      Marco_87: -5113350913800636256
+      Marco_13: 3869397521704581653
+      Marco_20: 306890755184309159
+      Marco_9: -2977936693174745738
+      Marco_75: -3724303031291928174
+      Marco_76: 3746393757661052715
+      Marco_37: -927387828641507447
+      Marco_15: -927285381446840606
+      Marco_18: -6841783851874441349
+      Marco_94: 4667921801493934534
+      Marco_68: 5400272036678953174
+      Marco_77: -6770045150108637261
+      Marco_30: -8777955588798512832
+      Marco_55: -4645876311257241292
+      Marco_44: -4062328745766222307
+      Marco_60: -914393053017528272
+      Marco_22: 804664890187397807
+      Marco_78: -842662148417453967
+      Marco_80: 1573381388576404261
+      Marco_43: -5686104442643318099
+      Marco_6: -6590022438966603191
+      Marco_74: -8655683891891913499
+      Marco_3: 2189251851782679489
+      Marco_54: -5833056683636780358
+      Marco_66: 6778989068887924735
+      Marco_38: -8638086689373425653
+      Marco_14: 8483445098277722849
+      Marco_67: -1752337463792635424
+      Marco_7: -7728472491502074562
+      Marco_71: -5625412606470786074
+      Marco_88: -2076623983191471122
+      Marco_64: 4311763424177294865
+      Marco_82: -6092287725921830580
+      Marco_27: 5519049832140364725
+      Marco_19: -3340662908148450406
+      Marco_95: 2654309412699454833
+      Marco_48: 8418119305629455687
+      Marco_62: 8681468545986270947
+      Marco_73: -1848548933641633828
+      Marco_65: -8309525622986903149
+      Marco_47: 5876442708928684348
+      Marco_32: 1239672456116260962
+      Marco_56: -348951600309170081
+      Marco_40: -5539324122093127013
+      Marco_51: -7162614775166041966
+      Marco_33: -9006609187908470213
+      Marco_69: 5146844627073232258
+      Marco_29: 7012955645255726981
+      Marco_11: -7744555998209969817
+      Marco_57: 9078194469075269850
+      Marco_96: 6865903147809350818
+      Marco_59: -815476230518307280
+      Marco_63: -1638177967643892601
+      Marco_12: -7816353234375226544
+      Marco_24: 6215668347256407726
+      Marco_17: 5634442532347580356
+      Marco_72: -4482355045722621484
+      Marco_58: 8954102087180116306
+      Marco_61: -7228304770816898604
+      Marco_85: -4761957987816982484
+      Marco_79: 6456162437391913738
+      Marco_10: 4497675971009598694
+      Marco_4: -4952770598051600857
+      Marco_49: -3573900836716331330
+      Marco_89: 7319143553375697319
+      Marco_23: 5176177870998437398
+      Marco_25: 8125281982289346118
+      Marco_21: 7479801483924427715
+      Marco_26: -9170036250558827935
+      Marco_84: 2818581198170934494
+      Marco_31: 5016731653886227843
+      Marco_91: 619294282113154407
+      Marco_46: 2057478148936469248
+      Marco_86: 4643024480140683333
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

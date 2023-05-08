@@ -23,6 +23,9 @@ public class LocalArrowPosition : MonoBehaviour
         navigation.started += UpdateArrowPositionWrapper;
         navigation.canceled += UpdateArrowPositionWrapper;
         navigation.Enable();
+
+        //print($"Current parent: {transform.parent.gameObject.name}");
+        EventSystem.current.SetSelectedGameObject(transform.parent.gameObject);
     }
 
     private void OnDisable()
@@ -57,9 +60,16 @@ public class LocalArrowPosition : MonoBehaviour
 
     public void UpdateArrowPosition(GameObject buttonToNavigate)
     {
+        //print(buttonToNavigate);
         var btnTransform = buttonToNavigate.transform;
-        var arrowPosition = btnTransform.Find(PlayerSelectionUIController.ArrowPositionName).GetComponent<RectTransform>().localPosition;
+        //var arrowPositionGameObject = GameObject.FindGameObjectWithTag(PlayerSelectionUIController.ArrowPositionName);
+
+        //if (!arrowPositionGameObject)
+        //    return;
+
+        //var arrowPosition = arrowPositionGameObject.GetComponent<RectTransform>().localPosition;
+
         gameObject.transform.SetParent(btnTransform, false);
-        gameObject.transform.localPosition = arrowPosition;
+        //gameObject.transform.localPosition = arrowPosition;
     }
 }

@@ -5,14 +5,14 @@ using UnityEngine.InputSystem;
 
 public class AnimatorHashes
 {
-    public readonly int shootTrigger = Animator.StringToHash("Shoot");
-    public readonly int shotLevel = Animator.StringToHash("Shot Level");
-    public readonly int XVelocity = Animator.StringToHash("XVelocity");
-    public readonly int YVelocity = Animator.StringToHash("YVelocity");
-    public readonly int isGrounded = Animator.StringToHash("IsGrounded");
-    public readonly int up = Animator.StringToHash("Up");
-    public readonly int down = Animator.StringToHash("Down");
-    public readonly int jetCopter = Animator.StringToHash("JetCopter");
+    public readonly int shootTrigger = Animator.StringToHash(ConstantStrings.Shoot);
+    public readonly int shotLevel = Animator.StringToHash(ConstantStrings.ShotLevel);
+    public readonly int XVelocity = Animator.StringToHash(ConstantStrings.XVelocity);
+    public readonly int YVelocity = Animator.StringToHash(ConstantStrings.YVelocity);
+    public readonly int isGrounded = Animator.StringToHash(ConstantStrings.IsGrounded);
+    public readonly int up = Animator.StringToHash(ConstantStrings.Up);
+    public readonly int down = Animator.StringToHash(ConstantStrings.Down);
+    public readonly int jetCopter = Animator.StringToHash(ConstantStrings.JetCopter);
 }
 
 public class Penosa : MonoBehaviour

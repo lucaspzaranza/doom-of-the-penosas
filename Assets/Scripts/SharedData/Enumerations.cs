@@ -18,9 +18,9 @@ namespace SharedData.Enumerations
 
     public enum SpecialItemType
     {
-        Adrenaline,
-        JetCopter,
-        Mayday,
-        WalkTalk
+        Adrenaline = 0,
+        JetCopter = 1,
+        Mayday = 2,
+        WalkTalk = 3
     }
 }

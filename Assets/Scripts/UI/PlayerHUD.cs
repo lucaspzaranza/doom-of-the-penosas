@@ -12,7 +12,6 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private Text _livesTxt = null;
     [SerializeField] private Image _lifebarImg = null;
     [SerializeField] private Image _armorLifebarImg = null;
-    [SerializeField] private Image _iconImg = null;
     [SerializeField] private Image _specialItemImg = null;
     [SerializeField] private GameObject _hudContainer = null;
     [SerializeField] private byte playerID;

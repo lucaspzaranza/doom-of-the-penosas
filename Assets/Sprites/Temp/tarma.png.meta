@@ -297,7 +297,7 @@ TextureImporter:
       213: 8459363468630374718
     second: tarma_97
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -318,6 +318,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -356,6 +357,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -395,6 +397,30 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -2476,6 +2502,105 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      tarma_88: 7467086842060204717
+      tarma_76: 6205170142611737728
+      tarma_55: -1363141399620320754
+      tarma_11: -1288640022627003824
+      tarma_35: -4516223991997974817
+      tarma_16: -2772048741454324374
+      tarma_7: 2494292179258960474
+      tarma_43: 2821814700223209017
+      tarma_73: 3252215496404270389
+      tarma_48: 3213743784497656389
+      tarma_25: -1432604936817877928
+      tarma_17: -6175342460783498280
+      tarma_62: -6880626700411153154
+      tarma_81: 2879704009893995997
+      tarma_61: 7499034013190092408
+      tarma_85: -1880804099674852690
+      tarma_12: 8246691656051263249
+      tarma_21: -8037539752541180475
+      tarma_44: -8474274572324820571
+      tarma_57: 1072920459033679658
+      tarma_19: -7226704486895098055
+      tarma_52: 3917096127872051937
+      tarma_22: -9101217732865822550
+      tarma_9: 7611379525535547845
+      tarma_24: 8349256886080836634
+      tarma_70: -7451142843170105758
+      tarma_37: 5795175503925213174
+      tarma_58: 3683223992159716950
+      tarma_59: -4433474371879983581
+      tarma_68: -6863870875610699405
+      tarma_75: 3678425997378735126
+      tarma_2: -3244126604846956877
+      tarma_66: 1194993220387956230
+      tarma_18: 4294190850147304885
+      tarma_41: 4558827536893075126
+      tarma_46: 3235468572893974863
+      tarma_53: 2846383387568781025
+      tarma_33: -978119706252055642
+      tarma_80: 3943677444803569019
+      tarma_6: 1628922344448902673
+      tarma_27: -4685875330753948934
+      tarma_97: 8459363468630374718
+      tarma_54: -7096520656949602279
+      tarma_4: 698347943852190418
+      tarma_90: -7774380113638795561
+      tarma_83: -7269274155841761210
+      tarma_69: 5973915277909254398
+      tarma_56: 8709771331743687882
+      tarma_20: 6914380789882658477
+      tarma_31: 1759136668883031429
+      tarma_49: -447536739798161467
+      tarma_79: 5854017592659898078
+      tarma_87: -5679272673851547259
+      tarma_78: 6470036980227769087
+      tarma_8: -2934996370132348576
+      tarma_91: 3209125700548664470
+      tarma_3: 7048198398925023442
+      tarma_64: -5788920304165783224
+      tarma_32: -5920468199401444959
+      tarma_29: -742478276234248769
+      tarma_45: 7941145380367493794
+      tarma_26: -5026739548293534109
+      tarma_30: 1414418371844040499
+      tarma_5: -3817286286463725148
+      tarma_36: 8683831150456051646
+      tarma_23: 7321051843783256267
+      tarma_13: -7363711423968238348
+      tarma_1: 800479106241971116
+      tarma_38: -8505900219974886876
+      tarma_0: -894387173527953005
+      tarma_39: -4525738639666540712
+      tarma_47: -3463886367080497764
+      tarma_34: -2139310860109074693
+      tarma_65: 7930879108352917064
+      tarma_86: -8065978441758464655
+      tarma_71: 6291269059177941943
+      tarma_77: -8423488827501041944
+      tarma_92: 7762522175967539710
+      tarma_51: 691337321703015133
+      tarma_89: -1807874241621974298
+      tarma_15: -472980255060046431
+      tarma_14: -162404803528281693
+      tarma_95: 3042559347403513361
+      tarma_93: 3484099132836817211
+      tarma_63: -7661625477348054992
+      tarma_28: 1412220547216762548
+      tarma_50: -3636595234420417340
+      tarma_84: -4101723026658823931
+      tarma_74: -1976912425872886312
+      tarma_60: 3735600329393044369
+      tarma_96: 8961525540577744430
+      tarma_94: 8623564618194882541
+      tarma_42: -4578428571113117267
+      tarma_40: -8971417622188751267
+      tarma_82: -2502538567684840485
+      tarma_72: -6178633992352469511
+      tarma_67: 5854073210855323171
+      tarma_10: 2322585529614767080
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

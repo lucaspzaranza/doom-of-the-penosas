@@ -37,8 +37,7 @@ public class CollectableItem : MonoBehaviour
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         Sprite sprite = sr.sprite;
 
-        //player.Inventory.AddItem(itemScript.GetClass().ToString(), amount, player, sprite);
-        player.Inventory.AddItem(itemType.ToString(), amount, player, sprite);
+        player.Inventory.AddItem(itemType, amount, player, sprite);
     }
 
     public void OnTriggerEnter2D(Collider2D other)

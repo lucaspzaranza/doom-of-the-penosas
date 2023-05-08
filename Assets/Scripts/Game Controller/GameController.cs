@@ -4,18 +4,6 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 
-public class InputStrings
-{
-    public const string Jump = "Jump";
-    public const string Fire1 = "Fire1";
-    public const string Fire2 = "Fire2";
-    public const string Fire3 = "Fire3";
-    public const string Horizontal = "Horizontal";
-    public const string Vertical = "Vertical";
-    public const string ChangeSpecialItem = "ChangeSpecialItem";
-    public const string Start = "Start";
-}
-
 public class GameController : MonoBehaviour
 {
     #region Constants
@@ -25,25 +13,32 @@ public class GameController : MonoBehaviour
     #endregion
 
     #region Variables
+
     public static GameController instance;
+
     [SerializeField] private List<PlayerData> _playersData = null;
     [SerializeField] private Transform playerStartPosition = null;
     private Text gameOverCountdownText;
 
     #endregion
 
-    #region #Properties
+    #region Properties
 
     public List<PlayerData> PlayersData => _playersData;
     #endregion
 
     void Start()
     {
-        if (instance == null) instance = this;
-        else Destroy(gameObject);
+        if (instance == null) 
+            instance = this;
+        else
+            Destroy(gameObject);
+
         GetPlayersOnScene();
 
         InitiateProjectilesPools();
+
+        DontDestroyOnLoad(gameObject);
     }
 
     void Update()
@@ -55,16 +50,16 @@ public class GameController : MonoBehaviour
 
     private void InitiateProjectilesPools()
     {
-        StartCoroutine(ObjectPool.instance.InitializePool("Egg Shot"));
-        StartCoroutine(ObjectPool.instance.InitializePool("Big Egg Shot"));
-        StartCoroutine(ObjectPool.instance.InitializePool("Grenade"));
-        StartCoroutine(ObjectPool.instance.InitializePool("Shuriken"));
-        StartCoroutine(ObjectPool.instance.InitializePool("Fuuma Shuriken"));
+        StartCoroutine(ObjectPool.instance.InitializePool(ConstantStrings.EggShot));
+        StartCoroutine(ObjectPool.instance.InitializePool(ConstantStrings.BigEggShot));
+        StartCoroutine(ObjectPool.instance.InitializePool(ConstantStrings.Grenade));
+        StartCoroutine(ObjectPool.instance.InitializePool(ConstantStrings.Shuriken));
+        StartCoroutine(ObjectPool.instance.InitializePool(ConstantStrings.FuumaShuriken));
     }
 
     private void GetPlayersOnScene()
     {
-        var players = GameObject.FindGameObjectsWithTag("Player")
+        var players = GameObject.FindGameObjectsWithTag(ConstantStrings.PlayerTag)
             .Select(player => player.GetComponent<Penosa>())
             .ToList();
         _playersData = new List<PlayerData>();

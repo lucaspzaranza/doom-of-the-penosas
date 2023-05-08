@@ -25,7 +25,7 @@ public class Mayday : SpecialItem
 
         ItemInUse = false;            
 
-        if(itemSlot.Player.Inventory.SelectedSlot.Amount == 0) 
+        if(ItemSlot.Player.Inventory.SelectedSlot.Amount == 0) 
             RemoveItemIfAmountEqualsZero();
     }
 
