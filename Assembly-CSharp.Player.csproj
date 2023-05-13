@@ -60,12 +60,12 @@
     <Compile Include="Assets\Scripts\Items\AddLives.cs" />
     <Compile Include="Assets\Scripts\Items\Armor.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerHUD.cs" />
-    <Compile Include="Assets\Scripts\Penosa\PlayerConsts.cs" />
-    <Compile Include="Assets\Scripts\Game Controller\GameController.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerConsts.cs" />
+    <Compile Include="Assets\Scripts\GameSystem\GameController.cs" />
     <Compile Include="Assets\ParrelSync\Examples\CustomArgumentExample.cs" />
     <Compile Include="Assets\Scripts\Items\ItemSlot.cs" />
     <Compile Include="Assets\Scripts\SharedData\CustomEventArgs.cs" />
-    <Compile Include="Assets\Scripts\Penosa\Penosa.cs" />
+    <Compile Include="Assets\Scripts\Player\Penosa.cs" />
     <Compile Include="Assets\Scripts\UI\Player Selection Menu\PlayerSelectionUIController.cs" />
     <Compile Include="Assets\Scripts\Items\JetCopter.cs" />
     <Compile Include="Assets\Input System\PlayerInput.cs" />
@@ -74,7 +74,7 @@
     <Compile Include="Assets\Scripts\SharedData\Enumerations.cs" />
     <Compile Include="Assets\Scripts\Items\WeaponLvlUp.cs" />
     <Compile Include="Assets\Scripts\Items\SpriteAddedEventArgs.cs" />
-    <Compile Include="Assets\Scripts\Penosa\PlayerData.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Weapons\AutoRotate.cs" />
     <Compile Include="Assets\Scripts\UI\Player Selection Menu\PlayerSelectionData.cs" />
     <Compile Include="Assets\Scripts\Items\Inventory.cs" />
@@ -87,11 +87,14 @@
     <Compile Include="Assets\Scripts\Weapons\Projectile.cs" />
     <Compile Include="Assets\Scripts\Items\Mayday.cs" />
     <Compile Include="Assets\Scripts\Items\Item.cs" />
-    <Compile Include="Assets\Scripts\Penosa\Parachute.cs" />
+    <Compile Include="Assets\Scripts\Player\Parachute.cs" />
     <Compile Include="Assets\Scripts\Items\SpecialItem.cs" />
     <Compile Include="Assets\Scripts\Items\Adrenaline.cs" />
     <Compile Include="Assets\Scripts\SharedData\ConstantStrings.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\IController.cs" />
+    <Compile Include="Assets\Scripts\Pooling\PoolController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />

@@ -23,6 +23,7 @@ public class ConstantStrings : MonoBehaviour
     public const string Up = "Up";
     public const string Down = "Down";
     public const string JetCopter = "JetCopter";
+    public const string TurnOff = "TurnOff";
 
     // Menu
     public const string ArrowPositionName = "ArrowPosition";

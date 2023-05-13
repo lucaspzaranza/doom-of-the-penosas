@@ -9,6 +9,15 @@ namespace SharedData.Enumerations
         ReadyToStart = 1
     }
 
+    public enum GameStatus
+    {
+        Menu = 0,
+        Loading = 1,
+        InGame = 2,
+        GameOver = 3,
+        Cutscene = 4
+    }
+
     public enum Penosas
     {
         None = -1,

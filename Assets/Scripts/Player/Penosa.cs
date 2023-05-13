@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using System;
 
 public class AnimatorHashes
 {
@@ -17,6 +18,8 @@ public class AnimatorHashes
 
 public class Penosa : MonoBehaviour
 {
+    public static Action<byte> OnPlayerDeath;
+
     #region Vars
 
     private PlayerInput playerInputActions;
@@ -233,7 +236,8 @@ public class Penosa : MonoBehaviour
     public void Death()
     {
         if (PlayerData.Lives == 0)
-            GameController.instance.RemovePlayerFromScene(PlayerData.LocalID);
+            OnPlayerDeath(PlayerData.LocalID);
+            //GameController.instance.RemovePlayerFromScene(PlayerData.LocalID);
         else
         {
             // Play some death animation...
@@ -359,7 +363,7 @@ public class Penosa : MonoBehaviour
     {
         rb.gravityScale = defaultGravity;
         if (parachute.activeSelf)
-            parachute.GetComponent<Animator>().SetTrigger("TurnOff");
+            parachute.GetComponent<Animator>().SetTrigger(ConstantStrings.TurnOff);
     }
 
     private Transform GetShotSpawnCoordinates()
@@ -391,7 +395,7 @@ public class Penosa : MonoBehaviour
 
     private void SetShotLevel2VariationRate(ref GameObject projectile)
     {
-        float posVariationRate = Random.Range(PlayerConsts.shotLvl2VariationRate,
+        float posVariationRate = UnityEngine.Random.Range(PlayerConsts.shotLvl2VariationRate,
                                             -PlayerConsts.shotLvl2VariationRate);
         if (Vertical)
             projectile.transform.position = new Vector3

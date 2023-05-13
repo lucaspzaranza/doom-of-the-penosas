@@ -1,60 +1,34 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class GameController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IController
 {
-    #region Constants
-
     public const byte countdown = 10;
 
-    #endregion
-
-    #region Variables
-
-    public static GameController instance;
-
-    [SerializeField] private List<PlayerData> _playersData = null;
     [SerializeField] private Transform playerStartPosition = null;
     private Text gameOverCountdownText;
 
-    #endregion
-
-    #region Properties
-
     public List<PlayerData> PlayersData => _playersData;
-    #endregion
+    [SerializeField] private List<PlayerData> _playersData = null;
 
-    void Start()
-    {
-        if (instance == null) 
-            instance = this;
-        else
-            Destroy(gameObject);
-
-        GetPlayersOnScene();
-
-        InitiateProjectilesPools();
-
-        DontDestroyOnLoad(gameObject);
-    }
-
-    void Update()
+    private void Update()
     {
         if (PlayersData.Count == 0) return;
         if (PlayersData[0].OnCountdown && PlayersData[0].Countdown >= 0)
             GameOverCountdown(0);
     }
 
-    private void InitiateProjectilesPools()
+    public void Setup()
     {
-        StartCoroutine(ObjectPool.instance.InitializePool(ConstantStrings.EggShot));
-        StartCoroutine(ObjectPool.instance.InitializePool(ConstantStrings.BigEggShot));
-        StartCoroutine(ObjectPool.instance.InitializePool(ConstantStrings.Grenade));
-        StartCoroutine(ObjectPool.instance.InitializePool(ConstantStrings.Shuriken));
-        StartCoroutine(ObjectPool.instance.InitializePool(ConstantStrings.FuumaShuriken));
+        GetPlayersOnScene();
+    }
+
+    public void Dispose()
+    {
+        _playersData = null;
     }
 
     private void GetPlayersOnScene()
@@ -62,6 +36,7 @@ public class GameController : MonoBehaviour
         var players = GameObject.FindGameObjectsWithTag(ConstantStrings.PlayerTag)
             .Select(player => player.GetComponent<Penosa>())
             .ToList();
+
         _playersData = new List<PlayerData>();
         float xOffset = 0f;
         players.ForEach(player =>
