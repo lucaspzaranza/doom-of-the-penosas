@@ -4,37 +4,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIController : MonoBehaviour
+public class UIController : MonoBehaviour, IController
 {
-    public static UIController instance;
-    public PlayerHUD[] huds = new PlayerHUD[2];
+    [Header("UI Controllers")]
+    [SerializeField] private PlayerSelectionUIController _playerSelectionUIController;
+    [SerializeField] private PlayerInGameUIController _playerInGameUIController;
 
-    [Header("Game Over")]
-    public GameObject GameOverContainerObject;
-    public GameObject Title;
-    public GameObject Countdown;
+    // Props
+    public PlayerSelectionUIController PlayerSelectionUIController => _playerSelectionUIController;
+    public PlayerInGameUIController PlayerInGameUIController => _playerInGameUIController;
 
-    private GameObject[] players;
-
-    void Awake()
+    public void Setup()
     {
-        if (instance == null) instance = this;
-        else Destroy(gameObject);
+        
     }
 
-    private void Start()
+    public void Dispose()
     {
-        players = GameObject.FindGameObjectsWithTag("Player");
-        GetPlayersScriptToHUDController();
-        if (players.Length == 2)
-            huds[1].gameObject.SetActive(true);
+        
     }
 
-    private void GetPlayersScriptToHUDController()
+    public Text GetCountdownTextFromInGameController()
     {
-        foreach (var player in players)
-        {
-            huds[player.GetComponent<Penosa>().PlayerData.LocalID].Player = player.GetComponent<Penosa>();
-        }
+        return PlayerInGameUIController.GetCountdownText();
+    }
+
+    public void GameOverActivation(bool val)
+    {
+        PlayerInGameUIController.GameOverContainerActivation(val);
+    }
+
+    public void InGameSetup()
+    {
+        PlayerInGameUIController.Setup();
     }
 }

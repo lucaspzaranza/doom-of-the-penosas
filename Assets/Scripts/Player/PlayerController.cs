@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,13 +7,21 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour, IController
 {
+    // Constants
     public const byte countdown = 10;
 
-    [SerializeField] private Transform playerStartPosition = null;
-    private Text gameOverCountdownText;
+    // Events
+    public Action OnGameOverCountdownTextIsNull;
+    public Action<bool> OnCountdownActivation;
 
-    public List<PlayerData> PlayersData => _playersData;
+    // Vars
+    [SerializeField] private Transform playerStartPosition = null;
+
+    // Props
     [SerializeField] private List<PlayerData> _playersData = null;
+    public List<PlayerData> PlayersData => _playersData;
+
+    private Text _gameOverCountdownText;
 
     private void Update()
     {
@@ -66,9 +75,9 @@ public class PlayerController : MonoBehaviour, IController
     private void RespawnCountdown(byte ID)
     {
         PlayersData[ID].OnCountdown = true;
-        if (gameOverCountdownText == null)
-            gameOverCountdownText = UIController.instance.Countdown.GetComponent<Text>();
-        UIController.instance.GameOverContainerObject.gameObject.SetActive(true);
+        if (_gameOverCountdownText == null)
+            OnGameOverCountdownTextIsNull?.Invoke();
+        OnCountdownActivation?.Invoke(true);
     }
 
     private void GameOverCountdown(byte ID)
@@ -77,8 +86,8 @@ public class PlayerController : MonoBehaviour, IController
         if (PlayersData[ID].Countdown >= 0)
         {
             int currentCountdown = Mathf.FloorToInt(PlayersData[ID].Countdown);
-            if (currentCountdown.ToString() != gameOverCountdownText.text)
-                gameOverCountdownText.text = currentCountdown.ToString();
+            if (currentCountdown.ToString() != _gameOverCountdownText.text)
+                _gameOverCountdownText.text = currentCountdown.ToString();
 
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown(InputStrings.Start)) // Respawn Penosa
             {
@@ -89,15 +98,20 @@ public class PlayerController : MonoBehaviour, IController
                 PlayersData[ID].Player.ResetPlayerData();
                 PlayersData[ID].Player.Inventory.ClearInventory();
                 PlayersData[ID].Player.InitiateBlink();
-                gameOverCountdownText.text = countdown.ToString();
-                UIController.instance.GameOverContainerObject.gameObject.SetActive(false);
+                _gameOverCountdownText.text = countdown.ToString();
+                OnCountdownActivation?.Invoke(false);
             }
         }
         else
         {
-            gameOverCountdownText.text = string.Empty;
+            _gameOverCountdownText.text = string.Empty;
             // Mais pra frente, adicionar funcionalidade de navegar de volta ao 
             // menu inicial.
         }
+    }
+
+    public void SetGameOverCountdownText(Text countdown)
+    {
+        _gameOverCountdownText = countdown;
     }
 }

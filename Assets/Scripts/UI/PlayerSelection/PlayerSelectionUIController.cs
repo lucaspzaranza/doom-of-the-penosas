@@ -9,12 +9,10 @@ using System.Linq;
 using static UnityEngine.InputSystem.InputAction;
 using System;
 
-public class PlayerSelectionUIController : MonoBehaviour
+public class PlayerSelectionUIController : MonoBehaviour, IUIController
 {
-    #region Vars
 
-    public static PlayerSelectionUIController instance;
-
+    // Vars
     [SerializeField] private PlayerSelectionMenuState _menuState;
     [SerializeField] private TMP_Text[] _penosasTexts;
     [SerializeField] private GameObject localArrow;
@@ -31,10 +29,7 @@ public class PlayerSelectionUIController : MonoBehaviour
     private Button startBtnComponent;
     private Button cancelBtnComponent;
 
-    #endregion
-
-    #region Props
-
+    // Props
     public TMP_Text[] PenosasTexts => _penosasTexts;
     public GameObject StartButton => _startButton;
     public GameObject BackToMainMenuButton => _backToMainMenuButton;
@@ -43,19 +38,7 @@ public class PlayerSelectionUIController : MonoBehaviour
     public PlayerSelectionMenuState MenuState => _menuState;
     public List<GameObject> CharacterButtons => _characterButtons;
     public List<GameObject> NavButtons => _navButtons;
-    //public int CurrentPlayerIndex => NetworkClient.isHostClient ? 0 : 1;
     public int CurrentPlayerIndex => 0;
-
-    #endregion
-
-    #region Local
-
-    private void Awake()
-    {
-        if (instance == null)
-            instance = this;
-        else Destroy(gameObject);
-    }
 
     private void OnEnable()
     {
@@ -87,5 +70,13 @@ public class PlayerSelectionUIController : MonoBehaviour
         Application.Quit();
     }
 
-    #endregion
+    public void Setup()
+    {
+
+    }
+
+    public void Dispose()
+    {
+
+    }
 }
