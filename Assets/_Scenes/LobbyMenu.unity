@@ -1282,6 +1282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e9ea6e4cef2d574c995e2aa78cb0d8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _parentController: {fileID: 0}
   _menuState: 0
   _penosasTexts:
   - {fileID: 0}
@@ -1434,6 +1435,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 2122187266}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 507676150}
+        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
+        m_MethodName: SetGameMode
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2983,6 +2996,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b19c99c922a74134ab7d957c7d4c37ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _parentController: {fileID: 0}
   _playerSelectionUIController: {fileID: 507676150}
   _playerInGameUIController: {fileID: 0}
 --- !u!1 &1555865558
@@ -3182,6 +3196,18 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 2122187266}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 507676150}
+        m_TargetAssemblyTypeName: PlayerSelectionUIController, Assembly-CSharp
+        m_MethodName: SetGameMode
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3691,7 +3717,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e88fb6c878d43be4fabf38b78b738779, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  huds:
+  _parentController: {fileID: 0}
+  _huds:
   - {fileID: 0}
   - {fileID: 0}
   GameOverContainerObject: {fileID: 0}
@@ -3859,6 +3886,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da8980352d84a043bd8549315928457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameMode: 0
   _gameStatus: 0
   _playerController: {fileID: 1138391232}
   _uiController: {fileID: 1496763277}
@@ -3947,7 +3975,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2122187269}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 507676148}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2122187269
 MonoBehaviour:
   m_ObjectHideFlags: 0

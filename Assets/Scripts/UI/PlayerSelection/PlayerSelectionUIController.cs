@@ -9,10 +9,12 @@ using System.Linq;
 using static UnityEngine.InputSystem.InputAction;
 using System;
 
-public class PlayerSelectionUIController : MonoBehaviour, IUIController
+public class PlayerSelectionUIController : ControllerUnit, IUIController
 {
+    public Action<GameMode> OnGameModeButtonPressed;
 
     // Vars
+    [Space]
     [SerializeField] private PlayerSelectionMenuState _menuState;
     [SerializeField] private TMP_Text[] _penosasTexts;
     [SerializeField] private GameObject localArrow;
@@ -45,12 +47,6 @@ public class PlayerSelectionUIController : MonoBehaviour, IUIController
         _menuState = PlayerSelectionMenuState.PlayerSelection;
     }
 
-    private void Start()
-    {
-        startBtnComponent = StartButton.GetComponent<Button>();
-        cancelBtnComponent = BackToMainMenuButton.GetComponent<Button>();
-    }
-
     /// <summary>
     /// Se passar o índice 0, retorna o índice 1, e vice-versa.
     /// </summary>
@@ -62,7 +58,6 @@ public class PlayerSelectionUIController : MonoBehaviour, IUIController
     public void SelectButton(GameObject buttonToSelect)
     {
         EventSystem.current.SetSelectedGameObject(buttonToSelect);
-        //LocalArrow.UpdateArrowPosition(buttonToSelect);
     }
 
     public void QuitGame()
@@ -70,13 +65,21 @@ public class PlayerSelectionUIController : MonoBehaviour, IUIController
         Application.Quit();
     }
 
-    public void Setup()
+    public override void Setup()
     {
+        _parentController = GetComponentInParent<UIController>();
 
+        startBtnComponent = StartButton.GetComponent<Button>();
+        cancelBtnComponent = BackToMainMenuButton.GetComponent<Button>();
     }
 
-    public void Dispose()
-    {
+    //public override void Dispose()
+    //{
 
+    //}
+
+    public void SetGameMode(int gameMode)
+    {
+        OnGameModeButtonPressed?.Invoke((GameMode)gameMode);
     }
 }

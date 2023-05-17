@@ -5,9 +5,11 @@ using System.Linq;
 using UnityEngine.UI;
 using SharedData.Enumerations;
 
-public class GameController : MonoBehaviour, IController
+public class GameController : ControllerBase
 {
-    public static GameController instance;
+    [Header("Game General Data")]
+    [SerializeField] private GameMode _gameMode;
+    public GameMode GameMode => _gameMode;
 
     [SerializeField] private GameStatus _gameStatus;
     public GameStatus GameStatus => _gameStatus;
@@ -22,26 +24,33 @@ public class GameController : MonoBehaviour, IController
     [SerializeField] private PoolController _poolController;
     public PoolController PoolController => _poolController;
 
-    private void Awake()
-    {
-        // Singleton pattern
-        if (instance == null)
-            instance = this;
-        else
-            Destroy(gameObject);
-    }
-
     void Start()
     {
-        //InitiateProjectilesPools();
         Setup();
 
         DontDestroyOnLoad(gameObject);
     }
 
-    public void Setup()
+    public override void Setup()
     {
+        UIController?.Setup();
+
         EventHandlerSetup();       
+    }
+
+    public override void Dispose()
+    {
+        Penosa.OnPlayerDeath -= PlayerController.RemovePlayerFromScene;
+
+        PlayerController.OnGameOverCountdownTextIsNull -= HandleOnGameOverCountdownTextIsNull;
+
+        PlayerController.OnCountdownActivation -= HandleOnCoutdownActivation;
+
+        UIController.OnOnGameModeSelected += SetGameMode;
+
+        PlayerController.Dispose();
+        UIController.Dispose();
+        PoolController.Dispose();
     }
 
     private void EventHandlerSetup()
@@ -51,19 +60,8 @@ public class GameController : MonoBehaviour, IController
         PlayerController.OnGameOverCountdownTextIsNull += HandleOnGameOverCountdownTextIsNull;
 
         PlayerController.OnCountdownActivation += HandleOnCoutdownActivation;
-    }
 
-    public void Dispose() 
-    {
-        Penosa.OnPlayerDeath -= PlayerController.RemovePlayerFromScene;
-
-        PlayerController.OnGameOverCountdownTextIsNull -= HandleOnGameOverCountdownTextIsNull;
-
-        PlayerController.OnCountdownActivation -= HandleOnCoutdownActivation;
-
-        PlayerController.Dispose();
-        UIController.Dispose();
-        PoolController.Dispose();
+        UIController.OnOnGameModeSelected += SetGameMode;
     }
 
     public void StartGame()
@@ -89,5 +87,10 @@ public class GameController : MonoBehaviour, IController
     private void HandleOnCoutdownActivation(bool val)
     {
         UIController.GameOverActivation(val);
+    }
+
+    private void SetGameMode(GameMode gameMode)
+    {
+        _gameMode = gameMode;
     }
 }

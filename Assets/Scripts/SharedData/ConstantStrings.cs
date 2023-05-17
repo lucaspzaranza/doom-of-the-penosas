@@ -40,3 +40,9 @@ public class InputStrings
     public const string ChangeSpecialItem = "ChangeSpecialItem";
     public const string Start = "Start";
 }
+
+public class ConstantNumbers
+{
+    public const int NumberOfPlayers = 2;
+    public const int CountdownSeconds = 10;
+}

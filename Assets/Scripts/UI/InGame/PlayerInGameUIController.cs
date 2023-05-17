@@ -1,11 +1,15 @@
+using SharedData.Enumerations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerInGameUIController : MonoBehaviour, IUIController
+public class PlayerInGameUIController : ControllerUnit, IUIController
 {
-    public PlayerHUD[] huds = new PlayerHUD[2];
+    [Space]
+    [SerializeField] private PlayerHUD[] _huds = new PlayerHUD[ConstantNumbers.NumberOfPlayers];
+    public PlayerHUD[] HUDs => _huds;
 
     [Header("Game Over")]
     public GameObject GameOverContainerObject;
@@ -14,24 +18,28 @@ public class PlayerInGameUIController : MonoBehaviour, IUIController
 
     private GameObject[] players;
 
-    public void Setup()
+    public override void Setup()
     {
+        _parentController = GetComponentInParent<UIController>();
+
         players = GameObject.FindGameObjectsWithTag(ConstantStrings.PlayerTag);
         GetPlayersScriptToHUDController();
-        if (players.Length == 2)
-            huds[1].gameObject.SetActive(true);
+
+        //if (players.Length == 2)
+        if (GetGameModeFromParentController() == GameMode.LocalMultiplayer)
+            HUDs[ConstantNumbers.NumberOfPlayers - 1].gameObject.SetActive(true);
     }
 
-    public void Dispose()
-    {
+    //public override void Dispose()
+    //{
 
-    }
+    //}
 
     private void GetPlayersScriptToHUDController()
     {
         foreach (var player in players)
         {
-            huds[player.GetComponent<Penosa>().PlayerData.LocalID].Player = player.GetComponent<Penosa>();
+            HUDs[player.GetComponent<Penosa>().PlayerData.LocalID].Player = player.GetComponent<Penosa>();
         }
     }
     
@@ -43,5 +51,10 @@ public class PlayerInGameUIController : MonoBehaviour, IUIController
     public void GameOverContainerActivation(bool val)
     {
         GameOverContainerObject.gameObject.SetActive(val);
+    }
+
+    private GameMode GetGameModeFromParentController()
+    {
+        return ((UIController)_parentController).GetGameMode();
     }
 }

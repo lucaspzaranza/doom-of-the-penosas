@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 namespace SharedData.Enumerations
 {
+    public enum GameMode
+    {
+        Singleplayer = 0,
+        LocalMultiplayer = 1
+    }
+
     public enum PlayerSelectionMenuState
     {
         PlayerSelection = 0,

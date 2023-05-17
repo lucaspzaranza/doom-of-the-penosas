@@ -2,24 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PoolController : MonoBehaviour, IController
+public class PoolController : ControllerUnit
 {
-    [SerializeField] private GameObject _poolPrefab;
-
     private GameObject _poolInstance;
 
-    public ObjectPool Pool => _pool;
-    [SerializeField] private ObjectPool _pool;
+    [Space]
+    [SerializeField] private GameObject _poolPrefab;
 
-    public void Setup()
+
+    [SerializeField] private ObjectPool _pool;
+    public ObjectPool Pool => _pool;
+
+    public override void Setup()
     {
+        base.Setup();
         _poolInstance = Instantiate(_poolPrefab);
         _pool = _poolInstance.GetComponent<ObjectPool>();
 
         InitiateProjectilesPools();
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
         Destroy(_poolInstance);
     }
