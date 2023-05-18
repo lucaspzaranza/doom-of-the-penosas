@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class MenuWithCursor : MonoBehaviour
 {
-    public static Action<List<CursorPosition>> OnMenuEnabled;
-    public static Action<List<CursorPosition>> OnMenuDisabled;
+    public static Action<IReadOnlyList<CursorPosition>> OnMenuEnabled;
+    public static Action OnMenuDisabled;
 
     [SerializeField] private List<CursorPosition> _cursors;
 
@@ -17,6 +17,6 @@ public class MenuWithCursor : MonoBehaviour
 
     private void OnDisable()
     {
-        OnMenuDisabled?.Invoke(_cursors);
+        OnMenuDisabled?.Invoke();
     }
 }

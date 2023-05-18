@@ -101,7 +101,7 @@ public class UIController : ControllerUnit
         });
     }
 
-    private void HandleMenuWithCursorEnabled(List<CursorPosition> newCursors)
+    private void HandleMenuWithCursorEnabled(IReadOnlyList<CursorPosition> newCursors)
     {
         _cursors = new List<CursorPosition>(newCursors);
         ReturnCursorsToDefaultPosition();

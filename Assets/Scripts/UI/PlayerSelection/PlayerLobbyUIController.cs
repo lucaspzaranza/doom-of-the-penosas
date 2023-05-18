@@ -66,12 +66,16 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 
         _startBtnComponent = _startButton.GetComponent<Button>();
         _cancelBtnComponent = _backToMainMenuButton.GetComponent<Button>();
+
+        MenuWithCursor.OnMenuEnabled += HandleOnLobbySelectionMenuEnabled;
+        MenuWithCursor.OnMenuDisabled += HandleOnMenuWithCursorDisabled;
     }
 
-    //public override void Dispose()
-    //{
-
-    //}
+    public override void Dispose()
+    {
+        MenuWithCursor.OnMenuEnabled -= HandleOnLobbySelectionMenuEnabled;
+        MenuWithCursor.OnMenuDisabled -= HandleOnMenuWithCursorDisabled;
+    }
 
     public override GameMode GetGameMode()
     {
@@ -156,6 +160,23 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
             SetCharacterTextColors(_charactersTexts.IndexOf(_text), _defaultTextColor);
         });
         SetGameActivation(false);
+    }
+
+    private void HandleOnLobbySelectionMenuEnabled(IReadOnlyList<CursorPosition> cursors)
+    {
+        if(_lobbyState != LobbyState.PlayerSelection || GetGameMode() == GameMode.Singleplayer) 
+            return;
+
+        for (int i = 1; i < cursors.Count; i++)
+        {
+            //print("Activating cursor " + i);
+            cursors[i].gameObject.SetActive(true);
+        }
+    }
+
+    private void HandleOnMenuWithCursorDisabled()
+    {
+
     }
 
     public void FireStartGame()
