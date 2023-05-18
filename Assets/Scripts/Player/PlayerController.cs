@@ -13,7 +13,7 @@ public class PlayerController : ControllerUnit
 
     // Vars
     [Space]
-    [SerializeField] private Transform playerStartPosition = null;
+    [SerializeField] private Vector2 playerStartPosition;
 
     // Props
     [SerializeField] private List<PlayerData> _playersData = null;
@@ -50,7 +50,7 @@ public class PlayerController : ControllerUnit
         players.ForEach(player =>
         {
             PlayersData.Add(player.PlayerData);
-            player.transform.position = new Vector2(playerStartPosition.position.x + xOffset, playerStartPosition.position.y);
+            player.transform.position = new Vector2(playerStartPosition.x + xOffset, playerStartPosition.y);
             xOffset++;
         });
     }

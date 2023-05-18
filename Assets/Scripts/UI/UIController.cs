@@ -3,38 +3,61 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class UIController : ControllerUnit
 {
     public Action<GameMode> OnOnGameModeSelected;
+    public Action<IReadOnlyList<Penosas>> OnGameStart;
 
     [Space]
     [Header("UI Controllers")]
-    [SerializeField] private PlayerSelectionUIController _playerSelectionUIController;
+    [SerializeField] private PlayerLobbyUIController _playerSelectionUIController;
     [SerializeField] private PlayerInGameUIController _playerInGameUIController;
 
+    [Header("Cursor")]
+    [SerializeField] private List<CursorPosition> _cursors;
+    public List<CursorPosition> CursorPositions => _cursors;
+
+    [Header("Prefabs")]
+    [SerializeField] private GameObject _selectionController;
+    [SerializeField] private GameObject _inGameController;
+
     // Props
-    public PlayerSelectionUIController PlayerSelectionUIController => _playerSelectionUIController;
+    public PlayerLobbyUIController PlayerLobbyUIController => _playerSelectionUIController;
     public PlayerInGameUIController PlayerInGameUIController => _playerInGameUIController;
 
     public override void Setup()
     {
         base.Setup();
 
-        if(PlayerSelectionUIController != null)
+        if(PlayerLobbyUIController != null)
         {
-            PlayerSelectionUIController.Setup();
-            PlayerSelectionUIController.OnGameModeButtonPressed += HandleOnGameModeButtonPressed;
+            PlayerLobbyUIController.Setup();
+            PlayerLobbyUIController.OnGameModeButtonPressed += HandleLobbyOnGameModeButtonPressed;
+            PlayerLobbyUIController.OnGameReadyToStart += HandleLobbyOnGameReadyToStart;
+            PlayerLobbyUIController.OnCancelSelection += OnLobbyCancelSelection;
+            PlayerLobbyUIController.OnGameStart += HandleLobbyOnGameStart;
+            
         }
+
+        MenuWithCursor.OnMenuEnabled += HandleMenuWithCursorEnabled;
     }
 
     public override void Dispose()
     {
-        PlayerSelectionUIController.OnGameModeButtonPressed -= HandleOnGameModeButtonPressed;
+        PlayerLobbyUIController.OnGameModeButtonPressed -= HandleLobbyOnGameModeButtonPressed;
+        PlayerLobbyUIController.OnGameReadyToStart -= HandleLobbyOnGameReadyToStart;
+        PlayerLobbyUIController.OnCancelSelection -= OnLobbyCancelSelection;
+        PlayerLobbyUIController.OnGameStart -= HandleLobbyOnGameStart;
+        PlayerLobbyUIController.Dispose();
+
+        MenuWithCursor.OnMenuEnabled -= HandleMenuWithCursorEnabled;
     }
 
-    private void HandleOnGameModeButtonPressed(GameMode gameMode)
+    private void HandleLobbyOnGameModeButtonPressed(GameMode gameMode)
     {
         OnOnGameModeSelected?.Invoke(gameMode);
     }
@@ -54,8 +77,62 @@ public class UIController : ControllerUnit
         PlayerInGameUIController.Setup();
     }
 
-    public GameMode GetGameMode()
+    private void ReturnCursorsToDefaultPosition()
     {
-        return ((GameController)_parentController).GameMode;
+        _cursors.ForEach(cursor =>
+        {
+            SetCursorPosition(cursor, cursor.DefaultCursorParent);
+        });
+    }
+
+    private void ReturnCursorsToLastPosition()
+    {
+        _cursors.ForEach(cursor =>
+        {
+            SetCursorPosition(cursor, cursor.LastSelected);
+        });
+    }
+
+    private void ReturnCursorsToLastPressedButton()
+    {
+        _cursors.ForEach(cursor =>
+        {
+            SetCursorPosition(cursor, cursor.LastPressed);
+        });
+    }
+
+    private void HandleMenuWithCursorEnabled(List<CursorPosition> newCursors)
+    {
+        _cursors = new List<CursorPosition>(newCursors);
+        ReturnCursorsToDefaultPosition();
+    }
+
+    private void HandleLobbyOnGameReadyToStart(GameObject target)
+    {
+        if(GetGameMode() == GameMode.Singleplayer)
+            SetCursorPosition(CursorPositions[0], target);
+        else
+        {
+            CursorPositions.ForEach(cursor =>
+            {
+                SetCursorPosition(cursor, target);
+            });
+        }
+    }
+
+    private void OnLobbyCancelSelection()
+    {
+        ReturnCursorsToLastPressedButton();
+    }
+
+    public void SetCursorPosition(CursorPosition cursor, GameObject target)
+    {
+        EventSystem.current.SetSelectedGameObject(target);
+        cursor.UpdateCursorPosition(target);
+    }
+
+    private void HandleLobbyOnGameStart(IReadOnlyList<Penosas> selectedCharacters)
+    {
+        OnGameStart?.Invoke(selectedCharacters);
     }
 }

@@ -3,16 +3,20 @@ using System.Collections.Generic;
 
 namespace SharedData.Enumerations
 {
+    /// <summary>
+    /// Enum to get if the game is in Singleplayer or Multiplayer mode.
+    /// </summary>
     public enum GameMode
     {
         Singleplayer = 0,
-        LocalMultiplayer = 1
+        Multiplayer = 1
     }
 
-    public enum PlayerSelectionMenuState
+    public enum LobbyState
     {
-        PlayerSelection = 0,
-        ReadyToStart = 1
+        GameModeSelection = 0,
+        PlayerSelection = 1,
+        ReadyToStart = 2
     }
 
     public enum GameStatus

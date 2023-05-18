@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine.UI;
 using SharedData.Enumerations;
 
-public class GameController : ControllerBase
+public class GameController : Controller
 {
     [Header("Game General Data")]
     [SerializeField] private GameMode _gameMode;
@@ -47,6 +47,7 @@ public class GameController : ControllerBase
         PlayerController.OnCountdownActivation -= HandleOnCoutdownActivation;
 
         UIController.OnOnGameModeSelected += SetGameMode;
+        UIController.OnGameStart -= HandleUIControllerOnGameStart;
 
         PlayerController.Dispose();
         UIController.Dispose();
@@ -55,13 +56,14 @@ public class GameController : ControllerBase
 
     private void EventHandlerSetup()
     {
-        Penosa.OnPlayerDeath += PlayerController.RemovePlayerFromScene;
+        //Penosa.OnPlayerDeath += PlayerController.RemovePlayerFromScene;
 
-        PlayerController.OnGameOverCountdownTextIsNull += HandleOnGameOverCountdownTextIsNull;
+        //PlayerController.OnGameOverCountdownTextIsNull += HandleOnGameOverCountdownTextIsNull;
 
-        PlayerController.OnCountdownActivation += HandleOnCoutdownActivation;
+        //PlayerController.OnCountdownActivation += HandleOnCoutdownActivation;
 
         UIController.OnOnGameModeSelected += SetGameMode;
+        UIController.OnGameStart += HandleUIControllerOnGameStart;
     }
 
     public void StartGame()
@@ -92,5 +94,13 @@ public class GameController : ControllerBase
     private void SetGameMode(GameMode gameMode)
     {
         _gameMode = gameMode;
+    }
+
+    private void HandleUIControllerOnGameStart(IReadOnlyList<Penosas> characterSelectionList)
+    {
+        foreach (var character in characterSelectionList)
+        {
+            print(character.ToString());
+        }
     }
 }

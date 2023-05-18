@@ -5,21 +5,21 @@ using SharedData.Enumerations;
 using System;
 
 [Serializable]
-public class PlayerSelectionData
+public class PlayerLobbyData
 {
     [SerializeField] private Penosas _selectedPenosa;
 
-    public PlayerSelectionData()
+    public PlayerLobbyData()
     {
         _selectedPenosa = (Penosas)(-1);
     }
 
-    public PlayerSelectionData(Penosas selectedCharacter)
+    public PlayerLobbyData(Penosas selectedCharacter)
     {
         _selectedPenosa = selectedCharacter;
     }
 
-    public PlayerSelectionData(PlayerSelectionData newData)
+    public PlayerLobbyData(PlayerLobbyData newData)
     {
         _selectedPenosa = newData.SelectedPenosa;
     }

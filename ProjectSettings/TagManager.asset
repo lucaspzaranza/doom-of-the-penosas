@@ -6,8 +6,9 @@ TagManager:
   tags:
   - Projectile
   - Enemy
-  - ArrowPosition
-  - ArrowCursor
+  - ControllerUnit
+  - CursorPosition
+  - Cursor
   layers:
   - Default
   - TransparentFX

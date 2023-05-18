@@ -26,7 +26,7 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
         GetPlayersScriptToHUDController();
 
         //if (players.Length == 2)
-        if (GetGameModeFromParentController() == GameMode.LocalMultiplayer)
+        if (GetGameMode() == GameMode.Multiplayer)
             HUDs[ConstantNumbers.NumberOfPlayers - 1].gameObject.SetActive(true);
     }
 
@@ -51,10 +51,5 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
     public void GameOverContainerActivation(bool val)
     {
         GameOverContainerObject.gameObject.SetActive(val);
-    }
-
-    private GameMode GetGameModeFromParentController()
-    {
-        return ((UIController)_parentController).GetGameMode();
     }
 }

@@ -26,7 +26,7 @@ public class ConstantStrings : MonoBehaviour
     public const string TurnOff = "TurnOff";
 
     // Menu
-    public const string ArrowPositionName = "ArrowPosition";
+    public const string CursorPositionName = "CursorPosition";
 }
 
 public class InputStrings
