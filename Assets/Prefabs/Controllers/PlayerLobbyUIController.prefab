@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 1799214858555345510}
   - component: {fileID: 1799214858555345509}
   m_Layer: 0
-  m_Name: PlayerSelectionUIController
+  m_Name: PlayerLobbyUIController
   m_TagString: ControllerUnit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1799214858555345510
 Transform:
   m_ObjectHideFlags: 0
@@ -44,39 +44,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e9ea6e4cef2d574c995e2aa78cb0d8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _childControllers: []
   _parentController: {fileID: 0}
-  _menuState: 0
-  _penosasTexts:
-  - {fileID: 0}
-  - {fileID: 0}
+  _lobbyState: 0
   _arrow: {fileID: 0}
   _startButton: {fileID: 0}
   _backToMainMenuButton: {fileID: 0}
   _cancelCharacterSelectionButton: {fileID: 0}
-  _1stCharacterButton: {fileID: 0}
-  _2ndCharacterButton: {fileID: 0}
   _mainMenu: {fileID: 0}
-  _menuButtons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  _characterSelectionList: 
   _characterButtons:
   - {fileID: 0}
   - {fileID: 0}
-  _navButtons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  _charactersTexts: []
+  _defaultTextColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColors: []

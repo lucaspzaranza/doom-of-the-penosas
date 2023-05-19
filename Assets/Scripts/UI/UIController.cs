@@ -2,14 +2,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 
 public class UIController : ControllerUnit
 {
-    public Action<GameMode> OnOnGameModeSelected;
+    public static Action<GameMode> OnGameModeSelected;
     public Action<IReadOnlyList<Penosas>> OnGameStart;
 
     [Space]
@@ -20,10 +22,6 @@ public class UIController : ControllerUnit
     [Header("Cursor")]
     [SerializeField] private List<CursorPosition> _cursors;
     public List<CursorPosition> CursorPositions => _cursors;
-
-    [Header("Prefabs")]
-    [SerializeField] private GameObject _selectionController;
-    [SerializeField] private GameObject _inGameController;
 
     // Props
     public PlayerLobbyUIController PlayerLobbyUIController => _playerSelectionUIController;
@@ -40,10 +38,9 @@ public class UIController : ControllerUnit
             PlayerLobbyUIController.OnGameReadyToStart += HandleLobbyOnGameReadyToStart;
             PlayerLobbyUIController.OnCancelSelection += OnLobbyCancelSelection;
             PlayerLobbyUIController.OnGameStart += HandleLobbyOnGameStart;
-            
         }
 
-        MenuWithCursor.OnMenuEnabled += HandleMenuWithCursorEnabled;
+        MenuWithCursor.OnMenuEnabled += HandleMenuWithCursorEnabled;        
     }
 
     public override void Dispose()
@@ -59,7 +56,7 @@ public class UIController : ControllerUnit
 
     private void HandleLobbyOnGameModeButtonPressed(GameMode gameMode)
     {
-        OnOnGameModeSelected?.Invoke(gameMode);
+        OnGameModeSelected?.Invoke(gameMode);
     }
 
     public Text GetCountdownTextFromInGameController()
@@ -97,7 +94,8 @@ public class UIController : ControllerUnit
     {
         _cursors.ForEach(cursor =>
         {
-            SetCursorPosition(cursor, cursor.LastPressed);
+            if(cursor.LastPressed != null) 
+                SetCursorPosition(cursor, cursor.LastPressed);
         });
     }
 
@@ -109,15 +107,7 @@ public class UIController : ControllerUnit
 
     private void HandleLobbyOnGameReadyToStart(GameObject target)
     {
-        if(GetGameMode() == GameMode.Singleplayer)
-            SetCursorPosition(CursorPositions[0], target);
-        else
-        {
-            CursorPositions.ForEach(cursor =>
-            {
-                SetCursorPosition(cursor, target);
-            });
-        }
+        SetCursorPosition(CursorPositions[0], target);
     }
 
     private void OnLobbyCancelSelection()
@@ -134,5 +124,21 @@ public class UIController : ControllerUnit
     private void HandleLobbyOnGameStart(IReadOnlyList<Penosas> selectedCharacters)
     {
         OnGameStart?.Invoke(selectedCharacters);
+    }
+
+    public void SetInGameUIController(PlayerInGameUIController inGameUIController)
+    {
+        _playerInGameUIController = inGameUIController;
+    }
+
+    public void InGameUIControllerSetup()
+    {
+        _playerInGameUIController.Setup();
+    }
+
+    public void DisposeLobbyController()
+    {
+        var lobbyController = ChildControllers.FirstOrDefault(ctrl => ctrl.GetComponent<PlayerLobbyUIController>());
+        lobbyController.GetComponent<PlayerLobbyUIController>().Dispose();
     }
 }

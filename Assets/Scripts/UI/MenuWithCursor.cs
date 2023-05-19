@@ -5,13 +5,21 @@ using UnityEngine;
 
 public class MenuWithCursor : MonoBehaviour
 {
+    private const float eventDelay = 1f;
+
     public static Action<IReadOnlyList<CursorPosition>> OnMenuEnabled;
     public static Action OnMenuDisabled;
 
     [SerializeField] private List<CursorPosition> _cursors;
 
+    private void FireOnMenuEnabled()
+    {
+        OnMenuEnabled?.Invoke(_cursors);
+    }
+
     private void OnEnable()
     {
+        //Invoke(nameof(FireOnMenuEnabled), eventDelay);
         OnMenuEnabled?.Invoke(_cursors);
     }
 

@@ -34,21 +34,12 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
     [SerializeField] private Color _defaultTextColor;
     [SerializeField] private List<Color> _selectedColors;
 
-    private Button _startBtnComponent;
-    private Button _cancelBtnComponent;
+    private List<CursorPosition> _cursors;
 
     private void OnEnable()
     {
         _lobbyState = LobbyState.GameModeSelection;
-    }
-
-    /// <summary>
-    /// Se passar o índice 0, retorna o índice 1, e vice-versa.
-    /// </summary>
-    private int GetComplementaryPlayerIndex(int currentIndex)
-    {
-        return (currentIndex + 1) % 2;
-    }
+    }    
     
     public void SelectButton(GameObject buttonToSelect)
     {
@@ -62,24 +53,19 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 
     public override void Setup()
     {
-        _parentController = GetComponentInParent<UIController>();
-
-        _startBtnComponent = _startButton.GetComponent<Button>();
-        _cancelBtnComponent = _backToMainMenuButton.GetComponent<Button>();
+        //_parentController = GetComponentInParent<UIController>();
+        GetControllerFromParent<UIController>();
 
         MenuWithCursor.OnMenuEnabled += HandleOnLobbySelectionMenuEnabled;
-        MenuWithCursor.OnMenuDisabled += HandleOnMenuWithCursorDisabled;
+        CursorPosition.OnCursorMoved += HandleOnCursorMoved;
     }
 
     public override void Dispose()
     {
+        print("Dispose...");
         MenuWithCursor.OnMenuEnabled -= HandleOnLobbySelectionMenuEnabled;
-        MenuWithCursor.OnMenuDisabled -= HandleOnMenuWithCursorDisabled;
-    }
-
-    public override GameMode GetGameMode()
-    {
-        return ((ControllerUnit)_parentController).GetGameMode();
+        CursorPosition.OnCursorMoved -= HandleOnCursorMoved;
+        gameObject.SetActive(false);
     }
 
     public void SetGameMode(int gameMode)
@@ -164,21 +150,40 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 
     private void HandleOnLobbySelectionMenuEnabled(IReadOnlyList<CursorPosition> cursors)
     {
-        if(_lobbyState != LobbyState.PlayerSelection || GetGameMode() == GameMode.Singleplayer) 
-            return;
-
-        for (int i = 1; i < cursors.Count; i++)
+        if (_lobbyState == LobbyState.PlayerSelection && GetGameMode() == GameMode.Multiplayer)
         {
-            //print("Activating cursor " + i);
-            cursors[i].gameObject.SetActive(true);
+            _cursors = new List<CursorPosition>(cursors);
+
+            for (int i = 1; i < cursors.Count; i++)
+            {
+                cursors[i].gameObject.SetActive(true);
+            }
         }
     }
-
-    private void HandleOnMenuWithCursorDisabled()
+    private void HandleOnCursorMoved(CursorPosition cursor, Vector2 coordinates)
     {
+        // Only valid for 2 cursors at screen
+        if(GetGameMode() == GameMode.Multiplayer && _lobbyState == LobbyState.PlayerSelection)
+        {
+            int index = _cursors.IndexOf(cursor);
+            int complementaryCursorIndex = GetComplementaryPlayerIndex(index);
+            CursorPosition _2ndCursor = _cursors[complementaryCursorIndex];
 
+            Button parentBtn = cursor.transform.parent.GetComponent<Button>();
+            int btnIndex = _characterButtons.IndexOf(parentBtn);
+            int complementaryBtnIndex = GetComplementaryPlayerIndex(btnIndex);
+            GameObject complementaryButton = _characterButtons[complementaryBtnIndex].gameObject;
+
+            if (coordinates.y == 0)
+                _2ndCursor.UpdateCursorPosition(complementaryButton);
+            else if (cursor.transform.parent.Equals(_2ndCursor.transform.parent))
+            {
+                SelectButton(complementaryButton);
+                cursor.UpdateCursorPosition(complementaryButton);
+            }
+        }
     }
-
+   
     public void FireStartGame()
     {
         OnGameStart?.Invoke(CharacterSelectionList);

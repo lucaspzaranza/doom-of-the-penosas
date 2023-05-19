@@ -12,15 +12,20 @@ public abstract class ControllerUnit: Controller
     public override void Setup()
     {
         base.Setup();
-        _parentController = GetComponentInParent<GameController>();
+        //print($"Setting on {name} the parent Controller looking at the {transform.parent}.");
+        GetControllerFromParent<GameController>();
+    }
+
+    protected void GetControllerFromParent<T>() where T: Controller
+    {
+        _parentController = (T)GetComponentInParent<T>();
     }
 
     /// <summary>
-    /// Returns the Game Mode from the main Game Controller.
+    /// If we pass the index 0, it'll return the index 1 and vice versa.
     /// </summary>
-    /// <returns>The Game Mode.</returns>
-    public virtual GameMode GetGameMode()
+    public int GetComplementaryPlayerIndex(int currentIndex)
     {
-        return ((GameController)_parentController).GameMode;
+        return (currentIndex + 1) % 2;
     }
 }

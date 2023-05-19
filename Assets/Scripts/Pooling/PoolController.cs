@@ -16,6 +16,7 @@ public class PoolController : ControllerUnit
     public override void Setup()
     {
         base.Setup();
+
         _poolInstance = Instantiate(_poolPrefab);
         _pool = _poolInstance.GetComponent<ObjectPool>();
 

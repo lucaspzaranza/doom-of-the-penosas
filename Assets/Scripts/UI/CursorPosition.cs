@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
@@ -8,11 +7,14 @@ using System;
 
 public class CursorPosition : MonoBehaviour
 {
+    public static Action<CursorPosition, Vector2> OnCursorMoved;
+
     private PlayerInput playerInputActions;
     private InputAction navigation;
     private InputAction selection;
     private bool isPressing;
     private GameObject _currentSelected;
+    private Vector2 _pressed;
 
     // Props
     private GameObject _lastSelected;
@@ -60,8 +62,8 @@ public class CursorPosition : MonoBehaviour
     {
         if(isPressing)
         {
-            Vector2 pressed = navigation.ReadValue<Vector2>();
-            if (pressed != Vector2.zero)
+            _pressed = navigation.ReadValue<Vector2>();
+            if (_pressed != Vector2.zero)
                 StartCoroutine(nameof(UpdateCursorPosition));
         }
     }
@@ -97,5 +99,9 @@ public class CursorPosition : MonoBehaviour
         gameObject.transform.SetParent(buttonToNavigate.transform, false);
         gameObject.transform.localPosition = cursorPosition;
         _currentSelected = buttonToNavigate;
+
+        // Only sends one per time and if it is a horizontal move
+        if(isPressing)
+            OnCursorMoved?.Invoke(this, _pressed);
     }
 }

@@ -8,9 +8,8 @@ using SharedData.Enumerations;
 public class GameController : Controller
 {
     [Header("Game General Data")]
-    [SerializeField] private GameMode _gameMode;
-    public GameMode GameMode => _gameMode;
-
+    // variable to reflect the Controller Game Mode only in the Editor. 
+    [SerializeField] private GameMode _gameModeState;
     [SerializeField] private GameStatus _gameStatus;
     public GameStatus GameStatus => _gameStatus;
 
@@ -22,7 +21,7 @@ public class GameController : Controller
     public UIController UIController => _uiController;
 
     [SerializeField] private PoolController _poolController;
-    public PoolController PoolController => _poolController;
+    public PoolController PoolController => _poolController;    
 
     void Start()
     {
@@ -38,6 +37,11 @@ public class GameController : Controller
         EventHandlerSetup();       
     }
 
+    private void Update()
+    {
+        _gameModeState = GetGameMode();
+    }
+
     public override void Dispose()
     {
         Penosa.OnPlayerDeath -= PlayerController.RemovePlayerFromScene;
@@ -46,7 +50,6 @@ public class GameController : Controller
 
         PlayerController.OnCountdownActivation -= HandleOnCoutdownActivation;
 
-        UIController.OnOnGameModeSelected += SetGameMode;
         UIController.OnGameStart -= HandleUIControllerOnGameStart;
 
         PlayerController.Dispose();
@@ -62,7 +65,6 @@ public class GameController : Controller
 
         //PlayerController.OnCountdownActivation += HandleOnCoutdownActivation;
 
-        UIController.OnOnGameModeSelected += SetGameMode;
         UIController.OnGameStart += HandleUIControllerOnGameStart;
     }
 
@@ -91,16 +93,49 @@ public class GameController : Controller
         UIController.GameOverActivation(val);
     }
 
-    private void SetGameMode(GameMode gameMode)
-    {
-        _gameMode = gameMode;
-    }
-
     private void HandleUIControllerOnGameStart(IReadOnlyList<Penosas> characterSelectionList)
     {
         foreach (var character in characterSelectionList)
         {
             print(character.ToString());
         }
+
+        //UIController.DisposeLobbyController();
+        InstantiateInGameControllers();
+        InGameControllersSetup();
+    }
+
+    private void InstantiateInGameControllers()
+    {
+        var playerController = ChildControllers.FirstOrDefault(ctrl => ctrl.GetComponent<PlayerController>());
+        if (playerController != null)
+        {
+            var playerControllerInstance = Instantiate(playerController.gameObject, transform);
+            _playerController = playerControllerInstance.GetComponent<PlayerController>();
+        }
+
+        var playerInGameUIController = UIController.ChildControllers.
+            FirstOrDefault(ctrl => ctrl.GetComponent<PlayerInGameUIController>());
+
+        if (playerInGameUIController != null)
+        {
+            var playerInGameUIControllerInstance = Instantiate(playerInGameUIController.gameObject, UIController.transform);
+            var inGameUIController = playerInGameUIControllerInstance.GetComponent<PlayerInGameUIController>();
+            UIController.SetInGameUIController(inGameUIController);
+        }
+
+        var poolController = ChildControllers.FirstOrDefault(ctrl => ctrl.GetComponent<PoolController>());
+        if (poolController != null)
+        {
+            var poolControllerInstance = Instantiate(poolController.gameObject, transform);
+            _poolController = poolControllerInstance.GetComponent<PoolController>();
+        }
+    }
+
+    private void InGameControllersSetup()
+    {
+        _playerController.Setup();
+        _poolController.Setup();
+        UIController.InGameUIControllerSetup();
     }
 }
