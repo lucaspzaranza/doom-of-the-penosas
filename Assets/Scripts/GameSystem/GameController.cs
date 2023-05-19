@@ -21,18 +21,21 @@ public class GameController : Controller
     public UIController UIController => _uiController;
 
     [SerializeField] private PoolController _poolController;
-    public PoolController PoolController => _poolController;    
+    public PoolController PoolController => _poolController;
+
+    [SerializeField] private SceneController _sceneController;
+    public SceneController SceneController => _sceneController;
 
     void Start()
     {
         Setup();
-
         DontDestroyOnLoad(gameObject);
     }
 
     public override void Setup()
     {
-        UIController?.Setup();
+        UIController.Setup();
+        SceneController.Setup();
 
         EventHandlerSetup();       
     }
@@ -42,30 +45,26 @@ public class GameController : Controller
         _gameModeState = GetGameMode();
     }
 
+    private void EventHandlerSetup()
+    {
+        UIController.OnGameStart += HandleUIControllerOnGameStart;
+        SceneController.OnSceneLoaded += HandleOnSceneLoaded;
+    }
+
     public override void Dispose()
     {
         Penosa.OnPlayerDeath -= PlayerController.RemovePlayerFromScene;
 
         PlayerController.OnGameOverCountdownTextIsNull -= HandleOnGameOverCountdownTextIsNull;
-
         PlayerController.OnCountdownActivation -= HandleOnCoutdownActivation;
 
         UIController.OnGameStart -= HandleUIControllerOnGameStart;
 
+        SceneController.OnSceneLoaded -= HandleOnSceneLoaded;
+
         PlayerController.Dispose();
         UIController.Dispose();
         PoolController.Dispose();
-    }
-
-    private void EventHandlerSetup()
-    {
-        //Penosa.OnPlayerDeath += PlayerController.RemovePlayerFromScene;
-
-        //PlayerController.OnGameOverCountdownTextIsNull += HandleOnGameOverCountdownTextIsNull;
-
-        //PlayerController.OnCountdownActivation += HandleOnCoutdownActivation;
-
-        UIController.OnGameStart += HandleUIControllerOnGameStart;
     }
 
     public void StartGame()
@@ -100,34 +99,33 @@ public class GameController : Controller
             print(character.ToString());
         }
 
-        //UIController.DisposeLobbyController();
-        InstantiateInGameControllers();
-        InGameControllersSetup();
+        UIController.DisposeLobbyController();        
+        SceneController.LoadScene(1);
     }
 
     private void InstantiateInGameControllers()
     {
-        var playerController = ChildControllers.FirstOrDefault(ctrl => ctrl.GetComponent<PlayerController>());
+        var playerController = ChildControllersPrefabs.SingleOrDefault(ctrl => ctrl.GetComponent<PlayerController>());
         if (playerController != null)
         {
-            var playerControllerInstance = Instantiate(playerController.gameObject, transform);
+            var playerControllerInstance = Instantiate(playerController, transform);
             _playerController = playerControllerInstance.GetComponent<PlayerController>();
         }
 
-        var playerInGameUIController = UIController.ChildControllers.
-            FirstOrDefault(ctrl => ctrl.GetComponent<PlayerInGameUIController>());
+        var playerInGameUIController = UIController.ChildControllersPrefabs.
+            SingleOrDefault(ctrl => ctrl.GetComponent<PlayerInGameUIController>());
 
         if (playerInGameUIController != null)
         {
-            var playerInGameUIControllerInstance = Instantiate(playerInGameUIController.gameObject, UIController.transform);
+            var playerInGameUIControllerInstance = Instantiate(playerInGameUIController, UIController.transform);
             var inGameUIController = playerInGameUIControllerInstance.GetComponent<PlayerInGameUIController>();
             UIController.SetInGameUIController(inGameUIController);
         }
 
-        var poolController = ChildControllers.FirstOrDefault(ctrl => ctrl.GetComponent<PoolController>());
+        var poolController = ChildControllersPrefabs.SingleOrDefault(ctrl => ctrl.GetComponent<PoolController>());
         if (poolController != null)
         {
-            var poolControllerInstance = Instantiate(poolController.gameObject, transform);
+            var poolControllerInstance = Instantiate(poolController, transform);
             _poolController = poolControllerInstance.GetComponent<PoolController>();
         }
     }
@@ -137,5 +135,16 @@ public class GameController : Controller
         _playerController.Setup();
         _poolController.Setup();
         UIController.InGameUIControllerSetup();
+
+        Penosa.OnPlayerDeath += PlayerController.RemovePlayerFromScene;
+
+        PlayerController.OnGameOverCountdownTextIsNull += HandleOnGameOverCountdownTextIsNull;
+        PlayerController.OnCountdownActivation += HandleOnCoutdownActivation;
+    }
+
+    private void HandleOnSceneLoaded()
+    {
+        InstantiateInGameControllers();
+        InGameControllersSetup();
     }
 }

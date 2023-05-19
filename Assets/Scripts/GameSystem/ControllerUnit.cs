@@ -11,14 +11,13 @@ public abstract class ControllerUnit: Controller
 
     public override void Setup()
     {
-        base.Setup();
-        //print($"Setting on {name} the parent Controller looking at the {transform.parent}.");
         GetControllerFromParent<GameController>();
     }
 
     protected void GetControllerFromParent<T>() where T: Controller
     {
-        _parentController = (T)GetComponentInParent<T>();
+        //print($"Setting on {name} the parent Controller looking at the {transform.parent}.");
+        _parentController = GetComponentInParent<T>();
     }
 
     /// <summary>

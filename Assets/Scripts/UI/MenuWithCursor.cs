@@ -11,15 +11,9 @@ public class MenuWithCursor : MonoBehaviour
     public static Action OnMenuDisabled;
 
     [SerializeField] private List<CursorPosition> _cursors;
-
-    private void FireOnMenuEnabled()
-    {
-        OnMenuEnabled?.Invoke(_cursors);
-    }
-
+   
     private void OnEnable()
     {
-        //Invoke(nameof(FireOnMenuEnabled), eventDelay);
         OnMenuEnabled?.Invoke(_cursors);
     }
 

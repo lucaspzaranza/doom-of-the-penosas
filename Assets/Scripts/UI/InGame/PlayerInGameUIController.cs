@@ -25,15 +25,14 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
         players = GameObject.FindGameObjectsWithTag(ConstantStrings.PlayerTag);
         GetPlayersScriptToHUDController();
 
-        //if (players.Length == 2)
         if (GetGameMode() == GameMode.Multiplayer)
             HUDs[ConstantNumbers.NumberOfPlayers - 1].gameObject.SetActive(true);
     }
 
-    //public override void Dispose()
-    //{
+    public override void Dispose()
+    {
 
-    //}
+    }
 
     private void GetPlayersScriptToHUDController()
     {

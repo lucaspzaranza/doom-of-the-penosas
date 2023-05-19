@@ -17,7 +17,7 @@ public class PoolController : ControllerUnit
     {
         base.Setup();
 
-        _poolInstance = Instantiate(_poolPrefab);
+        _poolInstance = Instantiate(_poolPrefab, transform);
         _pool = _poolInstance.GetComponent<ObjectPool>();
 
         InitiateProjectilesPools();

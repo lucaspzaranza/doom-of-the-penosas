@@ -16,7 +16,7 @@ public class UIController : ControllerUnit
 
     [Space]
     [Header("UI Controllers")]
-    [SerializeField] private PlayerLobbyUIController _playerSelectionUIController;
+    [SerializeField] private PlayerLobbyUIController _playerLobbyUIController;
     [SerializeField] private PlayerInGameUIController _playerInGameUIController;
 
     [Header("Cursor")]
@@ -24,14 +24,16 @@ public class UIController : ControllerUnit
     public List<CursorPosition> CursorPositions => _cursors;
 
     // Props
-    public PlayerLobbyUIController PlayerLobbyUIController => _playerSelectionUIController;
+    public PlayerLobbyUIController PlayerLobbyUIController => _playerLobbyUIController;
     public PlayerInGameUIController PlayerInGameUIController => _playerInGameUIController;
 
     public override void Setup()
     {
         base.Setup();
 
-        if(PlayerLobbyUIController != null)
+        _playerLobbyUIController = FindAnyObjectByType<PlayerLobbyUIController>();
+
+        if (PlayerLobbyUIController != null)
         {
             PlayerLobbyUIController.Setup();
             PlayerLobbyUIController.OnGameModeButtonPressed += HandleLobbyOnGameModeButtonPressed;
@@ -40,7 +42,7 @@ public class UIController : ControllerUnit
             PlayerLobbyUIController.OnGameStart += HandleLobbyOnGameStart;
         }
 
-        MenuWithCursor.OnMenuEnabled += HandleMenuWithCursorEnabled;        
+        MenuWithCursor.OnMenuEnabled += HandleMenuWithCursorEnabled;
     }
 
     public override void Dispose()
@@ -138,7 +140,10 @@ public class UIController : ControllerUnit
 
     public void DisposeLobbyController()
     {
-        var lobbyController = ChildControllers.FirstOrDefault(ctrl => ctrl.GetComponent<PlayerLobbyUIController>());
-        lobbyController.GetComponent<PlayerLobbyUIController>().Dispose();
+        var lobbyController = ChildControllersPrefabs.FirstOrDefault(ctrl => ctrl.GetComponent<PlayerLobbyUIController>());
+        ChildControllersPrefabs.Remove(lobbyController);
+
+        var controllerComponent = lobbyController.GetComponent<PlayerLobbyUIController>();
+        //DestroyImmediate(lobbyController, true);
     }
 }

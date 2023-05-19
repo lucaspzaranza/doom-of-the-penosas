@@ -27,6 +27,10 @@ public class ConstantStrings : MonoBehaviour
 
     // Menu
     public const string CursorPositionName = "CursorPosition";
+
+    // Messages
+    public const string ReachedMaxTimeAttempingToGetTheParentController =
+        "Reached the max time duration attempting to get the parent controller. Aborting operation.";
 }
 
 public class InputStrings
@@ -45,4 +49,6 @@ public class ConstantNumbers
 {
     public const int NumberOfPlayers = 2;
     public const int CountdownSeconds = 10;
+
+    public const float TimeToTryToGetTheParentController = 5f;
 }

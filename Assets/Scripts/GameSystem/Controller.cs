@@ -5,17 +5,17 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 
-public class Controller : MonoBehaviour, IController
+public abstract class Controller : MonoBehaviour, IController
 {
     [Header("Controller Prefabs")]
-    [SerializeField] private List<Controller> _childControllers;
-    public IReadOnlyList<Controller> ChildControllers => _childControllers;
+    [SerializeField] private List<GameObject> _childControllersPrefabs;
+    public List<GameObject> ChildControllersPrefabs => _childControllersPrefabs;
 
     private static GameMode _gameMode;
     public GameMode GetGameMode() => _gameMode;
 
-    public virtual void Setup() { }
-    public virtual void Dispose() { }
+    public abstract void Setup();
+    public abstract void Dispose();
 
     private void OnEnable()
     {

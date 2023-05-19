@@ -18,11 +18,9 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
     // Vars
     [Space]
     [SerializeField] private LobbyState _lobbyState;
-    [SerializeField] private GameObject _arrow;
     [SerializeField] private GameObject _startButton;
     [SerializeField] private GameObject _backToMainMenuButton;
     [SerializeField] private GameObject _cancelCharacterSelectionButton; 
-    [SerializeField] private GameObject _mainMenu;
 
     [Header("Chosen Characters")]
     [SerializeField] private List<Penosas> _characterSelectionList;
@@ -53,7 +51,6 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 
     public override void Setup()
     {
-        //_parentController = GetComponentInParent<UIController>();
         GetControllerFromParent<UIController>();
 
         MenuWithCursor.OnMenuEnabled += HandleOnLobbySelectionMenuEnabled;
@@ -62,9 +59,10 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 
     public override void Dispose()
     {
-        print("Dispose...");
+        print("Disposing Lobby UI Controller...");
         MenuWithCursor.OnMenuEnabled -= HandleOnLobbySelectionMenuEnabled;
         CursorPosition.OnCursorMoved -= HandleOnCursorMoved;
+        enabled = false;
         gameObject.SetActive(false);
     }
 
