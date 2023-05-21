@@ -69,10 +69,12 @@
     <Compile Include="Assets\Scripts\SharedData\CustomEventArgs.cs" />
     <Compile Include="Assets\Scripts\Player\Penosa.cs" />
     <Compile Include="Assets\Scripts\SharedData\ExtensionMethods.cs" />
+    <Compile Include="Assets\Scripts\ControllerBackup\ControllerBackup.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerLobby\PlayerLobbyUIController.cs" />
     <Compile Include="Assets\Scripts\Items\JetCopter.cs" />
     <Compile Include="Assets\Input System\PlayerInput.cs" />
     <Compile Include="Assets\Scripts\Items\WalkTalk.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\IControllerBackup.cs" />
     <Compile Include="Assets\Scripts\Pooling\ObjectPool.cs" />
     <Compile Include="Assets\Scripts\SharedData\Enumerations.cs" />
     <Compile Include="Assets\Scripts\Items\WeaponLvlUp.cs" />
@@ -91,7 +93,9 @@
     <Compile Include="Assets\Scripts\UI\MenuWithCursor.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IController.cs" />
     <Compile Include="Assets\Scripts\Weapons\Projectile.cs" />
+    <Compile Include="Assets\Scripts\MapaMundi\MapaMundiController.cs" />
     <Compile Include="Assets\Scripts\Items\Mayday.cs" />
+    <Compile Include="Assets\Scripts\ControllerBackup\LobbyControllerBackup.cs" />
     <Compile Include="Assets\Scripts\Items\Item.cs" />
     <Compile Include="Assets\Scripts\Player\Parachute.cs" />
     <Compile Include="Assets\Scripts\UI\InGame\PlayerInGameUIController.cs" />
@@ -100,10 +104,6 @@
     <Compile Include="Assets\Scripts\SharedData\ConstantStrings.cs" />
     <Compile Include="Assets\Scripts\GameController\Controller.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
-    <Compile Include="Assets\Scripts\MapaMundi\MapaMundiController.cs" />
-    <Compile Include="Assets\Scripts\ControllerBackup\ControllerBackup.cs" />
-    <Compile Include="Assets\Scripts\ControllerBackup\LobbyControllerBackup.cs" />
-    <Compile Include="Assets\Scripts\Interfaces\IControllerBackup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />

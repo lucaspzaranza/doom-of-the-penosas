@@ -33,11 +33,15 @@ public class LobbyControllerBackup : ControllerBackup
     [Space]
     [Header("Scene Buttons")]
     [SerializeField] private Button _singlePlayerBtn;
+    [SerializeField] private Button _multiplayerBtn;
+    [SerializeField] private Button _continueBtn;
+    [SerializeField] private Button _quitGameBtn;
 
     [Space]
     [Header("Scene GameObjects")]
     [SerializeField] private GameObject _mainMenu;
-    [SerializeField] private GameObject _playerSelection;
+    [SerializeField] private GameObject _playerSelectionMenu;
+    [SerializeField] private GameObject _2PCursor;
 
     protected override Type GetControllerType() => typeof(PlayerLobbyUIController);
 
@@ -46,17 +50,70 @@ public class LobbyControllerBackup : ControllerBackup
         base.OnEnable();
     }
 
-    protected override void SetListeners()
+    private void SetGameMode(GameMode mode)
     {
-        var playerController = _controller as PlayerLobbyUIController;
+        var lobbyController = _controller as PlayerLobbyUIController;
+
+        lobbyController.SetGameMode(mode);
+        lobbyController.SetLobbyState(LobbyState.PlayerSelection);
+        _mainMenu.SetActive(false);
+        _playerSelectionMenu.SetActive(true);
+        lobbyController.SelectButton(_characterButtons[0].gameObject);
+    }
+
+    protected override void ListenersSetup()
+    {
+        var lobbyController = _controller as PlayerLobbyUIController;
 
         _singlePlayerBtn.onClick.AddListener(() =>
         {
-            playerController.SetGameMode(GameMode.Singleplayer);
-            playerController.SetLobbyState(LobbyState.PlayerSelection);
-            _mainMenu.SetActive(false);
-            _playerSelection.SetActive(true);
-            playerController.SelectButton(_characterButtons[0].gameObject);
+            SetGameMode(GameMode.Singleplayer);
+        });
+
+        _multiplayerBtn.onClick.AddListener(() =>
+        {
+            SetGameMode(GameMode.Multiplayer);
+        });
+
+        _continueBtn.onClick.AddListener(() =>
+        {
+            // Load game progress logic here...
+        });
+
+        _quitGameBtn.onClick.AddListener(() =>
+        {
+            lobbyController.QuitGame();
+        });
+
+        // For some reason, a for loop didn't worked here '_'
+        _characterButtons[0].onClick.AddListener(() =>
+        {
+            lobbyController.ChooseCharacter(0);
+        });
+
+        _characterButtons[1].onClick.AddListener(() =>
+        {
+            lobbyController.ChooseCharacter(1);
+        });
+
+        _startButton.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            lobbyController.SelectPlayersCharacters();
+        });
+
+        _backToMainMenuButton.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            _mainMenu.SetActive(true);
+            _playerSelectionMenu.SetActive(false);
+            lobbyController.SetGameMode(GameMode.Singleplayer);
+            lobbyController.SetLobbyState(LobbyState.GameModeSelection);
+            if(_2PCursor.activeSelf)
+                _2PCursor.SetActive(false);
+        });
+
+        _cancelCharacterSelectionButton.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            lobbyController.CancelCharacterSelection();
         });
     }
 }

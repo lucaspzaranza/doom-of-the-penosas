@@ -108,6 +108,7 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 
     public void ChooseCharacter(int characterIndex)
     {
+        print("characterIndex: " + characterIndex);
         if (_lobbyState != LobbyState.PlayerSelection)
             return;
 
@@ -131,6 +132,7 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 
     private void SetCharacterTextColors(int characterIndex, Color color)
     {
+        //print(_charactersTexts.Count);
         _charactersTexts[characterIndex].color = color;
     }
 

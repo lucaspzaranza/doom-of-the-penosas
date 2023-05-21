@@ -29,7 +29,7 @@ public abstract class ControllerBackup : MonoBehaviour
     /// <summary>
     /// Set all listeners from the buttons stored on this controller.
     /// </summary>
-    protected abstract void SetListeners();
+    protected abstract void ListenersSetup();
 
     private IEnumerator FindControllerForBackupCoroutine(Type type)
     {
@@ -37,7 +37,7 @@ public abstract class ControllerBackup : MonoBehaviour
         FindControllerForBackup(type);
 
         yield return new WaitForEndOfFrame();
-        SetListeners();
+        ListenersSetup();
     }
 
     public void FindControllerForBackup(Type type)
