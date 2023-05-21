@@ -57,19 +57,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Items\HealItem.cs" />
-    <Compile Include="Assets\Scripts\GameSystem\ControllerUnit.cs" />
+    <Compile Include="Assets\Scripts\GameController\ControllerUnit.cs" />
     <Compile Include="Assets\Scripts\Items\AddLives.cs" />
     <Compile Include="Assets\Scripts\Items\Armor.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerHUD.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerConsts.cs" />
-    <Compile Include="Assets\Scripts\GameSystem\GameController.cs" />
+    <Compile Include="Assets\Scripts\GameController\GameController.cs" />
     <Compile Include="Assets\ParrelSync\Examples\CustomArgumentExample.cs" />
     <Compile Include="Assets\Scripts\Items\ItemSlot.cs" />
     <Compile Include="Assets\Scripts\Pooling\PoolController.cs" />
     <Compile Include="Assets\Scripts\SharedData\CustomEventArgs.cs" />
     <Compile Include="Assets\Scripts\Player\Penosa.cs" />
     <Compile Include="Assets\Scripts\SharedData\ExtensionMethods.cs" />
-    <Compile Include="Assets\Scripts\UI\PlayerSelection\PlayerLobbyUIController.cs" />
+    <Compile Include="Assets\Scripts\UI\PlayerLobby\PlayerLobbyUIController.cs" />
     <Compile Include="Assets\Scripts\Items\JetCopter.cs" />
     <Compile Include="Assets\Input System\PlayerInput.cs" />
     <Compile Include="Assets\Scripts\Items\WalkTalk.cs" />
@@ -81,7 +81,6 @@
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Weapons\AutoRotate.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IUIController.cs" />
-    <Compile Include="Assets\Scripts\UI\PlayerSelection\PlayerLobbyData.cs" />
     <Compile Include="Assets\Scripts\Items\Inventory.cs" />
     <Compile Include="Assets\Scripts\UI\CursorPosition.cs" />
     <Compile Include="Assets\Scripts\Items\CollectableItem.cs" />
@@ -99,8 +98,12 @@
     <Compile Include="Assets\Scripts\Items\SpecialItem.cs" />
     <Compile Include="Assets\Scripts\Items\Adrenaline.cs" />
     <Compile Include="Assets\Scripts\SharedData\ConstantStrings.cs" />
-    <Compile Include="Assets\Scripts\GameSystem\Controller.cs" />
+    <Compile Include="Assets\Scripts\GameController\Controller.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
+    <Compile Include="Assets\Scripts\MapaMundi\MapaMundiController.cs" />
+    <Compile Include="Assets\Scripts\ControllerBackup\ControllerBackup.cs" />
+    <Compile Include="Assets\Scripts\ControllerBackup\LobbyControllerBackup.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\IControllerBackup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />

@@ -12,36 +12,41 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 {
     public Action<GameMode> OnGameModeButtonPressed;
     public Action<GameObject> OnGameReadyToStart;
-    public Action<IReadOnlyList<Penosas>> OnGameStart;
+    public Action<IReadOnlyList<Penosas>> OnLobbySelectedCharacters;
     public Action OnCancelSelection;
+
+    [Header("Chosen Characters")]
+    [SerializeField] private List<Penosas> _characterSelectionList;
+    public List<Penosas> CharacterSelectionList => _characterSelectionList;
 
     // Vars
     [Space]
     [SerializeField] private LobbyState _lobbyState;
     [SerializeField] private GameObject _startButton;
     [SerializeField] private GameObject _backToMainMenuButton;
-    [SerializeField] private GameObject _cancelCharacterSelectionButton; 
-
-    [Header("Chosen Characters")]
-    [SerializeField] private List<Penosas> _characterSelectionList;
-    public List<Penosas> CharacterSelectionList => _characterSelectionList;
-
-    [Space]
+    [SerializeField] private GameObject _cancelCharacterSelectionButton;
     [SerializeField] private List<Button> _characterButtons;
     [SerializeField] private List<TMP_Text> _charactersTexts;
     [SerializeField] private Color _defaultTextColor;
     [SerializeField] private List<Color> _selectedColors;
 
     private List<CursorPosition> _cursors;
-
-    private void OnEnable()
-    {
-        _lobbyState = LobbyState.GameModeSelection;
-    }    
     
     public void SelectButton(GameObject buttonToSelect)
     {
         EventSystem.current.SetSelectedGameObject(buttonToSelect);
+    }
+
+    private void OnEnable()
+    {
+        MenuWithCursor.OnMenuEnabled += HandleOnLobbySelectionMenuEnabled;
+        CursorPosition.OnCursorMoved += HandleOnCursorMoved;
+    }
+
+    private void OnDisable()
+    {
+        MenuWithCursor.OnMenuEnabled -= HandleOnLobbySelectionMenuEnabled;
+        CursorPosition.OnCursorMoved -= HandleOnCursorMoved;
     }
 
     public void QuitGame()
@@ -51,19 +56,34 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 
     public override void Setup()
     {
-        GetControllerFromParent<UIController>();
+        SetControllerFromParent<UIController>();
+    }
 
-        MenuWithCursor.OnMenuEnabled += HandleOnLobbySelectionMenuEnabled;
-        CursorPosition.OnCursorMoved += HandleOnCursorMoved;
+    public void ResetLobbyState()
+    {
+        _lobbyState = LobbyState.GameModeSelection;
     }
 
     public override void Dispose()
     {
         print("Disposing Lobby UI Controller...");
-        MenuWithCursor.OnMenuEnabled -= HandleOnLobbySelectionMenuEnabled;
-        CursorPosition.OnCursorMoved -= HandleOnCursorMoved;
-        enabled = false;
+        _characterSelectionList = null;
+        ResetLobbyState();
+        
         gameObject.SetActive(false);
+    }
+
+    public override void LoadGameObjectsReferencesFromControllerBackup(ControllerBackup backup)
+    {
+        LobbyControllerBackup lobbyBackup = backup as LobbyControllerBackup;
+
+        _startButton = lobbyBackup.StartButton;
+        _backToMainMenuButton = lobbyBackup.BackToMainMenuButton;
+        _cancelCharacterSelectionButton = lobbyBackup.CancelCharacterSelectionButton;
+        _characterButtons = lobbyBackup.CharacterButtons;
+        _charactersTexts = lobbyBackup.CharacterTexts;
+        _defaultTextColor = lobbyBackup.DefaultTextColor;
+        _selectedColors = lobbyBackup.SelectedColors;
     }
 
     public void SetGameMode(int gameMode)
@@ -71,9 +91,19 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
         OnGameModeButtonPressed?.Invoke((GameMode)gameMode);
     }
 
+    public void SetGameMode(GameMode gameMode)
+    {
+        OnGameModeButtonPressed?.Invoke(gameMode);
+    }
+
     public void SetLobbyState(int lobbyState)
     {
         _lobbyState = (LobbyState)lobbyState;
+    }
+
+    public void SetLobbyState(LobbyState lobbyState)
+    {
+        _lobbyState = lobbyState;
     }
 
     public void ChooseCharacter(int characterIndex)
@@ -182,8 +212,8 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
         }
     }
    
-    public void FireStartGame()
+    public void SelectPlayersCharacters()
     {
-        OnGameStart?.Invoke(CharacterSelectionList);
+        OnLobbySelectedCharacters?.Invoke(CharacterSelectionList);
     }
 }

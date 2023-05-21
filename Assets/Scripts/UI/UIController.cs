@@ -7,25 +7,26 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
 
 public class UIController : ControllerUnit
 {
     public static Action<GameMode> OnGameModeSelected;
-    public Action<IReadOnlyList<Penosas>> OnGameStart;
+    public Action<IReadOnlyList<Penosas>> OnUISelectedCharacters;
 
     [Space]
     [Header("UI Controllers")]
     [SerializeField] private PlayerLobbyUIController _playerLobbyUIController;
+    public PlayerLobbyUIController PlayerLobbyUIController => _playerLobbyUIController;
+
     [SerializeField] private PlayerInGameUIController _playerInGameUIController;
+    public PlayerInGameUIController PlayerInGameUIController => _playerInGameUIController;
+
+    [SerializeField] private MapaMundiController _mapaMundiController;
+    public MapaMundiController MapaMundiController => _mapaMundiController;
 
     [Header("Cursor")]
     [SerializeField] private List<CursorPosition> _cursors;
     public List<CursorPosition> CursorPositions => _cursors;
-
-    // Props
-    public PlayerLobbyUIController PlayerLobbyUIController => _playerLobbyUIController;
-    public PlayerInGameUIController PlayerInGameUIController => _playerInGameUIController;
 
     public override void Setup()
     {
@@ -35,11 +36,14 @@ public class UIController : ControllerUnit
 
         if (PlayerLobbyUIController != null)
         {
+            if(!PlayerLobbyUIController.gameObject.activeSelf)
+                PlayerLobbyUIController.gameObject.SetActive(true);
+
             PlayerLobbyUIController.Setup();
             PlayerLobbyUIController.OnGameModeButtonPressed += HandleLobbyOnGameModeButtonPressed;
             PlayerLobbyUIController.OnGameReadyToStart += HandleLobbyOnGameReadyToStart;
             PlayerLobbyUIController.OnCancelSelection += OnLobbyCancelSelection;
-            PlayerLobbyUIController.OnGameStart += HandleLobbyOnGameStart;
+            PlayerLobbyUIController.OnLobbySelectedCharacters += HandleLobbyOnGameSelectedCharacters;
         }
 
         MenuWithCursor.OnMenuEnabled += HandleMenuWithCursorEnabled;
@@ -50,7 +54,7 @@ public class UIController : ControllerUnit
         PlayerLobbyUIController.OnGameModeButtonPressed -= HandleLobbyOnGameModeButtonPressed;
         PlayerLobbyUIController.OnGameReadyToStart -= HandleLobbyOnGameReadyToStart;
         PlayerLobbyUIController.OnCancelSelection -= OnLobbyCancelSelection;
-        PlayerLobbyUIController.OnGameStart -= HandleLobbyOnGameStart;
+        PlayerLobbyUIController.OnLobbySelectedCharacters -= HandleLobbyOnGameSelectedCharacters;
         PlayerLobbyUIController.Dispose();
 
         MenuWithCursor.OnMenuEnabled -= HandleMenuWithCursorEnabled;
@@ -69,11 +73,6 @@ public class UIController : ControllerUnit
     public void GameOverActivation(bool val)
     {
         PlayerInGameUIController.GameOverContainerActivation(val);
-    }
-
-    public void InGameSetup()
-    {
-        PlayerInGameUIController.Setup();
     }
 
     private void ReturnCursorsToDefaultPosition()
@@ -123,16 +122,11 @@ public class UIController : ControllerUnit
         cursor.UpdateCursorPosition(target);
     }
 
-    private void HandleLobbyOnGameStart(IReadOnlyList<Penosas> selectedCharacters)
+    private void HandleLobbyOnGameSelectedCharacters(IReadOnlyList<Penosas> selectedCharacters)
     {
-        OnGameStart?.Invoke(selectedCharacters);
+        OnUISelectedCharacters?.Invoke(selectedCharacters);
     }
-
-    public void SetInGameUIController(PlayerInGameUIController inGameUIController)
-    {
-        _playerInGameUIController = inGameUIController;
-    }
-
+   
     public void InGameUIControllerSetup()
     {
         _playerInGameUIController.Setup();
@@ -140,10 +134,28 @@ public class UIController : ControllerUnit
 
     public void DisposeLobbyController()
     {
-        var lobbyController = ChildControllersPrefabs.FirstOrDefault(ctrl => ctrl.GetComponent<PlayerLobbyUIController>());
-        ChildControllersPrefabs.Remove(lobbyController);
+        PlayerLobbyUIController.Dispose();
+    }
 
-        var controllerComponent = lobbyController.GetComponent<PlayerLobbyUIController>();
-        //DestroyImmediate(lobbyController, true);
+    public void InstantiateMapaMundiController()
+    {
+        if (_mapaMundiController == null)
+        {
+            var prefab = GetControllerFromPrefabList<MapaMundiController>();
+            var instance = Instantiate(prefab, transform);
+            _mapaMundiController = instance.GetComponent<MapaMundiController>();
+            _mapaMundiController.Setup();
+        }
+    }
+
+    public void InstantiatePlayerInGameUIController()
+    {
+        if (_playerInGameUIController == null)
+        {
+            var prefab = GetControllerFromPrefabList<PlayerInGameUIController>();
+            var instance = Instantiate(prefab, transform);
+            _playerInGameUIController = instance.GetComponent<PlayerInGameUIController>();
+            _playerInGameUIController.Setup();
+        }
     }
 }

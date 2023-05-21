@@ -4,12 +4,14 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 using SharedData.Enumerations;
+using UnityEngine.SceneManagement;
 
 public class GameController : Controller
 {
-    [Header("Game General Data")]
-    // variable to reflect the Controller Game Mode only in the Editor. 
-    [SerializeField] private GameMode _gameModeState;
+    // Singleton instance
+    private static GameController instance;
+
+    // Props
     [SerializeField] private GameStatus _gameStatus;
     public GameStatus GameStatus => _gameStatus;
 
@@ -26,10 +28,31 @@ public class GameController : Controller
     [SerializeField] private SceneController _sceneController;
     public SceneController SceneController => _sceneController;
 
+    private bool IsSingleInstance => instance == this;
+
+    // Vars
+    [Header("Game General Data")]
+    [SerializeField] private GameMode _gameModeState; // Variable to reflect the Controller Game Mode only in the Editor. 
+    private List<Penosas> _characterSelection;
+
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+        else
+        {
+            print("Destroying GameController duplicate...");
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
-        Setup();
-        DontDestroyOnLoad(gameObject);
+        if(IsSingleInstance)
+        {
+            Setup();
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
     public override void Setup()
@@ -47,7 +70,7 @@ public class GameController : Controller
 
     private void EventHandlerSetup()
     {
-        UIController.OnGameStart += HandleUIControllerOnGameStart;
+        UIController.OnUISelectedCharacters += HandleOnUISelectedCharacters;
         SceneController.OnSceneLoaded += HandleOnSceneLoaded;
     }
 
@@ -58,7 +81,7 @@ public class GameController : Controller
         PlayerController.OnGameOverCountdownTextIsNull -= HandleOnGameOverCountdownTextIsNull;
         PlayerController.OnCountdownActivation -= HandleOnCoutdownActivation;
 
-        UIController.OnGameStart -= HandleUIControllerOnGameStart;
+        UIController.OnUISelectedCharacters -= HandleOnUISelectedCharacters;
 
         SceneController.OnSceneLoaded -= HandleOnSceneLoaded;
 
@@ -67,14 +90,10 @@ public class GameController : Controller
         PoolController.Dispose();
     }
 
-    public void StartGame()
+    public void SetGameStatus(GameStatus gameStatus)
     {
-        _gameStatus = GameStatus.Loading;
-
-        PlayerController.Setup();
-        PoolController.Setup();
-        UIController.InGameSetup();
-    }    
+        _gameStatus = gameStatus;
+    }
 
     public void GetAllControllers()
     {
@@ -92,41 +111,43 @@ public class GameController : Controller
         UIController.GameOverActivation(val);
     }
 
-    private void HandleUIControllerOnGameStart(IReadOnlyList<Penosas> characterSelectionList)
+    private void HandleOnUISelectedCharacters(IReadOnlyList<Penosas> characterSelectionList)
     {
+        print("HandleOnUISelectedCharacters");
+        UIController.DisposeLobbyController();
+
         foreach (var character in characterSelectionList)
         {
+            // temporary
             print(character.ToString());
         }
+        if(_characterSelection == null)
+            _characterSelection = new List<Penosas>();
+        _characterSelection = characterSelectionList.ToList();
 
-        UIController.DisposeLobbyController();        
-        SceneController.LoadScene(1);
+        SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
+
+        UIController.InstantiateMapaMundiController();
     }
 
     private void InstantiateInGameControllers()
     {
-        var playerController = ChildControllersPrefabs.SingleOrDefault(ctrl => ctrl.GetComponent<PlayerController>());
-        if (playerController != null)
+        var playerControllerPrefab = GetControllerFromPrefabList<PlayerController>();
+        if (playerControllerPrefab != null)
         {
-            var playerControllerInstance = Instantiate(playerController, transform);
-            _playerController = playerControllerInstance.GetComponent<PlayerController>();
+            var instance = Instantiate(playerControllerPrefab, transform);
+            _playerController = instance.GetComponent<PlayerController>();
+            _playerController.Setup();
         }
 
-        var playerInGameUIController = UIController.ChildControllersPrefabs.
-            SingleOrDefault(ctrl => ctrl.GetComponent<PlayerInGameUIController>());
+        UIController.InstantiatePlayerInGameUIController();
 
-        if (playerInGameUIController != null)
+        var poolPrefab = GetControllerFromPrefabList<PoolController>();
+        if (playerControllerPrefab != null)
         {
-            var playerInGameUIControllerInstance = Instantiate(playerInGameUIController, UIController.transform);
-            var inGameUIController = playerInGameUIControllerInstance.GetComponent<PlayerInGameUIController>();
-            UIController.SetInGameUIController(inGameUIController);
-        }
-
-        var poolController = ChildControllersPrefabs.SingleOrDefault(ctrl => ctrl.GetComponent<PoolController>());
-        if (poolController != null)
-        {
-            var poolControllerInstance = Instantiate(poolController, transform);
-            _poolController = poolControllerInstance.GetComponent<PoolController>();
+            var instance = Instantiate(poolPrefab, transform);
+            _poolController = instance.GetComponent<PoolController>();
+            _poolController.Setup();
         }
     }
 
@@ -142,9 +163,20 @@ public class GameController : Controller
         PlayerController.OnCountdownActivation += HandleOnCoutdownActivation;
     }
 
-    private void HandleOnSceneLoaded()
+    private void HandleOnSceneLoaded(Scene scene)
     {
-        InstantiateInGameControllers();
-        InGameControllersSetup();
+        if(scene.buildIndex == ScenesBuildIndexes.MainMenu)
+        {
+            if(GameStatus == GameStatus.Loading)
+            {
+                SetGameStatus(GameStatus.InGame);
+                InstantiateInGameControllers();
+                InGameControllersSetup();
+            }
+            else if(GameStatus == GameStatus.Menu)
+            {
+                UIController.PlayerLobbyUIController.gameObject.SetActive(true);
+            }
+        }
     }
 }

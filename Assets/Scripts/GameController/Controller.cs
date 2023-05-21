@@ -1,4 +1,5 @@
 using SharedData.Enumerations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,8 @@ public abstract class Controller : MonoBehaviour, IController
     public GameMode GetGameMode() => _gameMode;
 
     public abstract void Setup();
-    public abstract void Dispose();
-
+    public abstract void Dispose();    
+        
     private void OnEnable()
     {
         UIController.OnGameModeSelected += SetGameMode;
@@ -30,5 +31,16 @@ public abstract class Controller : MonoBehaviour, IController
     private void SetGameMode(GameMode newGameMode)
     {
         _gameMode = newGameMode;
+    }
+
+    /// <summary>
+    /// Returns the Controller prefab from the list of prefabs this Controller has access.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns>The prefab GameObject.</returns>
+    public GameObject GetControllerFromPrefabList<T>() where T: Controller
+    {
+        var prefab = ChildControllersPrefabs.SingleOrDefault(c => c.GetComponent<T>());
+        return prefab;
     }
 }

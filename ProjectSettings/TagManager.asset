@@ -9,6 +9,7 @@ TagManager:
   - ControllerUnit
   - CursorPosition
   - Cursor
+  - ControllerBackup
   layers:
   - Default
   - TransparentFX

@@ -9,12 +9,14 @@ public abstract class ControllerUnit: Controller
     [Header("Parent Controller")]
     [SerializeField] protected Controller _parentController;
 
+    public virtual void LoadGameObjectsReferencesFromControllerBackup(ControllerBackup backup) { }
+
     public override void Setup()
     {
-        GetControllerFromParent<GameController>();
+        SetControllerFromParent<GameController>();
     }
 
-    protected void GetControllerFromParent<T>() where T: Controller
+    protected void SetControllerFromParent<T>() where T: Controller
     {
         //print($"Setting on {name} the parent Controller looking at the {transform.parent}.");
         _parentController = GetComponentInParent<T>();

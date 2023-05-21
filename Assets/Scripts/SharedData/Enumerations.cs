@@ -21,10 +21,29 @@ namespace SharedData.Enumerations
 
     public enum GameStatus
     {
+        /// <summary>
+        /// When the game is in some menu.
+        /// </summary>
         Menu = 0,
+
+        /// <summary>
+        /// Status when loading a scene.
+        /// </summary>
         Loading = 1,
+
+        /// <summary>
+        /// When the game is into a stage and the players are active in.
+        /// </summary>
         InGame = 2,
+
+        /// <summary>
+        /// When the game is over and the players must decide if they try again or give up.
+        /// </summary>
         GameOver = 3,
+
+        /// <summary>
+        /// When the game is playing a cutscene.
+        /// </summary>
         Cutscene = 4
     }
 

@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : ControllerUnit
 {
-    public Action OnSceneLoaded;
+    public Action<Scene> OnSceneLoaded;
 
     public override void Setup()
     {
@@ -31,7 +31,7 @@ public class SceneController : ControllerUnit
 
     private void HandleOnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
-        print($"Scene {scene.name} loaded with success.");
-        OnSceneLoaded?.Invoke();
+        //print($"Scene {scene.name} loaded with success.");
+        OnSceneLoaded?.Invoke(scene);
     }
 }

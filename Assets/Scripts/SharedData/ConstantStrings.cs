@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConstantStrings : MonoBehaviour
+public static class ConstantStrings
 {
     // Projectiles
     public const string EggShot = "Egg Shot";
@@ -33,7 +33,7 @@ public class ConstantStrings : MonoBehaviour
         "Reached the max time duration attempting to get the parent controller. Aborting operation.";
 }
 
-public class InputStrings
+public static class InputStrings
 {
     public const string Jump = "Jump";
     public const string Fire1 = "Fire1";
@@ -45,10 +45,16 @@ public class InputStrings
     public const string Start = "Start";
 }
 
-public class ConstantNumbers
+public static class ConstantNumbers
 {
+    // Player
     public const int NumberOfPlayers = 2;
     public const int CountdownSeconds = 10;
+}   
 
-    public const float TimeToTryToGetTheParentController = 5f;
+public static class ScenesBuildIndexes
+{
+    public const int MainMenu = 0;
+    public const int MapaMundi = 1;
+    public const int _1stStage = 2;
 }
