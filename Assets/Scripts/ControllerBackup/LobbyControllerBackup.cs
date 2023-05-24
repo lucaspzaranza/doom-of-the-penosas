@@ -54,7 +54,8 @@ public class LobbyControllerBackup : ControllerBackup
     {
         var lobbyController = _controller as PlayerLobbyUIController;
 
-        lobbyController.SetGameMode(mode);
+        lobbyController.FireSetNewGameEvent(true);
+        lobbyController.FireSetGameModeEvent(mode);
         lobbyController.SetLobbyState(LobbyState.PlayerSelection);
         _mainMenu.SetActive(false);
         _playerSelectionMenu.SetActive(true);
@@ -64,6 +65,12 @@ public class LobbyControllerBackup : ControllerBackup
     protected override void ListenersSetup()
     {
         var lobbyController = _controller as PlayerLobbyUIController;
+
+        if (lobbyController == null)
+        {
+            ConstantStrings.ControllerNotFoundOnBackupMessage(nameof(PlayerLobbyUIController));
+            return;
+        }
 
         _singlePlayerBtn.onClick.AddListener(() =>
         {
@@ -78,6 +85,7 @@ public class LobbyControllerBackup : ControllerBackup
         _continueBtn.onClick.AddListener(() =>
         {
             // Load game progress logic here...
+            lobbyController.FireSetNewGameEvent(false);
         });
 
         _quitGameBtn.onClick.AddListener(() =>
@@ -85,7 +93,7 @@ public class LobbyControllerBackup : ControllerBackup
             lobbyController.QuitGame();
         });
 
-        // For some reason, a for loop didn't worked here '_'
+        // For some reason, a for loop didn't worked here ¬¬"
         _characterButtons[0].onClick.AddListener(() =>
         {
             lobbyController.ChooseCharacter(0);
@@ -105,8 +113,9 @@ public class LobbyControllerBackup : ControllerBackup
         {
             _mainMenu.SetActive(true);
             _playerSelectionMenu.SetActive(false);
-            lobbyController.SetGameMode(GameMode.Singleplayer);
+            lobbyController.FireSetGameModeEvent(GameMode.Singleplayer);
             lobbyController.SetLobbyState(LobbyState.GameModeSelection);
+            lobbyController.FireSetNewGameEvent(false);
             if(_2PCursor.activeSelf)
                 _2PCursor.SetActive(false);
         });

@@ -10,8 +10,10 @@ using UnityEngine.UI;
 
 public class UIController : ControllerUnit
 {
-    public static Action<GameMode> OnGameModeSelected;
+    public Action<GameMode> OnUIGameModeSelected;
+    public Action<bool> OnUISetNewGame;
     public Action<IReadOnlyList<Penosas>> OnUISelectedCharacters;
+    public Action<int> OnUIGameSelectedSceneIndex;
 
     [Space]
     [Header("UI Controllers")]
@@ -44,6 +46,7 @@ public class UIController : ControllerUnit
             PlayerLobbyUIController.OnGameReadyToStart += HandleLobbyOnGameReadyToStart;
             PlayerLobbyUIController.OnCancelSelection += OnLobbyCancelSelection;
             PlayerLobbyUIController.OnLobbySelectedCharacters += HandleLobbyOnGameSelectedCharacters;
+            PlayerLobbyUIController.OnLobbySetNewGame += HandleOnLobbySetNewGame;
         }
 
         MenuWithCursor.OnMenuEnabled += HandleMenuWithCursorEnabled;
@@ -55,14 +58,20 @@ public class UIController : ControllerUnit
         PlayerLobbyUIController.OnGameReadyToStart -= HandleLobbyOnGameReadyToStart;
         PlayerLobbyUIController.OnCancelSelection -= OnLobbyCancelSelection;
         PlayerLobbyUIController.OnLobbySelectedCharacters -= HandleLobbyOnGameSelectedCharacters;
+        PlayerLobbyUIController.OnLobbySetNewGame -= HandleOnLobbySetNewGame;
         PlayerLobbyUIController.Dispose();
 
         MenuWithCursor.OnMenuEnabled -= HandleMenuWithCursorEnabled;
     }
 
+    private void HandleOnLobbySetNewGame(bool value)
+    {
+        OnUISetNewGame?.Invoke(value);
+    }
+
     private void HandleLobbyOnGameModeButtonPressed(GameMode gameMode)
     {
-        OnGameModeSelected?.Invoke(gameMode);
+        OnUIGameModeSelected?.Invoke(gameMode);
     }
 
     public Text GetCountdownTextFromInGameController()
@@ -145,6 +154,13 @@ public class UIController : ControllerUnit
             var instance = Instantiate(prefab, transform);
             _mapaMundiController = instance.GetComponent<MapaMundiController>();
             _mapaMundiController.Setup();
+
+            _mapaMundiController.OnGameSceneIndexSelected += HandleMapaMundiOnSceneIndexSelected;
+        }
+        else
+        {
+            if (!_mapaMundiController.gameObject.activeSelf)
+                _mapaMundiController.gameObject.SetActive(true);
         }
     }
 
@@ -157,5 +173,16 @@ public class UIController : ControllerUnit
             _playerInGameUIController = instance.GetComponent<PlayerInGameUIController>();
             _playerInGameUIController.Setup();
         }
+        else
+        {
+            if (!_playerInGameUIController.gameObject.activeSelf)
+                _playerInGameUIController.gameObject.SetActive(true);
+        }
+    }
+
+    private void HandleMapaMundiOnSceneIndexSelected(int buildIndex)
+    {
+        print($"OnUISelectedSceneIndex: {buildIndex}");
+        OnUIGameSelectedSceneIndex?.Invoke(buildIndex);
     }
 }

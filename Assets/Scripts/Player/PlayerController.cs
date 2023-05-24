@@ -1,3 +1,4 @@
+using SharedData.Enumerations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,9 @@ public class PlayerController : ControllerUnit
     [SerializeField] private Vector2 playerStartPosition;
 
     // Props
+    [SerializeField] private List<PlayerDataPrefabs> _playerPrefabs;
+    public List<PlayerDataPrefabs> PlayerPrefabs => _playerPrefabs;
+
     [SerializeField] private List<PlayerData> _playersData = null;
     public List<PlayerData> PlayersData => _playersData;
 
@@ -28,15 +32,37 @@ public class PlayerController : ControllerUnit
             GameOverCountdown(0);
     }
 
-    public override void Setup()
+    //public override void Setup()
+    //{
+    //    base.Setup();
+    //    //GetPlayersOnScene();
+    //}
+
+    public void Setup(IReadOnlyList<Penosas> characters)
     {
         base.Setup();
-        GetPlayersOnScene();
+
+        foreach (var character in characters)
+        {
+            AddNewPlayerData(character);
+        }
     }
 
     public override void Dispose()
     {
         _playersData = null;
+    }
+
+    private void AddNewPlayerData(Penosas characterToAdd)
+    {
+        print($"Adding the {characterToAdd} to the PlayerDataController with Local ID {_playersData.Count}...");
+
+        PlayerData newPlayerData = new PlayerData(characterToAdd, _playersData.Count);
+        PlayerDataPrefabs prefabs = PlayerPrefabs.
+            SingleOrDefault(prefab => prefab.Character == characterToAdd);
+        newPlayerData.SetPrefabs(prefabs);
+
+        _playersData.Add(newPlayerData);
     }
 
     private void GetPlayersOnScene()
@@ -93,7 +119,7 @@ public class PlayerController : ControllerUnit
                 PlayersData[ID].GameObject.SetActive(true);
                 PlayersData[ID].Countdown = ConstantNumbers.CountdownSeconds;
                 PlayersData[ID].OnCountdown = false;
-                PlayersData[ID].Lives = PlayerConsts.initial_lives;
+                PlayersData[ID].Lives = PlayerConsts.Initial_Lives;
                 PlayersData[ID].Player.ResetPlayerData();
                 PlayersData[ID].Player.Inventory.ClearInventory();
                 PlayersData[ID].Player.InitiateBlink();

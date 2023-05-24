@@ -13,6 +13,7 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
     public Action<GameMode> OnGameModeButtonPressed;
     public Action<GameObject> OnGameReadyToStart;
     public Action<IReadOnlyList<Penosas>> OnLobbySelectedCharacters;
+    public Action<bool> OnLobbySetNewGame;
     public Action OnCancelSelection;
 
     [Header("Chosen Characters")]
@@ -66,7 +67,6 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 
     public override void Dispose()
     {
-        print("Disposing Lobby UI Controller...");
         _characterSelectionList = null;
         ResetLobbyState();
         
@@ -86,19 +86,14 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
         _selectedColors = lobbyBackup.SelectedColors;
     }
 
-    public void SetGameMode(int gameMode)
+    public void FireSetNewGameEvent(bool newGame)
     {
-        OnGameModeButtonPressed?.Invoke((GameMode)gameMode);
+        OnLobbySetNewGame?.Invoke(newGame);
     }
 
-    public void SetGameMode(GameMode gameMode)
+    public void FireSetGameModeEvent(GameMode gameMode)
     {
         OnGameModeButtonPressed?.Invoke(gameMode);
-    }
-
-    public void SetLobbyState(int lobbyState)
-    {
-        _lobbyState = (LobbyState)lobbyState;
     }
 
     public void SetLobbyState(LobbyState lobbyState)
@@ -108,7 +103,6 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 
     public void ChooseCharacter(int characterIndex)
     {
-        print("characterIndex: " + characterIndex);
         if (_lobbyState != LobbyState.PlayerSelection)
             return;
 

@@ -84,7 +84,7 @@ public class PlayerHUD : MonoBehaviour
 
     public void SetHUDValues()
     {
-        Name = player.PlayerData.name;
+        Name = player.PlayerData.Character.ToString();
         Lives = player.PlayerData.Lives;
         Life = player.PlayerData.Life;
         ArmorLife = player.PlayerData.ArmorLife; 

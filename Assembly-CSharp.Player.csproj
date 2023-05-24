@@ -61,7 +61,6 @@
     <Compile Include="Assets\Scripts\Items\AddLives.cs" />
     <Compile Include="Assets\Scripts\Items\Armor.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerHUD.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerConsts.cs" />
     <Compile Include="Assets\Scripts\GameController\GameController.cs" />
     <Compile Include="Assets\ParrelSync\Examples\CustomArgumentExample.cs" />
     <Compile Include="Assets\Scripts\Items\ItemSlot.cs" />
@@ -96,6 +95,7 @@
     <Compile Include="Assets\Scripts\MapaMundi\MapaMundiController.cs" />
     <Compile Include="Assets\Scripts\Items\Mayday.cs" />
     <Compile Include="Assets\Scripts\ControllerBackup\LobbyControllerBackup.cs" />
+    <Compile Include="Assets\Scripts\ControllerBackup\MapaMundiControllerBackup.cs" />
     <Compile Include="Assets\Scripts\Items\Item.cs" />
     <Compile Include="Assets\Scripts\Player\Parachute.cs" />
     <Compile Include="Assets\Scripts\UI\InGame\PlayerInGameUIController.cs" />
@@ -104,6 +104,7 @@
     <Compile Include="Assets\Scripts\SharedData\ConstantStrings.cs" />
     <Compile Include="Assets\Scripts\GameController\Controller.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerDataPrefabs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />

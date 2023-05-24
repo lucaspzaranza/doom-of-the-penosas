@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine.UI;
 using SharedData.Enumerations;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameController : Controller
 {
@@ -12,13 +13,20 @@ public class GameController : Controller
     private static GameController instance;
 
     // Props
+    [SerializeField] private GameMode _gameMode;
+    public GameMode GameMode => _gameMode;
+
     [SerializeField] private GameStatus _gameStatus;
     public GameStatus GameStatus => _gameStatus;
+
+    [SerializeField] private bool _isNewGame;
+    public bool IsNewGame => _isNewGame;
 
     [Header("Controllers")]
 
     [SerializeField] private PlayerController _playerController;
     public PlayerController PlayerController => _playerController;
+
     [SerializeField] private UIController _uiController;
     public UIController UIController => _uiController;
 
@@ -33,17 +41,14 @@ public class GameController : Controller
     // Vars
     [Header("Game General Data")]
     [SerializeField] private GameMode _gameModeState; // Variable to reflect the Controller Game Mode only in the Editor. 
-    private List<Penosas> _characterSelection;
+    private List<Penosas> _characterSelectionList;
 
     private void Awake()
     {
         if (instance == null)
             instance = this;
         else
-        {
-            print("Destroying GameController duplicate...");
             Destroy(gameObject);
-        }
     }
 
     void Start()
@@ -63,14 +68,13 @@ public class GameController : Controller
         EventHandlerSetup();       
     }
 
-    private void Update()
-    {
-        _gameModeState = GetGameMode();
-    }
-
     private void EventHandlerSetup()
     {
         UIController.OnUISelectedCharacters += HandleOnUISelectedCharacters;
+        UIController.OnUIGameModeSelected += SetGameMode;
+        UIController.OnUISetNewGame += SetNewGame;
+        UIController.OnUIGameSelectedSceneIndex += HandleOnGameSceneSelectedIndex;
+
         SceneController.OnSceneLoaded += HandleOnSceneLoaded;
     }
 
@@ -82,12 +86,25 @@ public class GameController : Controller
         PlayerController.OnCountdownActivation -= HandleOnCoutdownActivation;
 
         UIController.OnUISelectedCharacters -= HandleOnUISelectedCharacters;
+        UIController.OnUIGameModeSelected -= SetGameMode;
+        UIController.OnUISetNewGame -= SetNewGame;
+        UIController.OnUIGameSelectedSceneIndex -= HandleOnGameSceneSelectedIndex;
 
         SceneController.OnSceneLoaded -= HandleOnSceneLoaded;
 
         PlayerController.Dispose();
         UIController.Dispose();
         PoolController.Dispose();
+    }
+
+    private void SetGameMode(GameMode newGameMode)
+    {
+        _gameMode = newGameMode;
+    }
+
+    private void SetNewGame(bool val)
+    {
+        _isNewGame = val;
     }
 
     public void SetGameStatus(GameStatus gameStatus)
@@ -110,47 +127,27 @@ public class GameController : Controller
     {
         UIController.GameOverActivation(val);
     }
-
+   
     private void HandleOnUISelectedCharacters(IReadOnlyList<Penosas> characterSelectionList)
     {
-        print("HandleOnUISelectedCharacters");
         UIController.DisposeLobbyController();
 
-        foreach (var character in characterSelectionList)
-        {
-            // temporary
-            print(character.ToString());
-        }
-        if(_characterSelection == null)
-            _characterSelection = new List<Penosas>();
-        _characterSelection = characterSelectionList.ToList();
+        if(_characterSelectionList == null)
+            _characterSelectionList = new List<Penosas>();
+        _characterSelectionList = characterSelectionList.ToList();
 
         SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
 
         UIController.InstantiateMapaMundiController();
     }
 
+    // Change it
     private void InstantiateInGameControllers()
-    {
-        var playerControllerPrefab = GetControllerFromPrefabList<PlayerController>();
-        if (playerControllerPrefab != null)
-        {
-            var instance = Instantiate(playerControllerPrefab, transform);
-            _playerController = instance.GetComponent<PlayerController>();
-            _playerController.Setup();
-        }
-
-        UIController.InstantiatePlayerInGameUIController();
-
-        var poolPrefab = GetControllerFromPrefabList<PoolController>();
-        if (playerControllerPrefab != null)
-        {
-            var instance = Instantiate(poolPrefab, transform);
-            _poolController = instance.GetComponent<PoolController>();
-            _poolController.Setup();
-        }
+    {        
+        UIController.InstantiatePlayerInGameUIController();        
     }
 
+    // Change it
     private void InGameControllersSetup()
     {
         _playerController.Setup();
@@ -174,9 +171,37 @@ public class GameController : Controller
                 InGameControllersSetup();
             }
             else if(GameStatus == GameStatus.Menu)
-            {
                 UIController.PlayerLobbyUIController.gameObject.SetActive(true);
-            }
         }
+    }
+
+    private void InstantiatePlayerController()
+    {
+        var playerControllerPrefab = GetControllerFromPrefabList<PlayerController>();
+        if (playerControllerPrefab != null && _playerController == null)
+        {
+            var instance = Instantiate(playerControllerPrefab, transform);
+            _playerController = instance.GetComponent<PlayerController>();
+            _playerController.Setup(_characterSelectionList);
+        }
+    }
+
+    private void InstantiatePoolController()
+    {
+        var poolPrefab = GetControllerFromPrefabList<PoolController>();
+        if (poolPrefab != null && _poolController == null)
+        {
+            var instance = Instantiate(poolPrefab, transform);
+            _poolController = instance.GetComponent<PoolController>();
+            _poolController.Setup();
+        }
+    }
+
+    private void HandleOnGameSceneSelectedIndex(int buildIndex)
+    {
+        InstantiatePlayerController();
+        InstantiatePoolController();
+        
+        //SceneController.LoadScene(buildIndex);
     }
 }

@@ -44,6 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f476d829a71a65544b2d01e854ea5207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _childControllersPrefabs: []
   _parentController: {fileID: 0}
-  playerStartPosition: {fileID: 0}
+  playerStartPosition: {x: 0, y: 0}
+  _playerPrefabs:
+  - {fileID: 11400000, guid: facbc43c11a731948a9f9488587ab104, type: 2}
+  - {fileID: 11400000, guid: cdb94e71e6706674080cb8a916f9e0d3, type: 2}
   _playersData: []

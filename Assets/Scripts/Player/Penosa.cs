@@ -91,7 +91,7 @@ public class Penosa : MonoBehaviour
 
     public Animator Animator => anim;
 
-    public bool Adrenaline => speed > PlayerConsts.defaultSpeed;
+    public bool Adrenaline => speed > PlayerConsts.DefaultSpeed;
 
     public PlayerData PlayerData
     {
@@ -149,7 +149,8 @@ public class Penosa : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, terrainLayerMask);
         anim.SetBool(animHashes.isGrounded, isGrounded);
 
-        if (isGrounded && rb.gravityScale != defaultGravity && !JetCopterActivated) ResetGravity();
+        if (isGrounded && rb.gravityScale != defaultGravity && !JetCopterActivated) 
+            ResetGravity();
 
         if (isBlinking)
         {
@@ -248,7 +249,7 @@ public class Penosa : MonoBehaviour
 
     public void ResetPlayerData()
     {
-        PlayerData.Life = PlayerConsts.max_life;
+        PlayerData.Life = PlayerConsts.Max_Life;
         PlayerData._1stWeaponLevel = 1;
         PlayerData._2ndWeaponLevel = 1;
         PlayerData._1stWeaponAmmo = 0;
@@ -395,8 +396,8 @@ public class Penosa : MonoBehaviour
 
     private void SetShotLevel2VariationRate(ref GameObject projectile)
     {
-        float posVariationRate = UnityEngine.Random.Range(PlayerConsts.shotLvl2VariationRate,
-                                            -PlayerConsts.shotLvl2VariationRate);
+        float posVariationRate = UnityEngine.Random.Range(PlayerConsts.ShotLvl2VariationRate,
+                                            -PlayerConsts.ShotLvl2VariationRate);
         if (Vertical)
             projectile.transform.position = new Vector3
             (projectile.transform.position.x + posVariationRate, projectile.transform.position.y);
@@ -483,7 +484,7 @@ public class Penosa : MonoBehaviour
 
     private void Instantiate_1stShotLv2()
     {
-        if (continuousTimeCounter >= PlayerConsts.machineGunInterval)
+        if (continuousTimeCounter >= PlayerConsts.MachineGunInterval)
         {
             Instantiate_1stShot();
             continuousTimeCounter = 0f;
@@ -494,8 +495,8 @@ public class Penosa : MonoBehaviour
     private void ResetShootAnim()
     {
         shotAnimTimeCounter += Time.deltaTime;
-        float timeToResetAnimation = PlayerData._1stWeaponLevel <= 2 ? PlayerConsts.shotAnimDuration :
-                                    PlayerConsts.shotLvl3Duration;
+        float timeToResetAnimation = PlayerData._1stWeaponLevel <= 2 ? PlayerConsts.ShotAnimDuration :
+                                    PlayerConsts.ShotLvl3Duration;
         if (shotAnimTimeCounter >= timeToResetAnimation)
         {
             anim.SetInteger(animHashes.shotLevel, 0);

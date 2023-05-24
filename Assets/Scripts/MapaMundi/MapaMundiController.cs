@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MapaMundiController : ControllerUnit, IUIController
 {
-    public Action<int> OnSceneIndexSelected;
+    public Action<int> OnGameSceneIndexSelected;
 
     public override void Setup()
     {
@@ -18,7 +18,7 @@ public class MapaMundiController : ControllerUnit, IUIController
     }
 
     public void SelectSceneIndex(int buildIndex)
-    {
-        OnSceneIndexSelected?.Invoke(buildIndex);
+    {        
+        OnGameSceneIndexSelected?.Invoke(buildIndex);
     }
 }

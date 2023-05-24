@@ -2,50 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using SharedData.Enumerations;
+using UnityEditor;
 
 [Serializable]
 public class PlayerData
 {
-    #region Variables
+    public Action<int> OnLifeChanged;
+    public Action<int> OnArmorLifeChanged;
+    public Action<int> OnLivesChanged;
+    public Action<WeaponType, int> OnWeaponLevelChanged;
+    public Action<WeaponType, int> OnWeaponAmmoChanged;
 
-    public string name;
-    [SerializeField] private Penosa _player = null;
+    [SerializeField] private Penosas _character;
+    [SerializeField] private Penosa _playerScript = null;
     [SerializeField] private byte _localID;
     [SerializeField] private GameObject _gameObject = null;
     [SerializeField] private float _countdown;
     [SerializeField] private int _continues;
-    [SerializeField] [Range(0, PlayerConsts.max_lives)] private int _lives;
-    [SerializeField] [Range(0, PlayerConsts.max_life)] private int _life;
-    [SerializeField] [Range(0, PlayerConsts.max_life)] private int _armorLife;
-    [SerializeField] [Range(1, PlayerConsts._1stWeaponMaxLvl)] private byte __1stWeaponLvl;
-    [SerializeField] [Range(1, PlayerConsts._2ndWeaponMaxLvl)] private byte __2ndWeaponLvl;
+    [SerializeField] [Range(0, PlayerConsts.Max_Lives)] private int _lives;
+    [SerializeField] [Range(0, PlayerConsts.Max_Life)] private int _life;
+    [SerializeField] [Range(0, PlayerConsts.Max_Life)] private int _armorLife;
+    [SerializeField] [Range(1, PlayerConsts._1stWeaponMaxLvl)] private byte _1stWeaponLvl;
+    [SerializeField] [Range(1, PlayerConsts._2ndWeaponMaxLvl)] private byte _2ndWeaponLvl;
     [SerializeField] private int __1stWeaponAmmo;
     [SerializeField] private int __2ndWeaponAmmo;
-    public GameObject[] _1stShot;
-    public GameObject[] _2ndShot;
-
-    #endregion
-
-    #region Events
-
-    public delegate void PlayerDataEvent(int newValue);
-    public delegate void PlayerAmmoDataEvent(WeaponType weaponType, int newValue);
-    public event PlayerDataEvent OnLifeChanged;
-    public event PlayerDataEvent OnArmorLifeChanged;
-    public event PlayerDataEvent OnLivesChanged;
-    public event PlayerAmmoDataEvent OnWeaponLevelChanged;
-    public event PlayerAmmoDataEvent OnWeaponAmmoChanged;
-
-    #endregion
-
-    #region Properties
+    [SerializeField] private List<GameObject> _1stShot;
+    [SerializeField] private List<GameObject> _2ndShot;
 
     public int _1stWeaponAmmo
     {
         get => __1stWeaponAmmo;
         set
         {
-            __1stWeaponAmmo = Mathf.Clamp(value, 0, PlayerConsts.maxAmmo);
+            __1stWeaponAmmo = Mathf.Clamp(value, 0, PlayerConsts.MaxAmmo);
             if (__1stWeaponAmmo == 0) _1stWeaponLevel = 1;
             OnWeaponAmmoChanged?.Invoke(WeaponType.Primary, __1stWeaponAmmo);
         }
@@ -53,13 +43,13 @@ public class PlayerData
 
     public byte _1stWeaponLevel
     {
-        get => __1stWeaponLvl;
+        get => _1stWeaponLvl;
         set 
         {
             if (value <= PlayerConsts._1stWeaponMaxLevel)
             {
-                __1stWeaponLvl = value;
-                OnWeaponLevelChanged?.Invoke(WeaponType.Primary, __1stWeaponLvl);
+                _1stWeaponLvl = value;
+                OnWeaponLevelChanged?.Invoke(WeaponType.Primary, _1stWeaponLvl);
             }
         }
     }
@@ -69,7 +59,7 @@ public class PlayerData
         get => __2ndWeaponAmmo;
         set
         {
-            if (value <= PlayerConsts.maxAmmo && value >= 0)
+            if (value <= PlayerConsts.MaxAmmo && value >= 0)
             {
                 __2ndWeaponAmmo = value;
                 if (__2ndWeaponAmmo == 0) _2ndWeaponLevel = 1;
@@ -80,13 +70,13 @@ public class PlayerData
 
     public byte _2ndWeaponLevel
     {
-        get => __2ndWeaponLvl;
+        get => _2ndWeaponLvl;
         set 
         { 
             if (value <= PlayerConsts._2ndWeaponMaxLevel)
             {
-                __2ndWeaponLvl = value;
-                OnWeaponLevelChanged?.Invoke(WeaponType.Secondary, __2ndWeaponLvl);
+                _2ndWeaponLvl = value;
+                OnWeaponLevelChanged?.Invoke(WeaponType.Secondary, _2ndWeaponLvl);
             }
         }
     }
@@ -96,7 +86,7 @@ public class PlayerData
         get => _armorLife;
         set
         {
-            _armorLife = Mathf.Clamp(value, 0, PlayerConsts.max_life);
+            _armorLife = Mathf.Clamp(value, 0, PlayerConsts.Max_Life);
             OnArmorLifeChanged?.Invoke(_armorLife);
             if (value < 0) Life -= (Mathf.Abs(value));
         }
@@ -135,7 +125,7 @@ public class PlayerData
         get => _life;
         set
         {
-            _life = Mathf.Clamp(value, 0, PlayerConsts.max_life);
+            _life = Mathf.Clamp(value, 0, PlayerConsts.Max_Life);
             OnLifeChanged?.Invoke(_life);
             if (_life == 0 && !Player.Adrenaline && !Player.IsBlinking)
             {
@@ -150,14 +140,41 @@ public class PlayerData
         get => _lives;
         set
         {
-            _lives = Mathf.Clamp(value, 0, PlayerConsts.max_lives);
+            _lives = Mathf.Clamp(value, 0, PlayerConsts.Max_Lives);
             OnLivesChanged?.Invoke(_lives);
         }
     }
 
     public bool OnCountdown { get; set; }
 
-    public Penosa Player => _player;
+    public Penosa Player => _playerScript;
 
-    #endregion
+    public Penosas Character => _character;
+
+    public PlayerData(Penosas newCharacter, int localID)
+    {
+        _character = newCharacter;
+        _localID = (byte)localID;
+
+        _life = PlayerConsts.Max_Life;
+        _armorLife = PlayerConsts.ArmorInitialLife;
+        _lives = PlayerConsts.Initial_Lives;
+
+        _1stWeaponLvl = PlayerConsts.WeaponInitialLevel;
+        __1stWeaponAmmo = PlayerConsts._1stWeaponInitialAmmo;
+
+        _2ndWeaponLvl = PlayerConsts.WeaponInitialLevel;
+        __2ndWeaponAmmo = PlayerConsts._1stWeaponInitialAmmo;
+
+        _countdown = PlayerConsts.Countdown;
+        _continues = PlayerConsts.Continues;
+    }
+
+    public void SetPrefabs(PlayerDataPrefabs prefabs)
+    {
+        _gameObject = prefabs.PlayerPrefab;
+
+        _1stShot = new List<GameObject>(prefabs.ListOf1stShots);
+        _2ndShot = new List<GameObject>(prefabs.ListOf2ndShots);
+    }
 }
