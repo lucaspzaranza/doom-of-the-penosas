@@ -57,7 +57,7 @@ public class PlayerController : ControllerUnit
 
     private void AddNewPlayerData(Penosas characterToAdd)
     {
-        print($"Adding the {characterToAdd} to the PlayerDataController with Local ID {_playersData.Count}...");
+        //print($"Adding the {characterToAdd} to the PlayerDataController with Local ID {_playersData.Count}...");
 
         PlayerData newPlayerData = new PlayerData(characterToAdd, _playersData.Count);
         PlayerDataPrefabs prefabs = PlayerPrefabs.

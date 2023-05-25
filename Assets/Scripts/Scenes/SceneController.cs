@@ -40,13 +40,18 @@ public class SceneController : ControllerUnit
 
     IEnumerator LoadAsync(int sceneId)
     {
-        Time.timeScale = 0.1f;
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneId);
-
         var loadingScreenInstance = Instantiate(_loadingScreen);
         _loadingScreenProgress = loadingScreenInstance.GetComponent<LoadingProgress>();
+        _loadingScreenProgress.Fade(true);
 
-        while (!operation.isDone)
+        while (_loadingScreenProgress.IsInFade)
+        {
+            yield return null;
+        }
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneId);
+
+        while (operation != null && !operation.isDone)
         {
             float progress = Mathf.Clamp01(operation.progress / 0.9f);
             _loadingScreenProgress.SetProgress(progress);
@@ -54,6 +59,6 @@ public class SceneController : ControllerUnit
             yield return null;
         }
 
-        Time.timeScale = 1.0f;
+        _loadingScreenProgress.Fade(false);
     }
 }

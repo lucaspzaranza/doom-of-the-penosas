@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 5772257525967060860}
   - component: {fileID: 5772257525967060861}
   - component: {fileID: 5772257525967060737}
+  - component: {fileID: 2990192990535332402}
   m_Layer: 5
   m_Name: LoadingCanvas
   m_TagString: Untagged
@@ -129,7 +130,7 @@ Canvas:
   m_GameObject: {fileID: 5772257525967060858}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -139,7 +140,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &5772257525967060860
 MonoBehaviour:
@@ -193,9 +194,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452990caed87507409ab7965e2b6c7ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canvas: {fileID: 5772257525967060863}
+  _canvasGroup: {fileID: 2990192990535332402}
   _progressBar: {fileID: 5772257525644702240}
   _progressTxt: {fileID: 5772257527212349844}
+  _fadeRate: 0.1
+--- !u!225 &2990192990535332402
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5772257525967060858}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &5772257526679022110
 GameObject:
   m_ObjectHideFlags: 0
