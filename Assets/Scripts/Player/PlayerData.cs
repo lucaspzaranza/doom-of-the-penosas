@@ -17,7 +17,7 @@ public class PlayerData
     [SerializeField] private Penosas _character;
     [SerializeField] private Penosa _playerScript = null;
     [SerializeField] private byte _localID;
-    [SerializeField] private GameObject _gameObject = null;
+    [SerializeField] private GameObject _playerGameObject = null;
     [SerializeField] private float _countdown;
     [SerializeField] private int _continues;
     [SerializeField] [Range(0, PlayerConsts.Max_Lives)] private int _lives;
@@ -25,19 +25,19 @@ public class PlayerData
     [SerializeField] [Range(0, PlayerConsts.Max_Life)] private int _armorLife;
     [SerializeField] [Range(1, PlayerConsts._1stWeaponMaxLvl)] private byte _1stWeaponLvl;
     [SerializeField] [Range(1, PlayerConsts._2ndWeaponMaxLvl)] private byte _2ndWeaponLvl;
-    [SerializeField] private int __1stWeaponAmmo;
-    [SerializeField] private int __2ndWeaponAmmo;
+    [SerializeField] private int _1stWeaponAmmo;
+    [SerializeField] private int _2ndWeaponAmmo;
     [SerializeField] private List<GameObject> _1stShot;
     [SerializeField] private List<GameObject> _2ndShot;
 
-    public int _1stWeaponAmmo
+    public int _1stWeaponAmmoProp
     {
-        get => __1stWeaponAmmo;
+        get => _1stWeaponAmmo;
         set
         {
-            __1stWeaponAmmo = Mathf.Clamp(value, 0, PlayerConsts.MaxAmmo);
-            if (__1stWeaponAmmo == 0) _1stWeaponLevel = 1;
-            OnWeaponAmmoChanged?.Invoke(WeaponType.Primary, __1stWeaponAmmo);
+            _1stWeaponAmmo = Mathf.Clamp(value, 0, PlayerConsts.MaxAmmo);
+            if (_1stWeaponAmmo == 0) _1stWeaponLevel = 1;
+            OnWeaponAmmoChanged?.Invoke(WeaponType.Primary, _1stWeaponAmmo);
         }
     }
 
@@ -54,16 +54,16 @@ public class PlayerData
         }
     }
 
-    public int _2ndWeaponAmmo
+    public int _2ndWeaponAmmoProp
     {
-        get => __2ndWeaponAmmo;
+        get => _2ndWeaponAmmo;
         set
         {
             if (value <= PlayerConsts.MaxAmmo && value >= 0)
             {
-                __2ndWeaponAmmo = value;
-                if (__2ndWeaponAmmo == 0) _2ndWeaponLevel = 1;
-                OnWeaponAmmoChanged?.Invoke(WeaponType.Secondary, __2ndWeaponAmmo);
+                _2ndWeaponAmmo = value;
+                if (_2ndWeaponAmmo == 0) _2ndWeaponLevel = 1;
+                OnWeaponAmmoChanged?.Invoke(WeaponType.Secondary, _2ndWeaponAmmo);
             }
         }
     }
@@ -115,7 +115,7 @@ public class PlayerData
 
     public GameObject Current2ndShot => _2ndShot[_2ndWeaponLevel - 1];
 
-    public GameObject GameObject => _gameObject;
+    public GameObject PlayerGameObject => _playerGameObject;
 
     // Local ID difere do ID para network. Esse serve apenas pra diferenciar o player 1 do player 2.
     public byte LocalID { get => _localID; set => _localID = value; }
@@ -161,20 +161,28 @@ public class PlayerData
         _lives = PlayerConsts.Initial_Lives;
 
         _1stWeaponLvl = PlayerConsts.WeaponInitialLevel;
-        __1stWeaponAmmo = PlayerConsts._1stWeaponInitialAmmo;
+        _1stWeaponAmmo = PlayerConsts._1stWeaponInitialAmmo;
 
         _2ndWeaponLvl = PlayerConsts.WeaponInitialLevel;
-        __2ndWeaponAmmo = PlayerConsts._1stWeaponInitialAmmo;
+        _2ndWeaponAmmo = PlayerConsts._2ndWeaponInitialAmmo;
 
         _countdown = PlayerConsts.Countdown;
         _continues = PlayerConsts.Continues;
     }
 
-    public void SetPrefabs(PlayerDataPrefabs prefabs)
+    public void SetProjectilesPrefabs(PlayerDataPrefabs prefabs)
     {
-        _gameObject = prefabs.PlayerPrefab;
-
         _1stShot = new List<GameObject>(prefabs.ListOf1stShots);
         _2ndShot = new List<GameObject>(prefabs.ListOf2ndShots);
+    }
+
+    public void SetPlayerFromInstance(Penosa playerScript)
+    {
+        _playerScript = playerScript;
+    }
+
+    public void SetPlayerGameObjectFromInstance(GameObject playerGameObject)
+    {
+        _playerGameObject = playerGameObject;
     }
 }

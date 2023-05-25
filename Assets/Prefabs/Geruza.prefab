@@ -1398,10 +1398,10 @@ MonoBehaviour:
     _lives: 5
     _life: 100
     _armorLife: 0
-    _1stWeaponLvl: 0
-    _2ndWeaponLvl: 0
-    __1stWeaponAmmo: 0
-    __2ndWeaponAmmo: 10
+    _1stWeaponLvl: 1
+    _2ndWeaponLvl: 1
+    _1stWeaponAmmo: 0
+    _2ndWeaponAmmo: 0
     _1stShot:
     - {fileID: 1617454459024769971, guid: 01c60fe339bafbd42aa4817129bfb0ec, type: 3}
     - {fileID: 813294959795268939, guid: fb6057ddc83ac294f9aa987f82256072, type: 3}

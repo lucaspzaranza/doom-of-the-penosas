@@ -3199,7 +3199,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1572194366
 PrefabInstance:
@@ -4211,7 +4211,7 @@ Transform:
   - {fileID: 1496763276}
   - {fileID: 1363809939}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1988867009
 MonoBehaviour:
@@ -4230,7 +4230,9 @@ MonoBehaviour:
   - {fileID: 7866207365053520672, guid: 1049b25c2b161824dad4d343c96036df, type: 3}
   - {fileID: 3880201317863603421, guid: 2961981ba91eeb545a4f419dde9cc948, type: 3}
   - {fileID: 494667710214850738, guid: 05f476ac6291a804fb2fce0bcdf903ff, type: 3}
+  _gameMode: 0
   _gameStatus: 0
+  _isNewGame: 0
   _playerController: {fileID: 0}
   _uiController: {fileID: 1496763277}
   _poolController: {fileID: 0}
@@ -4878,6 +4880,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1988867008}
     m_Modifications:
+    - target: {fileID: 1899442311020433141, guid: 2961981ba91eeb545a4f419dde9cc948,
+        type: 3}
+      propertyPath: _loadingScreen
+      value: 
+      objectReference: {fileID: 5772257525967060858, guid: adff0531f8893ff4eb112da10f17a978,
+        type: 3}
     - target: {fileID: 1948413715142239106, guid: 2961981ba91eeb545a4f419dde9cc948,
         type: 3}
       propertyPath: m_RootOrder

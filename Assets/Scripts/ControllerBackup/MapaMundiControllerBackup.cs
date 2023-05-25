@@ -28,23 +28,25 @@ public class MapaMundiControllerBackup : ControllerBackup
 
         _backToMainMenuBtn.onClick.AddListener(() =>
         {
-            var sceneController = FindAnyObjectByType<SceneController>();
-            if (sceneController != null)
-                sceneController.LoadScene(ScenesBuildIndexes.MainMenu);
-            else
-                SceneManager.LoadScene(ScenesBuildIndexes.MainMenu);
-                mapaMundiController.gameObject.SetActive(false);
+            mapaMundiController.FireBackToMainMenuEvent();
+
+            //var sceneController = FindAnyObjectByType<SceneController>();
+            //if (sceneController != null)
+            //    sceneController.LoadScene(ScenesBuildIndexes.MainMenu);
+            //else
+            //    SceneManager.LoadScene(ScenesBuildIndexes.MainMenu);
+            //    mapaMundiController.gameObject.SetActive(false);
         });
 
         // Man, I have to find a way to do this with some loop instead using these hard coded values...
         _stageButtons[0].onClick.AddListener(() =>
         {
-            mapaMundiController.SelectSceneIndex(0);
+            mapaMundiController.SelectSceneIndex(ScenesBuildIndexes._1stStage);
         });
 
         _stageButtons[1].onClick.AddListener(() =>
         {
-            mapaMundiController.SelectSceneIndex(1);
+            mapaMundiController.SelectSceneIndex(ScenesBuildIndexes._1stStage);
         });
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 public class MapaMundiController : ControllerUnit, IUIController
 {
     public Action<int> OnGameSceneIndexSelected;
+    public Action OnBackToMainMenu;
 
     public override void Setup()
     {
@@ -14,11 +15,16 @@ public class MapaMundiController : ControllerUnit, IUIController
 
     public override void Dispose()
     {
-
+        gameObject.SetActive(false);
     }
 
     public void SelectSceneIndex(int buildIndex)
     {        
         OnGameSceneIndexSelected?.Invoke(buildIndex);
+    }
+
+    public void FireBackToMainMenuEvent()
+    {
+        OnBackToMainMenu?.Invoke();
     }
 }

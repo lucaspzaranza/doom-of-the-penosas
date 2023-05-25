@@ -40,6 +40,15 @@ public abstract class ControllerUnit: Controller
             return ((ControllerUnit)_parentController).GetIsNewGame();
     }
 
+    protected IReadOnlyList<Penosas> GetCharacterSelectionList()
+    {
+        GameController gameCtrl = null;
+        if (_parentController.TryGetComponent(out gameCtrl))
+            return gameCtrl.CharacterSelectionList;
+        else
+            return ((ControllerUnit)_parentController).GetCharacterSelectionList();
+    }
+
     /// <summary>
     /// If we pass the index 0, it'll return the index 1 and vice versa.
     /// </summary>

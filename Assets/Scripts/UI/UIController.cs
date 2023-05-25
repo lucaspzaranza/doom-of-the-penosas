@@ -14,6 +14,7 @@ public class UIController : ControllerUnit
     public Action<bool> OnUISetNewGame;
     public Action<IReadOnlyList<Penosas>> OnUISelectedCharacters;
     public Action<int> OnUIGameSelectedSceneIndex;
+    public Action OnUIBackToMainMenuFromMapaMundi;
 
     [Space]
     [Header("UI Controllers")]
@@ -156,6 +157,7 @@ public class UIController : ControllerUnit
             _mapaMundiController.Setup();
 
             _mapaMundiController.OnGameSceneIndexSelected += HandleMapaMundiOnSceneIndexSelected;
+            _mapaMundiController.OnBackToMainMenu += HandleOnMapaMundiBackToMainMenu;
         }
         else
         {
@@ -182,7 +184,13 @@ public class UIController : ControllerUnit
 
     private void HandleMapaMundiOnSceneIndexSelected(int buildIndex)
     {
-        print($"OnUISelectedSceneIndex: {buildIndex}");
         OnUIGameSelectedSceneIndex?.Invoke(buildIndex);
+    }
+
+    private void HandleOnMapaMundiBackToMainMenu()
+    {
+        MapaMundiController.Dispose();
+
+        OnUIBackToMainMenuFromMapaMundi?.Invoke();
     }
 }

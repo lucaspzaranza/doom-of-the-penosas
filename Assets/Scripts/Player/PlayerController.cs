@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +15,8 @@ public class PlayerController : ControllerUnit
 
     // Vars
     [Space]
-    [SerializeField] private Vector2 playerStartPosition;
+    [SerializeField] private Vector2 _playerStartPosition;
+    [SerializeField] private float _offsetX;
 
     // Props
     [SerializeField] private List<PlayerDataPrefabs> _playerPrefabs;
@@ -60,9 +62,30 @@ public class PlayerController : ControllerUnit
         PlayerData newPlayerData = new PlayerData(characterToAdd, _playersData.Count);
         PlayerDataPrefabs prefabs = PlayerPrefabs.
             SingleOrDefault(prefab => prefab.Character == characterToAdd);
-        newPlayerData.SetPrefabs(prefabs);
+        newPlayerData.SetProjectilesPrefabs(prefabs);
 
         _playersData.Add(newPlayerData);
+    }
+
+    public void AddPlayers()
+    {
+        // foreach (var playerPrefab in PlayerPrefabs)
+        
+        foreach (var character in GetCharacterSelectionList())
+        {
+            var playerPrefab = PlayerPrefabs.SingleOrDefault(prefab => prefab.Character == character);
+            var newPlayer = Instantiate(playerPrefab.PlayerPrefab, _playerStartPosition, Quaternion.identity);
+            var newPlayerScript = newPlayer.GetComponent<Penosa>();
+
+            var playerData = PlayersData.SingleOrDefault(data => data.Character == newPlayerScript.PlayerData.Character);
+            playerData.SetPlayerFromInstance(newPlayerScript);
+            playerData.SetPlayerGameObjectFromInstance(newPlayer);
+
+            newPlayerScript.SetPlayerData(playerData);
+
+            newPlayer.transform.position = new Vector2
+                (_playerStartPosition.x + (_offsetX * playerData.LocalID), _playerStartPosition.y);
+        }
     }
 
     private void GetPlayersOnScene()
@@ -76,14 +99,14 @@ public class PlayerController : ControllerUnit
         players.ForEach(player =>
         {
             PlayersData.Add(player.PlayerData);
-            player.transform.position = new Vector2(playerStartPosition.x + xOffset, playerStartPosition.y);
+            player.transform.position = new Vector2(_playerStartPosition.x + xOffset, _playerStartPosition.y);
             xOffset++;
         });
     }
 
     public void RemovePlayerFromScene(byte ID)
     {
-        PlayersData[ID].GameObject.SetActive(false);
+        PlayersData[ID].PlayerGameObject.SetActive(false);
         PlayersData[ID].Continues--;
 
         if (PlayersData[ID].Continues == 0)
@@ -116,7 +139,7 @@ public class PlayerController : ControllerUnit
 
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown(InputStrings.Start)) // Respawn Penosa
             {
-                PlayersData[ID].GameObject.SetActive(true);
+                PlayersData[ID].PlayerGameObject.SetActive(true);
                 PlayersData[ID].Countdown = ConstantNumbers.CountdownSeconds;
                 PlayersData[ID].OnCountdown = false;
                 PlayersData[ID].Lives = PlayerConsts.Initial_Lives;

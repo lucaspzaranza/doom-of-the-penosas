@@ -22,6 +22,9 @@ public class GameController : Controller
     [SerializeField] private bool _isNewGame;
     public bool IsNewGame => _isNewGame;
 
+    private List<Penosas> _characterSelectionList;
+    public IReadOnlyList<Penosas> CharacterSelectionList => _characterSelectionList;
+
     [Header("Controllers")]
 
     [SerializeField] private PlayerController _playerController;
@@ -40,8 +43,7 @@ public class GameController : Controller
 
     // Vars
     [Header("Game General Data")]
-    [SerializeField] private GameMode _gameModeState; // Variable to reflect the Controller Game Mode only in the Editor. 
-    private List<Penosas> _characterSelectionList;
+    [SerializeField] private GameMode _gameModeState; // Variable to reflect the Controller Game Mode only in the Editor.     
 
     private void Awake()
     {
@@ -74,6 +76,7 @@ public class GameController : Controller
         UIController.OnUIGameModeSelected += SetGameMode;
         UIController.OnUISetNewGame += SetNewGame;
         UIController.OnUIGameSelectedSceneIndex += HandleOnGameSceneSelectedIndex;
+        UIController.OnUIBackToMainMenuFromMapaMundi += HandleOnUIBackToMainMenuFromMapaMundi;
 
         SceneController.OnSceneLoaded += HandleOnSceneLoaded;
     }
@@ -89,6 +92,7 @@ public class GameController : Controller
         UIController.OnUIGameModeSelected -= SetGameMode;
         UIController.OnUISetNewGame -= SetNewGame;
         UIController.OnUIGameSelectedSceneIndex -= HandleOnGameSceneSelectedIndex;
+        UIController.OnUIBackToMainMenuFromMapaMundi -= HandleOnUIBackToMainMenuFromMapaMundi;
 
         SceneController.OnSceneLoaded -= HandleOnSceneLoaded;
 
@@ -140,13 +144,7 @@ public class GameController : Controller
 
         UIController.InstantiateMapaMundiController();
     }
-
-    // Change it
-    private void InstantiateInGameControllers()
-    {        
-        UIController.InstantiatePlayerInGameUIController();        
-    }
-
+   
     // Change it
     private void InGameControllersSetup()
     {
@@ -167,11 +165,18 @@ public class GameController : Controller
             if(GameStatus == GameStatus.Loading)
             {
                 SetGameStatus(GameStatus.InGame);
-                InstantiateInGameControllers();
                 InGameControllersSetup();
             }
             else if(GameStatus == GameStatus.Menu)
                 UIController.PlayerLobbyUIController.gameObject.SetActive(true);
+        }
+        else if(scene.buildIndex == ScenesBuildIndexes._1stStage)
+        {
+            if (GameStatus == GameStatus.Loading)
+            {
+                SetGameStatus(GameStatus.InGame);
+                PlayerController.AddPlayers();
+            }
         }
     }
 
@@ -199,9 +204,16 @@ public class GameController : Controller
 
     private void HandleOnGameSceneSelectedIndex(int buildIndex)
     {
+        SetGameStatus(GameStatus.Loading);
+        SceneController.LoadScene(buildIndex);
         InstantiatePlayerController();
-        InstantiatePoolController();
-        
-        //SceneController.LoadScene(buildIndex);
+        InstantiatePoolController();        
+        //UIController.InstantiatePlayerInGameUIController();
+    }
+
+    private void HandleOnUIBackToMainMenuFromMapaMundi()
+    {
+        if(SceneController != null)
+            SceneController.LoadScene(ScenesBuildIndexes.MainMenu);
     }
 }

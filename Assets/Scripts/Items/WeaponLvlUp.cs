@@ -24,7 +24,7 @@ public class WeaponLvlUp : Item
                 player.SetAmmo(WeaponType.Primary, ammo);
             }
             else 
-                player.SetAmmo(WeaponType.Primary, ammo + player.PlayerData._1stWeaponAmmo);
+                player.SetAmmo(WeaponType.Primary, ammo + player.PlayerData._1stWeaponAmmoProp);
         }
         else if(weaponType == WeaponType.Secondary) 
         {
@@ -34,7 +34,7 @@ public class WeaponLvlUp : Item
                 player.SetAmmo(WeaponType.Secondary, ammo);
             }
             else
-                player.SetAmmo(WeaponType.Secondary, player.PlayerData._2ndWeaponAmmo + ammo);
+                player.SetAmmo(WeaponType.Secondary, player.PlayerData._2ndWeaponAmmoProp + ammo);
         }
     }
 }

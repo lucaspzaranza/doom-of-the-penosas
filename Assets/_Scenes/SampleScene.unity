@@ -1730,7 +1730,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 199.99998, y: 0}
+  m_AnchoredPosition: {x: 200, y: 0}
   m_SizeDelta: {x: -399.99997, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &599368921
@@ -2954,12 +2954,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _childControllersPrefabs: []
-  _gameModeState: 0
+  _gameMode: 0
   _gameStatus: 0
+  _isNewGame: 0
   _playerController: {fileID: 0}
   _uiController: {fileID: 0}
   _poolController: {fileID: 0}
   _sceneController: {fileID: 0}
+  _gameModeState: 0
 --- !u!4 &1233200614
 Transform:
   m_ObjectHideFlags: 0
@@ -3814,14 +3816,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1442785437}
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 2.22, y: 0.23, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.22, y: -0.23, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 17
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1460994370
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4778,6 +4780,7 @@ MonoBehaviour:
   _parentController: {fileID: 0}
   _playerLobbyUIController: {fileID: 0}
   _playerInGameUIController: {fileID: 0}
+  _mapaMundiController: {fileID: 0}
   _cursors: []
 --- !u!4 &2135048783
 Transform:

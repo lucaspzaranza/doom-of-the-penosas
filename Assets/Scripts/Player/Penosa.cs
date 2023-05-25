@@ -252,8 +252,8 @@ public class Penosa : MonoBehaviour
         PlayerData.Life = PlayerConsts.Max_Life;
         PlayerData._1stWeaponLevel = 1;
         PlayerData._2ndWeaponLevel = 1;
-        PlayerData._1stWeaponAmmo = 0;
-        PlayerData._2ndWeaponAmmo = PlayerConsts._2ndWeaponInitialAmmo;
+        PlayerData._1stWeaponAmmoProp = 0;
+        PlayerData._2ndWeaponAmmoProp = PlayerConsts._2ndWeaponInitialAmmo;
     }
 
     private void ChangeSpecialItem(InputAction.CallbackContext context)
@@ -408,7 +408,7 @@ public class Penosa : MonoBehaviour
 
     private void Instantiate_1stShot()
     {
-        if (PlayerData._1stWeaponLevel == 1 || (PlayerData._1stWeaponLevel > 1 && PlayerData._1stWeaponAmmo > 0))
+        if (PlayerData._1stWeaponLevel == 1 || (PlayerData._1stWeaponLevel > 1 && PlayerData._1stWeaponAmmoProp > 0))
         {
             isShooting = true;
             anim.SetInteger(animHashes.shotLevel, PlayerData._1stWeaponLevel);
@@ -429,7 +429,7 @@ public class Penosa : MonoBehaviour
 
             newBullet.GetComponent<Projectile>().Speed = shotspeed * currentDirection;
 
-            SetAmmo(WeaponType.Primary, PlayerData._1stWeaponAmmo - 1);
+            SetAmmo(WeaponType.Primary, PlayerData._1stWeaponAmmoProp - 1);
         }
     }
 
@@ -478,7 +478,7 @@ public class Penosa : MonoBehaviour
             if(PlayerData._2ndWeaponLevel == 1 && currentGrenade != null) 
                 currentGrenade = null;
 
-            SetAmmo(WeaponType.Secondary, PlayerData._2ndWeaponAmmo - 1);
+            SetAmmo(WeaponType.Secondary, PlayerData._2ndWeaponAmmoProp - 1);
         }
     }
 
@@ -522,7 +522,7 @@ public class Penosa : MonoBehaviour
             Instantiate_1stShotLv2();
         else if (fire1ButtonPressed && !isShooting && PlayerData._1stWeaponLevel == 3)
             Instantiate_1stShot();
-        else if (fire2ButtonPressed && PlayerData._2ndWeaponAmmo > 0)
+        else if (fire2ButtonPressed && PlayerData._2ndWeaponAmmoProp > 0)
             InstantiateSecondaryShot();
         else if (fire3ButtonPressed) UseSpecialItem();
 
@@ -532,9 +532,9 @@ public class Penosa : MonoBehaviour
     public void SetAmmo(WeaponType weaponType, int ammo)
     {
         if (weaponType == WeaponType.Primary && PlayerData._1stWeaponLevel > 1)
-            PlayerData._1stWeaponAmmo = ammo;
+            PlayerData._1stWeaponAmmoProp = ammo;
         else if (weaponType == WeaponType.Secondary)
-            PlayerData._2ndWeaponAmmo = ammo;
+            PlayerData._2ndWeaponAmmoProp = ammo;
     }
 
     public void TakeDamage(int dmg, bool force = false) // Remove this default parameter. It's for test usage only.
@@ -544,6 +544,11 @@ public class Penosa : MonoBehaviour
             if (HasArmor) PlayerData.ArmorLife -= dmg;
             else PlayerData.Life -= dmg;
         }
+    }
+
+    public void SetPlayerData(PlayerData newPlayerData)
+    {
+        _playerData = newPlayerData;
     }
 }
 
