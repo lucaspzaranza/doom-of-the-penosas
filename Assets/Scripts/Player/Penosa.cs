@@ -22,14 +22,14 @@ public class Penosa : MonoBehaviour
 
     #region Vars
 
-    private PlayerInput playerInputActions;
-    private InputAction moveAction;
-    private InputAction jumpAction;
-    private InputAction parachuteAction;
-    private InputAction changespecialItemAction;
-    private InputAction fire1Action;
-    private InputAction fire2Action;
-    private InputAction fire3Action;
+    private UnityEngine.InputSystem.PlayerInput _playerInput;
+    private InputAction _moveAction;
+    private InputAction _jumpAction;
+    private InputAction _parachuteAction;
+    private InputAction _changespecialItemAction;
+    private InputAction _fire1Action;
+    private InputAction _fire2Action;
+    private InputAction _fire3Action;
 
     [SerializeField] private PlayerData _playerData;
     private Inventory _inventory = null;
@@ -79,11 +79,11 @@ public class Penosa : MonoBehaviour
 
     #region Props
 
-    public bool HasArmor => PlayerData.ArmorLife > 0;
+    public bool HasArmor => PlayerData.ArmorLife > PlayerConsts.DeathLife;
 
     public GameObject JetCopterObject => _jetCopter;
 
-    private bool Vertical => Mathf.Abs(moveAction.ReadValue<Vector2>().y) > 0;
+    private bool Vertical => Mathf.Abs(_moveAction.ReadValue<Vector2>().y) > PlayerConsts.InputZeroValue;
 
     public Inventory Inventory => _inventory;
 
@@ -103,22 +103,10 @@ public class Penosa : MonoBehaviour
 
     #endregion
 
-    void Awake()
-    {
-        //ResetPlayerData();
-        playerInputActions = new PlayerInput();
-    }
-
     private void OnEnable()
     {
         InputSystemSetup();
-
         _inventory = GetComponentInChildren<Inventory>();
-    }
-
-    private void OnDisable() 
-    {
-        DisableInputSystem();
     }
 
     void Start()
@@ -137,7 +125,7 @@ public class Penosa : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return)) // Remove this!   
             TakeDamage(40, true);
 
-        if (PlayerData.Life <= 0 && !Adrenaline && !IsBlinking)
+        if (PlayerData.Life <= PlayerConsts.DeathLife && !Adrenaline && !IsBlinking)
         {
             PlayerData.Lives--;
             Death();
@@ -146,7 +134,7 @@ public class Penosa : MonoBehaviour
 
     void FixedUpdate()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, terrainLayerMask);
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, PlayerConsts.OverlapCircleDiameter, terrainLayerMask);
         anim.SetBool(animHashes.isGrounded, isGrounded);
 
         if (isGrounded && rb.gravityScale != defaultGravity && !JetCopterActivated) 
@@ -159,56 +147,25 @@ public class Penosa : MonoBehaviour
             if (blinkIntervalTimeCounter >= blinkFrameInterval)
             {
                 Blink();
-                blinkIntervalTimeCounter = 0f;
+                blinkIntervalTimeCounter = PlayerConsts.BlinkInitialValue;
             }
         }
     }
 
     private void InputSystemSetup()
     {
-        moveAction = playerInputActions.Player.MoveAim;
-        moveAction.Enable();
+        _playerInput = GetComponent<UnityEngine.InputSystem.PlayerInput>();
+        _fire1Action = _playerInput.actions.FindAction(PlayerConsts.Fire1Action);
+        _fire2Action = _playerInput.actions.FindAction(PlayerConsts.Fire2Action);
+        _fire3Action = _playerInput.actions.FindAction(PlayerConsts.Fire3SpecialAction);
+        _moveAction = _playerInput.actions.FindAction(PlayerConsts.MoveAction);
+        _parachuteAction = _playerInput.actions.FindAction(PlayerConsts.ParachuteAction);
+        _changespecialItemAction = _playerInput.actions.FindAction(PlayerConsts.ChangeSpecialItemAction);
+        _changespecialItemAction.performed += ChangeSpecialItem;
 
-        jumpAction = playerInputActions.Player.Jump;
-        jumpAction.performed += Jump;
-        jumpAction.canceled += Fall;
-        jumpAction.Enable();
-
-        parachuteAction = playerInputActions.Player.Parachute;
-        parachuteAction.Enable();
-
-        changespecialItemAction = playerInputActions.Player.ChangeSpecialItem;
-        changespecialItemAction.performed += ChangeSpecialItem;
-        changespecialItemAction.Enable();
-
-        fire1Action = playerInputActions.Player.Fire1Shot;
-        fire1Action.Enable();
-
-        fire2Action = playerInputActions.Player.Fire2Shot;
-        fire2Action.Enable();
-
-        fire3Action = playerInputActions.Player.Fire3SpecialItem;
-        fire3Action.Enable();
-    }
-
-    private void DisableInputSystem()
-    {
-        moveAction.Disable();
-
-        jumpAction.performed -= Jump;
-        jumpAction.canceled -= Fall;
-        jumpAction.Disable();
-
-        parachuteAction.Disable();
-
-        changespecialItemAction.performed -= ChangeSpecialItem;
-        changespecialItemAction.Disable();
-
-        playerInputActions.Player.TimeBombMovement.Disable();
-
-        fire1Action.Disable();
-        fire2Action.Disable();
-        fire3Action.Disable();
+        _jumpAction = _playerInput.actions.FindAction(PlayerConsts.JumpAction);
+        _jumpAction.performed += Jump;
+        _jumpAction.canceled += Fall;
     }
 
     public void Blink()
@@ -236,7 +193,7 @@ public class Penosa : MonoBehaviour
 
     public void Death()
     {
-        if (PlayerData.Lives == 0)
+        if (PlayerData.Lives == PlayerConsts.GameOverLives)
             OnPlayerDeath(PlayerData.LocalID);
             //GameController.instance.RemovePlayerFromScene(PlayerData.LocalID);
         else
@@ -250,9 +207,9 @@ public class Penosa : MonoBehaviour
     public void ResetPlayerData()
     {
         PlayerData.Life = PlayerConsts.Max_Life;
-        PlayerData._1stWeaponLevel = 1;
-        PlayerData._2ndWeaponLevel = 1;
-        PlayerData._1stWeaponAmmoProp = 0;
+        PlayerData._1stWeaponLevel = PlayerConsts.WeaponInitialLevel;
+        PlayerData._2ndWeaponLevel = PlayerConsts.WeaponInitialLevel;
+        PlayerData._1stWeaponAmmoProp = PlayerConsts._1stWeaponInitialAmmo;
         PlayerData._2ndWeaponAmmoProp = PlayerConsts._2ndWeaponInitialAmmo;
     }
 
@@ -260,7 +217,7 @@ public class Penosa : MonoBehaviour
     {
         if (!Inventory.IsEmpty)
         {
-            float value = changespecialItemAction.ReadValue<float>();
+            float value = _changespecialItemAction.ReadValue<float>();
             int length = Inventory.Slots.Count;
             int index = Inventory.Slots.IndexOf(Inventory.SelectedSlot);
             if (value > 0 && index < length - 1) index++;
@@ -279,7 +236,7 @@ public class Penosa : MonoBehaviour
 
     private void Move()
     {
-        Vector2 moveVector = moveAction.ReadValue<Vector2>();
+        Vector2 moveVector = _moveAction.ReadValue<Vector2>();
 
         float horizontal = GetNormalizedMovementValue(moveVector.x);
         float vertical = GetNormalizedMovementValue(moveVector.y);
@@ -287,10 +244,29 @@ public class Penosa : MonoBehaviour
         if (horizontal > 0 && isLeft) Flip();
         else if (horizontal < 0 && !isLeft) Flip();
 
-        if (!HitWall())
+        if (!HitWall() && rb != null)
             rb.velocity = new Vector2(speed * horizontal, rb.velocity.y);
 
         SetMovementAnimators(vertical);
+    }
+
+    private void Jump(InputAction.CallbackContext context)
+    {
+        if (!JetCopterActivated)
+        {
+            if (isGrounded)
+                rb.AddForce(Vector2.up * jumpForce);
+        }
+        else
+            rb.velocity = new Vector2(rb.velocity.x, speed);
+    }
+
+    private void Fall(InputAction.CallbackContext context)
+    {
+        float yVelocity = rb.velocity.y;
+        float newY = yVelocity < 0 ? yVelocity : 0;
+
+        rb.velocity = new Vector2(rb.velocity.x, newY);
     }
 
     private float GetNormalizedMovementValue(float raw)
@@ -312,6 +288,9 @@ public class Penosa : MonoBehaviour
 
     private void SetMovementAnimators(float vertical)
     {
+        if (rb == null)
+            return;
+
         anim.SetInteger(animHashes.XVelocity, (int)rb.velocity.x);
         anim.SetFloat(animHashes.YVelocity, rb.velocity.y);
 
@@ -327,28 +306,9 @@ public class Penosa : MonoBehaviour
         Inventory.transform.localScale = new Vector2(isLeft ? -1f : 1f, 1f);
     }
 
-    private void Jump(InputAction.CallbackContext context) 
-    {
-        if (!JetCopterActivated)
-        {
-            if (isGrounded)
-                rb.AddForce(Vector2.up * jumpForce);
-        }
-        else
-            rb.velocity = new Vector2(rb.velocity.x, speed);
-    }
-
-    private void Fall(InputAction.CallbackContext context)
-    {
-        float yVelocity = rb.velocity.y;
-        float newY = yVelocity < 0 ? yVelocity : 0;
-
-        rb.velocity = new Vector2(rb.velocity.x, newY);
-    }
-
     private void Parachute()
     {
-        bool buttonPressed = parachuteAction.ReadValue<float>() > 0f;
+        bool buttonPressed = _parachuteAction.ReadValue<float>() > 0f;
 
         if (JetCopterActivated) return;
 
@@ -507,14 +467,15 @@ public class Penosa : MonoBehaviour
 
     private void Shoot()
     {
-        bool fire1ButtonPressed = fire1Action.ReadValue<float>() > 0;
+        bool fire1ButtonPressed = _fire1Action.ReadValue<float>() > 0;
+
         // Lvl Diferente de 2, porque com o nível 2, o comportamento do tiro é diferente,
         // precisa verificar se está pressionado a cada frame, enquanto que nos lvls 1 e 3 
         // a função de tiro só deve ser chamada no frame em que o botão foi pressionado.
-        if (PlayerData._1stWeaponLevel != 2) fire1ButtonPressed &= fire1Action.triggered;
+        if (PlayerData._1stWeaponLevel != 2) fire1ButtonPressed &= _fire1Action.triggered;
 
-        bool fire2ButtonPressed = fire2Action.ReadValue<float>() > 0 && fire2Action.triggered;
-        bool fire3ButtonPressed = fire3Action.ReadValue<float>() > 0 && fire3Action.triggered;
+        bool fire2ButtonPressed = _fire2Action.ReadValue<float>() > 0 && _fire2Action.triggered;
+        bool fire3ButtonPressed = _fire3Action.ReadValue<float>() > 0 && _fire3Action.triggered;
 
         if (fire1ButtonPressed && PlayerData._1stWeaponLevel == 1)
             Instantiate_1stShot();

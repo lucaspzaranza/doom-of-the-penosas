@@ -36,7 +36,7 @@ public class CursorPosition : MonoBehaviour
 
     private void OnEnable()
     {
-        navigation = playerInputActions.PlayerSelectionMenu.ArrowNavigation;
+        navigation = playerInputActions.PlayerSelectionMenu.CursorNavigation;
         navigation.started += UpdateCursorPositionWrapper;
         navigation.canceled += UpdateCursorPositionWrapper;
         navigation.Enable();

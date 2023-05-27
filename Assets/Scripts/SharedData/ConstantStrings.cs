@@ -27,14 +27,18 @@ public static class ConstantStrings
 
     // Menu
     public const string CursorPositionName = "CursorPosition";
+}
 
-    // Messages
-    public const string ReachedMaxTimeAttempingToGetTheParentController =
-        "Reached the max time duration attempting to get the parent controller. Aborting operation.";
-
+public static class WarningMessages
+{
     public static void ControllerNotFoundOnBackupMessage(string controllerName)
     {
         Debug.LogWarning($"The {controllerName} could not be found. Are you missing the Controller instance on the scene?");
+    }
+
+    public static void CantAddPlayer(string playerName)
+    {
+        Debug.LogWarning($"Can't add {playerName} to the game. Please check if there is an appropriate input device inserted on your machine.");
     }
 }
 
@@ -70,6 +74,9 @@ public static class PlayerConsts
     public const float ShotLvl3Duration = 0.5f;
     public const float ShotLvl2VariationRate = 0.1f;
     public const float ShotAnimDuration = 0.25f;
+    public const float DefaultSpeed = 2f;
+    public const float OverlapCircleDiameter = 0.1f;
+    public const float BlinkInitialValue = 0.1f;
     public const byte Max_Life = 100;
     public const byte Max_Lives = 9;
     public const byte Countdown = 10;
@@ -84,5 +91,15 @@ public static class PlayerConsts
     public const byte _2ndWeaponInitialAmmo = 10;
     public const byte ArmorInitialLife = 10;
     public const int MaxAmmo = 999;
-    public const float DefaultSpeed = 2f;
+    public const int DeathLife = 0;
+    public const int GameOverLives = 0;
+    public const int InputZeroValue = 0;
+
+    public const string Fire1Action = "Fire1";
+    public const string Fire2Action = "Fire2";
+    public const string Fire3SpecialAction = "Fire3Special";
+    public const string MoveAction = "MoveAndAim";
+    public const string ParachuteAction = "Parachute";
+    public const string JumpAction = "Jump";
+    public const string ChangeSpecialItemAction = "ChangeSpecialItem";
 }

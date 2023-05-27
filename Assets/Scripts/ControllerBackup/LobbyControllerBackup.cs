@@ -68,7 +68,7 @@ public class LobbyControllerBackup : ControllerBackup
 
         if (lobbyController == null)
         {
-            ConstantStrings.ControllerNotFoundOnBackupMessage(nameof(PlayerLobbyUIController));
+            WarningMessages.ControllerNotFoundOnBackupMessage(nameof(PlayerLobbyUIController));
             return;
         }
 

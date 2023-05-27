@@ -3,8 +3,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class PlayerController : ControllerUnit
@@ -19,6 +21,9 @@ public class PlayerController : ControllerUnit
     [SerializeField] private float _offsetX;
 
     // Props
+    [SerializeField] private InputSystemController _inputSystemController;
+    public InputSystemController InputSystemController => _inputSystemController;
+
     [SerializeField] private List<PlayerDataPrefabs> _playerPrefabs;
     public List<PlayerDataPrefabs> PlayerPrefabs => _playerPrefabs;
 
@@ -69,15 +74,23 @@ public class PlayerController : ControllerUnit
 
     public void AddPlayers()
     {
-        // foreach (var playerPrefab in PlayerPrefabs)
-        
+        InstantiatePlayerInputController();
+
         foreach (var character in GetCharacterSelectionList())
         {
             var playerPrefab = PlayerPrefabs.SingleOrDefault(prefab => prefab.Character == character);
-            var newPlayer = Instantiate(playerPrefab.PlayerPrefab, _playerStartPosition, Quaternion.identity);
+            var playerData = PlayersData.SingleOrDefault(data => data.Character == character);
+
+            var newPlayer = _inputSystemController.AddPlayerWithID(playerData.LocalID, playerPrefab.PlayerPrefab);
+
+            if(newPlayer == null)
+            {
+                WarningMessages.CantAddPlayer(playerPrefab.Character.ToString());
+                return;
+            }
+
             var newPlayerScript = newPlayer.GetComponent<Penosa>();
 
-            var playerData = PlayersData.SingleOrDefault(data => data.Character == newPlayerScript.PlayerData.Character);
             playerData.SetPlayerFromInstance(newPlayerScript);
             playerData.SetPlayerGameObjectFromInstance(newPlayer);
 
@@ -85,6 +98,19 @@ public class PlayerController : ControllerUnit
 
             newPlayer.transform.position = new Vector2
                 (_playerStartPosition.x + (_offsetX * playerData.LocalID), _playerStartPosition.y);
+        }
+    }
+
+    private void InstantiatePlayerInputController()
+    {
+        GameObject inputControllerPrefab = ChildControllersPrefabs.
+            SingleOrDefault(prefab => prefab.GetComponent<InputSystemController>() != null);
+
+        if (inputControllerPrefab != null)
+        {
+            GameObject newInstance = Instantiate(inputControllerPrefab, transform);
+            _inputSystemController = newInstance.GetComponent<InputSystemController>();
+            _inputSystemController.Setup();
         }
     }
 

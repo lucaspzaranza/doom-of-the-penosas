@@ -1,0 +1,43 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.InputSystem.Users;
+
+public class InputSystemController : ControllerUnit
+{
+    [SerializeField] private PlayerInputManager _playerInputManager;
+    public PlayerInputManager PlayerInputManager => _playerInputManager;
+
+    public override void Setup()
+    {
+        base.Setup();
+
+        _playerInputManager = FindAnyObjectByType<PlayerInputManager>();
+    }
+
+    public override void Dispose()
+    {
+        _playerInputManager = null;
+    }
+
+    public GameObject AddPlayerWithID(int playerIndex, GameObject prefab)
+    {
+        _playerInputManager.playerPrefab = prefab;
+        var playerInput = _playerInputManager.JoinPlayer(playerIndex);
+
+        InputUser lastPlayerInputUser = InputUser.all[InputUser.all.Count - 1];
+        
+        for (int i = 1; i < lastPlayerInputUser.pairedDevices.Count; i++)
+        {
+            InputDevice lastDevice = lastPlayerInputUser.pairedDevices[i];
+            lastPlayerInputUser.UnpairDevice(lastDevice);
+        }
+
+        var playersInputs = FindObjectsOfType<UnityEngine.InputSystem.PlayerInput>().ToList();
+        var player = playersInputs.SingleOrDefault(input => input.playerIndex == playerIndex)?.gameObject;
+        return player;
+    }
+}

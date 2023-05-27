@@ -37,7 +37,7 @@ public class GameController : Controller
     public PoolController PoolController => _poolController;
 
     [SerializeField] private SceneController _sceneController;
-    public SceneController SceneController => _sceneController;
+    public SceneController SceneController => _sceneController;   
 
     private bool IsSingleInstance => instance == this;
 
@@ -156,7 +156,7 @@ public class GameController : Controller
 
         PlayerController.OnGameOverCountdownTextIsNull += HandleOnGameOverCountdownTextIsNull;
         PlayerController.OnCountdownActivation += HandleOnCoutdownActivation;
-    }
+    }    
 
     private void HandleOnSceneLoaded(Scene scene)
     {

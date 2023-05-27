@@ -24,7 +24,7 @@ public class TimeBomb : Grenade
     {
         playerInputActions.Player.TimeBombMovement.Enable();
 
-        timeBombExplosionAction = playerInputActions.Player.Fire2Shot;
+        timeBombExplosionAction = playerInputActions.Player.Fire2;
         timeBombExplosionAction.Enable();
     }
 

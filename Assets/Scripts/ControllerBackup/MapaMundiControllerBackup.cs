@@ -22,20 +22,13 @@ public class MapaMundiControllerBackup : ControllerBackup
 
         if (mapaMundiController == null)
         {
-            ConstantStrings.ControllerNotFoundOnBackupMessage(nameof(MapaMundiController));
+            WarningMessages.ControllerNotFoundOnBackupMessage(nameof(MapaMundiController));
             return;
         }
 
         _backToMainMenuBtn.onClick.AddListener(() =>
         {
             mapaMundiController.FireBackToMainMenuEvent();
-
-            //var sceneController = FindAnyObjectByType<SceneController>();
-            //if (sceneController != null)
-            //    sceneController.LoadScene(ScenesBuildIndexes.MainMenu);
-            //else
-            //    SceneManager.LoadScene(ScenesBuildIndexes.MainMenu);
-            //    mapaMundiController.gameObject.SetActive(false);
         });
 
         // Man, I have to find a way to do this with some loop instead using these hard coded values...
