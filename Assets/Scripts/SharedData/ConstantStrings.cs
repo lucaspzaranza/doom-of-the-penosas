@@ -27,6 +27,13 @@ public static class ConstantStrings
 
     // Menu
     public const string CursorPositionName = "CursorPosition";
+
+    // Devices
+    public const string Mouse = "Mouse";
+
+    // Tags
+    public const string CharacterSelectionButtonTag = "CharacterSelectionButton";
+    public const string DeviceSelectionButtonTag = "DeviceSelectionButton";
 }
 
 public static class WarningMessages
@@ -36,9 +43,14 @@ public static class WarningMessages
         Debug.LogWarning($"The {controllerName} could not be found. Are you missing the Controller instance on the scene?");
     }
 
-    public static void CantAddPlayer(string playerName)
+    public static void CantAddPlayerMessage(string playerName)
     {
         Debug.LogWarning($"Can't add {playerName} to the game. Please check if there is an appropriate input device inserted on your machine.");
+    }
+
+    public static void InputDeviceChosenTwiceOrMoreMessage(string device)
+    {
+        Debug.LogWarning($"The {device} device is being chosen by more than one player. Please select another device.");
     }
 }
 
@@ -79,7 +91,6 @@ public static class PlayerConsts
     public const float BlinkInitialValue = 0.1f;
     public const byte Max_Life = 100;
     public const byte Max_Lives = 9;
-    public const byte Countdown = 10;
     public const byte Continues = 5;
     public const byte Initial_Lives = 5;
     public const byte WeaponInitialLevel = 1;

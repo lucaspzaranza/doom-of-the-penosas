@@ -10,6 +10,8 @@ TagManager:
   - CursorPosition
   - Cursor
   - ControllerBackup
+  - CharacterSelectionButton
+  - DeviceSelectionButton
   layers:
   - Default
   - TransparentFX

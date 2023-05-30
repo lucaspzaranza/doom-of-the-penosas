@@ -85,7 +85,7 @@ public class PlayerController : ControllerUnit
 
             if(newPlayer == null)
             {
-                WarningMessages.CantAddPlayer(playerPrefab.Character.ToString());
+                WarningMessages.CantAddPlayerMessage(playerPrefab.Character.ToString());
                 return;
             }
 

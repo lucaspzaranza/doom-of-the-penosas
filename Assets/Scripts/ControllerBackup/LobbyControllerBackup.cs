@@ -18,6 +18,9 @@ public class LobbyControllerBackup : ControllerBackup
     [SerializeField] private GameObject _cancelCharacterSelectionButton;
     public GameObject CancelCharacterSelectionButton => _cancelCharacterSelectionButton;
 
+    [SerializeField] private GameObject _deviceSelectorPanel;
+    public GameObject DeviceSelectorPanel => _deviceSelectorPanel;
+
     [SerializeField] private List<Button> _characterButtons;
     public List<Button> CharacterButtons => _characterButtons;
 

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
 using System;
+using UnityEngine.InputSystem;
 
 public class PlayerLobbyUIController : ControllerUnit, IUIController
 {
@@ -19,20 +20,23 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
     [Header("Chosen Characters")]
     [SerializeField] private List<Penosas> _characterSelectionList;
     public List<Penosas> CharacterSelectionList => _characterSelectionList;
-
+    
     // Vars
     [Space]
     [SerializeField] private LobbyState _lobbyState;
     [SerializeField] private GameObject _startButton;
     [SerializeField] private GameObject _backToMainMenuButton;
     [SerializeField] private GameObject _cancelCharacterSelectionButton;
+    [SerializeField] private GameObject _deviceSelectorPanel;
     [SerializeField] private List<Button> _characterButtons;
     [SerializeField] private List<TMP_Text> _charactersTexts;
     [SerializeField] private Color _defaultTextColor;
     [SerializeField] private List<Color> _selectedColors;
+    [SerializeField] private List<InputDevicesSelector> _deviceSelectors;
 
     private List<CursorPosition> _cursors;
-    
+    DevicePopupPanelUI _devicePanel;
+
     public void SelectButton(GameObject buttonToSelect)
     {
         EventSystem.current.SetSelectedGameObject(buttonToSelect);
@@ -70,6 +74,7 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
         _characterSelectionList = null;
         ResetLobbyState();
         
+        _devicePanel.OnDeviceSelectorsAdded -= HandleOnDeviceSelectorsAdded;
         gameObject.SetActive(false);
     }
 
@@ -84,6 +89,15 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
         _charactersTexts = lobbyBackup.CharacterTexts;
         _defaultTextColor = lobbyBackup.DefaultTextColor;
         _selectedColors = lobbyBackup.SelectedColors;
+        _deviceSelectorPanel = lobbyBackup.DeviceSelectorPanel;
+
+        _devicePanel = _deviceSelectorPanel.GetComponent<DevicePopupPanelUI>();
+        _devicePanel.OnDeviceSelectorsAdded += HandleOnDeviceSelectorsAdded;
+    }
+
+    private void HandleOnDeviceSelectorsAdded(List<InputDevicesSelector> devices) 
+    {
+        _deviceSelectors = devices.Where(device => device.gameObject.activeSelf).ToList();
     }
 
     public void FireSetNewGameEvent(bool newGame)
@@ -106,6 +120,12 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
         if (_lobbyState != LobbyState.PlayerSelection)
             return;
 
+        if(HasRepeatedDeviceSelected(out string duplicatedDevice))
+        {
+            WarningMessages.InputDeviceChosenTwiceOrMoreMessage(duplicatedDevice);
+            return;
+        }
+
         if (_characterSelectionList == null)
             ResetSelection();
 
@@ -122,6 +142,32 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 
         _lobbyState = LobbyState.ReadyToStart;
         SetGameActivation(true);
+    }
+
+    private bool HasRepeatedDeviceSelected(out string duplicatedDevice)
+    {
+        duplicatedDevice = string.Empty;
+        var selectedDevices = _deviceSelectors.Select(device => device.SelectedDevice).ToList();
+        List<InputDevice> repeateDevices = new List<InputDevice>();
+
+        for (int i = 0; i < _deviceSelectors.Count; i++)
+        {
+            for (int j = 0; j < _deviceSelectors.Count; j++)
+            {
+                if (i == j)
+                    continue;
+                
+                if (_deviceSelectors[j].SelectedDevice == selectedDevices[i] && 
+                    !repeateDevices.Contains(_deviceSelectors[j].SelectedDevice))
+                {
+                    duplicatedDevice = _deviceSelectors[j].SelectedDevice.displayName;
+                    repeateDevices.Add(_deviceSelectors[j].SelectedDevice);
+                    break;
+                }
+            }
+        }
+
+        return repeateDevices.Count > 0;
     }
 
     private void SetCharacterTextColors(int characterIndex, Color color)
@@ -186,28 +232,39 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
     }
     private void HandleOnCursorMoved(CursorPosition cursor, Vector2 coordinates)
     {
-        // Only valid for 2 cursors at screen
-        if(GetGameMode() == GameMode.Multiplayer && _lobbyState == LobbyState.PlayerSelection)
+        if(_lobbyState == LobbyState.PlayerSelection)
         {
-            int index = _cursors.IndexOf(cursor);
-            int complementaryCursorIndex = GetComplementaryPlayerIndex(index);
-            CursorPosition _2ndCursor = _cursors[complementaryCursorIndex];
-
-            Button parentBtn = cursor.transform.parent.GetComponent<Button>();
-            int btnIndex = _characterButtons.IndexOf(parentBtn);
-            int complementaryBtnIndex = GetComplementaryPlayerIndex(btnIndex);
-            GameObject complementaryButton = _characterButtons[complementaryBtnIndex].gameObject;
-
-            if (coordinates.y == 0)
-                _2ndCursor.UpdateCursorPosition(complementaryButton);
-            else if (cursor.transform.parent.Equals(_2ndCursor.transform.parent))
+            // Only valid for 2 cursors at screen
+            if(GetGameMode() == GameMode.Multiplayer)
             {
-                SelectButton(complementaryButton);
-                cursor.UpdateCursorPosition(complementaryButton);
+                int index = _cursors.IndexOf(cursor);
+                int complementaryCursorIndex = GetComplementaryPlayerIndex(index);
+                CursorPosition _2ndCursor = _cursors[complementaryCursorIndex];
+
+                Button parentBtn = cursor.transform.parent.GetComponent<Button>();
+                int btnIndex = _characterButtons.IndexOf(parentBtn);
+                int complementaryBtnIndex = GetComplementaryPlayerIndex(btnIndex);
+                GameObject complementaryButton = _characterButtons[complementaryBtnIndex].gameObject;
+
+                if (coordinates.y == 0 && IsCharacterSelectionButton(cursor.transform.parent.gameObject)) // Horizontal Cursor Movement
+                    _2ndCursor.UpdateCursorPosition(complementaryButton);
+                else if (cursor.transform.parent.Equals(_2ndCursor.transform.parent)) // Changing the 1P and the 2P cursors position
+                {
+                    SelectButton(complementaryButton);
+                    cursor.UpdateCursorPosition(complementaryButton);
+                }
             }
         }
     }
-   
+
+    private bool IsCharacterSelectionButton(GameObject parentGameObj)
+    {
+        if(!parentGameObj.TryGetComponent(out Button button))
+            return false;
+
+        return parentGameObj.tag == ConstantStrings.CharacterSelectionButtonTag;
+    }    
+
     public void SelectPlayersCharacters()
     {
         OnLobbySelectedCharacters?.Invoke(CharacterSelectionList);

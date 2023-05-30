@@ -166,7 +166,7 @@ public class PlayerData
         _2ndWeaponLvl = PlayerConsts.WeaponInitialLevel;
         _2ndWeaponAmmo = PlayerConsts._2ndWeaponInitialAmmo;
 
-        _countdown = PlayerConsts.Countdown;
+        _countdown = ConstantNumbers.CountdownSeconds;
         _continues = PlayerConsts.Continues;
     }
 

@@ -56,6 +56,7 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\UI\InputDevices\InputDevicesSelector.cs" />
     <Compile Include="Assets\Scripts\Items\HealItem.cs" />
     <Compile Include="Assets\Scripts\GameController\ControllerUnit.cs" />
     <Compile Include="Assets\Scripts\Items\AddLives.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Assets\Scripts\Items\ItemSlot.cs" />
     <Compile Include="Assets\Scripts\Pooling\PoolController.cs" />
     <Compile Include="Assets\Scripts\SharedData\CustomEventArgs.cs" />
+    <Compile Include="Assets\Scripts\UI\InputDevices\DevicePopupPanelUI.cs" />
     <Compile Include="Assets\Scripts\Player\Penosa.cs" />
     <Compile Include="Assets\Scripts\UI\LoadingProgress.cs" />
     <Compile Include="Assets\Scripts\SharedData\ExtensionMethods.cs" />
