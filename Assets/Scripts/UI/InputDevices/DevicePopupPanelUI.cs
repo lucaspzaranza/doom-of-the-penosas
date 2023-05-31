@@ -9,12 +9,19 @@ public class DevicePopupPanelUI : MonoBehaviour
     public Action<List<InputDevicesSelector>> OnDeviceSelectorsAdded;
 
     [SerializeField] private GameObject _deviceUnitPrefab;
+    [SerializeField] private InputControlsPanel _inputControsPanel;
     [SerializeField] private Transform _playerDevicesTransform;
     [SerializeField] private List<InputDevicesSelector> _inputDevicesSelectors;
 
     private void OnEnable()
     {
         GetPlayersDevices();
+        SetDevicesSelectorsCallback();
+    }
+
+    private void OnDisable()
+    {
+        RemoveDeviceSelectorsCallbacks(); 
     }
 
     private void GetPlayersDevices()
@@ -52,6 +59,33 @@ public class DevicePopupPanelUI : MonoBehaviour
         for (int i = 1; i < _inputDevicesSelectors.Count; i++)
         {
             _inputDevicesSelectors[i].gameObject.SetActive(val);
+        }
+    }
+
+    private void SetDevicesSelectorsCallback()
+    {
+        foreach (var deviceSelector in _inputDevicesSelectors)
+        {
+            deviceSelector.DeviceButton.onClick.AddListener(() =>
+            {
+                _inputControsPanel.gameObject.SetActive(!_inputControsPanel.gameObject.activeSelf);
+
+                if (!_inputControsPanel.gameObject.activeSelf)
+                    return; 
+
+                if (deviceSelector.SelectedDevice.displayName.Contains(ConstantStrings.Keyboard))
+                    _inputControsPanel.ActivatePanel(ConstantStrings.Keyboard);
+                else
+                    _inputControsPanel.ActivatePanel(ConstantStrings.Joystick);
+            });
+        }
+    }
+
+    private void RemoveDeviceSelectorsCallbacks()
+    {
+        foreach (var deviceSelector in _inputDevicesSelectors)
+        {
+            deviceSelector.DeviceButton.onClick.RemoveAllListeners();
         }
     }
 }

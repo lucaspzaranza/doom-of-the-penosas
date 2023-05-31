@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,9 @@ public class InputDevicesSelector : MonoBehaviour
     [SerializeField] private List<InputDevice> _devices;
 
     public InputDevice SelectedDevice => _devices[_currentIndex];
+
+    [SerializeField] private Button _deviceButton; 
+    public Button DeviceButton => _deviceButton;
 
     private int _currentIndex;
     private int CurrentIndex
@@ -43,6 +47,9 @@ public class InputDevicesSelector : MonoBehaviour
         CursorPosition.OnCursorMoved -= ChangeDevice;
         if(instancesCounter > 0)
             instancesCounter--;
+
+        if (_deviceButton != null)
+            _deviceButton.onClick.RemoveAllListeners();
     }
 
     public void SetPlayerName(string playerName)
@@ -50,17 +57,9 @@ public class InputDevicesSelector : MonoBehaviour
         _playerName.text = playerName;
     }
 
-    private bool IsDeviceSelectionButton(GameObject parentGameObj)
-    {
-        if (!parentGameObj.TryGetComponent(out Button button))
-            return false;
-
-        return parentGameObj.tag == ConstantStrings.DeviceSelectionButtonTag;
-    }
-
     public void ChangeDevice(CursorPosition cursor, Vector2 directions)
     {
-        if (!IsDeviceSelectionButton(cursor.transform.parent.gameObject) ||
+        if (!cursor.transform.parent.gameObject.IsDeviceSelectionButton() ||
             !IsButtonWithCursor(cursor))
             return;
 

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Policy;
+using System.Threading;
 using UnityEngine;
 
 public static class ConstantStrings
@@ -30,10 +32,19 @@ public static class ConstantStrings
 
     // Devices
     public const string Mouse = "Mouse";
+    public const string Keyboard = "Keyboard";
+    public const string Joystick = "Joystick";
 
     // Tags
     public const string CharacterSelectionButtonTag = "CharacterSelectionButton";
     public const string DeviceSelectionButtonTag = "DeviceSelectionButton";
+
+    // Menu Messages
+
+    // Lobby
+    public const string SelectCharacterMsg = "Select your character to play.";
+    public const string SelectTheDeviceAndSeeTheControls = "Select the device you wish to use with this player." +
+                                                "\nPress confirm to see the device controls.";
 }
 
 public static class WarningMessages
@@ -48,9 +59,16 @@ public static class WarningMessages
         Debug.LogWarning($"Can't add {playerName} to the game. Please check if there is an appropriate input device inserted on your machine.");
     }
 
-    public static void InputDeviceChosenTwiceOrMoreMessage(string device)
+    public static string InputDeviceChosenTwiceOrMoreMessage(string device)
     {
-        Debug.LogWarning($"The {device} device is being chosen by more than one player. Please select another device.");
+        string message = $"The {device} device is being chosen by more than one player. Please select another device.";
+        Debug.LogWarning(message);
+        return message;
+    }
+
+    public static void ButtonComponentNotFound()
+    {
+        Debug.LogWarning($"The GameObject hasn't any Button Component, and he may not behave properly.");
     }
 }
 

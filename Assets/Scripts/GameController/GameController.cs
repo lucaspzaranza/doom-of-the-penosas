@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using SharedData.Enumerations;
 using UnityEngine.SceneManagement;
 using System;
+using UnityEngine.InputSystem;
 
 public class GameController : Controller
 {
@@ -25,6 +26,9 @@ public class GameController : Controller
     private List<Penosas> _characterSelectionList;
     public IReadOnlyList<Penosas> CharacterSelectionList => _characterSelectionList;
 
+    private IReadOnlyList<InputDevice> _selectedDevices;
+    public IReadOnlyList<InputDevice> SelectedDevices => _selectedDevices;
+
     [Header("Controllers")]
 
     [SerializeField] private PlayerController _playerController;
@@ -40,10 +44,6 @@ public class GameController : Controller
     public SceneController SceneController => _sceneController;   
 
     private bool IsSingleInstance => instance == this;
-
-    // Vars
-    [Header("Game General Data")]
-    [SerializeField] private GameMode _gameModeState; // Variable to reflect the Controller Game Mode only in the Editor.     
 
     private void Awake()
     {
@@ -77,6 +77,7 @@ public class GameController : Controller
         UIController.OnUISetNewGame += SetNewGame;
         UIController.OnUIGameSelectedSceneIndex += HandleOnGameSceneSelectedIndex;
         UIController.OnUIBackToMainMenuFromMapaMundi += HandleOnUIBackToMainMenuFromMapaMundi;
+        UIController.OnUISelectedDevices += HandleOnUISelectedDevices;
 
         SceneController.OnSceneLoaded += HandleOnSceneLoaded;
     }
@@ -93,6 +94,7 @@ public class GameController : Controller
         UIController.OnUISetNewGame -= SetNewGame;
         UIController.OnUIGameSelectedSceneIndex -= HandleOnGameSceneSelectedIndex;
         UIController.OnUIBackToMainMenuFromMapaMundi -= HandleOnUIBackToMainMenuFromMapaMundi;
+        UIController.OnUISelectedDevices -= HandleOnUISelectedDevices;
 
         SceneController.OnSceneLoaded -= HandleOnSceneLoaded;
 
@@ -187,7 +189,7 @@ public class GameController : Controller
         {
             var instance = Instantiate(playerControllerPrefab, transform);
             _playerController = instance.GetComponent<PlayerController>();
-            _playerController.Setup(_characterSelectionList);
+            _playerController.Setup(_characterSelectionList, _selectedDevices);
         }
     }
 
@@ -215,5 +217,10 @@ public class GameController : Controller
     {
         if(SceneController != null)
             SceneController.LoadScene(ScenesBuildIndexes.MainMenu);
+    }
+
+    private void HandleOnUISelectedDevices(IReadOnlyList<InputDevice> devices)
+    {
+        _selectedDevices = devices;
     }
 }

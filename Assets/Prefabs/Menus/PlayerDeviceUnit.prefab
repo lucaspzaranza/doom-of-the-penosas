@@ -311,6 +311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78cc72cde3f2fd843855591bc40f029e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _deviceButton: {fileID: 2149397002428004052}
   _playerName: {fileID: 2149397003003312037}
   _deviceTMPRO: {fileID: 2149397004138037740}
 --- !u!1 &2149397003003312039

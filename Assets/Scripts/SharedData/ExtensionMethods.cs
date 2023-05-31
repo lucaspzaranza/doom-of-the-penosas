@@ -17,7 +17,7 @@ public static class ExtensionMethods
     {
         if (button == null || !button.TryGetComponent(typeof(Button), out Component buttonComponent))
         {
-            Debug.LogWarning($"The Button GameObject hasn't any Button Component, and he may not behave properly.");
+            WarningMessages.ButtonComponentNotFound();
             return null;
         }
 
@@ -34,9 +34,9 @@ public static class ExtensionMethods
     /// <returns>The CursorPosition GameObject. Returns a Vector3.Zero if can't find any Button or CursorPosition object.</returns>
     public static Vector3 GetCursorPosition(this GameObject button)
     {
-        if (button == null || !button.TryGetComponent(typeof(Button), out Component buttonComponent))
+        if (button == null || !button.TryGetComponent(out Button buttonComponent))
         {
-            Debug.LogWarning($"The Button GameObject hasn't any Button Component, and he may not behave properly.");
+            WarningMessages.ButtonComponentNotFound();
             return Vector3.zero;
         }
 
@@ -49,5 +49,27 @@ public static class ExtensionMethods
         }
         else
             return Vector3.zero;
+    }
+
+    public static bool IsDeviceSelectionButton(this GameObject button)
+    {
+        if (button == null || !button.TryGetComponent(out Button buttonComponent))
+        {
+            WarningMessages.ButtonComponentNotFound();
+            return false;
+        }
+
+        return button.tag == ConstantStrings.DeviceSelectionButtonTag;
+    }
+
+    public static bool IsCharacterSelectionButton(this GameObject button)
+    {
+        if (button == null || !button.TryGetComponent(out Button buttonComponent))
+        {
+            WarningMessages.ButtonComponentNotFound();
+            return false;
+        }
+
+        return button.tag == ConstantStrings.CharacterSelectionButtonTag;
     }
 }

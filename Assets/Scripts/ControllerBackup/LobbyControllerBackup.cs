@@ -33,12 +33,18 @@ public class LobbyControllerBackup : ControllerBackup
     [SerializeField] private List<Color> _selectedColors;
     public List<Color> SelectedColors => _selectedColors;
 
+    [SerializeField] private TextMeshProUGUI _lobbyMessages;
+    public TextMeshProUGUI LobbyMessages => _lobbyMessages;
+
+    [SerializeField] private InputControlsPanel _inputControlsPanel;
+    public InputControlsPanel InputControlsPanel => _inputControlsPanel;
+
     [Space]
     [Header("Scene Buttons")]
     [SerializeField] private Button _singlePlayerBtn;
     [SerializeField] private Button _multiplayerBtn;
     [SerializeField] private Button _continueBtn;
-    [SerializeField] private Button _quitGameBtn;
+    [SerializeField] private Button _quitGameBtn;   
 
     [Space]
     [Header("Scene GameObjects")]
@@ -119,8 +125,12 @@ public class LobbyControllerBackup : ControllerBackup
             lobbyController.FireSetGameModeEvent(GameMode.Singleplayer);
             lobbyController.SetLobbyState(LobbyState.GameModeSelection);
             lobbyController.FireSetNewGameEvent(false);
+
             if(_2PCursor.activeSelf)
                 _2PCursor.SetActive(false);
+
+            if(_lobbyMessages.gameObject.activeSelf)
+                _lobbyMessages.gameObject.SetActive(false);
         });
 
         _cancelCharacterSelectionButton.GetComponent<Button>().onClick.AddListener(() =>

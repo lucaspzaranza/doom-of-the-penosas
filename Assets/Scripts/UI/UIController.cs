@@ -13,6 +13,7 @@ public class UIController : ControllerUnit
     public Action<GameMode> OnUIGameModeSelected;
     public Action<bool> OnUISetNewGame;
     public Action<IReadOnlyList<Penosas>> OnUISelectedCharacters;
+    public Action<IReadOnlyList<InputDevice>> OnUISelectedDevices;
     public Action<int> OnUIGameSelectedSceneIndex;
     public Action OnUIBackToMainMenuFromMapaMundi;
 
@@ -48,6 +49,7 @@ public class UIController : ControllerUnit
             PlayerLobbyUIController.OnCancelSelection += OnLobbyCancelSelection;
             PlayerLobbyUIController.OnLobbySelectedCharacters += HandleLobbyOnGameSelectedCharacters;
             PlayerLobbyUIController.OnLobbySetNewGame += HandleOnLobbySetNewGame;
+            PlayerLobbyUIController.OnLobbySelectedDevices += HandleOnLobbySelectedDevices;
         }
 
         MenuWithCursor.OnMenuEnabled += HandleMenuWithCursorEnabled;
@@ -60,6 +62,7 @@ public class UIController : ControllerUnit
         PlayerLobbyUIController.OnCancelSelection -= OnLobbyCancelSelection;
         PlayerLobbyUIController.OnLobbySelectedCharacters -= HandleLobbyOnGameSelectedCharacters;
         PlayerLobbyUIController.OnLobbySetNewGame -= HandleOnLobbySetNewGame;
+        PlayerLobbyUIController.OnLobbySelectedDevices -= HandleOnLobbySelectedDevices;
         PlayerLobbyUIController.Dispose();
 
         MenuWithCursor.OnMenuEnabled -= HandleMenuWithCursorEnabled;
@@ -192,5 +195,10 @@ public class UIController : ControllerUnit
         MapaMundiController.Dispose();
 
         OnUIBackToMainMenuFromMapaMundi?.Invoke();
+    }
+
+    private void HandleOnLobbySelectedDevices(IReadOnlyList<InputDevice> devices)
+    {
+        OnUISelectedDevices?.Invoke(devices);
     }
 }

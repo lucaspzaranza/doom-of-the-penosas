@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.ComTypes;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class PlayerController : ControllerUnit
@@ -38,20 +39,14 @@ public class PlayerController : ControllerUnit
         if (PlayersData[0].OnCountdown && PlayersData[0].Countdown >= 0)
             GameOverCountdown(0);
     }
-
-    //public override void Setup()
-    //{
-    //    base.Setup();
-    //    //GetPlayersOnScene();
-    //}
-
-    public void Setup(IReadOnlyList<Penosas> characters)
+   
+    public void Setup(IReadOnlyList<Penosas> characters, IReadOnlyList<InputDevice> selectedDevices = null)
     {
         base.Setup();
 
-        foreach (var character in characters)
+        for (int i = 0; i < characters.Count; i++)
         {
-            AddNewPlayerData(character);
+            AddNewPlayerData(characters[i], selectedDevices[i]);
         }
     }
 
@@ -60,11 +55,11 @@ public class PlayerController : ControllerUnit
         _playersData = null;
     }
 
-    private void AddNewPlayerData(Penosas characterToAdd)
+    private void AddNewPlayerData(Penosas characterToAdd, InputDevice device = null)
     {
         //print($"Adding the {characterToAdd} to the PlayerDataController with Local ID {_playersData.Count}...");
 
-        PlayerData newPlayerData = new PlayerData(characterToAdd, _playersData.Count);
+        PlayerData newPlayerData = new PlayerData(characterToAdd, _playersData.Count, device);
         PlayerDataPrefabs prefabs = PlayerPrefabs.
             SingleOrDefault(prefab => prefab.Character == characterToAdd);
         newPlayerData.SetProjectilesPrefabs(prefabs);
@@ -81,7 +76,8 @@ public class PlayerController : ControllerUnit
             var playerPrefab = PlayerPrefabs.SingleOrDefault(prefab => prefab.Character == character);
             var playerData = PlayersData.SingleOrDefault(data => data.Character == character);
 
-            var newPlayer = _inputSystemController.AddPlayerWithID(playerData.LocalID, playerPrefab.PlayerPrefab);
+            var newPlayer = _inputSystemController.
+                AddPlayerWithIDAndDevice(playerData.LocalID, playerPrefab.PlayerPrefab, playerData.InputDevice);
 
             if(newPlayer == null)
             {

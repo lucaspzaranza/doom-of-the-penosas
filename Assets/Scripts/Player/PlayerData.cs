@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using SharedData.Enumerations;
 using UnityEditor;
+using UnityEngine.InputSystem;
 
 [Serializable]
 public class PlayerData
@@ -15,6 +16,7 @@ public class PlayerData
     public Action<WeaponType, int> OnWeaponAmmoChanged;
 
     [SerializeField] private Penosas _character;
+    [SerializeField] private InputDevice _inputDevice;
     [SerializeField] private Penosa _playerScript = null;
     [SerializeField] private byte _localID;
     [SerializeField] private GameObject _playerGameObject = null;
@@ -151,7 +153,9 @@ public class PlayerData
 
     public Penosas Character => _character;
 
-    public PlayerData(Penosas newCharacter, int localID)
+    public InputDevice InputDevice => _inputDevice;
+
+    public PlayerData(Penosas newCharacter, int localID, InputDevice device = null)
     {
         _character = newCharacter;
         _localID = (byte)localID;
@@ -168,6 +172,9 @@ public class PlayerData
 
         _countdown = ConstantNumbers.CountdownSeconds;
         _continues = PlayerConsts.Continues;
+
+        if (device != null)
+            _inputDevice = device;
     }
 
     public void SetProjectilesPrefabs(PlayerDataPrefabs prefabs)

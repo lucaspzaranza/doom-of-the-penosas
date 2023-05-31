@@ -23,10 +23,13 @@ public class InputSystemController : ControllerUnit
         _playerInputManager = null;
     }
 
-    public GameObject AddPlayerWithID(int playerIndex, GameObject prefab)
+    public GameObject AddPlayerWithIDAndDevice(int playerIndex, GameObject prefab, InputDevice device = null)
     {
         _playerInputManager.playerPrefab = prefab;
-        var playerInput = _playerInputManager.JoinPlayer(playerIndex);
+
+        var playerInput = (device == null)? 
+            _playerInputManager.JoinPlayer(playerIndex) : 
+            _playerInputManager.JoinPlayer(playerIndex, -1, null, device);
 
         InputUser lastPlayerInputUser = InputUser.all[InputUser.all.Count - 1];
         
