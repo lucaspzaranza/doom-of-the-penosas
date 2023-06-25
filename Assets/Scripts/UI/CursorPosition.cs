@@ -9,6 +9,8 @@ public class CursorPosition : MonoBehaviour
 {
     public static Action<CursorPosition, Vector2> OnCursorMoved;
 
+    [SerializeField] private bool _isLocked;
+
     private PlayerInput playerInputActions;
     private InputAction navigation;
     private InputAction selection;
@@ -91,7 +93,7 @@ public class CursorPosition : MonoBehaviour
 
     public void UpdateCursorPosition(GameObject buttonToNavigate)
     {
-        if (buttonToNavigate == null)
+        if (buttonToNavigate == null || _isLocked)
             return;
 
         var cursorPosition = buttonToNavigate.GetCursorPosition();
@@ -99,9 +101,26 @@ public class CursorPosition : MonoBehaviour
         gameObject.transform.SetParent(buttonToNavigate.transform, false);
         gameObject.transform.localPosition = cursorPosition;
         _currentSelected = buttonToNavigate;
+        //EventSystem.current.SetSelectedGameObject(_currentSelected);
 
         // Only sends one per time and if it is a horizontal move
-        if(isPressing)
+        if (isPressing)
             OnCursorMoved?.Invoke(this, _pressed);
+    }
+
+    /// <summary>
+    /// Prevents cursor from moving to another button.
+    /// </summary>
+    public void LockCursor()
+    {
+        _isLocked = true;
+    }
+
+    /// <summary>
+    /// Enables cursor for moving to another button.
+    /// </summary>
+    public void UnlockCursor()
+    {
+        _isLocked = false;
     }
 }

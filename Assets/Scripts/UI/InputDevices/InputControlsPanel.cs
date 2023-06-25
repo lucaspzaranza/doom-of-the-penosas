@@ -7,6 +7,9 @@ public class InputControlsPanel : MonoBehaviour
 {
     [SerializeField] private List<GameObject> _panels;
 
+    [SerializeField] private GameObject _closeButton;
+    public GameObject CloseButton => _closeButton;
+
     public void ActivatePanel(string panelName)
     {
         _panels.SingleOrDefault(panel => panel.activeSelf)?.SetActive(false);

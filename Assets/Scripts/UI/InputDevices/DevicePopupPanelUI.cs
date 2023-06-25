@@ -3,13 +3,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DevicePopupPanelUI : MonoBehaviour
 {
     public Action<List<InputDevicesSelector>> OnDeviceSelectorsAdded;
+    public Action<bool> OnInputControlsPanelActivation;
 
     [SerializeField] private GameObject _deviceUnitPrefab;
-    [SerializeField] private InputControlsPanel _inputControsPanel;
+    [SerializeField] private InputControlsPanel _inputControlsPanel;
     [SerializeField] private Transform _playerDevicesTransform;
     [SerializeField] private List<InputDevicesSelector> _inputDevicesSelectors;
 
@@ -68,17 +70,29 @@ public class DevicePopupPanelUI : MonoBehaviour
         {
             deviceSelector.DeviceButton.onClick.AddListener(() =>
             {
-                _inputControsPanel.gameObject.SetActive(!_inputControsPanel.gameObject.activeSelf);
-
-                if (!_inputControsPanel.gameObject.activeSelf)
-                    return; 
+                _inputControlsPanel.gameObject.SetActive(true);
 
                 if (deviceSelector.SelectedDevice.displayName.Contains(ConstantStrings.Keyboard))
-                    _inputControsPanel.ActivatePanel(ConstantStrings.Keyboard);
+                    _inputControlsPanel.ActivatePanel(ConstantStrings.Keyboard);
                 else
-                    _inputControsPanel.ActivatePanel(ConstantStrings.Joystick);
+                    _inputControlsPanel.ActivatePanel(ConstantStrings.Joystick);
+
+                OnInputControlsPanelActivation?.Invoke(true);
             });
         }
+
+        CloseButtonCallbackSetup();
+    }
+
+    private void CloseButtonCallbackSetup()
+    {
+        var closeBtn = _inputControlsPanel.CloseButton.GetComponent<Button>();
+
+        closeBtn.onClick.AddListener(() =>
+        {
+            _inputControlsPanel.gameObject.SetActive(false);
+            OnInputControlsPanelActivation?.Invoke(false);
+        });
     }
 
     private void RemoveDeviceSelectorsCallbacks()

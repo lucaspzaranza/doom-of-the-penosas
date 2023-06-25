@@ -27,6 +27,7 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
     [SerializeField] private LobbyState _lobbyState;
     [SerializeField] private GameObject _startButton;
     [SerializeField] private GameObject _backToMainMenuButton;
+    [SerializeField] private GameObject _devicePopupCloseButton;
     [SerializeField] private GameObject _cancelCharacterSelectionButton;
     [SerializeField] private GameObject _deviceSelectorPanel;
     [SerializeField] private List<Button> _characterButtons;
@@ -98,11 +99,30 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 
         _devicePanel = _deviceSelectorPanel.GetComponent<DevicePopupPanelUI>();
         _devicePanel.OnDeviceSelectorsAdded += HandleOnDeviceSelectorsAdded;
+        _devicePanel.OnInputControlsPanelActivation += HandleOnInputControlsPanelActivated;
+        _devicePopupCloseButton = _inputControlsPanel.CloseButton;
     }
 
     private void HandleOnDeviceSelectorsAdded(List<InputDevicesSelector> devices) 
     {
         _deviceSelectors = devices.Where(device => device.gameObject.activeSelf).ToList();
+    }
+
+    private void HandleOnInputControlsPanelActivated(bool active)
+    {
+        var UIController = _parentController as UIController;
+        if(active)
+        {
+            UIController.CursorPositions[0].UpdateCursorPosition(_devicePopupCloseButton);
+            UIController.CursorPositions[0].LockCursor();
+            EventSystem.current.SetSelectedGameObject(_devicePopupCloseButton);
+        }
+        else
+        {
+            UIController.CursorPositions[0].UnlockCursor();
+            UIController.CursorPositions[0].UpdateCursorPosition(UIController.CursorPositions[0].LastPressed);
+            EventSystem.current.SetSelectedGameObject(UIController.CursorPositions[0].LastPressed);
+        }
     }
 
     public void FireSetNewGameEvent(bool newGame)
