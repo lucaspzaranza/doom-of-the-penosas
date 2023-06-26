@@ -40,6 +40,15 @@ public abstract class ControllerUnit: Controller
             return ((ControllerUnit)_parentController).GetIsNewGame();
     }
 
+    public bool GameIsPaused()
+    {
+        GameController gameCtrl = null;
+        if (_parentController.TryGetComponent(out gameCtrl))
+            return gameCtrl.GameIsPaused;
+        else
+            return ((ControllerUnit)_parentController).GameIsPaused();
+    }
+
     protected IReadOnlyList<Penosas> GetCharacterSelectionList()
     {
         GameController gameCtrl = null;

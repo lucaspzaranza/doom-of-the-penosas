@@ -8604,6 +8604,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 494667710214850740, guid: 05f476ac6291a804fb2fce0bcdf903ff,
         type: 3}
+      propertyPath: _pauseMenuPrefab
+      value: 
+      objectReference: {fileID: 4970468718375716660, guid: 668b7dd056a873a4daf5d35766f18358,
+        type: 3}
+    - target: {fileID: 494667710214850740, guid: 05f476ac6291a804fb2fce0bcdf903ff,
+        type: 3}
       propertyPath: _inGameController
       value: 
       objectReference: {fileID: 5560327996295814929, guid: 424792e2c65216741a6159f265abd914,

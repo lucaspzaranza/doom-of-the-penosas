@@ -128,6 +128,7 @@ public static class PlayerConsts
     public const string Fire2Action = "Fire2";
     public const string Fire3SpecialAction = "Fire3Special";
     public const string MoveAction = "MoveAndAim";
+    public const string PauseMenu = "PauseMenu";
     public const string ParachuteAction = "Parachute";
     public const string JumpAction = "Jump";
     public const string ChangeSpecialItemAction = "ChangeSpecialItem";

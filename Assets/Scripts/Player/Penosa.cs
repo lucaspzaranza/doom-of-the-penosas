@@ -24,6 +24,7 @@ public class Penosa : MonoBehaviour
 
     private UnityEngine.InputSystem.PlayerInput _playerInput;
     private InputAction _moveAction;
+    private InputAction _pauseAction;
     private InputAction _jumpAction;
     private InputAction _parachuteAction;
     private InputAction _changespecialItemAction;
@@ -31,6 +32,7 @@ public class Penosa : MonoBehaviour
     private InputAction _fire2Action;
     private InputAction _fire3Action;
 
+    [SerializeField] private PlayerController _playerController;
     [SerializeField] private PlayerData _playerData;
     private Inventory _inventory = null;
 
@@ -118,11 +120,14 @@ public class Penosa : MonoBehaviour
 
     void Update()
     {
+        if (_playerController.GameIsPaused())
+            return;
+
         Move();
         Parachute();
         Shoot();
 
-        if (Input.GetKeyDown(KeyCode.Return)) // Remove this!   
+        if (Input.GetKeyDown(KeyCode.X)) // Remove this!   
             TakeDamage(40, true);
 
         if (PlayerData.Life <= PlayerConsts.DeathLife && !Adrenaline && !IsBlinking)
@@ -134,6 +139,9 @@ public class Penosa : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (_playerController.GameIsPaused())
+            return;
+
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, PlayerConsts.OverlapCircleDiameter, terrainLayerMask);
         anim.SetBool(animHashes.isGrounded, isGrounded);
 
@@ -163,9 +171,18 @@ public class Penosa : MonoBehaviour
         _changespecialItemAction = _playerInput.actions.FindAction(PlayerConsts.ChangeSpecialItemAction);
         _changespecialItemAction.performed += ChangeSpecialItem;
 
+        _pauseAction = _playerInput.actions.FindAction(PlayerConsts.PauseMenu);
+        _pauseAction.performed += PauseMenu;
+        
         _jumpAction = _playerInput.actions.FindAction(PlayerConsts.JumpAction);
         _jumpAction.performed += Jump;
         _jumpAction.canceled += Fall;
+    }
+
+    public void PauseMenu(InputAction.CallbackContext context)
+    {
+        if(!_playerController.GameIsPaused())
+            _playerController.OnPlayerPause?.Invoke(true);
     }
 
     public void Blink()
@@ -252,6 +269,9 @@ public class Penosa : MonoBehaviour
 
     private void Jump(InputAction.CallbackContext context)
     {
+        if (_playerController.GameIsPaused())
+            return;
+
         if (!JetCopterActivated)
         {
             if (isGrounded)
@@ -510,6 +530,11 @@ public class Penosa : MonoBehaviour
     public void SetPlayerData(PlayerData newPlayerData)
     {
         _playerData = newPlayerData;
+    }
+
+    public void SetPlayerController(PlayerController controller)
+    {
+        _playerController = controller;
     }
 }
 

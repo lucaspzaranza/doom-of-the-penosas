@@ -98,6 +98,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PauseMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""9b14817d-47ff-4ba8-ba2a-66b38a6ff1dd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -419,6 +428,28 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""Fire3Special"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2fa45657-cd3b-44f2-bc7b-3dfee8684e79"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c1a1fef2-ac70-4768-b0ee-6434ca04ddfa"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -593,6 +624,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Player_Fire1 = m_Player.FindAction("Fire1", throwIfNotFound: true);
         m_Player_Fire2 = m_Player.FindAction("Fire2", throwIfNotFound: true);
         m_Player_Fire3Special = m_Player.FindAction("Fire3Special", throwIfNotFound: true);
+        m_Player_PauseMenu = m_Player.FindAction("PauseMenu", throwIfNotFound: true);
         // PlayerSelectionMenu
         m_PlayerSelectionMenu = asset.FindActionMap("PlayerSelectionMenu", throwIfNotFound: true);
         m_PlayerSelectionMenu_CursorNavigation = m_PlayerSelectionMenu.FindAction("CursorNavigation", throwIfNotFound: true);
@@ -664,6 +696,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Fire1;
     private readonly InputAction m_Player_Fire2;
     private readonly InputAction m_Player_Fire3Special;
+    private readonly InputAction m_Player_PauseMenu;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
@@ -676,6 +709,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @Fire1 => m_Wrapper.m_Player_Fire1;
         public InputAction @Fire2 => m_Wrapper.m_Player_Fire2;
         public InputAction @Fire3Special => m_Wrapper.m_Player_Fire3Special;
+        public InputAction @PauseMenu => m_Wrapper.m_Player_PauseMenu;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -709,6 +743,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Fire3Special.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire3Special;
                 @Fire3Special.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire3Special;
                 @Fire3Special.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire3Special;
+                @PauseMenu.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPauseMenu;
+                @PauseMenu.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPauseMenu;
+                @PauseMenu.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPauseMenu;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -737,6 +774,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Fire3Special.started += instance.OnFire3Special;
                 @Fire3Special.performed += instance.OnFire3Special;
                 @Fire3Special.canceled += instance.OnFire3Special;
+                @PauseMenu.started += instance.OnPauseMenu;
+                @PauseMenu.performed += instance.OnPauseMenu;
+                @PauseMenu.canceled += instance.OnPauseMenu;
             }
         }
     }
@@ -792,6 +832,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnFire1(InputAction.CallbackContext context);
         void OnFire2(InputAction.CallbackContext context);
         void OnFire3Special(InputAction.CallbackContext context);
+        void OnPauseMenu(InputAction.CallbackContext context);
     }
     public interface IPlayerSelectionMenuActions
     {

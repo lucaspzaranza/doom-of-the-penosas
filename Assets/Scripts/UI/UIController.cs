@@ -32,6 +32,10 @@ public class UIController : ControllerUnit
     [SerializeField] private List<CursorPosition> _cursors;
     public List<CursorPosition> CursorPositions => _cursors;
 
+    [Header("Prefabs")]
+    [SerializeField] private GameObject _pauseMenuPrefab;
+    private GameObject _pauseMenuInstance;
+
     public override void Setup()
     {
         base.Setup();
@@ -200,5 +204,17 @@ public class UIController : ControllerUnit
     private void HandleOnLobbySelectedDevices(IReadOnlyList<InputDevice> devices)
     {
         OnUISelectedDevices?.Invoke(devices);
+    }
+
+    public void PauseMenuActivation(bool val)
+    {
+        if(_pauseMenuInstance == null && val)
+        {
+            var canvas = FindAnyObjectByType<Canvas>();
+            _pauseMenuInstance = Instantiate(_pauseMenuPrefab, canvas.transform);
+            return;
+        }
+
+        _pauseMenuInstance.SetActive(val);
     }
 }

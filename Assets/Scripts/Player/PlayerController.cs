@@ -15,6 +15,7 @@ public class PlayerController : ControllerUnit
     // Events
     public Action OnGameOverCountdownTextIsNull;
     public Action<bool> OnCountdownActivation;
+    public Action<bool> OnPlayerPause;
 
     // Vars
     [Space]
@@ -91,6 +92,7 @@ public class PlayerController : ControllerUnit
             playerData.SetPlayerGameObjectFromInstance(newPlayer);
 
             newPlayerScript.SetPlayerData(playerData);
+            newPlayerScript.SetPlayerController(this);
 
             newPlayer.transform.position = new Vector2
                 (_playerStartPosition.x + (_offsetX * playerData.LocalID), _playerStartPosition.y);

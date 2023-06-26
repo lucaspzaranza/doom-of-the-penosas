@@ -41,7 +41,9 @@ public class GameController : Controller
     public PoolController PoolController => _poolController;
 
     [SerializeField] private SceneController _sceneController;
-    public SceneController SceneController => _sceneController;   
+    public SceneController SceneController => _sceneController;
+
+    public bool GameIsPaused => Time.timeScale == 0f;
 
     private bool IsSingleInstance => instance == this;
 
@@ -88,6 +90,7 @@ public class GameController : Controller
 
         PlayerController.OnGameOverCountdownTextIsNull -= HandleOnGameOverCountdownTextIsNull;
         PlayerController.OnCountdownActivation -= HandleOnCoutdownActivation;
+        PlayerController.OnPlayerPause -= HandleOnPlayerPause;
 
         UIController.OnUISelectedCharacters -= HandleOnUISelectedCharacters;
         UIController.OnUIGameModeSelected -= SetGameMode;
@@ -146,19 +149,6 @@ public class GameController : Controller
 
         UIController.InstantiateMapaMundiController();
     }
-   
-    // Change it
-    private void InGameControllersSetup()
-    {
-        _playerController.Setup();
-        _poolController.Setup();
-        UIController.InGameUIControllerSetup();
-
-        Penosa.OnPlayerDeath += PlayerController.RemovePlayerFromScene;
-
-        PlayerController.OnGameOverCountdownTextIsNull += HandleOnGameOverCountdownTextIsNull;
-        PlayerController.OnCountdownActivation += HandleOnCoutdownActivation;
-    }    
 
     private void HandleOnSceneLoaded(Scene scene)
     {
@@ -166,8 +156,8 @@ public class GameController : Controller
         {
             if(GameStatus == GameStatus.Loading)
             {
-                SetGameStatus(GameStatus.InGame);
-                InGameControllersSetup();
+                print("SetGameStatus(GameStatus.Menu)");
+                SetGameStatus(GameStatus.Menu);
             }
             else if(GameStatus == GameStatus.Menu)
                 UIController.PlayerLobbyUIController.gameObject.SetActive(true);
@@ -190,6 +180,16 @@ public class GameController : Controller
             var instance = Instantiate(playerControllerPrefab, transform);
             _playerController = instance.GetComponent<PlayerController>();
             _playerController.Setup(_characterSelectionList, _selectedDevices);
+
+            _playerController.OnGameOverCountdownTextIsNull += HandleOnGameOverCountdownTextIsNull;
+            _playerController.OnCountdownActivation += HandleOnCoutdownActivation;
+            _playerController.OnPlayerPause += HandleOnPlayerPause;
+
+            Penosa.OnPlayerDeath += PlayerController.RemovePlayerFromScene;
+
+            //_playerController.Setup();
+            //_poolController.Setup();
+            //UIController.InGameUIControllerSetup();
         }
     }
 
@@ -222,5 +222,11 @@ public class GameController : Controller
     private void HandleOnUISelectedDevices(IReadOnlyList<InputDevice> devices)
     {
         _selectedDevices = devices;
+    }
+
+    public void HandleOnPlayerPause(bool val)
+    {
+        Time.timeScale = val ? 0f : 1f;
+        UIController.PauseMenuActivation(val);
     }
 }

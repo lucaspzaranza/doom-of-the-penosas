@@ -3038,7 +3038,6 @@ MonoBehaviour:
   _uiController: {fileID: 0}
   _poolController: {fileID: 0}
   _sceneController: {fileID: 0}
-  _gameModeState: 0
 --- !u!4 &1233200614
 Transform:
   m_ObjectHideFlags: 0
@@ -4859,6 +4858,7 @@ MonoBehaviour:
   _playerInGameUIController: {fileID: 0}
   _mapaMundiController: {fileID: 0}
   _cursors: []
+  _pauseMenuPrefab: {fileID: 0}
 --- !u!4 &2135048783
 Transform:
   m_ObjectHideFlags: 0
