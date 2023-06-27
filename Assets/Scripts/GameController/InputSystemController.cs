@@ -43,4 +43,12 @@ public class InputSystemController : ControllerUnit
         var player = playersInputs.SingleOrDefault(input => input.playerIndex == playerIndex)?.gameObject;
         return player;
     }
+
+    public void UnpairDevices()
+    {
+        foreach (var inputUser in InputUser.all)
+        {
+            inputUser.UnpairDevices();
+        }
+    }
 }

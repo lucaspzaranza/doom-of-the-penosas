@@ -183,7 +183,7 @@ public class PlayerData
         _2ndShot = new List<GameObject>(prefabs.ListOf2ndShots);
     }
 
-    public void SetPlayerFromInstance(Penosa playerScript)
+    public void SetPlayerScriptFromInstance(Penosa playerScript)
     {
         _playerScript = playerScript;
     }

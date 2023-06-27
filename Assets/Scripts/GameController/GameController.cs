@@ -82,6 +82,9 @@ public class GameController : Controller
         UIController.OnUISelectedDevices += HandleOnUISelectedDevices;
 
         SceneController.OnSceneLoaded += HandleOnSceneLoaded;
+
+        PauseMenu.OnResume += ResumeGame;
+        PauseMenu.OnBackToMainMenu += BackToMainMenuButton;
     }
 
     public override void Dispose()
@@ -100,6 +103,9 @@ public class GameController : Controller
         UIController.OnUISelectedDevices -= HandleOnUISelectedDevices;
 
         SceneController.OnSceneLoaded -= HandleOnSceneLoaded;
+
+        PauseMenu.OnResume -= ResumeGame;
+        PauseMenu.OnBackToMainMenu -= BackToMainMenuButton;
 
         PlayerController.Dispose();
         UIController.Dispose();
@@ -228,5 +234,27 @@ public class GameController : Controller
     {
         Time.timeScale = val ? 0f : 1f;
         UIController.PauseMenuActivation(val);
+    }
+
+    public void ResumeGame()
+    {
+        if (GameIsPaused)
+            PlayerController.OnPlayerPause?.Invoke(false);
+    }
+
+    public void BackToMainMenuButton()
+    {
+        PlayerController.OnPlayerPause?.Invoke(false);
+        PlayerController.RemoveInputController();
+        Destroy(PlayerController.gameObject);
+        _playerController = null;
+
+        SetGameStatus(GameStatus.Menu);
+        SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
+    }
+
+    public GameObject GetProjectileFromPool(GameObject projectile)
+    {
+        return PoolController.GetProjectile(projectile);
     }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Grenade : Projectile
 {
@@ -24,8 +25,10 @@ public class Grenade : Projectile
 
     public virtual void Explode()
     {
+        //ObjectPool.instance.ReturnGameObject(gameObject);
+
         // Adicionar aqui lógica de animação de explosão...
-        ObjectPool.instance.ReturnGameObject(gameObject);
+        OnReturnProjectileToPool?.Invoke(gameObject);
     }
 
     public void CallThrowGrenade()

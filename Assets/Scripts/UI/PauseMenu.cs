@@ -5,22 +5,20 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using SharedData.Enumerations;
+using System;
 
 public class PauseMenu : MonoBehaviour
 {
+    public static Action OnResume;
+    public static Action OnBackToMainMenu;
+
     [SerializeField] private Button _resumeBtn;
     [SerializeField] private Button _backToMainMenuBtn;
-    [SerializeField] private GameController _gameController;
 
     private int _frameCounter = 0;
 
     private void OnEnable()
     {
-        _gameController = FindAnyObjectByType<GameController>();
-
-        if (_gameController == null)
-            return;
-
         _frameCounter = 0;
     }
 
@@ -39,15 +37,12 @@ public class PauseMenu : MonoBehaviour
     {
         _resumeBtn.onClick.AddListener(() =>
         {
-            if(_gameController.GameIsPaused)
-                _gameController.PlayerController.OnPlayerPause?.Invoke(false);
+            OnResume?.Invoke();
         });
 
         _backToMainMenuBtn.onClick.AddListener(() =>
         {
-            _gameController.PlayerController.OnPlayerPause?.Invoke(false);
-            _gameController.SetGameStatus(GameStatus.Menu);
-            _gameController.SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
+            OnBackToMainMenu?.Invoke();
         });
     }
 

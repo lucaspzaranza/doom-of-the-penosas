@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    public static Action<GameObject> OnReturnProjectileToPool;
+
     [SerializeField] private float _speed;
     public int damage;
     public bool isMissile = false;
@@ -24,8 +27,9 @@ public class Projectile : MonoBehaviour
         transform.Translate(Vector3.right * Speed * Time.deltaTime);
         if (TouchedProjectileInteractable)
         {
-            if(!isMissile)
-                ObjectPool.instance.ReturnGameObject(gameObject);
+            if (!isMissile)
+                OnReturnProjectileToPool?.Invoke(gameObject);
+                //ObjectPool.instance.ReturnGameObject(gameObject);
             else
                 Destroy(gameObject);
         }

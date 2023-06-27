@@ -88,7 +88,7 @@ public class PlayerController : ControllerUnit
 
             var newPlayerScript = newPlayer.GetComponent<Penosa>();
 
-            playerData.SetPlayerFromInstance(newPlayerScript);
+            playerData.SetPlayerScriptFromInstance(newPlayerScript);
             playerData.SetPlayerGameObjectFromInstance(newPlayer);
 
             newPlayerScript.SetPlayerData(playerData);
@@ -185,5 +185,17 @@ public class PlayerController : ControllerUnit
     public void SetGameOverCountdownText(Text countdownTxt)
     {
         _gameOverCountdownText = countdownTxt;
+    }
+
+    public void RemoveInputController()
+    {
+        InputSystemController.UnpairDevices();
+        Destroy(InputSystemController.gameObject);
+        _inputSystemController = null;
+    }
+
+    public GameObject RequestProjectileFromGameController(GameObject projectile)
+    {
+        return ((GameController)_parentController).GetProjectileFromPool(projectile);
     }
 }

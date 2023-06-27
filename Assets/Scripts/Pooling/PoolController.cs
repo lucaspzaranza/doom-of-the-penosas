@@ -19,12 +19,14 @@ public class PoolController : ControllerUnit
 
         _poolInstance = Instantiate(_poolPrefab, transform);
         _pool = _poolInstance.GetComponent<ObjectPool>();
+        Projectile.OnReturnProjectileToPool += HandleOnReturnProjectileToPool;
 
         InitiateProjectilesPools();
     }
 
     public override void Dispose()
     {
+        Projectile.OnReturnProjectileToPool -= HandleOnReturnProjectileToPool;
         Destroy(_poolInstance);
     }
 
@@ -35,5 +37,15 @@ public class PoolController : ControllerUnit
         StartCoroutine(_pool.InitializePool(ConstantStrings.Grenade));
         StartCoroutine(_pool.InitializePool(ConstantStrings.Shuriken));
         StartCoroutine(_pool.InitializePool(ConstantStrings.FuumaShuriken));
+    }
+
+    public GameObject GetProjectile(GameObject projectile)
+    {
+        return _pool.GetObject(projectile);
+    }
+
+    public void HandleOnReturnProjectileToPool(GameObject projectile)
+    {
+        _pool.ReturnGameObject(projectile);
     }
 }

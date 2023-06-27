@@ -399,7 +399,8 @@ public class Penosa : MonoBehaviour
             var currentRotation = GetShotRotation();
             int currentDirection = GetShotDirection();
 
-            GameObject newBullet = ObjectPool.instance.GetObject(PlayerData.Current1stShot);
+            //GameObject newBullet = ObjectPool.instance.GetObject(PlayerData.Current1stShot);
+            GameObject newBullet = _playerController.RequestProjectileFromGameController(PlayerData.Current1stShot);
             newBullet.transform.position = currentTransform.position;
             newBullet.transform.rotation = currentRotation;
             newBullet.transform.localScale = 
@@ -423,7 +424,8 @@ public class Penosa : MonoBehaviour
 
     private GameObject GetProjectileFromPool(GameObject instanceToSearch)
     {
-        GameObject result = ObjectPool.instance.GetObject(instanceToSearch);
+        //GameObject result = ObjectPool.instance.GetObject(instanceToSearch);
+        GameObject result = _playerController.RequestProjectileFromGameController(instanceToSearch);
         result.transform.position = secondaryShotSpawnCoordinates.position;
         result.transform.rotation = Quaternion.identity;
 
