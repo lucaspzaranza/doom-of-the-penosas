@@ -103,6 +103,16 @@ public class Penosa : MonoBehaviour
 
     public bool IsBlinking => isBlinking;
 
+    public Rigidbody2D Rigidbody2D
+    {
+        get
+        {
+            if(rb == null)
+                rb = GetComponent<Rigidbody2D>();
+            return rb;
+        }
+    }
+
     #endregion
 
     private void OnEnable()
@@ -111,11 +121,15 @@ public class Penosa : MonoBehaviour
         _inventory = GetComponentInChildren<Inventory>();
     }
 
+    private void OnDisable()
+    {
+        InputSystemReset();
+    }
+
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        rb.gravityScale = defaultGravity;
+        Rigidbody2D.gravityScale = defaultGravity;
     }
 
     void Update()
@@ -145,7 +159,7 @@ public class Penosa : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, PlayerConsts.OverlapCircleDiameter, terrainLayerMask);
         anim.SetBool(animHashes.isGrounded, isGrounded);
 
-        if (isGrounded && rb.gravityScale != defaultGravity && !JetCopterActivated) 
+        if (isGrounded && Rigidbody2D.gravityScale != defaultGravity && !JetCopterActivated) 
             ResetGravity();
 
         if (isBlinking)
@@ -177,6 +191,16 @@ public class Penosa : MonoBehaviour
         _jumpAction = _playerInput.actions.FindAction(PlayerConsts.JumpAction);
         _jumpAction.performed += Jump;
         _jumpAction.canceled += Fall;
+    }
+
+    private void InputSystemReset()
+    {
+        _changespecialItemAction.performed -= ChangeSpecialItem;
+
+        _pauseAction.performed -= PauseMenu;
+
+        _jumpAction.performed -= Jump;
+        _jumpAction.canceled -= Fall;
     }
 
     public void PauseMenu(InputAction.CallbackContext context)
@@ -261,8 +285,8 @@ public class Penosa : MonoBehaviour
         if (horizontal > 0 && isLeft) Flip();
         else if (horizontal < 0 && !isLeft) Flip();
 
-        if (!HitWall() && rb != null)
-            rb.velocity = new Vector2(speed * horizontal, rb.velocity.y);
+        if (!HitWall() && Rigidbody2D != null)
+            Rigidbody2D.velocity = new Vector2(speed * horizontal, Rigidbody2D.velocity.y);
 
         SetMovementAnimators(vertical);
     }
@@ -275,18 +299,18 @@ public class Penosa : MonoBehaviour
         if (!JetCopterActivated)
         {
             if (isGrounded)
-                rb.AddForce(Vector2.up * jumpForce);
+                Rigidbody2D.AddForce(Vector2.up * jumpForce);
         }
         else
-            rb.velocity = new Vector2(rb.velocity.x, speed);
+            Rigidbody2D.velocity = new Vector2(Rigidbody2D.velocity.x, speed);
     }
 
     private void Fall(InputAction.CallbackContext context)
     {
-        float yVelocity = rb.velocity.y;
+        float yVelocity = Rigidbody2D.velocity.y;
         float newY = yVelocity < 0 ? yVelocity : 0;
 
-        rb.velocity = new Vector2(rb.velocity.x, newY);
+        Rigidbody2D.velocity = new Vector2(Rigidbody2D.velocity.x, newY);
     }
 
     private float GetNormalizedMovementValue(float raw)
@@ -311,8 +335,8 @@ public class Penosa : MonoBehaviour
         if (rb == null)
             return;
 
-        anim.SetInteger(animHashes.XVelocity, (int)rb.velocity.x);
-        anim.SetFloat(animHashes.YVelocity, rb.velocity.y);
+        anim.SetInteger(animHashes.XVelocity, (int)Rigidbody2D.velocity.x);
+        anim.SetFloat(animHashes.YVelocity, Rigidbody2D.velocity.y);
 
         anim.SetBool(animHashes.up, vertical > 0);
         anim.SetBool(animHashes.down, vertical < 0);
@@ -332,9 +356,9 @@ public class Penosa : MonoBehaviour
 
         if (JetCopterActivated) return;
 
-        if (buttonPressed && !parachute.activeSelf && !isGrounded && rb.velocity.y < 0)
+        if (buttonPressed && !parachute.activeSelf && !isGrounded && Rigidbody2D.velocity.y < 0)
         {
-            rb.gravityScale = parachuteGravity;
+            Rigidbody2D.gravityScale = parachuteGravity;
             parachute.SetActive(true);
         }
         else if (!buttonPressed) ResetGravity();
@@ -342,7 +366,7 @@ public class Penosa : MonoBehaviour
 
     private void ResetGravity()
     {
-        rb.gravityScale = defaultGravity;
+        Rigidbody2D.gravityScale = defaultGravity;
         if (parachute.activeSelf)
             parachute.GetComponent<Animator>().SetTrigger(ConstantStrings.TurnOff);
     }
