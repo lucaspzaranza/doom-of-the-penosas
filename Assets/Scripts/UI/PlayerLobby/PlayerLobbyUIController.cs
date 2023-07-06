@@ -172,6 +172,7 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
         }
 
         _lobbyState = LobbyState.ReadyToStart;
+        _deviceSelectorPanel.SetActive(false);
         SetGameActivation(true);
     }
 
@@ -245,6 +246,7 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
         {
             SetCharacterTextColors(_charactersTexts.IndexOf(_text), _defaultTextColor);
         });
+        _deviceSelectorPanel.SetActive(true);
         SetGameActivation(false);
     }
 
