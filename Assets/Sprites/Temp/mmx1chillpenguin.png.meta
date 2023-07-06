@@ -216,7 +216,7 @@ TextureImporter:
       213: 5740940810637135891
     second: mmx1chillpenguin_70
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -236,6 +236,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -245,8 +247,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -267,10 +269,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -310,6 +316,30 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -1824,6 +1854,78 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      mmx1chillpenguin_50: 6024850360095431990
+      mmx1chillpenguin_69: 2299720168118226808
+      mmx1chillpenguin_9: 6244775337807041646
+      mmx1chillpenguin_36: 8057241324832837617
+      mmx1chillpenguin_40: -2884497163478080613
+      mmx1chillpenguin_41: -2334506524729822281
+      mmx1chillpenguin_27: -7178330901467317257
+      mmx1chillpenguin_43: -933213949242008554
+      mmx1chillpenguin_60: 9208475730574106410
+      mmx1chillpenguin_18: -8565967583330620902
+      mmx1chillpenguin_42: -2464600656080798693
+      mmx1chillpenguin_48: -8001007955619053264
+      mmx1chillpenguin_0: 8734593582362533321
+      mmx1chillpenguin_13: 4890646602651200471
+      mmx1chillpenguin_57: -1521099644986455447
+      mmx1chillpenguin_15: -6008701602321467712
+      mmx1chillpenguin_63: -2063259816514699112
+      mmx1chillpenguin_2: -187547676491855331
+      mmx1chillpenguin_4: 980322550049405419
+      mmx1chillpenguin_38: 8369958431074786480
+      mmx1chillpenguin_67: -7292156644077141415
+      mmx1chillpenguin_68: -3133441269424702119
+      mmx1chillpenguin_21: -5791783965916453556
+      mmx1chillpenguin_22: -2398002582928423068
+      mmx1chillpenguin_53: -6450217677828437278
+      mmx1chillpenguin_33: -3316551102218949136
+      mmx1chillpenguin_6: 4792101668278059882
+      mmx1chillpenguin_8: -868573349873359859
+      mmx1chillpenguin_16: -5856656947568583895
+      mmx1chillpenguin_58: 4146351688190160253
+      mmx1chillpenguin_31: 3575865696654151954
+      mmx1chillpenguin_65: -1969868914351944760
+      mmx1chillpenguin_66: -4360454881603381295
+      mmx1chillpenguin_45: -771326903952198749
+      mmx1chillpenguin_51: -7596075285899528820
+      mmx1chillpenguin_52: 5999880503965767244
+      mmx1chillpenguin_5: 1037909773540702217
+      mmx1chillpenguin_14: -7667063004762668044
+      mmx1chillpenguin_70: 5740940810637135891
+      mmx1chillpenguin_29: -6832934677858971346
+      mmx1chillpenguin_3: -6766433095029290393
+      mmx1chillpenguin_12: -5453608183158887270
+      mmx1chillpenguin_32: 239949868259795308
+      mmx1chillpenguin_20: -5692688778964905730
+      mmx1chillpenguin_37: -1420629014546021207
+      mmx1chillpenguin_44: 1576527930168610201
+      mmx1chillpenguin_47: -2617732451046436732
+      mmx1chillpenguin_34: 2643350152717714904
+      mmx1chillpenguin_54: -9064403736080513636
+      mmx1chillpenguin_62: 5603647149223717739
+      mmx1chillpenguin_35: -5787683800510766415
+      mmx1chillpenguin_30: 2098990788002598521
+      mmx1chillpenguin_25: 4547260339061255256
+      mmx1chillpenguin_59: -2976114489903439447
+      mmx1chillpenguin_1: -7570901138088539519
+      mmx1chillpenguin_23: 833037703957780337
+      mmx1chillpenguin_28: 2354683951569355764
+      mmx1chillpenguin_56: -725336053406201445
+      mmx1chillpenguin_7: 1734821028614179280
+      mmx1chillpenguin_49: -5961536589679988287
+      mmx1chillpenguin_55: -8196397928921413137
+      mmx1chillpenguin_39: -6369410242107589295
+      mmx1chillpenguin_19: 6641461119582018128
+      mmx1chillpenguin_11: -9035879965433105320
+      mmx1chillpenguin_26: 370441234428143738
+      mmx1chillpenguin_17: -8514194637289871166
+      mmx1chillpenguin_10: 5415232305503605549
+      mmx1chillpenguin_24: 6807677367323531783
+      mmx1chillpenguin_46: -5266822655900228835
+      mmx1chillpenguin_61: -8542400742515961110
+      mmx1chillpenguin_64: -3507377026794621775
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
