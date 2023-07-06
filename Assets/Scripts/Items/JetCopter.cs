@@ -23,13 +23,13 @@ public class JetCopter : SpecialItem
 
     private void SetJetCopterActivation(bool value)
     {
-        itemSlot.Player.JetCopterObject.SetActive(value);
-        itemSlot.Player.JetCopterActivated = value;
-        itemSlot.Player.Animator.SetBool("JetCopter", value);
+        ItemSlot.Player.JetCopterObject.SetActive(value);
+        ItemSlot.Player.JetCopterActivated = value;
+        ItemSlot.Player.Animator.SetBool(ConstantStrings.JetCopter, value);
 
         // Se true, coloca uma gravidade menor, senão, a gravidade normal
-        itemSlot.Player.GetComponent<Rigidbody2D>().gravityScale = 
-            value? itemSlot.Player.Inventory.JetCopterGravity : itemSlot.Player.defaultGravity;
+        ItemSlot.Player.GetComponent<Rigidbody2D>().gravityScale = 
+            value? ItemSlot.Player.Inventory.JetCopterGravity : ItemSlot.Player.defaultGravity;
         ItemInUse = value;
     }
 

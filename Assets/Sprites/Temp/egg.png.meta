@@ -72,7 +72,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -153,7 +153,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: Server
+    buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -165,7 +165,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: Android
+    buildTarget: Server
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -183,12 +183,12 @@ TextureImporter:
       name: egg_1
       rect:
         serializedVersion: 2
-        x: 22
-        y: 226
-        width: 8
-        height: 8
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        x: 44
+        y: 452
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -204,12 +204,12 @@ TextureImporter:
       name: egg_2
       rect:
         serializedVersion: 2
-        x: 34
-        y: 226
-        width: 10
-        height: 10
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        x: 68
+        y: 452
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -225,12 +225,12 @@ TextureImporter:
       name: egg_3
       rect:
         serializedVersion: 2
-        x: 22
-        y: 214
-        width: 8
-        height: 8
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        x: 44
+        y: 428
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -246,12 +246,12 @@ TextureImporter:
       name: egg_4
       rect:
         serializedVersion: 2
-        x: 34
-        y: 212
-        width: 10
-        height: 10
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        x: 68
+        y: 424
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -267,12 +267,12 @@ TextureImporter:
       name: egg_5
       rect:
         serializedVersion: 2
-        x: 24
-        y: 152
-        width: 20
-        height: 16
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        x: 48
+        y: 304
+        width: 40
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -288,12 +288,12 @@ TextureImporter:
       name: egg_6
       rect:
         serializedVersion: 2
-        x: 22
-        y: 98
-        width: 8
-        height: 8
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        x: 44
+        y: 196
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -309,12 +309,12 @@ TextureImporter:
       name: egg_7
       rect:
         serializedVersion: 2
-        x: 34
-        y: 98
-        width: 10
-        height: 10
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        x: 68
+        y: 196
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -330,12 +330,12 @@ TextureImporter:
       name: egg_8
       rect:
         serializedVersion: 2
-        x: 22
-        y: 86
-        width: 8
-        height: 8
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        x: 44
+        y: 172
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -351,12 +351,12 @@ TextureImporter:
       name: egg_9
       rect:
         serializedVersion: 2
-        x: 34
-        y: 84
-        width: 10
-        height: 10
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        x: 68
+        y: 168
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -372,12 +372,12 @@ TextureImporter:
       name: egg_10
       rect:
         serializedVersion: 2
-        x: 20
-        y: 18
-        width: 24
-        height: 28
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        x: 40
+        y: 36
+        width: 48
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -393,31 +393,10 @@ TextureImporter:
       name: egg_0
       rect:
         serializedVersion: 2
-        x: 24
-        y: 280
-        width: 20
-        height: 16
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a21b3a3018db65b40800000000000000
-      internalID: -4072622106568590741
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: egg_11
-      rect:
-        serializedVersion: 2
-        x: 15
-        y: 206
-        width: 46
-        height: 37
+        x: 48
+        y: 560
+        width: 40
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -425,8 +404,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9de434c965c97d790800000000000000
-      internalID: -7505358358186864935
+      spriteID: b6a739195c32b77c0800000000000000
+      internalID: -4072622106568590741
       vertices: []
       indices: 
       edges: []
@@ -452,7 +431,6 @@ TextureImporter:
       egg_5: -743625274410296649
       egg_4: 4492316552150090091
       egg_7: -8479111514861628900
-      egg_11: -7505358358186864935
       egg_0: -4072622106568590741
   spritePackingTag: 
   pSDRemoveMatte: 0

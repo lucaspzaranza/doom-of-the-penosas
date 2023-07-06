@@ -21,7 +21,7 @@ public class Kawarimi : Grenade
     {
         playerInputActions.Player.TimeBombMovement.Enable();
 
-        kawarimiExplosionAction = playerInputActions.Player.Fire2Shot;
+        kawarimiExplosionAction = playerInputActions.Player.Fire2;
         kawarimiExplosionAction.Enable();
     }
 

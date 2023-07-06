@@ -6,20 +6,10 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    public static ObjectPool instance;
-
     public Dictionary<string, Queue<GameObject>> objectPool = new Dictionary<string, Queue<GameObject>>();
 
     [SerializeField] private List<GameObject> prefabsList;
     [SerializeField] private int poolInitialSize = 10;
-
-    private void Awake()
-    {
-        if (instance == null)
-            instance = this;
-        else
-            Destroy(gameObject);
-    }
 
     public GameObject GetObject(GameObject gameObj)
     {

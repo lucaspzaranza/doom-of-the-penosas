@@ -21,7 +21,7 @@ public class Adrenaline : SpecialItem
             if(timeCounter >= duration)
             {
                 timeCounter = 0;
-                Player.speed = PlayerConsts.defaultSpeed;
+                Player.speed = PlayerConsts.DefaultSpeed;
                 ItemInUse = false;
                 RemoveItemIfAmountEqualsZero();
             }

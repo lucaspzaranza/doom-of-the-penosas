@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -11,9 +12,9 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private Text _livesTxt = null;
     [SerializeField] private Image _lifebarImg = null;
     [SerializeField] private Image _armorLifebarImg = null;
-    [SerializeField] private Image _iconImg = null;
     [SerializeField] private Image _specialItemImg = null;
     [SerializeField] private GameObject _hudContainer = null;
+    [SerializeField] private byte playerID;
     [Header("Ammo Text")]
     [SerializeField] private TMP_Text PrimaryWeaponText;
     [SerializeField] private TMP_Text PrimaryWeaponAmmoText;
@@ -69,6 +70,12 @@ public class PlayerHUD : MonoBehaviour
         }
     }
 
+    public Penosa Player
+    {
+        get => player;
+        set => player = value;
+    }
+
     public void SetSpecialItemIconSprite(Sprite newSprite)
     {
         _specialItemImg.sprite = newSprite;
@@ -77,7 +84,7 @@ public class PlayerHUD : MonoBehaviour
 
     public void SetHUDValues()
     {
-        Name = player.PlayerData.name;
+        Name = player.PlayerData.Character.ToString();
         Lives = player.PlayerData.Lives;
         Life = player.PlayerData.Life;
         ArmorLife = player.PlayerData.ArmorLife; 
@@ -85,6 +92,14 @@ public class PlayerHUD : MonoBehaviour
 
     private void OnEnable()
     {
+        if(player == null)
+        {
+            var players = FindObjectsOfType<Penosa>().OrderBy(penosa => penosa.PlayerData.LocalID).ToArray();
+            player = players.Length > 0? players[playerID] : null;
+        }
+
+        if (player == null) return;
+
         player.PlayerData.OnArmorLifeChanged += newValue => ArmorLife = newValue;
         player.PlayerData.OnLifeChanged += newValue => Life = newValue;
         player.PlayerData.OnLivesChanged += newValue => Lives = newValue;
@@ -96,12 +111,14 @@ public class PlayerHUD : MonoBehaviour
 
     private void OnDisable()
     {
+        if (player == null) return;
         player.PlayerData.OnWeaponLevelChanged -= UpdateWeaponLevelText;
         player.PlayerData.OnWeaponAmmoChanged -= UpdateWeaponAmmoText;
     }
 
     private void Start()
     {
+        if (player == null) return;
         player.Inventory.OnSpecialItemIconChanged += SetSpecialItemIconSprite;
     }
 

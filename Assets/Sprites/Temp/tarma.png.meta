@@ -2471,6 +2471,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: tarma_97
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1600
+        width: 30
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3931ad4142b56570800000000000000
+      internalID: 8459363468630374718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -2523,6 +2544,7 @@ TextureImporter:
       tarma_80: 3943677444803569019
       tarma_6: 1628922344448902673
       tarma_27: -4685875330753948934
+      tarma_97: 8459363468630374718
       tarma_54: -7096520656949602279
       tarma_4: 698347943852190418
       tarma_90: -7774380113638795561

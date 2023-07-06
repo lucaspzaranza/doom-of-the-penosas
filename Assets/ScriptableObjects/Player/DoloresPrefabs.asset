@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c39687e0a95c5443b565ab19f741f9d, type: 3}
+  m_Name: DoloresPrefabs
+  m_EditorClassIdentifier: 
+  _character: 1
+  _playerPrefab: {fileID: 6435880766563690141, guid: f2bd2c97fcedbef4b94d7e2c1fd75773,
+    type: 3}
+  _listOf1stShots:
+  - {fileID: 2652151204235091336, guid: 40d6b29f2c1675146845205518d32812, type: 3}
+  - {fileID: 3243487704828474248, guid: 70d390fe99ad475488d0de937cff9054, type: 3}
+  _listOf2ndShots:
+  - {fileID: 1092687857533456297, guid: 8b0cb2b6e8c22f64b9c1a0033b9e97f7, type: 3}
+  - {fileID: 4330093296665523782, guid: e67204e8915228f498691f7c07c42172, type: 3}

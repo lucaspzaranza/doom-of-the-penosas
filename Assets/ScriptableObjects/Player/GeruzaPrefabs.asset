@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c39687e0a95c5443b565ab19f741f9d, type: 3}
+  m_Name: GeruzaPrefabs
+  m_EditorClassIdentifier: 
+  _character: 0
+  _playerPrefab: {fileID: 5257087423172684955, guid: d6b0d9204e9e57c4bbc4e933bdfbc950,
+    type: 3}
+  _listOf1stShots:
+  - {fileID: 1617454459024769971, guid: 01c60fe339bafbd42aa4817129bfb0ec, type: 3}
+  - {fileID: 813294959795268939, guid: fb6057ddc83ac294f9aa987f82256072, type: 3}
+  _listOf2ndShots:
+  - {fileID: 1092687857533456297, guid: 8b0cb2b6e8c22f64b9c1a0033b9e97f7, type: 3}
+  - {fileID: 4330093296665523782, guid: b3671417bc039294f865d849ca5d3f4b, type: 3}

@@ -1,21 +1,220 @@
-﻿using System;
+﻿using SharedData.Enumerations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class UIController : MonoBehaviour
+public class UIController : ControllerUnit
 {
-    public static UIController instance;
+    public Action<GameMode> OnUIGameModeSelected;
+    public Action<bool> OnUISetNewGame;
+    public Action<IReadOnlyList<Penosas>> OnUISelectedCharacters;
+    public Action<IReadOnlyList<InputDevice>> OnUISelectedDevices;
+    public Action<int> OnUIGameSelectedSceneIndex;
+    public Action OnUIBackToMainMenuFromMapaMundi;
 
-    [Header("Game Over")]
-    public GameObject GameOverContainerObject;
-    public GameObject Title;
-    public GameObject Countdown;
+    [Space]
+    [Header("UI Controllers")]
+    [SerializeField] private PlayerLobbyUIController _playerLobbyUIController;
+    public PlayerLobbyUIController PlayerLobbyUIController => _playerLobbyUIController;
 
-    void Awake()
+    [SerializeField] private PlayerInGameUIController _playerInGameUIController;
+    public PlayerInGameUIController PlayerInGameUIController => _playerInGameUIController;
+
+    [SerializeField] private MapaMundiController _mapaMundiController;
+    public MapaMundiController MapaMundiController => _mapaMundiController;
+
+    [Header("Cursor")]
+    [SerializeField] private List<CursorPosition> _cursors;
+    public List<CursorPosition> CursorPositions => _cursors;
+
+    [Header("Prefabs")]
+    [SerializeField] private GameObject _pauseMenuPrefab;
+    private GameObject _pauseMenuInstance;
+
+    public override void Setup()
     {
-        if (instance == null) instance = this;
-        else Destroy(gameObject);
+        base.Setup();
+
+        _playerLobbyUIController = FindAnyObjectByType<PlayerLobbyUIController>();
+
+        if (PlayerLobbyUIController != null)
+        {
+            if(!PlayerLobbyUIController.gameObject.activeSelf)
+                PlayerLobbyUIController.gameObject.SetActive(true);
+
+            PlayerLobbyUIController.Setup();
+            PlayerLobbyUIController.OnGameModeButtonPressed += HandleLobbyOnGameModeButtonPressed;
+            PlayerLobbyUIController.OnGameReadyToStart += HandleLobbyOnGameReadyToStart;
+            PlayerLobbyUIController.OnCancelSelection += OnLobbyCancelSelection;
+            PlayerLobbyUIController.OnLobbySelectedCharacters += HandleLobbyOnGameSelectedCharacters;
+            PlayerLobbyUIController.OnLobbySetNewGame += HandleOnLobbySetNewGame;
+            PlayerLobbyUIController.OnLobbySelectedDevices += HandleOnLobbySelectedDevices;
+        }
+
+        MenuWithCursor.OnMenuEnabled += HandleMenuWithCursorEnabled;
+    }
+
+    public override void Dispose()
+    {
+        PlayerLobbyUIController.OnGameModeButtonPressed -= HandleLobbyOnGameModeButtonPressed;
+        PlayerLobbyUIController.OnGameReadyToStart -= HandleLobbyOnGameReadyToStart;
+        PlayerLobbyUIController.OnCancelSelection -= OnLobbyCancelSelection;
+        PlayerLobbyUIController.OnLobbySelectedCharacters -= HandleLobbyOnGameSelectedCharacters;
+        PlayerLobbyUIController.OnLobbySetNewGame -= HandleOnLobbySetNewGame;
+        PlayerLobbyUIController.OnLobbySelectedDevices -= HandleOnLobbySelectedDevices;
+        PlayerLobbyUIController.Dispose();
+
+        MenuWithCursor.OnMenuEnabled -= HandleMenuWithCursorEnabled;
+    }
+
+    private void HandleOnLobbySetNewGame(bool value)
+    {
+        OnUISetNewGame?.Invoke(value);
+    }
+
+    private void HandleLobbyOnGameModeButtonPressed(GameMode gameMode)
+    {
+        OnUIGameModeSelected?.Invoke(gameMode);
+    }
+
+    public Text GetCountdownTextFromInGameController()
+    {
+        return PlayerInGameUIController.GetCountdownText();
+    }
+
+    public void GameOverActivation(bool val)
+    {
+        PlayerInGameUIController.GameOverContainerActivation(val);
+    }
+
+    private void ReturnCursorsToDefaultPosition()
+    {
+        _cursors.ForEach(cursor =>
+        {
+            SetCursorPosition(cursor, cursor.DefaultCursorParent);
+        });
+    }
+
+    private void ReturnCursorsToLastPosition()
+    {
+        _cursors.ForEach(cursor =>
+        {
+            SetCursorPosition(cursor, cursor.LastSelected);
+        });
+    }
+
+    private void ReturnCursorsToLastPressedButton()
+    {
+        _cursors.ForEach(cursor =>
+        {
+            if(cursor.LastPressed != null) 
+                SetCursorPosition(cursor, cursor.LastPressed);
+        });
+    }
+
+    private void HandleMenuWithCursorEnabled(IReadOnlyList<CursorPosition> newCursors)
+    {
+        _cursors = new List<CursorPosition>(newCursors);
+        ReturnCursorsToDefaultPosition();
+    }
+
+    private void HandleLobbyOnGameReadyToStart(GameObject target)
+    {
+        SetCursorPosition(CursorPositions[0], target);
+    }
+
+    private void OnLobbyCancelSelection()
+    {
+        ReturnCursorsToLastPressedButton();
+    }
+
+    public void SetCursorPosition(CursorPosition cursor, GameObject target)
+    {
+        EventSystem.current.SetSelectedGameObject(target);
+        cursor.UpdateCursorPosition(target);
+    }
+
+    private void HandleLobbyOnGameSelectedCharacters(IReadOnlyList<Penosas> selectedCharacters)
+    {
+        OnUISelectedCharacters?.Invoke(selectedCharacters);
+    }
+   
+    public void InGameUIControllerSetup()
+    {
+        _playerInGameUIController.Setup();
+    }
+
+    public void DisposeLobbyController()
+    {
+        PlayerLobbyUIController.Dispose();
+    }
+
+    public void InstantiateMapaMundiController()
+    {
+        if (_mapaMundiController == null)
+        {
+            var prefab = GetControllerFromPrefabList<MapaMundiController>();
+            var instance = Instantiate(prefab, transform);
+            _mapaMundiController = instance.GetComponent<MapaMundiController>();
+            _mapaMundiController.Setup();
+
+            _mapaMundiController.OnGameSceneIndexSelected += HandleMapaMundiOnSceneIndexSelected;
+            _mapaMundiController.OnBackToMainMenu += HandleOnMapaMundiBackToMainMenu;
+        }
+        else
+        {
+            if (!_mapaMundiController.gameObject.activeSelf)
+                _mapaMundiController.gameObject.SetActive(true);
+        }
+    }
+
+    public void InstantiatePlayerInGameUIController()
+    {
+        if (_playerInGameUIController == null)
+        {
+            var prefab = GetControllerFromPrefabList<PlayerInGameUIController>();
+            var instance = Instantiate(prefab, transform);
+            _playerInGameUIController = instance.GetComponent<PlayerInGameUIController>();
+            _playerInGameUIController.Setup();
+        }
+        else
+        {
+            if (!_playerInGameUIController.gameObject.activeSelf)
+                _playerInGameUIController.gameObject.SetActive(true);
+        }
+    }
+
+    private void HandleMapaMundiOnSceneIndexSelected(int buildIndex)
+    {
+        OnUIGameSelectedSceneIndex?.Invoke(buildIndex);
+    }
+
+    private void HandleOnMapaMundiBackToMainMenu()
+    {
+        MapaMundiController.Dispose();
+
+        OnUIBackToMainMenuFromMapaMundi?.Invoke();
+    }
+
+    private void HandleOnLobbySelectedDevices(IReadOnlyList<InputDevice> devices)
+    {
+        OnUISelectedDevices?.Invoke(devices);
+    }
+
+    public void PauseMenuActivation(bool val)
+    {
+        if(_pauseMenuInstance == null && val)
+        {
+            var canvas = FindAnyObjectByType<Canvas>();
+            _pauseMenuInstance = Instantiate(_pauseMenuPrefab, canvas.transform);
+            return;
+        }
+
+        _pauseMenuInstance.SetActive(val);
     }
 }

@@ -6,6 +6,12 @@ TagManager:
   tags:
   - Projectile
   - Enemy
+  - ControllerUnit
+  - CursorPosition
+  - Cursor
+  - ControllerBackup
+  - CharacterSelectionButton
+  - DeviceSelectionButton
   layers:
   - Default
   - TransparentFX

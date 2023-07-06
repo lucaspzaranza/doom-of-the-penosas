@@ -29,7 +29,7 @@ public abstract class Item : MonoBehaviour
 
     public virtual void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Player")
+        if (other.tag == ConstantStrings.PlayerTag)
         {
             Penosa player = other.GetComponent<Penosa>();
             GetItem(player);

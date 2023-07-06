@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System.Runtime.Remoting;
 using UnityEngine.UI;
+using SharedData.Enumerations;
 
 public class Inventory : MonoBehaviour
 {
@@ -84,15 +84,16 @@ public class Inventory : MonoBehaviour
         temporizerTimeCounter = 0;
     }
 
-    public void AddItem(string itemType, byte amount, Penosa player, Sprite itemSprite)
+    public void AddItem(SpecialItemType itemType, byte amount, Penosa player, Sprite itemSprite)
     {
-        var matchSlot = Slots.Find(slot => slot.Item == null || slot.Item.GetType().ToString() == itemType);
+        //var matchSlot = Slots.Find(slot => slot.Item == null || slot.Item.GetType().ToString() == typeString);
+        var matchSlot = Slots.Find(slot => slot.Item == null || slot.Item.ItemType == itemType);
 
-        if (matchSlot != null)
+        if (matchSlot != null) // already has an item
             SetItemAmount(matchSlot, (byte)(matchSlot.Amount + amount));
-        else
+        else // add new item
         {
-            SpecialItem specialItem = (SpecialItem)GetComponent(itemType);
+            SpecialItem specialItem = (SpecialItem)GetComponent(itemType.ToString());
             var newSlot = new ItemSlot(specialItem, amount, player, itemSprite);
             Slots.Add(newSlot);
             if (Slots.Count == 1)

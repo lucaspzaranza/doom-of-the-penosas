@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharedData.Enumerations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,15 +7,19 @@ using UnityEngine;
 public abstract class SpecialItem : MonoBehaviour
 {
     public bool ItemInUse { get; protected set; }
-    public ItemSlot itemSlot;
 
     protected float timeCounter;
+    protected Penosa Player => _player;
+    protected Inventory Inventory => _inventory;
+    public ItemSlot ItemSlot => _itemSlot;
+    public SpecialItemType ItemType => _type;
+
+    [SerializeField]
+    protected SpecialItemType _type;
 
     private Penosa _player;
     private Inventory _inventory;
-
-    protected Penosa Player => _player;
-    protected Inventory Inventory => _inventory;
+    private ItemSlot _itemSlot;
 
     private void Awake()
     {
@@ -26,12 +31,18 @@ public abstract class SpecialItem : MonoBehaviour
 
     public virtual void Use()
     {
-        Inventory.DecreaseItemAmount(itemSlot);
+        Inventory.DecreaseItemAmount(ItemSlot);
+    }
+
+    public void SetSlot(ItemSlot slotToSet)
+    {
+        if(_itemSlot == null)
+            _itemSlot = slotToSet;
     }
 
     protected void RemoveItemIfAmountEqualsZero()
     {
         if (Inventory.SelectedSlot.Amount == 0)
-            Inventory.RemoveItem(itemSlot);
+            Inventory.RemoveItem(ItemSlot);
     }
 }
