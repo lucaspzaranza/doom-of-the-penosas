@@ -30,6 +30,8 @@ public class GameController : Controller
     public IReadOnlyList<InputDevice> SelectedDevices => _selectedDevices;
 
     [Header("Controllers")]
+    [SerializeField] private PersistenceController _persistenceController;
+    public PersistenceController PersistenceController => _persistenceController;
 
     [SerializeField] private PlayerController _playerController;
     public PlayerController PlayerController => _playerController;
@@ -68,6 +70,7 @@ public class GameController : Controller
     {
         UIController.Setup();
         SceneController.Setup();
+        PersistenceController.Setup();
 
         EventHandlerSetup();       
     }
@@ -168,12 +171,23 @@ public class GameController : Controller
             else if(GameStatus == GameStatus.Menu)
                 UIController.PlayerLobbyUIController.gameObject.SetActive(true);
         }
+        else if(scene.buildIndex == ScenesBuildIndexes.MapaMundi)
+        {
+            int completedStages = (IsNewGame)? 0 : PersistenceController.LoadCompletedStages();
+            UIController.MapaMundiController.ActivateStageLoaders(completedStages);
+        }
         else if(scene.buildIndex == ScenesBuildIndexes._1stStage)
         {
             if (GameStatus == GameStatus.Loading)
             {
                 SetGameStatus(GameStatus.InGame);
                 PlayerController.AddPlayers();
+
+                if(IsNewGame)
+                {
+                    print("Saving game progress from the beginning...");
+                    PersistenceController.SaveCompletedStages(0);
+                }
             }
         }
     }

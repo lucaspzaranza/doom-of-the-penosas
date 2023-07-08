@@ -39,7 +39,7 @@ public class MapaMundiControllerBackup : ControllerBackup
 
         _stageButtons[1].onClick.AddListener(() =>
         {
-            mapaMundiController.SelectSceneIndex(ScenesBuildIndexes._1stStage);
+            mapaMundiController.SelectSceneIndex(ScenesBuildIndexes._2ndStage);
         });
     }
 }

@@ -45,6 +45,9 @@ public static class ConstantStrings
     public const string SelectCharacterMsg = "Select your character to play.";
     public const string SelectTheDeviceAndSeeTheControls = "Select the device you wish to use with this player." +
                                                 "\nPress confirm to see the device controls.";
+
+    // Persistence
+    public const string CompletedStagesKey = "CompletedStages";
 }
 
 public static class WarningMessages
@@ -96,6 +99,7 @@ public static class ScenesBuildIndexes
     public const int MainMenu = 0;
     public const int MapaMundi = 1;
     public const int _1stStage = 2;
+    public const int _2ndStage = 3;
 }
 
 public static class PlayerConsts

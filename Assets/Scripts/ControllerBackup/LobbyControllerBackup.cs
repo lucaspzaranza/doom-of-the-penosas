@@ -43,12 +43,14 @@ public class LobbyControllerBackup : ControllerBackup
     [Header("Scene Buttons")]
     [SerializeField] private Button _singlePlayerBtn;
     [SerializeField] private Button _multiplayerBtn;
+    [SerializeField] private Button _newGameBtn;
     [SerializeField] private Button _continueBtn;
     [SerializeField] private Button _quitGameBtn;   
 
     [Space]
     [Header("Scene GameObjects")]
     [SerializeField] private GameObject _mainMenu;
+    [SerializeField] private GameObject _gameModeMenu;
     [SerializeField] private GameObject _playerSelectionMenu;
     [SerializeField] private GameObject _2PCursor;
 
@@ -63,10 +65,11 @@ public class LobbyControllerBackup : ControllerBackup
     {
         var lobbyController = _controller as PlayerLobbyUIController;
 
-        lobbyController.FireSetNewGameEvent(true);
+        //lobbyController.FireSetNewGameEvent(true);
         lobbyController.FireSetGameModeEvent(mode);
         lobbyController.SetLobbyState(LobbyState.PlayerSelection);
-        _mainMenu.SetActive(false);
+        //_mainMenu.SetActive(false);
+        _gameModeMenu.SetActive(false);
         _playerSelectionMenu.SetActive(true);
         lobbyController.SelectButton(_characterButtons[0].gameObject);
     }
@@ -91,10 +94,18 @@ public class LobbyControllerBackup : ControllerBackup
             SetGameMode(GameMode.Multiplayer);
         });
 
+        _newGameBtn.onClick.AddListener(() =>
+        {
+            lobbyController.FireSetNewGameEvent(true);
+            _mainMenu.SetActive(false);
+            _gameModeMenu.SetActive(true);
+        });
+
         _continueBtn.onClick.AddListener(() =>
         {
-            // Load game progress logic here...
             lobbyController.FireSetNewGameEvent(false);
+            _mainMenu.SetActive(false);
+            _gameModeMenu.SetActive(true);
         });
 
         _quitGameBtn.onClick.AddListener(() =>
