@@ -87,7 +87,7 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
         LobbyControllerBackup lobbyBackup = backup as LobbyControllerBackup;
 
         _startButton = lobbyBackup.StartButton;
-        _backToMainMenuButton = lobbyBackup.BackToMainMenuButton;
+        _backToMainMenuButton = lobbyBackup.BackToGameModeMenuFromCharacterSelectionButton;
         _cancelCharacterSelectionButton = lobbyBackup.CancelCharacterSelectionButton;
         _characterButtons = lobbyBackup.CharacterButtons;
         _charactersTexts = lobbyBackup.CharacterTexts;

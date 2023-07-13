@@ -96,7 +96,8 @@ public class UIController : ControllerUnit
     {
         _cursors.ForEach(cursor =>
         {
-            SetCursorPosition(cursor, cursor.DefaultCursorParent);
+            if(cursor != null)
+                SetCursorPosition(cursor, cursor.DefaultCursorParent);
         });
     }
 
@@ -163,8 +164,11 @@ public class UIController : ControllerUnit
             _mapaMundiController = instance.GetComponent<MapaMundiController>();
             _mapaMundiController.Setup();
 
+            GameController gameCtrl = _parentController as GameController;
+
             _mapaMundiController.OnGameSceneIndexSelected += HandleMapaMundiOnSceneIndexSelected;
             _mapaMundiController.OnBackToMainMenu += HandleOnMapaMundiBackToMainMenu;
+            _mapaMundiController.OnReferencesLoaded += gameCtrl.HandleOnMapaMundiReferencesLoaded;
         }
         else
         {

@@ -29,6 +29,8 @@ public static class ConstantStrings
 
     // Menu
     public const string CursorPositionName = "CursorPosition";
+    public const string NewGameSubtitle = "New Game";
+    public const string ContinueGameSubtitle = "Continue";
 
     // Devices
     public const string Mouse = "Mouse";

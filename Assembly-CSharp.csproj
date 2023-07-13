@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\SharedData\Enumerations.cs" />
     <Compile Include="Assets\Scripts\Items\WeaponLvlUp.cs" />
     <Compile Include="Assets\Scripts\Items\SpriteAddedEventArgs.cs" />
+    <Compile Include="Assets\Scripts\Persistence\PersistenceController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Weapons\AutoRotate.cs" />
@@ -111,7 +112,8 @@
     <Compile Include="Assets\Scripts\SharedData\ConstantStrings.cs" />
     <Compile Include="Assets\Scripts\GameController\Controller.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
-    <Compile Include="Assets\Scripts\Persistence\PersistenceController.cs" />
+    <Compile Include="Assets\Scripts\UI\PlayerLobby\GameModeTitleSelector.cs" />
+    <Compile Include="Assets\Scripts\UI\ContinueButtonSetInteractable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />

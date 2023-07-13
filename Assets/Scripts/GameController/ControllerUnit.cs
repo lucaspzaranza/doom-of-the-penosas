@@ -6,6 +6,8 @@ using UnityEngine;
 
 public abstract class ControllerUnit: Controller
 {
+    public Action OnReferencesLoaded;
+
     [Header("Parent Controller")]
     [SerializeField] protected Controller _parentController;
 

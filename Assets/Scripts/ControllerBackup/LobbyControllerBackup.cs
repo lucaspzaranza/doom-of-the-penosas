@@ -12,8 +12,8 @@ public class LobbyControllerBackup : ControllerBackup
     [SerializeField] private GameObject _startButton;
     public GameObject StartButton => _startButton;
 
-    [SerializeField] private GameObject _backToMainMenuButton;
-    public GameObject BackToMainMenuButton => _backToMainMenuButton;
+    [SerializeField] private GameObject _backToGameModeMenuFromCharacterSelectionButton;
+    public GameObject BackToGameModeMenuFromCharacterSelectionButton => _backToGameModeMenuFromCharacterSelectionButton;
 
     [SerializeField] private GameObject _cancelCharacterSelectionButton;
     public GameObject CancelCharacterSelectionButton => _cancelCharacterSelectionButton;
@@ -45,6 +45,7 @@ public class LobbyControllerBackup : ControllerBackup
     [SerializeField] private Button _multiplayerBtn;
     [SerializeField] private Button _newGameBtn;
     [SerializeField] private Button _continueBtn;
+    [SerializeField] private Button _backToMainMenuBtnFromGameMode;
     [SerializeField] private Button _quitGameBtn;   
 
     [Space]
@@ -65,10 +66,8 @@ public class LobbyControllerBackup : ControllerBackup
     {
         var lobbyController = _controller as PlayerLobbyUIController;
 
-        //lobbyController.FireSetNewGameEvent(true);
         lobbyController.FireSetGameModeEvent(mode);
         lobbyController.SetLobbyState(LobbyState.PlayerSelection);
-        //_mainMenu.SetActive(false);
         _gameModeMenu.SetActive(false);
         _playerSelectionMenu.SetActive(true);
         lobbyController.SelectButton(_characterButtons[0].gameObject);
@@ -108,6 +107,12 @@ public class LobbyControllerBackup : ControllerBackup
             _gameModeMenu.SetActive(true);
         });
 
+        _backToMainMenuBtnFromGameMode.onClick.AddListener(() =>
+        {
+            _gameModeMenu.SetActive(false);
+            _mainMenu.SetActive(true);
+        });
+
         _quitGameBtn.onClick.AddListener(() =>
         {
             lobbyController.QuitGame();
@@ -129,9 +134,10 @@ public class LobbyControllerBackup : ControllerBackup
             lobbyController.SelectPlayersCharacters();
         });
 
-        _backToMainMenuButton.GetComponent<Button>().onClick.AddListener(() =>
+        _backToGameModeMenuFromCharacterSelectionButton.GetComponent<Button>().onClick.AddListener(() =>
         {
-            _mainMenu.SetActive(true);
+            //_mainMenu.SetActive(true);
+            _gameModeMenu.SetActive(true);
             _playerSelectionMenu.SetActive(false);
             lobbyController.FireSetGameModeEvent(GameMode.Singleplayer);
             lobbyController.SetLobbyState(LobbyState.GameModeSelection);

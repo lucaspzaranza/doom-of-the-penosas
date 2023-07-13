@@ -173,8 +173,8 @@ public class GameController : Controller
         }
         else if(scene.buildIndex == ScenesBuildIndexes.MapaMundi)
         {
-            int completedStages = (IsNewGame)? 0 : PersistenceController.LoadCompletedStages();
-            UIController.MapaMundiController.ActivateStageLoaders(completedStages);
+            //int completedStages = IsNewGame? 0 : PersistenceController.LoadCompletedStages();
+            //UIController.MapaMundiController.ActivateStageLoaders(completedStages);
         }
         else if(scene.buildIndex == ScenesBuildIndexes._1stStage)
         {
@@ -270,5 +270,11 @@ public class GameController : Controller
     public GameObject GetProjectileFromPool(GameObject projectile)
     {
         return PoolController.GetProjectile(projectile);
+    }
+
+    public void HandleOnMapaMundiReferencesLoaded()
+    {
+        int completedStages = IsNewGame ? 0 : PersistenceController.LoadCompletedStages();
+        UIController.MapaMundiController.ActivateStageLoaders(completedStages);
     }
 }

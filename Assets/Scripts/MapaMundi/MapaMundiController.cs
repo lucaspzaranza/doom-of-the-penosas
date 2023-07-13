@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class MapaMundiController : ControllerUnit, IUIController
 {
     public Action<int> OnGameSceneIndexSelected;
-    public Action OnBackToMainMenu;
+    public Action OnBackToMainMenu;    
 
     [SerializeField] private List<Button> _stageButtons;
     public List<Button> StageButtons => _stageButtons;
@@ -26,6 +26,8 @@ public class MapaMundiController : ControllerUnit, IUIController
     {
         MapaMundiControllerBackup mapaMundiBackup = backup as MapaMundiControllerBackup;
         _stageButtons = mapaMundiBackup.StageButtons;
+
+        OnReferencesLoaded?.Invoke();
     }
 
     public void SelectSceneIndex(int buildIndex)
@@ -42,9 +44,12 @@ public class MapaMundiController : ControllerUnit, IUIController
     {
         print($"Completed Stages: {completedStages}");
 
-        for (int i = 0; i < completedStages; i++)
+        for (int i = 0; i < completedStages + 1; i++)
         {
-            _stageButtons[i].gameObject.SetActive(true);
+            if (i >= _stageButtons.Count)
+                break;
+
+            _stageButtons[i].interactable = true;
         }
     }
 }
