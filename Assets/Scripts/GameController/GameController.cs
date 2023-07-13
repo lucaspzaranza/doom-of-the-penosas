@@ -171,11 +171,11 @@ public class GameController : Controller
             else if(GameStatus == GameStatus.Menu)
                 UIController.PlayerLobbyUIController.gameObject.SetActive(true);
         }
-        else if(scene.buildIndex == ScenesBuildIndexes.MapaMundi)
-        {
-            //int completedStages = IsNewGame? 0 : PersistenceController.LoadCompletedStages();
-            //UIController.MapaMundiController.ActivateStageLoaders(completedStages);
-        }
+        //else if(scene.buildIndex == ScenesBuildIndexes.MapaMundi)
+        //{
+        //    int completedStages = IsNewGame? 0 : PersistenceController.LoadCompletedStages();
+        //    UIController.MapaMundiController.ActivateStageLoaders(completedStages);
+        //}
         else if(scene.buildIndex == ScenesBuildIndexes._1stStage)
         {
             if (GameStatus == GameStatus.Loading)
@@ -195,7 +195,7 @@ public class GameController : Controller
     private void InstantiatePlayerController()
     {
         var playerControllerPrefab = GetControllerFromPrefabList<PlayerController>();
-        if (playerControllerPrefab != null && _playerController == null)
+        if (IsNewGame || (playerControllerPrefab != null && _playerController == null))
         {
             var instance = Instantiate(playerControllerPrefab, transform);
             _playerController = instance.GetComponent<PlayerController>();
@@ -206,11 +206,9 @@ public class GameController : Controller
             _playerController.OnPlayerPause += HandleOnPlayerPause;
 
             Penosa.OnPlayerDeath += PlayerController.RemovePlayerFromScene;
-
-            //_playerController.Setup();
-            //_poolController.Setup();
-            //UIController.InGameUIControllerSetup();
         }
+        else
+            _playerController.Setup(_characterSelectionList, _selectedDevices);
     }
 
     private void InstantiatePoolController()
@@ -260,8 +258,12 @@ public class GameController : Controller
     {
         PlayerController.OnPlayerPause?.Invoke(false);
         PlayerController.RemoveInputController();
-        Destroy(PlayerController.gameObject);
-        _playerController = null;
+
+        if(IsNewGame)
+        {
+            Destroy(PlayerController.gameObject);
+            _playerController = null;
+        }
 
         SetGameStatus(GameStatus.Menu);
         SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);

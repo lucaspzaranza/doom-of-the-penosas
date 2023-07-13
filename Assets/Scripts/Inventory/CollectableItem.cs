@@ -42,7 +42,7 @@ public class CollectableItem : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == ConstantStrings.PlayerTag)
         {
             var player = other.gameObject.GetComponent<Penosa>();
             GetItem(player);

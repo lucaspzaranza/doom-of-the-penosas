@@ -55,6 +55,9 @@ public class Inventory : MonoBehaviour
     public delegate void PlayerDataSpriteEvent(Sprite newSprite);
     public event PlayerDataSpriteEvent OnSpecialItemIconChanged;
 
+    public delegate void InventorySpecialItemAdded(InventoryListItem inventoryListItem);
+    public event InventorySpecialItemAdded OnInventorySpecialItemAdded;
+
     void FixedUpdate()
     {
         if (slotGameObject.activeSelf)
@@ -106,11 +109,13 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    private void SetItemAmount(ItemSlot item, byte amount)
+    private void SetItemAmount(ItemSlot itemToUpdate, byte amount)
     {
-        item.Amount = amount;
-        if (item.Equals(SelectedSlot))
+        itemToUpdate.Amount = amount;
+        if (itemToUpdate.Equals(SelectedSlot))
             itemAmount.text = amount.ToString();
+
+        OnInventorySpecialItemAdded?.Invoke(new InventoryListItem(itemToUpdate.Item.ItemType, amount));
     }
 
     public void DecreaseItemAmount(ItemSlot slot)
@@ -123,11 +128,9 @@ public class Inventory : MonoBehaviour
     {
         int index = Slots.IndexOf(slot);
         Slots.Remove(slot);
-        //itemSprites.RemoveAt(index);
         Destroy(slot.Item);
         int newIndex = index == Slots.Count ? index - 1 : index;
         SelectedSlot = IsEmpty ? null : Slots[newIndex];
-        //SelectSlotSprite(IsEmpty ? null : itemSprites[newIndex]);
         SelectSlotSprite(IsEmpty ? null : Slots[newIndex].Sprite);
         itemAmount.text = IsEmpty ? "0" : SelectedSlot.Amount.ToString();
     }

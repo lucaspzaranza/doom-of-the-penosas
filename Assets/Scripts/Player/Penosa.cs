@@ -119,10 +119,12 @@ public class Penosa : MonoBehaviour
     {
         InputSystemSetup();
         _inventory = GetComponentInChildren<Inventory>();
+        _inventory.OnInventorySpecialItemAdded += HandleOnInventorySpecialItemAdded;
     }
 
     private void OnDisable()
     {
+        _inventory.OnInventorySpecialItemAdded -= HandleOnInventorySpecialItemAdded;
         InputSystemReset();
     }
 
@@ -201,6 +203,11 @@ public class Penosa : MonoBehaviour
 
         _jumpAction.performed -= Jump;
         _jumpAction.canceled -= Fall;
+    }
+
+    private void HandleOnInventorySpecialItemAdded(InventoryListItem inventoryListItem)
+    {
+        _playerData.InventoryData.UpdateData(inventoryListItem);
     }
 
     public void PauseMenu(InputAction.CallbackContext context)

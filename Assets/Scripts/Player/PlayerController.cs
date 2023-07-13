@@ -47,7 +47,7 @@ public class PlayerController : ControllerUnit
 
         for (int i = 0; i < characters.Count; i++)
         {
-            AddNewPlayerData(characters[i], selectedDevices[i]);
+            AddNewPlayerData(characters[i], i, selectedDevices[i]);
         }
     }
 
@@ -56,16 +56,30 @@ public class PlayerController : ControllerUnit
         _playersData = null;
     }
 
-    private void AddNewPlayerData(Penosas characterToAdd, InputDevice device = null)
+    private void AddNewPlayerData(Penosas characterToAdd, int idToAdd, InputDevice device = null)
     {
         //print($"Adding the {characterToAdd} to the PlayerDataController with Local ID {_playersData.Count}...");
 
-        PlayerData newPlayerData = new PlayerData(characterToAdd, _playersData.Count, device);
+        PlayerData newPlayerData = new PlayerData(characterToAdd, idToAdd, device);
         PlayerDataPrefabs prefabs = PlayerPrefabs.
             SingleOrDefault(prefab => prefab.Character == characterToAdd);
         newPlayerData.SetProjectilesPrefabs(prefabs);
 
-        _playersData.Add(newPlayerData);
+        var existingData = _playersData.SingleOrDefault(data => data.Character == characterToAdd && data.LocalID == idToAdd);
+
+        if(existingData != null)
+        {
+            if (existingData.LocalID == idToAdd)
+                print($"Player data for {characterToAdd} with ID {idToAdd} already exists.");
+            else
+                existingData = newPlayerData;
+        }
+        else
+        {
+            if (_playersData.Count > 0 && idToAdd < _playersData.Count)
+                _playersData.RemoveAt(idToAdd);
+            _playersData.Insert(idToAdd, newPlayerData);
+        }
     }
 
     public void AddPlayers()

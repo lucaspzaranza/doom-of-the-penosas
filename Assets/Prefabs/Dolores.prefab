@@ -858,6 +858,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ee3cf25a32235468184bf7e853f6ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerController: {fileID: 0}
   _playerData:
     _character: 1
     _playerScript: {fileID: 6435880766563690138}
@@ -878,6 +879,10 @@ MonoBehaviour:
     _2ndShot:
     - {fileID: 1092687857533456297, guid: 8b0cb2b6e8c22f64b9c1a0033b9e97f7, type: 3}
     - {fileID: 4330093296665523782, guid: e67204e8915228f498691f7c07c42172, type: 3}
+    _inventoryData:
+      _specialItems:
+      - SpecialItemType: 0
+        Amount: 0
   speed: 2
   jumpForce: 260
   groundCheck: {fileID: 6435880765277024125}
@@ -1298,7 +1303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace5c9db745390548ac8a4c9fdecb857, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 0
+  _type: 1
 --- !u!114 &6435880766666006909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1311,7 +1316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25e98ad925516914ea4d759581f10ee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 0
+  _type: 3
 --- !u!114 &6435880766666006910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1324,7 +1329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b42820fda3b30894cbeb440529b6eff7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 0
+  _type: 2
 --- !u!1 &6435880766679047486
 GameObject:
   m_ObjectHideFlags: 0

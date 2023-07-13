@@ -299,7 +299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace5c9db745390548ac8a4c9fdecb857, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 0
+  _type: 1
 --- !u!114 &7336664865580295715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,7 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25e98ad925516914ea4d759581f10ee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 0
+  _type: 3
 --- !u!114 &6993876478730571605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,7 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b42820fda3b30894cbeb440529b6eff7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 0
+  _type: 2
 --- !u!1 &5257087421366373182
 GameObject:
   m_ObjectHideFlags: 0
@@ -1389,6 +1389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ee3cf25a32235468184bf7e853f6ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerController: {fileID: 0}
   _playerData:
     _character: 0
     _playerScript: {fileID: 5257087423172685668}
@@ -1409,6 +1410,8 @@ MonoBehaviour:
     _2ndShot:
     - {fileID: 1092687857533456297, guid: 8b0cb2b6e8c22f64b9c1a0033b9e97f7, type: 3}
     - {fileID: 4330093296665523782, guid: b3671417bc039294f865d849ca5d3f4b, type: 3}
+    _inventoryData:
+      _specialItems: []
   speed: 2
   jumpForce: 260
   groundCheck: {fileID: 5257087421400951423}
@@ -1542,7 +1545,7 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: Keyboard & Joystick
+  m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}

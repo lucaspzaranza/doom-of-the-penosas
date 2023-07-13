@@ -5,6 +5,7 @@ using System;
 using SharedData.Enumerations;
 using UnityEditor;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 [Serializable]
 public class PlayerData
@@ -31,6 +32,7 @@ public class PlayerData
     [SerializeField] private int _2ndWeaponAmmo;
     [SerializeField] private List<GameObject> _1stShot;
     [SerializeField] private List<GameObject> _2ndShot;
+    [SerializeField] private InventoryData _inventoryData;
 
     public int _1stWeaponAmmoProp
     {
@@ -155,6 +157,8 @@ public class PlayerData
 
     public InputDevice InputDevice => _inputDevice;
 
+    public InventoryData InventoryData => _inventoryData;
+
     public PlayerData(Penosas newCharacter, int localID, InputDevice device = null)
     {
         _character = newCharacter;
@@ -191,5 +195,16 @@ public class PlayerData
     public void SetPlayerGameObjectFromInstance(GameObject playerGameObject)
     {
         _playerGameObject = playerGameObject;
+    }
+
+    public void UpdateInventoryData(SpecialItem specialItem, byte amount)
+    {
+        InventoryListItem specialItemOnInvetory = 
+            _inventoryData.SpecialItems.SingleOrDefault(item => item.SpecialItemType == specialItem.ItemType);
+
+        if(specialItemOnInvetory == null)
+            _inventoryData.SpecialItems.Add(new InventoryListItem(specialItem.ItemType, amount));
+        else
+            specialItemOnInvetory.Amount = amount;
     }
 }

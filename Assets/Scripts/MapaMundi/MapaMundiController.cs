@@ -42,7 +42,7 @@ public class MapaMundiController : ControllerUnit, IUIController
 
     public void ActivateStageLoaders(int completedStages)
     {
-        print($"Completed Stages: {completedStages}");
+        //print($"Completed Stages: {completedStages}");
 
         for (int i = 0; i < completedStages + 1; i++)
         {
