@@ -97,6 +97,7 @@
     <Compile Include="Assets\Scripts\Weapons\Kawarimi.cs" />
     <Compile Include="Assets\Scripts\Weapons\Grenade.cs" />
     <Compile Include="Assets\Scripts\Weapons\TimeBomb.cs" />
+    <Compile Include="Assets\Scripts\Inventory\InventoryData.cs" />
     <Compile Include="Assets\Scripts\Scenes\SceneController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerDataPrefabs.cs" />
     <Compile Include="Assets\Scripts\UI\MenuWithCursor.cs" />
@@ -114,7 +115,6 @@
     <Compile Include="Assets\Scripts\SharedData\ConstantStrings.cs" />
     <Compile Include="Assets\Scripts\GameController\Controller.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
-    <Compile Include="Assets\Scripts\Inventory\InventoryData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />

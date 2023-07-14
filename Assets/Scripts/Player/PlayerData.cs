@@ -6,6 +6,7 @@ using SharedData.Enumerations;
 using UnityEditor;
 using UnityEngine.InputSystem;
 using System.Linq;
+using System.Drawing.Printing;
 
 [Serializable]
 public class PlayerData
@@ -197,13 +198,21 @@ public class PlayerData
         _playerGameObject = playerGameObject;
     }
 
+    public void InventoryDataSetup(Penosa player, bool isNewGame)
+    {
+        if(isNewGame || _inventoryData == null)
+            _inventoryData = new InventoryData(player);
+        else
+            _inventoryData.SetPlayer(player);
+    }
+
     public void UpdateInventoryData(SpecialItem specialItem, byte amount)
     {
         InventoryListItem specialItemOnInvetory = 
             _inventoryData.SpecialItems.SingleOrDefault(item => item.SpecialItemType == specialItem.ItemType);
 
         if(specialItemOnInvetory == null)
-            _inventoryData.SpecialItems.Add(new InventoryListItem(specialItem.ItemType, amount));
+            _inventoryData.SpecialItems.Add(new InventoryListItem(specialItem.ItemType, amount, specialItem.ItemSlot.Sprite));
         else
             specialItemOnInvetory.Amount = amount;
     }

@@ -69,9 +69,10 @@ public class PlayerController : ControllerUnit
 
         if(existingData != null)
         {
-            if (existingData.LocalID == idToAdd)
-                print($"Player data for {characterToAdd} with ID {idToAdd} already exists.");
-            else
+            //if (existingData.LocalID == idToAdd)
+            //    WarningMessages.PlayerDataAlreadyExists(characterToAdd.ToString(), idToAdd);
+            //else
+            if(existingData.LocalID != idToAdd)
                 existingData = newPlayerData;
         }
         else
@@ -104,15 +105,18 @@ public class PlayerController : ControllerUnit
 
             playerData.SetPlayerScriptFromInstance(newPlayerScript);
             playerData.SetPlayerGameObjectFromInstance(newPlayer);
+            playerData.InventoryDataSetup(newPlayerScript, ((GameController)_parentController).IsNewGame);
 
             newPlayerScript.SetPlayerData(playerData);
             newPlayerScript.SetPlayerController(this);
+            if(!((GameController)_parentController).IsNewGame)
+                newPlayerScript.Inventory.LoadInventoryData(playerData.InventoryData);
 
             newPlayer.transform.position = new Vector2
                 (_playerStartPosition.x + (_offsetX * playerData.LocalID), _playerStartPosition.y);
         }
     }
-
+   
     private void InstantiatePlayerInputController()
     {
         GameObject inputControllerPrefab = ChildControllersPrefabs.

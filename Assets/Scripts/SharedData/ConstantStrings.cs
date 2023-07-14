@@ -75,6 +75,16 @@ public static class WarningMessages
     {
         Debug.LogWarning($"The GameObject hasn't any Button Component, and he may not behave properly.");
     }
+
+    public static void PlayerDataAlreadyExists(string characterToAdd, int idToAdd)
+    {
+        Debug.LogWarning($"Player data for {characterToAdd} with ID {idToAdd} already exists.");
+    }
+
+    public static void SavingProgressFromTheBeggining()
+    {
+        Debug.Log("Saving game progress from the beginning...");
+    }
 }
 
 public static class InputStrings

@@ -185,7 +185,7 @@ public class GameController : Controller
 
                 if(IsNewGame)
                 {
-                    print("Saving game progress from the beginning...");
+                    WarningMessages.SavingProgressFromTheBeggining();
                     PersistenceController.SaveCompletedStages(0);
                 }
             }

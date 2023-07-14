@@ -8,8 +8,6 @@ using SharedData.Enumerations;
 
 public class Inventory : MonoBehaviour
 {
-    #region Vars
-
     [SerializeField] private SpecialItem _selectedItem;
     [SerializeField] private List<ItemSlot> _slots = null;
     
@@ -28,10 +26,6 @@ public class Inventory : MonoBehaviour
     private Sprite currentItemSprite;
     private ItemSlot _selectedSlot = null;
 
-    #endregion
-
-    #region Props
-
     public byte ItemEffectDuration => itemEffectDuration;
     public float JetCopterGravity => jetCopterGravity;
     public float AdrenalineSpeedEnhancingRate => adrenalineSpeedEnhancindRate;
@@ -49,8 +43,6 @@ public class Inventory : MonoBehaviour
             _selectedItem = _selectedSlot == null ? null : _selectedSlot.Item;
         }
     }
-
-    #endregion
 
     public delegate void PlayerDataSpriteEvent(Sprite newSprite);
     public event PlayerDataSpriteEvent OnSpecialItemIconChanged;
@@ -109,13 +101,25 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public void LoadInventoryData(InventoryData inventoryData)
+    {
+        if (inventoryData == null || inventoryData.SpecialItems == null)
+            return;
+
+        foreach (var item in inventoryData.SpecialItems)
+        {
+            AddItem(item.SpecialItemType, item.Amount, inventoryData.Player, item.ItemSprite);
+        }
+    }
+
     private void SetItemAmount(ItemSlot itemToUpdate, byte amount)
     {
         itemToUpdate.Amount = amount;
         if (itemToUpdate.Equals(SelectedSlot))
             itemAmount.text = amount.ToString();
 
-        OnInventorySpecialItemAdded?.Invoke(new InventoryListItem(itemToUpdate.Item.ItemType, amount));
+        OnInventorySpecialItemAdded?.Invoke(
+            new InventoryListItem(itemToUpdate.Item.ItemType, amount, itemToUpdate.Sprite));
     }
 
     public void DecreaseItemAmount(ItemSlot slot)
