@@ -848,7 +848,7 @@ PrefabInstance:
     - target: {fileID: 849103225893220652, guid: 90da3cd1c267a904abbdbe9421062f66,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.46
+      value: 2.1
       objectReference: {fileID: 0}
     - target: {fileID: 849103225893220652, guid: 90da3cd1c267a904abbdbe9421062f66,
         type: 3}
@@ -903,7 +903,7 @@ PrefabInstance:
     - target: {fileID: 849103225893220654, guid: 90da3cd1c267a904abbdbe9421062f66,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90da3cd1c267a904abbdbe9421062f66, type: 3}
@@ -2805,7 +2805,7 @@ PrefabInstance:
     - target: {fileID: 849103225893220654, guid: 9b5eba5ce4625384b9b194bed19c82cb,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b5eba5ce4625384b9b194bed19c82cb, type: 3}
@@ -3034,10 +3034,12 @@ MonoBehaviour:
   _gameMode: 0
   _gameStatus: 0
   _isNewGame: 0
+  _persistenceController: {fileID: 0}
   _playerController: {fileID: 0}
   _uiController: {fileID: 0}
   _poolController: {fileID: 0}
   _sceneController: {fileID: 0}
+  _stageController: {fileID: 0}
 --- !u!4 &1233200614
 Transform:
   m_ObjectHideFlags: 0
@@ -3970,7 +3972,7 @@ PrefabInstance:
     - target: {fileID: 742759606539004931, guid: 09d40828159cf7645bea664c1262f9ab,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 09d40828159cf7645bea664c1262f9ab, type: 3}
@@ -4725,7 +4727,7 @@ PrefabInstance:
     - target: {fileID: 742759606539004931, guid: f63c14b2c49b1ab4faf526b885493058,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f63c14b2c49b1ab4faf526b885493058, type: 3}

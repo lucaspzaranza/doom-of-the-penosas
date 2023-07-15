@@ -9330,6 +9330,7 @@ MonoBehaviour:
   - {fileID: 7866207365053520672, guid: 1049b25c2b161824dad4d343c96036df, type: 3}
   - {fileID: 3880201317863603421, guid: 2961981ba91eeb545a4f419dde9cc948, type: 3}
   - {fileID: 494667710214850738, guid: 05f476ac6291a804fb2fce0bcdf903ff, type: 3}
+  - {fileID: 3978230461744049896, guid: 7f53ff92ebbf7394baaffc4c20d5dfea, type: 3}
   _gameMode: 0
   _gameStatus: 0
   _isNewGame: 0
@@ -9338,6 +9339,7 @@ MonoBehaviour:
   _uiController: {fileID: 1496763277}
   _poolController: {fileID: 0}
   _sceneController: {fileID: 1363809938}
+  _stageController: {fileID: 0}
 --- !u!1 &1990729036
 GameObject:
   m_ObjectHideFlags: 0

@@ -24,10 +24,19 @@ public abstract class ControllerUnit: Controller
         _parentController = GetComponentInParent<T>();
     }
 
+    public GameController TryToGetGameControllerFromParent()
+    {
+        GameController gameController = null;
+        _parentController.TryGetComponent(out gameController);
+        return gameController;
+    }
+
     protected GameMode GetGameMode()
     {
-        GameController gameCtrl = null;
-        if (_parentController.TryGetComponent(out gameCtrl))
+        //GameController gameCtrl = null;
+        //if (_parentController.TryGetComponent(out gameCtrl))
+        GameController gameCtrl = TryToGetGameControllerFromParent();
+        if (gameCtrl != null)
             return gameCtrl.GameMode;
         else
             return ((ControllerUnit)_parentController).GetGameMode();
@@ -35,8 +44,10 @@ public abstract class ControllerUnit: Controller
 
     protected bool GetIsNewGame()
     {
-        GameController gameCtrl = null;
-        if (_parentController.TryGetComponent(out gameCtrl))
+        //GameController gameCtrl = null;
+        //if (_parentController.TryGetComponent(out gameCtrl))
+        GameController gameCtrl = TryToGetGameControllerFromParent();
+        if (gameCtrl != null)
             return gameCtrl.IsNewGame;
         else
             return ((ControllerUnit)_parentController).GetIsNewGame();
@@ -44,8 +55,10 @@ public abstract class ControllerUnit: Controller
 
     public bool GameIsPaused()
     {
-        GameController gameCtrl = null;
-        if (_parentController.TryGetComponent(out gameCtrl))
+        //GameController gameCtrl = null;
+        //if (_parentController.TryGetComponent(out gameCtrl))
+        GameController gameCtrl = TryToGetGameControllerFromParent();
+        if (gameCtrl != null)
             return gameCtrl.GameIsPaused;
         else
             return ((ControllerUnit)_parentController).GameIsPaused();
@@ -53,8 +66,10 @@ public abstract class ControllerUnit: Controller
 
     protected IReadOnlyList<Penosas> GetCharacterSelectionList()
     {
-        GameController gameCtrl = null;
-        if (_parentController.TryGetComponent(out gameCtrl))
+        //GameController gameCtrl = null;
+        //if (_parentController.TryGetComponent(out gameCtrl))
+        GameController gameCtrl = TryToGetGameControllerFromParent();
+        if (gameCtrl != null)
             return gameCtrl.CharacterSelectionList;
         else
             return ((ControllerUnit)_parentController).GetCharacterSelectionList();

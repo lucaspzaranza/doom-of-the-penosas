@@ -45,6 +45,9 @@ public class GameController : Controller
     [SerializeField] private SceneController _sceneController;
     public SceneController SceneController => _sceneController;
 
+    [SerializeField] private StageController _stageController;
+    public StageController StageController => _stageController;
+
     public bool GameIsPaused => Time.timeScale == 0f;
 
     private bool IsSingleInstance => instance == this;
@@ -171,11 +174,10 @@ public class GameController : Controller
             else if(GameStatus == GameStatus.Menu)
                 UIController.PlayerLobbyUIController.gameObject.SetActive(true);
         }
-        //else if(scene.buildIndex == ScenesBuildIndexes.MapaMundi)
-        //{
-        //    int completedStages = IsNewGame? 0 : PersistenceController.LoadCompletedStages();
-        //    UIController.MapaMundiController.ActivateStageLoaders(completedStages);
-        //}
+        else if (scene.buildIndex == ScenesBuildIndexes.MapaMundi)
+        {
+            InstantiateStageController();
+        }
         else if(scene.buildIndex == ScenesBuildIndexes._1stStage)
         {
             if (GameStatus == GameStatus.Loading)
@@ -187,7 +189,7 @@ public class GameController : Controller
                 {
                     WarningMessages.SavingProgressFromTheBeggining();
                     PersistenceController.SaveCompletedStages(0);
-                }
+                }               
             }
         }
     }
@@ -222,13 +224,37 @@ public class GameController : Controller
         }
     }
 
+    private void InstantiateStageController()
+    {
+        if (_stageController != null)
+            return;
+
+        var stagePrefab = GetControllerFromPrefabList<StageController>();
+        if (_stageController == null && stagePrefab != null)
+        {
+            var instance = Instantiate(stagePrefab, transform);
+            _stageController = instance.GetComponent<StageController>();
+            _stageController.Setup();
+            _stageController.OnStageClear += HandleOnStageClear;
+        }
+    }
+
+    private void HandleOnStageClear(StageSO stage)
+    {
+        SetNewGame(false);
+        // Load another stage
+    }
+
     private void HandleOnGameSceneSelectedIndex(int buildIndex)
     {
         SetGameStatus(GameStatus.Loading);
         SceneController.LoadScene(buildIndex);
         InstantiatePlayerController();
-        InstantiatePoolController();        
+        InstantiatePoolController();
         //UIController.InstantiatePlayerInGameUIController();
+
+        StageController.SetCurrentStageSO(StageController.Stages.SingleOrDefault(
+                   stage => stage.SceneIndex == buildIndex));
     }
 
     private void HandleOnUIBackToMainMenuFromMapaMundi()

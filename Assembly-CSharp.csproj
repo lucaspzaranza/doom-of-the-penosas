@@ -63,8 +63,10 @@
     <Compile Include="Assets\Scripts\Inventory\Armor.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerHUD.cs" />
     <Compile Include="Assets\Scripts\GameController\GameController.cs" />
+    <Compile Include="Assets\Scripts\Stages\StageController.cs" />
     <Compile Include="Assets\ParrelSync\Examples\CustomArgumentExample.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemSlot.cs" />
+    <Compile Include="Assets\Scripts\Stages\StageSO.cs" />
     <Compile Include="Assets\Scripts\Pooling\PoolController.cs" />
     <Compile Include="Assets\Scripts\UI\ContinueButtonSetInteractable.cs" />
     <Compile Include="Assets\Scripts\SharedData\CustomEventArgs.cs" />

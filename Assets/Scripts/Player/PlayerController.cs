@@ -102,14 +102,15 @@ public class PlayerController : ControllerUnit
             }
 
             var newPlayerScript = newPlayer.GetComponent<Penosa>();
+            GameController gameController = TryToGetGameControllerFromParent();
 
             playerData.SetPlayerScriptFromInstance(newPlayerScript);
             playerData.SetPlayerGameObjectFromInstance(newPlayer);
-            playerData.InventoryDataSetup(newPlayerScript, ((GameController)_parentController).IsNewGame);
+            playerData.InventoryDataSetup(newPlayerScript, gameController.IsNewGame);
 
             newPlayerScript.SetPlayerData(playerData);
             newPlayerScript.SetPlayerController(this);
-            if(!((GameController)_parentController).IsNewGame)
+            if(!gameController.IsNewGame) // Must find a way to load 1st and 2nd weapon level only between stage changing.
                 newPlayerScript.Inventory.LoadInventoryData(playerData.InventoryData);
 
             newPlayer.transform.position = new Vector2
