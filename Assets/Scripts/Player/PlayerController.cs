@@ -123,7 +123,7 @@ public class PlayerController : ControllerUnit
         GameObject inputControllerPrefab = ChildControllersPrefabs.
             SingleOrDefault(prefab => prefab.GetComponent<InputSystemController>() != null);
 
-        if (inputControllerPrefab != null)
+        if (inputControllerPrefab != null && _inputSystemController == null)
         {
             GameObject newInstance = Instantiate(inputControllerPrefab, transform);
             _inputSystemController = newInstance.GetComponent<InputSystemController>();

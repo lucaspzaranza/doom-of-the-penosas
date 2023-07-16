@@ -7,6 +7,8 @@ using SharedData.Enumerations;
 using UnityEngine.SceneManagement;
 using System;
 using UnityEngine.InputSystem;
+using Unity.Collections.LowLevel.Unsafe;
+using UnityEditor;
 
 public class GameController : Controller
 {
@@ -178,14 +180,14 @@ public class GameController : Controller
         {
             InstantiateStageController();
         }
-        else if(scene.buildIndex == ScenesBuildIndexes._1stStage)
+        else if(scene.buildIndex >= ScenesBuildIndexes._1stStage)
         {
             if (GameStatus == GameStatus.Loading)
             {
                 SetGameStatus(GameStatus.InGame);
                 PlayerController.AddPlayers();
 
-                if(IsNewGame)
+                if(scene.buildIndex == ScenesBuildIndexes._1stStage && IsNewGame)
                 {
                     WarningMessages.SavingProgressFromTheBeggining();
                     PersistenceController.SaveCompletedStages(0);
@@ -239,10 +241,21 @@ public class GameController : Controller
         }
     }
 
-    private void HandleOnStageClear(StageSO stage)
+    private IEnumerator WaitAndLoadNextStage(int nextStageIndex)
+    {
+        yield return new WaitForSeconds(ConstantNumbers.TimeToShowStageClearTxt);
+
+        SceneController.LoadScene(nextStageIndex);
+    }
+
+    private void HandleOnStageClear(StageSO currentStageSO)
     {
         SetNewGame(false);
-        // Load another stage
+        int completedStages = PersistenceController.LoadCompletedStages() + 1;
+        PersistenceController.SaveCompletedStages(completedStages);
+
+        print($"Total stages completed: {completedStages}");
+        StartCoroutine(WaitAndLoadNextStage(currentStageSO.SceneIndex + 1));
     }
 
     private void HandleOnGameSceneSelectedIndex(int buildIndex)

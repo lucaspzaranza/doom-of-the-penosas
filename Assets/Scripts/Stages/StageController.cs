@@ -3,17 +3,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using UnityEditor;
 using UnityEngine;
 
 public class StageController : ControllerUnit
 {
     public Action<StageSO> OnStageClear;
 
+    [SerializeField] private Canvas _stageCanvas;
+
     [SerializeField] private StageSO _currentStage;
     public StageSO CurrentStage => _currentStage;
 
     [SerializeField] private List<StageSO> _stages;
     public IReadOnlyList<StageSO> Stages => _stages;
+
+    [SerializeField] private GameObject _stageClearText;
+    public GameObject StageClearText => _stageClearText;
 
     public override void Setup()
     {
@@ -45,13 +51,25 @@ public class StageController : ControllerUnit
         _currentStage = stage;
     }
 
+    public IEnumerator StageClearEvent()
+    {
+        _stageCanvas = FindFirstObjectByType<Canvas>();
+
+        var stageClearTxt = Instantiate(StageClearText, _stageCanvas.transform);
+
+        yield return new WaitForSeconds(
+            ConstantNumbers.TimeToShowStageClearTxt);
+
+        Destroy(stageClearTxt);
+    }
+
     /// <summary>
     /// Event handler to fire the StageClear Event when the stage is clear, i.e.:
     /// when the boss is defeated.
     /// </summary>
     public void HandleOnBossDefeated()
     {
-        print("HandleOnBossDefeated");
+        StartCoroutine(nameof(StageClearEvent));
         OnStageClear?.Invoke(_currentStage);
     }
 }

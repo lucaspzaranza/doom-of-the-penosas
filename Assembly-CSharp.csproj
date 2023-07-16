@@ -114,9 +114,9 @@
     <Compile Include="Assets\Scripts\UI\InGame\PlayerInGameUIController.cs" />
     <Compile Include="Assets\Scripts\Inventory\SpecialItem.cs" />
     <Compile Include="Assets\Scripts\Inventory\Adrenaline.cs" />
-    <Compile Include="Assets\Scripts\SharedData\ConstantStrings.cs" />
     <Compile Include="Assets\Scripts\GameController\Controller.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
+    <Compile Include="Assets\Scripts\SharedData\Constants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />

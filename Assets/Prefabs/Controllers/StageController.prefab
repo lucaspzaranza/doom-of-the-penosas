@@ -54,3 +54,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b4553011ea537264b9b44591f745fc08, type: 2}
   - {fileID: 11400000, guid: 994340f3751e91348808944c8d111523, type: 2}
   - {fileID: 11400000, guid: d8856508b00b919449afc63f7274be27, type: 2}
+  _stageClearText: {fileID: 3518337361043025360, guid: aab5804680ace2b4d91c7e6c012b1596,
+    type: 3}

@@ -104,6 +104,9 @@ public static class ConstantNumbers
     // Player
     public const int NumberOfPlayers = 2;
     public const int CountdownSeconds = 10;
+
+    // Stage
+    public const float TimeToShowStageClearTxt = 2f;
 }   
 
 public static class ScenesBuildIndexes

@@ -12,7 +12,7 @@ public class GameModeTitleSelector : MonoBehaviour
         var gameCtrl = FindAnyObjectByType<GameController>();
 
         if(gameCtrl != null)
-            _subtitle.text = gameCtrl.IsNewGame? ConstantStrings.NewGameSubtitle : 
+            _subtitle.text = gameCtrl.IsNewGame? ConstantStrings.NewGameSubtitle :
                 ConstantStrings.ContinueGameSubtitle;
     }
 }

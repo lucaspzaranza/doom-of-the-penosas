@@ -32,6 +32,12 @@ public class SceneController : ControllerUnit
         StartCoroutine(LoadAsync(sceneId));
     }
 
+    public void LoadScene(string sceneName)
+    {
+        int sceneId = SceneManager.GetSceneByName(sceneName).buildIndex;
+        StartCoroutine(LoadAsync(sceneId));
+    }
+
     private void HandleOnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
         //print($"Scene {scene.name} loaded with success.");
