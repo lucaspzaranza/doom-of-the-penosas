@@ -14,6 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Stage 3
   _sceneIndex: 4
+  _stageClear: 0
   _isFinalStage: 0
-  _sceneAsset: {fileID: 102900000, guid: 2cda990e2423bbf4892e6590ba056729, type: 3}
-  _nextStage: {fileID: 102900000, guid: 2cda990e2423bbf4892e6590ba056729, type: 3}

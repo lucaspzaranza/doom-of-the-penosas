@@ -58,20 +58,14 @@ public class PlayerController : ControllerUnit
 
     private void AddNewPlayerData(Penosas characterToAdd, int idToAdd, InputDevice device = null)
     {
-        //print($"Adding the {characterToAdd} to the PlayerDataController with Local ID {_playersData.Count}...");
-
         PlayerData newPlayerData = new PlayerData(characterToAdd, idToAdd, device);
-        PlayerDataPrefabs prefabs = PlayerPrefabs.
-            SingleOrDefault(prefab => prefab.Character == characterToAdd);
-        newPlayerData.SetProjectilesPrefabs(prefabs);
+        SetPlayerProjectilesPrefabs(newPlayerData);
 
-        var existingData = _playersData.SingleOrDefault(data => data.Character == characterToAdd && data.LocalID == idToAdd);
+        var existingData = _playersData.
+            SingleOrDefault(data => data.Character == characterToAdd && data.LocalID == idToAdd);
 
         if(existingData != null)
         {
-            //if (existingData.LocalID == idToAdd)
-            //    WarningMessages.PlayerDataAlreadyExists(characterToAdd.ToString(), idToAdd);
-            //else
             if(existingData.LocalID != idToAdd)
                 existingData = newPlayerData;
         }
@@ -118,6 +112,27 @@ public class PlayerController : ControllerUnit
         }
     }
    
+    public void ResetPlayerEquipmentData()
+    {
+        foreach (var playerData in _playersData)
+        {
+            playerData._1stWeaponLevel = PlayerConsts.WeaponInitialLevel;
+            playerData._2ndWeaponLevel = PlayerConsts.WeaponInitialLevel;
+            playerData._1stWeaponAmmoProp = PlayerConsts._1stWeaponInitialAmmo;
+            playerData._2ndWeaponAmmoProp = PlayerConsts._2ndWeaponInitialAmmo;
+            playerData.Life = PlayerConsts.Max_Life;
+            playerData.ArmorLife = 0;
+            playerData.Continues = PlayerConsts.Continues;
+        }
+    }
+
+    private void SetPlayerProjectilesPrefabs(PlayerData playerData)
+    {
+        PlayerDataPrefabs prefabs = PlayerPrefabs.
+            SingleOrDefault(prefab => prefab.Character == playerData.Character);
+        playerData.SetProjectilesPrefabs(prefabs);
+    }
+
     private void InstantiatePlayerInputController()
     {
         GameObject inputControllerPrefab = ChildControllersPrefabs.
@@ -129,22 +144,6 @@ public class PlayerController : ControllerUnit
             _inputSystemController = newInstance.GetComponent<InputSystemController>();
             _inputSystemController.Setup();
         }
-    }
-
-    private void GetPlayersOnScene()
-    {
-        var players = GameObject.FindGameObjectsWithTag(ConstantStrings.PlayerTag)
-            .Select(player => player.GetComponent<Penosa>())
-            .ToList();
-
-        _playersData = new List<PlayerData>();
-        float xOffset = 0f;
-        players.ForEach(player =>
-        {
-            PlayersData.Add(player.PlayerData);
-            player.transform.position = new Vector2(_playerStartPosition.x + xOffset, _playerStartPosition.y);
-            xOffset++;
-        });
     }
 
     public void RemovePlayerFromScene(byte ID)

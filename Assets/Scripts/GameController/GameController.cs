@@ -17,9 +17,15 @@ public class GameController : Controller
 
     // Props
     [SerializeField] private GameMode _gameMode;
+    /// <summary>
+    /// Returns if game is singleplayer or multiplayer.
+    /// </summary>
     public GameMode GameMode => _gameMode;
 
     [SerializeField] private GameStatus _gameStatus;
+    /// <summary>
+    /// Returns if game is in menu, in game, loading, cutscene, etc.
+    /// </summary>
     public GameStatus GameStatus => _gameStatus;
 
     [SerializeField] private bool _isNewGame;
@@ -120,6 +126,10 @@ public class GameController : Controller
         PoolController.Dispose();
     }
 
+    /// <summary>
+    /// Function to set if the game will be Singleplayer or Multiplayer.
+    /// </summary>
+    /// <param name="newGameMode"></param>
     private void SetGameMode(GameMode newGameMode)
     {
         _gameMode = newGameMode;
@@ -130,6 +140,10 @@ public class GameController : Controller
         _isNewGame = val;
     }
 
+    /// <summary>
+    /// Function to set the main game status, if it's loading a scene, at some menu, or in game, etc.
+    /// </summary>
+    /// <param name="gameStatus"></param>
     public void SetGameStatus(GameStatus gameStatus)
     {
         _gameStatus = gameStatus;
@@ -180,25 +194,40 @@ public class GameController : Controller
         {
             InstantiateStageController();
         }
-        else if(scene.buildIndex >= ScenesBuildIndexes._1stStage)
+        else if(scene.buildIndex >= ScenesBuildIndexes._1stStage && 
+        scene.buildIndex <= ScenesBuildIndexes._6thStage && 
+        GameStatus == GameStatus.Loading)
         {
-            if (GameStatus == GameStatus.Loading)
-            {
-                SetGameStatus(GameStatus.InGame);
-                PlayerController.AddPlayers();
-
-                if(scene.buildIndex == ScenesBuildIndexes._1stStage && IsNewGame)
-                {
-                    WarningMessages.SavingProgressFromTheBeggining();
-                    PersistenceController.SaveCompletedStages(0);
-                }               
-            }
+            PutPlayerOnStage(scene);
         }
+    }
+
+    private void PutPlayerOnStage(Scene scene)
+    {
+        SetGameStatus(GameStatus.InGame);
+        PlayerController.AddPlayers();
+
+        if (scene.buildIndex == ScenesBuildIndexes._1stStage && IsNewGame)
+        {
+            WarningMessages.SavingProgressFromTheBeggining();
+            PersistenceController.SaveCompletedStages(0);
+            StageController.ResetAllStagesClear();
+        }
+
+        StageController.SetCurrentStageSO(StageController.Stages.SingleOrDefault(
+           stage => stage.SceneIndex == scene.buildIndex));
+
+        if (!IsNewGame)
+            StageController.SetStagesClearFromTo(PersistenceController.LoadCompletedStages());
     }
 
     private void InstantiatePlayerController()
     {
+         if (IsNewGame && _playerController != null)
+            RemovePlayerController();
+
         var playerControllerPrefab = GetControllerFromPrefabList<PlayerController>();
+
         if (IsNewGame || (playerControllerPrefab != null && _playerController == null))
         {
             var instance = Instantiate(playerControllerPrefab, transform);
@@ -245,16 +274,22 @@ public class GameController : Controller
     {
         yield return new WaitForSeconds(ConstantNumbers.TimeToShowStageClearTxt);
 
+        SetGameStatus(GameStatus.Loading);
         SceneController.LoadScene(nextStageIndex);
     }
 
     private void HandleOnStageClear(StageSO currentStageSO)
     {
-        SetNewGame(false);
-        int completedStages = PersistenceController.LoadCompletedStages() + 1;
-        PersistenceController.SaveCompletedStages(completedStages);
+        if(IsNewGame)
+            SetNewGame(false);
 
-        print($"Total stages completed: {completedStages}");
+        if(!currentStageSO.StageClear)
+        {
+            int completedStages = PersistenceController.LoadCompletedStages() + 1;
+            PersistenceController.SaveCompletedStages(completedStages);
+            //print($"Total stages completed: {completedStages}");
+        }
+
         StartCoroutine(WaitAndLoadNextStage(currentStageSO.SceneIndex + 1));
     }
 
@@ -265,9 +300,6 @@ public class GameController : Controller
         InstantiatePlayerController();
         InstantiatePoolController();
         //UIController.InstantiatePlayerInGameUIController();
-
-        StageController.SetCurrentStageSO(StageController.Stages.SingleOrDefault(
-                   stage => stage.SceneIndex == buildIndex));
     }
 
     private void HandleOnUIBackToMainMenuFromMapaMundi()
@@ -283,6 +315,7 @@ public class GameController : Controller
 
     public void HandleOnPlayerPause(bool val)
     {
+        SetGameStatus(val ? GameStatus.Menu : GameStatus.InGame);
         Time.timeScale = val ? 0f : 1f;
         UIController.PauseMenuActivation(val);
     }
@@ -298,14 +331,19 @@ public class GameController : Controller
         PlayerController.OnPlayerPause?.Invoke(false);
         PlayerController.RemoveInputController();
 
-        if(IsNewGame)
-        {
-            Destroy(PlayerController.gameObject);
-            _playerController = null;
-        }
+        if (IsNewGame)
+            RemovePlayerController();
+        else
+            PlayerController.ResetPlayerEquipmentData();
 
         SetGameStatus(GameStatus.Menu);
         SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
+    }
+
+    private void RemovePlayerController()
+    {
+        Destroy(PlayerController.gameObject);
+        _playerController = null;
     }
 
     public GameObject GetProjectileFromPool(GameObject projectile)

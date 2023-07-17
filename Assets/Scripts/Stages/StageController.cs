@@ -2,6 +2,7 @@ using SharedData.Enumerations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
@@ -44,10 +45,27 @@ public class StageController : ControllerUnit
             TryToGetGameControllerFromParent().GameStatus == GameStatus.InGame)
             HandleOnBossDefeated();
     }
+    
+    public void ResetAllStagesClear()
+    {
+        for (int i = 0; i < _stages.Count; i++)
+        {
+            _stages[i].SetStageclear(false);
+        }
+    }
+
+    public void SetStagesClearFromTo(int index)
+    {
+        for (int i = 0; i < index; i++)
+        {
+            if (!_stages[i].StageClear)
+                _stages[i].SetStageclear(true);
+        }
+    }
 
     public void SetCurrentStageSO(StageSO stage)
     {
-        print($"Setting {stage.name} as the current stage.");
+        //print($"Setting {stage.name} as the current stage.");
         _currentStage = stage;
     }
 
@@ -71,5 +89,8 @@ public class StageController : ControllerUnit
     {
         StartCoroutine(nameof(StageClearEvent));
         OnStageClear?.Invoke(_currentStage);
+
+        if(!_currentStage.StageClear)
+            _currentStage.SetStageclear(true);
     }
 }

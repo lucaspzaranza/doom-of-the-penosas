@@ -89,6 +89,7 @@
     <Compile Include="Assets\Scripts\Player\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerLobby\GameModeTitleSelector.cs" />
+    <Compile Include="Assets\Scripts\SharedData\Constants.cs" />
     <Compile Include="Assets\Scripts\Weapons\AutoRotate.cs" />
     <Compile Include="Assets\Scripts\GameController\InputSystemController.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IUIController.cs" />
@@ -116,7 +117,6 @@
     <Compile Include="Assets\Scripts\Inventory\Adrenaline.cs" />
     <Compile Include="Assets\Scripts\GameController\Controller.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
-    <Compile Include="Assets\Scripts\SharedData\Constants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />

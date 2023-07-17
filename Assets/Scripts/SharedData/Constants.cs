@@ -115,6 +115,10 @@ public static class ScenesBuildIndexes
     public const int MapaMundi = 1;
     public const int _1stStage = 2;
     public const int _2ndStage = 3;
+    public const int _3rdStage = 4;
+    public const int _4thStage = 5;
+    public const int _5thStage = 6;
+    public const int _6thStage = 7;
 }
 
 public static class PlayerConsts

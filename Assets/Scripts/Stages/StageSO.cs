@@ -12,14 +12,16 @@ public class StageSO : ScriptableObject
     [SerializeField] private int _sceneIndex;
     public int SceneIndex => _sceneIndex;
 
+    [SerializeField] private bool _stageClear;
+    public bool StageClear => _stageClear;
+
     [SerializeField] private bool _isFinalStage;
     public bool IsFinalStage => _isFinalStage;
 
-    [SerializeField] private SceneAsset _sceneAsset;
-    public SceneAsset SceneAsset => _sceneAsset;
-
-    [SerializeField] private SceneAsset _nextStage;
-    public SceneAsset NextStage => _nextStage;
+    public void SetStageclear(bool val)
+    {
+        _stageClear = val;
+    }
 
     // Include Boss data which will fire the boss defeated event
     // which will be handled by the StageController to fire the
