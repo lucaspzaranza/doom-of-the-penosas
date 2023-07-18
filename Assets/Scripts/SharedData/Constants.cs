@@ -141,7 +141,7 @@ public static class PlayerConsts
     public const byte _2ndWeaponMaxLvl = 2;
     public const byte _1stWeaponInitialAmmo = 0;
     public const byte _2ndWeaponInitialAmmo = 10;
-    public const byte ArmorInitialLife = 10;
+    public const byte ArmorInitialLife = 0;
     public const int MaxAmmo = 999;
     public const int DeathLife = 0;
     public const int GameOverLives = 0;

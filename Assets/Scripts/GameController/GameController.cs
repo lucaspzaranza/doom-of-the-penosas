@@ -180,14 +180,11 @@ public class GameController : Controller
 
     private void HandleOnSceneLoaded(Scene scene)
     {
-        if(scene.buildIndex == ScenesBuildIndexes.MainMenu)
+        if(scene.buildIndex == ScenesBuildIndexes.MainMenu && GameStatus == GameStatus.Loading)
         {
-            if(GameStatus == GameStatus.Loading)
-            {
-                print("SetGameStatus(GameStatus.Menu)");
-                SetGameStatus(GameStatus.Menu);
-            }
-            else if(GameStatus == GameStatus.Menu)
+            SetGameStatus(GameStatus.Menu);
+
+            if (!UIController.PlayerLobbyUIController.gameObject.activeInHierarchy)
                 UIController.PlayerLobbyUIController.gameObject.SetActive(true);
         }
         else if (scene.buildIndex == ScenesBuildIndexes.MapaMundi)
@@ -198,6 +195,7 @@ public class GameController : Controller
         scene.buildIndex <= ScenesBuildIndexes._6thStage && 
         GameStatus == GameStatus.Loading)
         {
+            UIController.SelectGameSceneCanvas();
             PutPlayerOnStage(scene);
         }
     }
@@ -219,6 +217,8 @@ public class GameController : Controller
 
         if (!IsNewGame)
             StageController.SetStagesClearFromTo(PersistenceController.LoadCompletedStages());
+
+        UIController.InstantiatePlayerInGameUIController();
     }
 
     private void InstantiatePlayerController()
@@ -287,7 +287,6 @@ public class GameController : Controller
         {
             int completedStages = PersistenceController.LoadCompletedStages() + 1;
             PersistenceController.SaveCompletedStages(completedStages);
-            //print($"Total stages completed: {completedStages}");
         }
 
         StartCoroutine(WaitAndLoadNextStage(currentStageSO.SceneIndex + 1));
@@ -298,8 +297,7 @@ public class GameController : Controller
         SetGameStatus(GameStatus.Loading);
         SceneController.LoadScene(buildIndex);
         InstantiatePlayerController();
-        InstantiatePoolController();
-        //UIController.InstantiatePlayerInGameUIController();
+        InstantiatePoolController();       
     }
 
     private void HandleOnUIBackToMainMenuFromMapaMundi()
@@ -337,6 +335,7 @@ public class GameController : Controller
             PlayerController.ResetPlayerEquipmentData();
 
         SetGameStatus(GameStatus.Menu);
+        UIController.PlayerInGameUIController.Dispose();
         SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
     }
 

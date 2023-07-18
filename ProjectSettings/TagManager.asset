@@ -12,6 +12,7 @@ TagManager:
   - ControllerBackup
   - CharacterSelectionButton
   - DeviceSelectionButton
+  - HUD
   layers:
   - Default
   - TransparentFX

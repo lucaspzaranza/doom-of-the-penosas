@@ -1,3 +1,4 @@
+using SharedData.Enumerations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ public class SceneController : ControllerUnit
 
     public void LoadScene(int sceneId)
     {
+        TryToGetGameControllerFromParent().SetGameStatus(GameStatus.Loading);
         StartCoroutine(LoadAsync(sceneId));
     }
 

@@ -18,6 +18,10 @@ public class UIController : ControllerUnit
     public Action OnUIBackToMainMenuFromMapaMundi;
 
     [Space]
+    [Header("Variables")]
+    [SerializeField] private Canvas _gameSceneCanvas;
+
+    [Space]
     [Header("UI Controllers")]
     [SerializeField] private PlayerLobbyUIController _playerLobbyUIController;
     public PlayerLobbyUIController PlayerLobbyUIController => _playerLobbyUIController;
@@ -184,12 +188,16 @@ public class UIController : ControllerUnit
             var prefab = GetControllerFromPrefabList<PlayerInGameUIController>();
             var instance = Instantiate(prefab, transform);
             _playerInGameUIController = instance.GetComponent<PlayerInGameUIController>();
-            _playerInGameUIController.Setup();
+            _playerInGameUIController.Setup(_gameSceneCanvas, 
+                TryToGetGameControllerFromParent().PlayerController.PlayersData);
         }
         else
         {
             if (!_playerInGameUIController.gameObject.activeSelf)
                 _playerInGameUIController.gameObject.SetActive(true);
+
+            _playerInGameUIController.Setup(_gameSceneCanvas,
+                TryToGetGameControllerFromParent().PlayerController.PlayersData);
         }
     }
 
@@ -210,12 +218,17 @@ public class UIController : ControllerUnit
         OnUISelectedDevices?.Invoke(devices);
     }
 
+    public void SelectGameSceneCanvas()
+    {
+        _gameSceneCanvas = FindObjectsByType<Canvas>(FindObjectsSortMode.None)
+            .FirstOrDefault(canvas => canvas.transform.parent == null);
+    }
+
     public void PauseMenuActivation(bool val)
     {
         if(_pauseMenuInstance == null && val)
         {
-            var canvas = FindAnyObjectByType<Canvas>();
-            _pauseMenuInstance = Instantiate(_pauseMenuPrefab, canvas.transform);
+            _pauseMenuInstance = Instantiate(_pauseMenuPrefab, _gameSceneCanvas.transform);
             return;
         }
 

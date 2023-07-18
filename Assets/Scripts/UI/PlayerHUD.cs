@@ -8,13 +8,15 @@ using TMPro;
 public class PlayerHUD : MonoBehaviour
 {
     [SerializeField] private Penosa player;
-    [SerializeField] private Text _nameTxt = null;
-    [SerializeField] private Text _livesTxt = null;
+    [SerializeField] private TMP_Text _nameTxt = null;
+    [SerializeField] private TMP_Text _livesTxt = null;
     [SerializeField] private Image _lifebarImg = null;
     [SerializeField] private Image _armorLifebarImg = null;
     [SerializeField] private Image _specialItemImg = null;
     [SerializeField] private GameObject _hudContainer = null;
     [SerializeField] private byte playerID;
+
+    [Space]
     [Header("Ammo Text")]
     [SerializeField] private TMP_Text PrimaryWeaponText;
     [SerializeField] private TMP_Text PrimaryWeaponAmmoText;
@@ -90,37 +92,37 @@ public class PlayerHUD : MonoBehaviour
         ArmorLife = player.PlayerData.ArmorLife; 
     }
 
-    private void OnEnable()
-    {
-        if(player == null)
-        {
-            var players = FindObjectsOfType<Penosa>().OrderBy(penosa => penosa.PlayerData.LocalID).ToArray();
-            player = players.Length > 0? players[playerID] : null;
-        }
+    //private void OnEnable()
+    //{
+    //    if(player == null)
+    //    {
+    //        var players = FindObjectsOfType<Penosa>().OrderBy(penosa => penosa.PlayerData.LocalID).ToArray();
+    //        player = players.Length > 0? players[playerID] : null;
+    //    }
 
-        if (player == null) return;
+    //    if (player == null) return;
 
-        player.PlayerData.OnArmorLifeChanged += newValue => ArmorLife = newValue;
-        player.PlayerData.OnLifeChanged += newValue => Life = newValue;
-        player.PlayerData.OnLivesChanged += newValue => Lives = newValue;
-        player.PlayerData.OnWeaponLevelChanged += UpdateWeaponLevelText;
-        player.PlayerData.OnWeaponAmmoChanged += UpdateWeaponAmmoText;
+    //    player.PlayerData.OnArmorLifeChanged += newValue => ArmorLife = newValue;
+    //    player.PlayerData.OnLifeChanged += newValue => Life = newValue;
+    //    player.PlayerData.OnLivesChanged += newValue => Lives = newValue;
+    //    player.PlayerData.OnWeaponLevelChanged += UpdateWeaponLevelText;
+    //    player.PlayerData.OnWeaponAmmoChanged += UpdateWeaponAmmoText;
 
-        SetHUDValues();
-    }
+    //    SetHUDValues();
+    //}
 
-    private void OnDisable()
-    {
-        if (player == null) return;
-        player.PlayerData.OnWeaponLevelChanged -= UpdateWeaponLevelText;
-        player.PlayerData.OnWeaponAmmoChanged -= UpdateWeaponAmmoText;
-    }
+    //private void OnDisable()
+    //{
+    //    if (player == null) return;
+    //    player.PlayerData.OnWeaponLevelChanged -= UpdateWeaponLevelText;
+    //    player.PlayerData.OnWeaponAmmoChanged -= UpdateWeaponAmmoText;
+    //}
 
-    private void Start()
-    {
-        if (player == null) return;
-        player.Inventory.OnSpecialItemIconChanged += SetSpecialItemIconSprite;
-    }
+    //private void Start()
+    //{
+    //    if (player == null) return;
+    //    player.Inventory.OnSpecialItemIconChanged += SetSpecialItemIconSprite;
+    //}
 
     public void UpdateWeaponLevelText(WeaponType weaponType, int newLvl)
     {

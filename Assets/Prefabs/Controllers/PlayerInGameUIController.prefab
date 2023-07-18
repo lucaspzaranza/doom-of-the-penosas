@@ -44,10 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e88fb6c878d43be4fabf38b78b738779, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _childControllersPrefabs: []
   _parentController: {fileID: 0}
   _huds:
   - {fileID: 0}
   - {fileID: 0}
-  GameOverContainerObject: {fileID: 0}
-  Title: {fileID: 0}
-  Countdown: {fileID: 0}
+  _HUDPrefab: {fileID: 5687146501528632545, guid: 1177c7028911f784ca6fbabff84dc212,
+    type: 3}
+  _gameOverContainerObject: {fileID: 0}
+  _title: {fileID: 0}
+  _countdown: {fileID: 0}

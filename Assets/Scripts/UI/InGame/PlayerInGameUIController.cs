@@ -8,47 +8,67 @@ using UnityEngine.UI;
 public class PlayerInGameUIController : ControllerUnit, IUIController
 {
     [Space]
+    [Header("HUD")]
     [SerializeField] private PlayerHUD[] _huds = new PlayerHUD[ConstantNumbers.NumberOfPlayers];
     public PlayerHUD[] HUDs => _huds;
 
+    [SerializeField] private GameObject _HUDPrefab;
+
+    [Space]
     [Header("Game Over")]
-    public GameObject GameOverContainerObject;
-    public GameObject Title;
-    public GameObject Countdown;
+    [SerializeField] private GameObject _gameOverContainerObject;
+    [SerializeField] private GameObject _title;
+    [SerializeField] private GameObject _countdown;
 
-    private GameObject[] players;
+    private Canvas _gameSceneCanvas;
 
-    public override void Setup()
+    public void Setup(Canvas gameSceneCanvas, IReadOnlyList<PlayerData> playersData)
     {
-        _parentController = GetComponentInParent<UIController>();
+        if(_parentController == null)
+            _parentController = GetComponentInParent<UIController>();
 
-        players = GameObject.FindGameObjectsWithTag(ConstantStrings.PlayerTag);
-        GetPlayersScriptToHUDController();
+        if(_gameSceneCanvas == null)
+            _gameSceneCanvas = gameSceneCanvas;
 
-        if (GetGameMode() == GameMode.Multiplayer)
-            HUDs[ConstantNumbers.NumberOfPlayers - 1].gameObject.SetActive(true);
+        CreatePlayersHUDs(playersData);
     }
 
     public override void Dispose()
     {
+        _gameSceneCanvas = null;
+        for (int i = 0; i < _huds.Length; i++)
+        {
+            if (_huds[i] != null)
+                _huds[i] = null;
+        }
 
+        gameObject.SetActive(false);
     }
 
-    private void GetPlayersScriptToHUDController()
+    private void CreatePlayersHUDs(IReadOnlyList<PlayerData> playersData)
     {
-        foreach (var player in players)
+        foreach (var playerData in playersData)
         {
-            HUDs[player.GetComponent<Penosa>().PlayerData.LocalID].Player = player.GetComponent<Penosa>();
+            GameObject newHUD = Instantiate(_HUDPrefab, _gameSceneCanvas.transform);
+            PlayerHUD playerHUD = newHUD.GetComponent<PlayerHUD>();
+
+            if(playerHUD != null)
+            {
+                playerHUD.Player = playerData.Player;
+                playerHUD.SetHUDValues();
+            }
+
+            _huds[playerData.LocalID] = playerHUD;
         }
     }
     
     public Text GetCountdownText()
     {
-        return Countdown.GetComponent<Text>();
+        return _countdown.GetComponent<Text>();
     }
 
     public void GameOverContainerActivation(bool val)
     {
-        GameOverContainerObject.gameObject.SetActive(val);
+        _gameOverContainerObject.gameObject.SetActive(val);
     }
 }

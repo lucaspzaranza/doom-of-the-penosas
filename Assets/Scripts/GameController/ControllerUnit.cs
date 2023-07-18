@@ -20,7 +20,6 @@ public abstract class ControllerUnit: Controller
 
     protected void SetControllerFromParent<T>() where T: Controller
     {
-        //print($"Setting on {name} the parent Controller looking at the {transform.parent}.");
         _parentController = GetComponentInParent<T>();
     }
 
@@ -33,8 +32,6 @@ public abstract class ControllerUnit: Controller
 
     protected GameMode GetGameMode()
     {
-        //GameController gameCtrl = null;
-        //if (_parentController.TryGetComponent(out gameCtrl))
         GameController gameCtrl = TryToGetGameControllerFromParent();
         if (gameCtrl != null)
             return gameCtrl.GameMode;
@@ -44,8 +41,6 @@ public abstract class ControllerUnit: Controller
 
     protected bool GetIsNewGame()
     {
-        //GameController gameCtrl = null;
-        //if (_parentController.TryGetComponent(out gameCtrl))
         GameController gameCtrl = TryToGetGameControllerFromParent();
         if (gameCtrl != null)
             return gameCtrl.IsNewGame;
@@ -55,8 +50,6 @@ public abstract class ControllerUnit: Controller
 
     public bool GameIsPaused()
     {
-        //GameController gameCtrl = null;
-        //if (_parentController.TryGetComponent(out gameCtrl))
         GameController gameCtrl = TryToGetGameControllerFromParent();
         if (gameCtrl != null)
             return gameCtrl.GameIsPaused;
@@ -66,8 +59,6 @@ public abstract class ControllerUnit: Controller
 
     protected IReadOnlyList<Penosas> GetCharacterSelectionList()
     {
-        //GameController gameCtrl = null;
-        //if (_parentController.TryGetComponent(out gameCtrl))
         GameController gameCtrl = TryToGetGameControllerFromParent();
         if (gameCtrl != null)
             return gameCtrl.CharacterSelectionList;
