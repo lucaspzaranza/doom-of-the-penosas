@@ -40,7 +40,7 @@ public abstract class SpecialItem : MonoBehaviour
             _itemSlot = slotToSet;
     }
 
-    protected void RemoveItemIfAmountEqualsZero()
+    public void RemoveItemIfAmountEqualsZero()
     {
         if (Inventory.SelectedSlot.Amount == 0)
             Inventory.RemoveItem(ItemSlot);

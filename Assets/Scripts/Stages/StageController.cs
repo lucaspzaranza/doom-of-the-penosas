@@ -65,18 +65,17 @@ public class StageController : ControllerUnit
 
     public void SetCurrentStageSO(StageSO stage)
     {
-        //print($"Setting {stage.name} as the current stage.");
         _currentStage = stage;
     }
 
     public IEnumerator StageClearEvent()
     {
-        _stageCanvas = FindFirstObjectByType<Canvas>();
+        _stageCanvas = FindObjectsByType<Canvas>(FindObjectsSortMode.None)
+            .FirstOrDefault(canvas => canvas.transform.parent == null);
 
         var stageClearTxt = Instantiate(StageClearText, _stageCanvas.transform);
 
-        yield return new WaitForSeconds(
-            ConstantNumbers.TimeToShowStageClearTxt);
+        yield return new WaitForSeconds(ConstantNumbers.TimeToShowStageClearTxt);
 
         Destroy(stageClearTxt);
     }

@@ -883,6 +883,8 @@ MonoBehaviour:
       _specialItems:
       - SpecialItemType: 0
         Amount: 0
+        ItemSprite: {fileID: 0}
+      _player: {fileID: 0}
   speed: 2
   jumpForce: 260
   groundCheck: {fileID: 6435880765277024125}

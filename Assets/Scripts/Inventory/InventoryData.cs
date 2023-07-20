@@ -48,7 +48,11 @@ public class InventoryData
         var itemData = _specialItems.SingleOrDefault(item => item.SpecialItemType == inventoryListItem.SpecialItemType);
 
         if (itemData != null)
+        {
             itemData.Amount = inventoryListItem.Amount;
+            if(itemData.Amount <= 0)
+                _specialItems.Remove(itemData);
+        }
         else
             _specialItems.Add(inventoryListItem);
     }

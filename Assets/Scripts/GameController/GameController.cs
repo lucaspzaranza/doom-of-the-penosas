@@ -289,6 +289,7 @@ public class GameController : Controller
             PersistenceController.SaveCompletedStages(completedStages);
         }
 
+        UIController.PlayerInGameUIController.Dispose();
         StartCoroutine(WaitAndLoadNextStage(currentStageSO.SceneIndex + 1));
     }
 
@@ -298,12 +299,6 @@ public class GameController : Controller
         SceneController.LoadScene(buildIndex);
         InstantiatePlayerController();
         InstantiatePoolController();       
-    }
-
-    private void HandleOnUIBackToMainMenuFromMapaMundi()
-    {
-        if(SceneController != null)
-            SceneController.LoadScene(ScenesBuildIndexes.MainMenu);
     }
 
     private void HandleOnUISelectedDevices(IReadOnlyList<InputDevice> devices)
@@ -322,6 +317,12 @@ public class GameController : Controller
     {
         if (GameIsPaused)
             PlayerController.OnPlayerPause?.Invoke(false);
+    }
+
+    private void HandleOnUIBackToMainMenuFromMapaMundi()
+    {
+        if (SceneController != null)
+            SceneController.LoadScene(ScenesBuildIndexes.MainMenu);
     }
 
     public void BackToMainMenuButton()

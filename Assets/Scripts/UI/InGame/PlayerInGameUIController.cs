@@ -21,6 +21,7 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
     [SerializeField] private GameObject _countdown;
 
     private Canvas _gameSceneCanvas;
+    private Transform _hudTransform;
 
     public void Setup(Canvas gameSceneCanvas, IReadOnlyList<PlayerData> playersData)
     {
@@ -28,7 +29,10 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
             _parentController = GetComponentInParent<UIController>();
 
         if(_gameSceneCanvas == null)
+        {
             _gameSceneCanvas = gameSceneCanvas;
+            _hudTransform = _gameSceneCanvas.transform.Find(ConstantStrings.HUD).transform;
+        }
 
         CreatePlayersHUDs(playersData);
     }
@@ -39,7 +43,10 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
         for (int i = 0; i < _huds.Length; i++)
         {
             if (_huds[i] != null)
+            {
+                _huds[i].EventDispose();
                 _huds[i] = null;
+            }
         }
 
         gameObject.SetActive(false);
@@ -49,13 +56,14 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
     {
         foreach (var playerData in playersData)
         {
-            GameObject newHUD = Instantiate(_HUDPrefab, _gameSceneCanvas.transform);
+            GameObject newHUD = Instantiate(_HUDPrefab, _hudTransform);
             PlayerHUD playerHUD = newHUD.GetComponent<PlayerHUD>();
 
             if(playerHUD != null)
             {
                 playerHUD.Player = playerData.Player;
-                playerHUD.SetHUDValues();
+                playerHUD.UpdateHUDValues();
+                playerHUD.EventSetup();
             }
 
             _huds[playerData.LocalID] = playerHUD;

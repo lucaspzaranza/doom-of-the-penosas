@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class PlayerHUD : MonoBehaviour
 {
@@ -58,7 +59,7 @@ public class PlayerHUD : MonoBehaviour
         set
         {
             _lives = value;
-            _livesTxt.text = $"x{value.ToString()}";
+            _livesTxt.text = $"x{value}";
         }
     }
 
@@ -84,51 +85,56 @@ public class PlayerHUD : MonoBehaviour
         _specialItemImg.gameObject.SetActive(newSprite != null);
     }
 
-    public void SetHUDValues()
+    public void UpdateHUDValues()
     {
         Name = player.PlayerData.Character.ToString();
         Lives = player.PlayerData.Lives;
         Life = player.PlayerData.Life;
-        ArmorLife = player.PlayerData.ArmorLife; 
+        ArmorLife = player.PlayerData.ArmorLife;
+
+        UpdateWeaponAmmoText(WeaponType.Primary, player.PlayerData._1stWeaponAmmoProp);
+        UpdateWeaponLevelText(WeaponType.Primary, player.PlayerData._1stWeaponLevel);
+
+        UpdateWeaponAmmoText(WeaponType.Secondary, player.PlayerData._2ndWeaponAmmoProp);
+        UpdateWeaponLevelText(WeaponType.Secondary, player.PlayerData._2ndWeaponLevel);
+
+        if(player.Inventory.SelectedSlot != null)
+            SetSpecialItemIconSprite(player.Inventory.SelectedSlot.Sprite);
     }
 
-    //private void OnEnable()
-    //{
-    //    if(player == null)
-    //    {
-    //        var players = FindObjectsOfType<Penosa>().OrderBy(penosa => penosa.PlayerData.LocalID).ToArray();
-    //        player = players.Length > 0? players[playerID] : null;
-    //    }
+    public void EventSetup()
+    {
+        if (player == null)
+            return;
 
-    //    if (player == null) return;
+        player.PlayerData.OnArmorLifeChanged += UpdateArmorLife;
+        player.PlayerData.OnLifeChanged += UpdateLife;
+        player.PlayerData.OnLivesChanged += UpdateLives;
+        player.PlayerData.OnWeaponLevelChanged += UpdateWeaponLevelText;
+        player.PlayerData.OnWeaponAmmoChanged += UpdateWeaponAmmoText;
 
-    //    player.PlayerData.OnArmorLifeChanged += newValue => ArmorLife = newValue;
-    //    player.PlayerData.OnLifeChanged += newValue => Life = newValue;
-    //    player.PlayerData.OnLivesChanged += newValue => Lives = newValue;
-    //    player.PlayerData.OnWeaponLevelChanged += UpdateWeaponLevelText;
-    //    player.PlayerData.OnWeaponAmmoChanged += UpdateWeaponAmmoText;
+        player.Inventory.OnSpecialItemIconChanged += SetSpecialItemIconSprite;
+    }
 
-    //    SetHUDValues();
-    //}
+    public void EventDispose()
+    {
+        if (player == null) 
+            return;
 
-    //private void OnDisable()
-    //{
-    //    if (player == null) return;
-    //    player.PlayerData.OnWeaponLevelChanged -= UpdateWeaponLevelText;
-    //    player.PlayerData.OnWeaponAmmoChanged -= UpdateWeaponAmmoText;
-    //}
+        player.PlayerData.OnArmorLifeChanged -= UpdateArmorLife;
+        player.PlayerData.OnLifeChanged -= UpdateLife;
+        player.PlayerData.OnLivesChanged -= UpdateLives;
+        player.PlayerData.OnWeaponLevelChanged -= UpdateWeaponLevelText;
+        player.PlayerData.OnWeaponAmmoChanged -= UpdateWeaponAmmoText;
 
-    //private void Start()
-    //{
-    //    if (player == null) return;
-    //    player.Inventory.OnSpecialItemIconChanged += SetSpecialItemIconSprite;
-    //}
+        player.Inventory.OnSpecialItemIconChanged -= SetSpecialItemIconSprite;
+    }
 
     public void UpdateWeaponLevelText(WeaponType weaponType, int newLvl)
     {
         if (weaponType == WeaponType.Primary)
             PrimaryWeaponText.text = $"1st  Lvl {newLvl}:";
-        else //Secondary
+        else
             SecondaryWeaponText.text = $"2nd Lvl {newLvl}:";
     }
 
@@ -136,7 +142,11 @@ public class PlayerHUD : MonoBehaviour
     {
         if (weaponType == WeaponType.Primary)
             PrimaryWeaponAmmoText.text = player.PlayerData._1stWeaponLevel > 1? newAmmo.ToString() : "---";
-        else //Secondary
+        else
             SecondaryWeaponAmmoText.text = newAmmo.ToString();
     }
+
+    private void UpdateArmorLife(int newValue) => ArmorLife = newValue;
+    private void UpdateLife(int newValue) => Life = newValue;
+    private void UpdateLives(int newValue) => Lives = newValue;
 }
