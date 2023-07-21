@@ -20,7 +20,6 @@ public class ItemSlot
         set 
         {
             _item = value; 
-            //_item.ItemSlot = this;
             _item.SetSlot(this);
         }        
     }

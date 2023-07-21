@@ -22,7 +22,6 @@ public class PlayerData
     [SerializeField] private Penosa _playerScript = null;
     [SerializeField] private byte _localID;
     [SerializeField] private GameObject _playerGameObject = null;
-    [SerializeField] private float _countdown;
     [SerializeField] private int _continues;
     [SerializeField] [Range(0, PlayerConsts.Max_Lives)] private int _lives;
     [SerializeField] [Range(0, PlayerConsts.Max_Life)] private int _life;
@@ -97,12 +96,6 @@ public class PlayerData
         }
     }
 
-    public float Countdown
-    {
-        get => _countdown;
-        set => _countdown = value;
-    }
-
     public int Continues
     {
         get => _continues;
@@ -122,7 +115,6 @@ public class PlayerData
 
     public GameObject PlayerGameObject => _playerGameObject;
 
-    // Local ID difere do ID para network. Esse serve apenas pra diferenciar o player 1 do player 2.
     public byte LocalID { get => _localID; set => _localID = value; }
 
     public int Life
@@ -150,8 +142,6 @@ public class PlayerData
         }
     }
 
-    public bool OnCountdown { get; set; }
-
     public Penosa Player => _playerScript;
 
     public Penosas Character => _character;
@@ -175,7 +165,6 @@ public class PlayerData
         _2ndWeaponLvl = PlayerConsts.WeaponInitialLevel;
         _2ndWeaponAmmo = PlayerConsts._2ndWeaponInitialAmmo;
 
-        _countdown = ConstantNumbers.CountdownSeconds;
         _continues = PlayerConsts.Continues;
 
         if (device != null)
@@ -204,16 +193,5 @@ public class PlayerData
             _inventoryData = new InventoryData(player);
         else
             _inventoryData.SetPlayer(player);
-    }
-
-    public void UpdateInventoryData(SpecialItem specialItem, byte amount)
-    {
-        InventoryListItem specialItemOnInvetory = 
-            _inventoryData.SpecialItems.SingleOrDefault(item => item.SpecialItemType == specialItem.ItemType);
-
-        if(specialItemOnInvetory == null)
-            _inventoryData.SpecialItems.Add(new InventoryListItem(specialItem.ItemType, amount, specialItem.ItemSlot.Sprite));
-        else
-            specialItemOnInvetory.Amount = amount;
     }
 }

@@ -1413,34 +1413,35 @@ MonoBehaviour:
     _inventoryData:
       _specialItems: []
       _player: {fileID: 0}
-  speed: 2
-  jumpForce: 260
-  groundCheck: {fileID: 5257087421400951423}
-  wallCheckCollider: {fileID: 5257087421191820688}
-  terrainLayerMask:
+  _speed: 2
+  _jumpForce: 260
+  _groundCheck: {fileID: 5257087421400951423}
+  _wallCheckCollider: {fileID: 5257087421191820688}
+  _terrainLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  defaultGravity: 1.5
-  parachute: {fileID: 5257087422953267525}
-  parachuteGravity: 0.2
-  shotspeed: 8
-  horizontalShotSpawnCoordinates:
+  _defaultGravity: 1.5
+  _parachute: {fileID: 5257087422953267525}
+  _parachuteGravity: 0.2
+  _shotspeed: 8
+  _spawnCoordinatesContainer: {fileID: 5257087422963267375}
+  _horizontalShotSpawnCoordinates:
   - {fileID: 5257087422008705588}
   - {fileID: 5257087421872940484}
   - {fileID: 5257087421498683092}
-  verticalShotSpawnCoordinates:
+  _verticalShotSpawnCoordinates:
   - {fileID: 5257087421733592099}
   - {fileID: 5257087421388655160}
   - {fileID: 5257087421842884842}
   - {fileID: 5257087423243553917}
   - {fileID: 5257087422415889529}
   - {fileID: 5257087422442211840}
-  secondaryShotSpawnCoordinates: {fileID: 5257087421735016002}
+  _secondaryShotSpawnCoordinates: {fileID: 5257087421735016002}
   _jetCopter: {fileID: 5257087421396592317}
-  blinkDuration: 2
-  body: {fileID: 5257087422295494793}
-  legs: {fileID: 5257087422621857229}
-  isBlinking: 0
+  _blinkDuration: 2
+  _body: {fileID: 5257087422295494793}
+  _legs: {fileID: 5257087422621857229}
+  _isBlinking: 0
 --- !u!212 &5257087423172685669
 SpriteRenderer:
   m_ObjectHideFlags: 0

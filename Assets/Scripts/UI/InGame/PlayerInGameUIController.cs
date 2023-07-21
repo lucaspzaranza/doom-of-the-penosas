@@ -35,6 +35,8 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
         }
 
         CreatePlayersHUDs(playersData);
+
+        Penosa.OnPlayerRespawn += HandleOnPlayerRespawn;
     }
 
     public override void Dispose()
@@ -49,6 +51,7 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
             }
         }
 
+        Penosa.OnPlayerRespawn -= HandleOnPlayerRespawn;
         gameObject.SetActive(false);
     }
 
@@ -75,8 +78,15 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
         return _countdown.GetComponent<Text>();
     }
 
-    public void GameOverContainerActivation(bool val)
+    public void GameOverActivation(byte playerID, bool val)
     {
-        _gameOverContainerObject.gameObject.SetActive(val);
+        _huds[playerID].HUDContainer.SetActive(!val);
+        _huds[playerID].GameOverContainer.SetActive(val);
+        _huds[playerID].CountdownActivated = val;
+    }
+
+    public void HandleOnPlayerRespawn(byte playerID)
+    {
+        GameOverActivation(playerID, false);
     }
 }

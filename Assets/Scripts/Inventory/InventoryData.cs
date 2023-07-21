@@ -56,4 +56,9 @@ public class InventoryData
         else
             _specialItems.Add(inventoryListItem);
     }
+
+    public void ClearInventoryData()
+    {
+        _specialItems = null;
+    }
 }

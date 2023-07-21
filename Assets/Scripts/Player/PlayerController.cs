@@ -13,8 +13,7 @@ using UnityEngine.UI;
 public class PlayerController : ControllerUnit
 {
     // Events
-    public Action OnGameOverCountdownTextIsNull;
-    public Action<bool> OnCountdownActivation;
+    public Action<byte, bool> OnCountdownActivation;
     public Action<bool> OnPlayerPause;
 
     // Vars
@@ -37,13 +36,15 @@ public class PlayerController : ControllerUnit
     private void Update()
     {
         if (PlayersData.Count == 0) return;
-        if (PlayersData[0].OnCountdown && PlayersData[0].Countdown >= 0)
-            GameOverCountdown(0);
+        //if (PlayersData[0].OnCountdown && PlayersData[0].Countdown >= 0)
+        //    GameOverCountdown(0);
     }
    
     public void Setup(IReadOnlyList<Penosas> characters, IReadOnlyList<InputDevice> selectedDevices = null)
     {
         base.Setup();
+        Penosa.OnPlayerGameOver += RemovePlayerFromScene;
+        Penosa.OnPlayerRespawn += RespawnPlayer;
 
         for (int i = 0; i < characters.Count; i++)
         {
@@ -51,9 +52,16 @@ public class PlayerController : ControllerUnit
         }
     }
 
+    public void EventDispose()
+    {
+        Penosa.OnPlayerGameOver -= RemovePlayerFromScene;
+        Penosa.OnPlayerRespawn -= RespawnPlayer;
+    }
+
     public override void Dispose()
     {
         _playersData = null;
+        EventDispose();
     }
 
     private void AddNewPlayerData(Penosas characterToAdd, int idToAdd, InputDevice device = null)
@@ -107,8 +115,10 @@ public class PlayerController : ControllerUnit
             if(!gameController.IsNewGame) // Must find a way to load 1st and 2nd weapon level only between stage changing.
                 newPlayerScript.Inventory.LoadInventoryData(playerData.InventoryData);
 
-            newPlayer.transform.position = new Vector2
-                (_playerStartPosition.x + (_offsetX * playerData.LocalID), _playerStartPosition.y);
+            //newPlayer.transform.position = new Vector2
+            //    (_playerStartPosition.x + (_offsetX * playerData.LocalID), _playerStartPosition.y);
+
+            SetPlayerStartPosition(newPlayer, playerData.LocalID);
         }
     }
    
@@ -146,58 +156,68 @@ public class PlayerController : ControllerUnit
         }
     }
 
-    public void RemovePlayerFromScene(byte ID)
+    public void RemovePlayerFromScene(byte playerID)
     {
-        PlayersData[ID].PlayerGameObject.SetActive(false);
-        PlayersData[ID].Continues--;
+        SetPlayerStartPosition(PlayersData[playerID].PlayerGameObject, playerID);
+        PlayersData[playerID].Player.Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
+        PlayersData[playerID].Player.SetPlayerOnSceneAfterGameOver(false);
+        PlayersData[playerID].Player.ResetPlayerData();
+        PlayersData[playerID].Continues--;
 
-        if (PlayersData[ID].Continues == 0)
+        if (PlayersData[playerID].Continues == 0)
         {
             // Game over...
         }
         else
-        {
-            // Call Respawn Countdown  
-            RespawnCountdown(ID);
-        }
+            OnCountdownActivation?.Invoke(playerID, true);
     }
 
-    private void RespawnCountdown(byte ID)
+    private void SetPlayerStartPosition(GameObject player, byte playerID)
     {
-        PlayersData[ID].OnCountdown = true;
-        if (_gameOverCountdownText == null)
-            OnGameOverCountdownTextIsNull?.Invoke();
-        OnCountdownActivation?.Invoke(true);
+        player.transform.position = new Vector2
+            (_playerStartPosition.x + (_offsetX * PlayersData[playerID].LocalID), _playerStartPosition.y);
+    }
+
+    public void RespawnPlayer(byte playerID)
+    {
+        PlayersData[playerID].Player.SetPlayerOnSceneAfterGameOver(true);
+
+        //PlayersData[playerID].Countdown = ConstantNumbers.CountdownSeconds;
+        //PlayersData[playerID].Lives = PlayerConsts.Initial_Lives;
+        //PlayersData[playerID].Player.ResetPlayerData();
+        PlayersData[playerID].Lives = PlayerConsts.Initial_Lives;
+        PlayersData[playerID].Player.Inventory.ClearInventory();
+        PlayersData[playerID].Player.InitiateBlink();
+        //_gameOverCountdownText.text = ConstantNumbers.CountdownSeconds.ToString();
     }
 
     private void GameOverCountdown(byte ID)
     {
-        PlayersData[ID].Countdown -= Time.deltaTime;
-        if (PlayersData[ID].Countdown >= 0)
-        {
-            int currentCountdown = Mathf.FloorToInt(PlayersData[ID].Countdown);
-            if (currentCountdown.ToString() != _gameOverCountdownText.text)
-                _gameOverCountdownText.text = currentCountdown.ToString();
+        //PlayersData[ID].Countdown -= Time.deltaTime;
+        //if (PlayersData[ID].Countdown >= 0)
+        //{
+        //    int currentCountdown = Mathf.FloorToInt(PlayersData[ID].Countdown);
+        //    if (currentCountdown.ToString() != _gameOverCountdownText.text)
+        //        _gameOverCountdownText.text = currentCountdown.ToString();
 
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown(InputStrings.Start)) // Respawn Penosa
-            {
-                PlayersData[ID].PlayerGameObject.SetActive(true);
-                PlayersData[ID].Countdown = ConstantNumbers.CountdownSeconds;
-                PlayersData[ID].OnCountdown = false;
-                PlayersData[ID].Lives = PlayerConsts.Initial_Lives;
-                PlayersData[ID].Player.ResetPlayerData();
-                PlayersData[ID].Player.Inventory.ClearInventory();
-                PlayersData[ID].Player.InitiateBlink();
-                _gameOverCountdownText.text = ConstantNumbers.CountdownSeconds.ToString();
-                OnCountdownActivation?.Invoke(false);
-            }
-        }
-        else
-        {
-            _gameOverCountdownText.text = string.Empty;
-            // Mais pra frente, adicionar funcionalidade de navegar de volta ao 
-            // menu inicial.
-        }
+        //    if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown(InputStrings.Start)) // Respawn Penosa
+        //    {
+        //        PlayersData[ID].PlayerGameObject.SetActive(true);
+        //        PlayersData[ID].Countdown = ConstantNumbers.CountdownSeconds;
+        //        PlayersData[ID].Lives = PlayerConsts.Initial_Lives;
+        //        PlayersData[ID].Player.ResetPlayerData();
+        //        PlayersData[ID].Player.Inventory.ClearInventory();
+        //        PlayersData[ID].Player.InitiateBlink();
+        //        _gameOverCountdownText.text = ConstantNumbers.CountdownSeconds.ToString();
+        //        //OnCountdownActivation?.Invoke(false);
+        //    }
+        //}
+        //else
+        //{
+        //    _gameOverCountdownText.text = string.Empty;
+        //    // Mais pra frente, adicionar funcionalidade de navegar de volta ao 
+        //    // menu inicial.
+        //}
     }
 
     public void SetGameOverCountdownText(Text countdownTxt)

@@ -15,7 +15,9 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private Image _armorLifebarImg = null;
     [SerializeField] private Image _specialItemImg = null;
     [SerializeField] private GameObject _hudContainer = null;
+    [SerializeField] private GameObject _gameOverContainer = null;
     [SerializeField] private byte playerID;
+    [SerializeField] private float _countdownTimer;
 
     [Space]
     [Header("Ammo Text")]
@@ -24,12 +26,17 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private TMP_Text SecondaryWeaponText;
     [SerializeField] private TMP_Text SecondaryWeaponAmmoText;
 
+    [Space]
+    [SerializeField] private TMP_Text _countdownText;
+
     private string _name;
     private int _lives;
     private int _life;
     private int _armorLife;
+    private bool _countdownActivated;
 
     public GameObject HUDContainer => _hudContainer;
+    public GameObject GameOverContainer => _gameOverContainer;
 
     public int Life
     {
@@ -77,6 +84,25 @@ public class PlayerHUD : MonoBehaviour
     {
         get => player;
         set => player = value;
+    }
+
+    public bool CountdownActivated
+    {
+        get => _countdownActivated;
+        set
+        {
+            if (value)
+                _countdownTimer = ConstantNumbers.CountdownSeconds + 1;
+            _countdownActivated = value;
+        }
+    }
+
+    public float CountdownTimer => _countdownTimer;
+
+    private void Update()
+    {
+        if (CountdownActivated && CountdownTimer >= 0)
+            GameOverCountdown();
     }
 
     public void SetSpecialItemIconSprite(Sprite newSprite)
@@ -149,4 +175,15 @@ public class PlayerHUD : MonoBehaviour
     private void UpdateArmorLife(int newValue) => ArmorLife = newValue;
     private void UpdateLife(int newValue) => Life = newValue;
     private void UpdateLives(int newValue) => Lives = newValue;
+
+    private void GameOverCountdown()
+    {
+        _countdownTimer -= Time.deltaTime;
+        if(_countdownTimer >= 0 )
+        {
+            int currentCountdown = Mathf.FloorToInt(_countdownTimer);
+            if (currentCountdown.ToString() != _countdownText.text)
+                _countdownText.text = currentCountdown.ToString();
+        }
+    }
 }

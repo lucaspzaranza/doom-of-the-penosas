@@ -131,6 +131,7 @@ public static class PlayerConsts
     public const float DefaultSpeed = 2f;
     public const float OverlapCircleDiameter = 0.1f;
     public const float BlinkInitialValue = 0.1f;
+    public const float DefaultGravity = 1.5f;
     public const byte Max_Life = 100;
     public const byte Max_Lives = 9;
     public const byte Continues = 5;

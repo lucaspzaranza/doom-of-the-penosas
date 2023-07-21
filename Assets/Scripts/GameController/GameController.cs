@@ -103,9 +103,9 @@ public class GameController : Controller
 
     public override void Dispose()
     {
-        Penosa.OnPlayerDeath -= PlayerController.RemovePlayerFromScene;
+        Penosa.OnPlayerGameOver -= PlayerController.RemovePlayerFromScene;
 
-        PlayerController.OnGameOverCountdownTextIsNull -= HandleOnGameOverCountdownTextIsNull;
+        //PlayerController.OnGameOverCountdownTextIsNull -= HandleOnGameOverCountdownTextIsNull;
         PlayerController.OnCountdownActivation -= HandleOnCoutdownActivation;
         PlayerController.OnPlayerPause -= HandleOnPlayerPause;
 
@@ -154,15 +154,9 @@ public class GameController : Controller
         _playerController = FindAnyObjectByType<PlayerController>();
     }
 
-    private void HandleOnGameOverCountdownTextIsNull()
+    private void HandleOnCoutdownActivation(byte playerID, bool val)
     {
-        Text countdown = UIController.GetCountdownTextFromInGameController();
-        PlayerController.SetGameOverCountdownText(countdown);
-    }
-
-    private void HandleOnCoutdownActivation(bool val)
-    {
-        UIController.GameOverActivation(val);
+        UIController.GameOverActivation(playerID, val);
     }
    
     private void HandleOnUISelectedCharacters(IReadOnlyList<Penosas> characterSelectionList)
@@ -234,11 +228,9 @@ public class GameController : Controller
             _playerController = instance.GetComponent<PlayerController>();
             _playerController.Setup(_characterSelectionList, _selectedDevices);
 
-            _playerController.OnGameOverCountdownTextIsNull += HandleOnGameOverCountdownTextIsNull;
+            //_playerController.OnGameOverCountdownTextIsNull += HandleOnGameOverCountdownTextIsNull;
             _playerController.OnCountdownActivation += HandleOnCoutdownActivation;
             _playerController.OnPlayerPause += HandleOnPlayerPause;
-
-            Penosa.OnPlayerDeath += PlayerController.RemovePlayerFromScene;
         }
         else
             _playerController.Setup(_characterSelectionList, _selectedDevices);
@@ -333,7 +325,10 @@ public class GameController : Controller
         if (IsNewGame)
             RemovePlayerController();
         else
+        {
+            PlayerController.EventDispose();
             PlayerController.ResetPlayerEquipmentData();
+        }
 
         SetGameStatus(GameStatus.Menu);
         UIController.PlayerInGameUIController.Dispose();
@@ -342,6 +337,7 @@ public class GameController : Controller
 
     private void RemovePlayerController()
     {
+        _playerController.EventDispose();
         Destroy(PlayerController.gameObject);
         _playerController = null;
     }

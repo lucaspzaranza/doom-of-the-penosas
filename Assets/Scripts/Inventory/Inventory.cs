@@ -8,6 +8,14 @@ using SharedData.Enumerations;
 
 public class Inventory : MonoBehaviour
 {
+    public delegate void PlayerDataSpriteEvent(Sprite newSprite);
+    public event PlayerDataSpriteEvent OnSpecialItemIconChanged;
+
+    public delegate void InventorySpecialItemAdded(InventoryListItem inventoryListItem);
+    public event InventorySpecialItemAdded OnInventorySpecialItemAdded;
+
+    public Action OnInventoryCleared;
+
     [SerializeField] private SpecialItem _selectedItem;
     [SerializeField] private List<ItemSlot> _slots = null;
     
@@ -34,6 +42,8 @@ public class Inventory : MonoBehaviour
     public List<ItemSlot> Slots => _slots;
     public bool IsEmpty => Slots.Count == 0;
 
+    public GameObject SlotGameObject => slotGameObject;
+
     public ItemSlot SelectedSlot
     {
         get => _selectedSlot;
@@ -43,12 +53,6 @@ public class Inventory : MonoBehaviour
             _selectedItem = _selectedSlot == null ? null : _selectedSlot.Item;
         }
     }
-
-    public delegate void PlayerDataSpriteEvent(Sprite newSprite);
-    public event PlayerDataSpriteEvent OnSpecialItemIconChanged;
-
-    public delegate void InventorySpecialItemAdded(InventoryListItem inventoryListItem);
-    public event InventorySpecialItemAdded OnInventorySpecialItemAdded;
 
     void FixedUpdate()
     {
@@ -63,14 +67,18 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public void ResetTemporizerCounter()
+    {
+        temporizerTimeCounter = 0;
+    }
+
     public void ClearInventory()
     {
-        var items = new List<SpecialItem>(GetComponents<SpecialItem>());
         Slots.RemoveRange(0, Slots.Count);
-        items.ForEach(item => Destroy(item));
         SelectedSlot = null;
         SelectSlotSprite(null);
         itemAmount.text = "0";
+        OnInventoryCleared?.Invoke();
     }
 
     public void ShowSlot()
@@ -81,7 +89,6 @@ public class Inventory : MonoBehaviour
 
     public void AddItem(SpecialItemType itemType, byte amount, Penosa player, Sprite itemSprite)
     {
-        //var matchSlot = Slots.Find(slot => slot.Item == null || slot.Item.GetType().ToString() == typeString);
         var matchSlot = Slots.Find(slot => slot.Item == null || slot.Item.ItemType == itemType);
 
         if (matchSlot != null) // already has an item
@@ -145,7 +152,6 @@ public class Inventory : MonoBehaviour
         SelectSlotSprite(Slots[index].Sprite);
         itemAmount.text = SelectedSlot.Amount.ToString();
     }
-
     public void SelectSlotSprite(Sprite newSprite)
     {
         currentItemSprite = newSprite;

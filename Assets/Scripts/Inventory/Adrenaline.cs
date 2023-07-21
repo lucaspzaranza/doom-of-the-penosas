@@ -21,7 +21,7 @@ public class Adrenaline : SpecialItem
             if(timeCounter >= duration)
             {
                 timeCounter = 0;
-                Player.speed = PlayerConsts.DefaultSpeed;
+                Player._speed = PlayerConsts.DefaultSpeed;
                 ItemInUse = false;
                 RemoveItemIfAmountEqualsZero();
             }
@@ -33,6 +33,6 @@ public class Adrenaline : SpecialItem
         GetPlayerValues();
         base.Use();
         ItemInUse = true;
-        Player.speed *= speedEnhancingRate;
+        Player._speed *= speedEnhancingRate;
     }
 }

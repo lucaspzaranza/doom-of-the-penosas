@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using System;
+using Newtonsoft.Json.Linq;
 
 public class AnimatorHashes
 {
@@ -18,7 +19,8 @@ public class AnimatorHashes
 
 public class Penosa : MonoBehaviour
 {
-    public static Action<byte> OnPlayerDeath;
+    public static Action<byte> OnPlayerGameOver;
+    public static Action<byte> OnPlayerRespawn;
 
     #region Vars
 
@@ -37,46 +39,47 @@ public class Penosa : MonoBehaviour
     private Inventory _inventory = null;
 
     [Header("Movement")]
-    public float speed;
-    public float jumpForce;
+    public float _speed;
+    public float _jumpForce;
 
     [Header(InputStrings.Jump)]
-    [SerializeField] private Transform groundCheck = null;
-    [SerializeField] private Collider2D wallCheckCollider = null;
-    public LayerMask terrainLayerMask;
-    public float defaultGravity;
+    [SerializeField] private Transform _groundCheck = null;
+    [SerializeField] private Collider2D _wallCheckCollider = null;
+    public LayerMask _terrainLayerMask;
 
     [Header("Parachute")]
-    public GameObject parachute;
-    public float parachuteGravity;
+    public GameObject _parachute;
+    public float _parachuteGravity;
 
-    public float shotspeed;
-    private GameObject currentGrenade;
-    [SerializeField] private Transform[] horizontalShotSpawnCoordinates = null;
-    [SerializeField] private Transform[] verticalShotSpawnCoordinates = null;
-    [SerializeField] private Transform secondaryShotSpawnCoordinates = null;
+    public float _shotspeed;
+    private GameObject _currentGrenade;
+    [SerializeField] private GameObject _spawnCoordinatesContainer;
+    [SerializeField] private Transform[] _horizontalShotSpawnCoordinates = null;
+    [SerializeField] private Transform[] _verticalShotSpawnCoordinates = null;
+    [SerializeField] private Transform _secondaryShotSpawnCoordinates = null;
 
     [Header("Items")]
     [SerializeField] private GameObject _jetCopter = null;
 
-    private float shotAnimTimeCounter;
-    private float continuousTimeCounter;
-    private Animator anim;
-    private Rigidbody2D rb;
-    private bool isShooting;
-    private bool isWalking;
-    private bool isLeft;
-    private bool isGrounded;
-    private AnimatorHashes animHashes = new AnimatorHashes();
+    private float _shotAnimTimeCounter;
+    private float _continuousTimeCounter;
+    private Animator _anim;
+    private Rigidbody2D _rb;
+    private bool _isShooting;
+    private bool _isWalking;
+    private bool _isLeft;
+    private bool _isGrounded;
+    private bool _isInCountdown;
+    private AnimatorHashes _animHashes = new AnimatorHashes();
 
     [Header("Blink")]
-    public float blinkDuration;
-    private float blinkTimeCounter;
-    private float blinkIntervalTimeCounter;
-    private const float blinkFrameInterval = 0.05f;
-    [SerializeField] private SpriteRenderer body;
-    [SerializeField] private SpriteRenderer legs;
-    [SerializeField] private bool isBlinking = false;
+    public float _blinkDuration;
+    private float _blinkTimeCounter;
+    private float _blinkIntervalTimeCounter;
+    private const float _blinkFrameInterval = 0.05f;
+    [SerializeField] private SpriteRenderer _body;
+    [SerializeField] private SpriteRenderer _legs;
+    [SerializeField] private bool _isBlinking = false;
     #endregion
 
     #region Props
@@ -91,9 +94,9 @@ public class Penosa : MonoBehaviour
 
     public bool JetCopterActivated { get; set; }
 
-    public Animator Animator => anim;
+    public Animator Animator => _anim;
 
-    public bool Adrenaline => speed > PlayerConsts.DefaultSpeed;
+    public bool Adrenaline => _speed > PlayerConsts.DefaultSpeed;
 
     public PlayerData PlayerData
     {
@@ -101,15 +104,15 @@ public class Penosa : MonoBehaviour
         set => _playerData = value;
     }
 
-    public bool IsBlinking => isBlinking;
+    public bool IsBlinking => _isBlinking;
 
     public Rigidbody2D Rigidbody2D
     {
         get
         {
-            if(rb == null)
-                rb = GetComponent<Rigidbody2D>();
-            return rb;
+            if(_rb == null)
+                _rb = GetComponent<Rigidbody2D>();
+            return _rb;
         }
     }
 
@@ -120,23 +123,25 @@ public class Penosa : MonoBehaviour
         InputSystemSetup();
         _inventory = GetComponentInChildren<Inventory>();
         _inventory.OnInventorySpecialItemAdded += HandleOnInventorySpecialItemAdded;
+        _inventory.OnInventoryCleared += HandleOnInventoryCleared;
     }
 
     private void OnDisable()
     {
         _inventory.OnInventorySpecialItemAdded -= HandleOnInventorySpecialItemAdded;
+        _inventory.OnInventoryCleared -= HandleOnInventoryCleared;
         InputSystemReset();
     }
 
     void Start()
     {
-        anim = GetComponent<Animator>();
-        Rigidbody2D.gravityScale = defaultGravity;
+        _anim = GetComponent<Animator>();
+        Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
     }
 
     void Update()
     {
-        if (_playerController.GameIsPaused())
+        if (_playerController.GameIsPaused() || _isInCountdown)
             return;
 
         Move();
@@ -144,7 +149,11 @@ public class Penosa : MonoBehaviour
         Shoot();
 
         if (Input.GetKeyDown(KeyCode.X)) // Remove this!   
-            TakeDamage(40, true);
+        {
+            //TakeDamage(100, true);
+            PlayerData.Lives = 0;
+            Death();
+        }
 
         if (PlayerData.Life <= PlayerConsts.DeathLife && !Adrenaline && !IsBlinking)
         {
@@ -155,23 +164,23 @@ public class Penosa : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (_playerController.GameIsPaused())
+        if (_playerController.GameIsPaused() || _isInCountdown)
             return;
 
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, PlayerConsts.OverlapCircleDiameter, terrainLayerMask);
-        anim.SetBool(animHashes.isGrounded, isGrounded);
+        _isGrounded = Physics2D.OverlapCircle(_groundCheck.position, PlayerConsts.OverlapCircleDiameter, _terrainLayerMask);
+        _anim.SetBool(_animHashes.isGrounded, _isGrounded);
 
-        if (isGrounded && Rigidbody2D.gravityScale != defaultGravity && !JetCopterActivated) 
+        if (_isGrounded && Rigidbody2D.gravityScale != PlayerConsts.DefaultGravity && !JetCopterActivated) 
             ResetGravity();
 
-        if (isBlinking)
+        if (_isBlinking)
         {
-            blinkIntervalTimeCounter += Time.fixedDeltaTime;
-            blinkTimeCounter += Time.fixedDeltaTime;
-            if (blinkIntervalTimeCounter >= blinkFrameInterval)
+            _blinkIntervalTimeCounter += Time.fixedDeltaTime;
+            _blinkTimeCounter += Time.fixedDeltaTime;
+            if (_blinkIntervalTimeCounter >= _blinkFrameInterval)
             {
                 Blink();
-                blinkIntervalTimeCounter = PlayerConsts.BlinkInitialValue;
+                _blinkIntervalTimeCounter = PlayerConsts.BlinkInitialValue;
             }
         }
     }
@@ -210,46 +219,51 @@ public class Penosa : MonoBehaviour
         _playerData.InventoryData.UpdateData(inventoryListItem);
     }
 
+    private void HandleOnInventoryCleared()
+    {
+        _playerData.InventoryData.ClearInventoryData();
+    }
+
     public void PauseMenu(InputAction.CallbackContext context)
     {
-        if(!_playerController.GameIsPaused())
+        if(_isInCountdown)
+            OnPlayerRespawn?.Invoke(PlayerData.LocalID);
+        else if (!_playerController.GameIsPaused())
             _playerController.OnPlayerPause?.Invoke(true);
     }
 
     public void Blink()
     {
-        if (blinkTimeCounter < blinkDuration)
+        if (_blinkTimeCounter < _blinkDuration)
         {
-            float alpha = body.color.a;
+            float alpha = _body.color.a;
             float transparency = alpha == 1 ? 0f : 1f;
-            body.color = new Color(255f, 255f, 255f, transparency);
-            legs.color = new Color(255f, 255f, 255f, transparency);
+            _body.color = new Color(255f, 255f, 255f, transparency);
+            _legs.color = new Color(255f, 255f, 255f, transparency);
         }
         else
         {
-            isBlinking = false;
-            body.color = new Color(255f, 255f, 255f, 1f);
-            legs.color = new Color(255f, 255f, 255f, 1f);
-            blinkTimeCounter = 0f;
+            _isBlinking = false;
+            _body.color = new Color(255f, 255f, 255f, 1f);
+            _legs.color = new Color(255f, 255f, 255f, 1f);
+            _blinkTimeCounter = 0f;
         }
     }
 
     public void InitiateBlink()
     {
-        isBlinking = true;
+        _isBlinking = true;
     }
 
     public void Death()
     {
+        ResetPlayerData();
+
         if (PlayerData.Lives == PlayerConsts.GameOverLives)
-            OnPlayerDeath(PlayerData.LocalID);
-            //GameController.instance.RemovePlayerFromScene(PlayerData.LocalID);
+            OnPlayerGameOver(PlayerData.LocalID);
         else
-        {
             // Play some death animation...
-            ResetPlayerData();
             InitiateBlink();
-        }
     }
 
     public void ResetPlayerData()
@@ -259,6 +273,7 @@ public class Penosa : MonoBehaviour
         PlayerData._2ndWeaponLevel = PlayerConsts.WeaponInitialLevel;
         PlayerData._1stWeaponAmmoProp = PlayerConsts._1stWeaponInitialAmmo;
         PlayerData._2ndWeaponAmmoProp = PlayerConsts._2ndWeaponInitialAmmo;
+        PlayerData.ArmorLife = PlayerConsts.ArmorInitialLife;
     }
 
     private void ChangeSpecialItem(InputAction.CallbackContext context)
@@ -289,11 +304,11 @@ public class Penosa : MonoBehaviour
         float horizontal = GetNormalizedMovementValue(moveVector.x);
         float vertical = GetNormalizedMovementValue(moveVector.y);
 
-        if (horizontal > 0 && isLeft) Flip();
-        else if (horizontal < 0 && !isLeft) Flip();
+        if (horizontal > 0 && _isLeft) Flip();
+        else if (horizontal < 0 && !_isLeft) Flip();
 
         if (!HitWall() && Rigidbody2D != null)
-            Rigidbody2D.velocity = new Vector2(speed * horizontal, Rigidbody2D.velocity.y);
+            Rigidbody2D.velocity = new Vector2(_speed * horizontal, Rigidbody2D.velocity.y);
 
         SetMovementAnimators(vertical);
     }
@@ -305,11 +320,11 @@ public class Penosa : MonoBehaviour
 
         if (!JetCopterActivated)
         {
-            if (isGrounded)
-                Rigidbody2D.AddForce(Vector2.up * jumpForce);
+            if (_isGrounded)
+                Rigidbody2D.AddForce(Vector2.up * _jumpForce);
         }
         else
-            Rigidbody2D.velocity = new Vector2(Rigidbody2D.velocity.x, speed);
+            Rigidbody2D.velocity = new Vector2(Rigidbody2D.velocity.x, _speed);
     }
 
     private void Fall(InputAction.CallbackContext context)
@@ -332,29 +347,29 @@ public class Penosa : MonoBehaviour
     {
         ContactFilter2D contactFilter = new ContactFilter2D();
         Collider2D[] results = new Collider2D[1];
-        contactFilter.SetLayerMask(terrainLayerMask);
-        wallCheckCollider.OverlapCollider(contactFilter, results);
+        contactFilter.SetLayerMask(_terrainLayerMask);
+        _wallCheckCollider.OverlapCollider(contactFilter, results);
         return results[0] != null;
     }
 
     private void SetMovementAnimators(float vertical)
     {
-        if (rb == null)
+        if (_rb == null)
             return;
 
-        anim.SetInteger(animHashes.XVelocity, (int)Rigidbody2D.velocity.x);
-        anim.SetFloat(animHashes.YVelocity, Rigidbody2D.velocity.y);
+        _anim.SetInteger(_animHashes.XVelocity, (int)Rigidbody2D.velocity.x);
+        _anim.SetFloat(_animHashes.YVelocity, Rigidbody2D.velocity.y);
 
-        anim.SetBool(animHashes.up, vertical > 0);
-        anim.SetBool(animHashes.down, vertical < 0);
+        _anim.SetBool(_animHashes.up, vertical > 0);
+        _anim.SetBool(_animHashes.down, vertical < 0);
     }
 
     private void Flip()
     {
-        isLeft = !isLeft;
+        _isLeft = !_isLeft;
         transform.localScale = new Vector2
             (transform.localScale.x * -1, transform.localScale.y);
-        Inventory.transform.localScale = new Vector2(isLeft ? -1f : 1f, 1f);
+        Inventory.transform.localScale = new Vector2(_isLeft ? -1f : 1f, 1f);
     }
 
     private void Parachute()
@@ -363,19 +378,19 @@ public class Penosa : MonoBehaviour
 
         if (JetCopterActivated) return;
 
-        if (buttonPressed && !parachute.activeSelf && !isGrounded && Rigidbody2D.velocity.y < 0)
+        if (buttonPressed && !_parachute.activeSelf && !_isGrounded && Rigidbody2D.velocity.y < 0)
         {
-            Rigidbody2D.gravityScale = parachuteGravity;
-            parachute.SetActive(true);
+            Rigidbody2D.gravityScale = _parachuteGravity;
+            _parachute.SetActive(true);
         }
         else if (!buttonPressed) ResetGravity();
     }
 
     private void ResetGravity()
     {
-        Rigidbody2D.gravityScale = defaultGravity;
-        if (parachute.activeSelf)
-            parachute.GetComponent<Animator>().SetTrigger(ConstantStrings.TurnOff);
+        Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
+        if (_parachute.activeSelf)
+            _parachute.GetComponent<Animator>().SetTrigger(ConstantStrings.TurnOff);
     }
 
     private Transform GetShotSpawnCoordinates()
@@ -385,9 +400,9 @@ public class Penosa : MonoBehaviour
             // Se estiver olhando pra baixo, pega os 3 últimos valores do array,
             // onde foram armazenados os Transforms dos frames da galinha mirando pra baixo
             int downShotSpawnPosIndex = Input.GetAxisRaw(InputStrings.Vertical) < 0 ? 3 : 0;
-            return verticalShotSpawnCoordinates[PlayerData._1stWeaponLevel + downShotSpawnPosIndex - 1];
+            return _verticalShotSpawnCoordinates[PlayerData._1stWeaponLevel + downShotSpawnPosIndex - 1];
         }
-        else return horizontalShotSpawnCoordinates[PlayerData._1stWeaponLevel - 1];
+        else return _horizontalShotSpawnCoordinates[PlayerData._1stWeaponLevel - 1];
     }
 
     private Quaternion GetShotRotation()
@@ -400,7 +415,7 @@ public class Penosa : MonoBehaviour
         int direction = 0;
         if (Vertical)
             direction = Input.GetAxisRaw(InputStrings.Vertical) > 0 ? 1 : -1;
-        else direction = isLeft ? -1 : 1;
+        else direction = _isLeft ? -1 : 1;
 
         return direction;
     }
@@ -421,16 +436,15 @@ public class Penosa : MonoBehaviour
     {
         if (PlayerData._1stWeaponLevel == 1 || (PlayerData._1stWeaponLevel > 1 && PlayerData._1stWeaponAmmoProp > 0))
         {
-            isShooting = true;
-            anim.SetInteger(animHashes.shotLevel, PlayerData._1stWeaponLevel);
-            anim.SetTrigger(animHashes.shootTrigger);
-            shotAnimTimeCounter = 0;
+            _isShooting = true;
+            _anim.SetInteger(_animHashes.shotLevel, PlayerData._1stWeaponLevel);
+            _anim.SetTrigger(_animHashes.shootTrigger);
+            _shotAnimTimeCounter = 0;
 
             var currentTransform = GetShotSpawnCoordinates();
             var currentRotation = GetShotRotation();
             int currentDirection = GetShotDirection();
 
-            //GameObject newBullet = ObjectPool.instance.GetObject(PlayerData.Current1stShot);
             GameObject newBullet = _playerController.RequestProjectileFromGameController(PlayerData.Current1stShot);
             newBullet.transform.position = currentTransform.position;
             newBullet.transform.rotation = currentRotation;
@@ -439,7 +453,7 @@ public class Penosa : MonoBehaviour
 
             if (PlayerData._1stWeaponLevel == 2) SetShotLevel2VariationRate(ref newBullet);
 
-            newBullet.GetComponent<Projectile>().Speed = shotspeed * currentDirection;
+            newBullet.GetComponent<Projectile>().Speed = _shotspeed * currentDirection;
 
             SetAmmo(WeaponType.Primary, PlayerData._1stWeaponAmmoProp - 1);
         }
@@ -447,17 +461,16 @@ public class Penosa : MonoBehaviour
 
     private void InitializeShot2Animators()
     {
-        isShooting = true;
-        anim.SetTrigger(animHashes.shootTrigger);
-        anim.SetInteger(animHashes.shotLevel, 4);
-        shotAnimTimeCounter = 0;
+        _isShooting = true;
+        _anim.SetTrigger(_animHashes.shootTrigger);
+        _anim.SetInteger(_animHashes.shotLevel, 4);
+        _shotAnimTimeCounter = 0;
     }
 
     private GameObject GetProjectileFromPool(GameObject instanceToSearch)
     {
-        //GameObject result = ObjectPool.instance.GetObject(instanceToSearch);
         GameObject result = _playerController.RequestProjectileFromGameController(instanceToSearch);
-        result.transform.position = secondaryShotSpawnCoordinates.position;
+        result.transform.position = _secondaryShotSpawnCoordinates.position;
         result.transform.rotation = Quaternion.identity;
 
         return result;
@@ -468,28 +481,28 @@ public class Penosa : MonoBehaviour
         bool canSpawn = PlayerData._2ndWeaponLevel == 1;
         // currentGrenade sendo nula significa que não tem nenhuma granada em tela no momento.
         // Essa verificação é feita pelo fato de que só pode atirar um 2nd shot por vez.
-        bool fire2Level2Logic = PlayerData._2ndWeaponLevel == 2 && currentGrenade == null;
+        bool fire2Level2Logic = PlayerData._2ndWeaponLevel == 2 && _currentGrenade == null;
         canSpawn |= fire2Level2Logic;
         if (canSpawn)
         {
             InitializeShot2Animators();
             // Somente o nível 1 do Tiro 2 terá Pooling, já que o nível 2 só tem uma instância por vez na tela.
             if (PlayerData._2ndWeaponLevel == 1)
-                currentGrenade = GetProjectileFromPool(PlayerData.Current2ndShot);
+                _currentGrenade = GetProjectileFromPool(PlayerData.Current2ndShot);
             else if(fire2Level2Logic)
-                currentGrenade = Instantiate(PlayerData.Current2ndShot, secondaryShotSpawnCoordinates.position, Quaternion.identity);
+                _currentGrenade = Instantiate(PlayerData.Current2ndShot, _secondaryShotSpawnCoordinates.position, Quaternion.identity);
 
-            var currentGrenadeScript = currentGrenade.GetComponent<Grenade>();
-            currentGrenadeScript.Speed *= isLeft ? -1 : 1;
-            currentGrenade.transform.localScale = new Vector2(currentGrenade.transform.localScale.x * (isLeft ? -1 : 1),
-                                                                                currentGrenade.transform.localScale.y);
+            var currentGrenadeScript = _currentGrenade.GetComponent<Grenade>();
+            currentGrenadeScript.Speed *= _isLeft ? -1 : 1;
+            _currentGrenade.transform.localScale = new Vector2(_currentGrenade.transform.localScale.x * (_isLeft ? -1 : 1),
+                                                                                _currentGrenade.transform.localScale.y);
             currentGrenadeScript.CallThrowGrenade();
-            var kawarimi = currentGrenade.GetComponent<Kawarimi>();
+            var kawarimi = _currentGrenade.GetComponent<Kawarimi>();
             if (kawarimi != null) kawarimi.penosa = gameObject;
 
             // Se a bomba for nivel 2, precisamos guardar a referência dela para futuras verificações
-            if(PlayerData._2ndWeaponLevel == 1 && currentGrenade != null) 
-                currentGrenade = null;
+            if(PlayerData._2ndWeaponLevel == 1 && _currentGrenade != null) 
+                _currentGrenade = null;
 
             SetAmmo(WeaponType.Secondary, PlayerData._2ndWeaponAmmoProp - 1);
         }
@@ -497,24 +510,24 @@ public class Penosa : MonoBehaviour
 
     private void Instantiate_1stShotLv2()
     {
-        if (continuousTimeCounter >= PlayerConsts.MachineGunInterval)
+        if (_continuousTimeCounter >= PlayerConsts.MachineGunInterval)
         {
             Instantiate_1stShot();
-            continuousTimeCounter = 0f;
+            _continuousTimeCounter = 0f;
         }
-        else continuousTimeCounter += Time.deltaTime;
+        else _continuousTimeCounter += Time.deltaTime;
     }
 
     private void ResetShootAnim()
     {
-        shotAnimTimeCounter += Time.deltaTime;
+        _shotAnimTimeCounter += Time.deltaTime;
         float timeToResetAnimation = PlayerData._1stWeaponLevel <= 2 ? PlayerConsts.ShotAnimDuration :
                                     PlayerConsts.ShotLvl3Duration;
-        if (shotAnimTimeCounter >= timeToResetAnimation)
+        if (_shotAnimTimeCounter >= timeToResetAnimation)
         {
-            anim.SetInteger(animHashes.shotLevel, 0);
-            shotAnimTimeCounter = 0;
-            isShooting = false;
+            _anim.SetInteger(_animHashes.shotLevel, 0);
+            _shotAnimTimeCounter = 0;
+            _isShooting = false;
         }
     }
 
@@ -522,7 +535,7 @@ public class Penosa : MonoBehaviour
     {
         bool fire1ButtonPressed = _fire1Action.ReadValue<float>() > 0;
 
-        // Lvl Diferente de 2, porque com o nível 2, o comportamento do tiro é diferente,
+        // Lvl Diferente de 2, porque com o nível 2 o comportamento do tiro é diferente,
         // precisa verificar se está pressionado a cada frame, enquanto que nos lvls 1 e 3 
         // a função de tiro só deve ser chamada no frame em que o botão foi pressionado.
         if (PlayerData._1stWeaponLevel != 2) fire1ButtonPressed &= _fire1Action.triggered;
@@ -534,13 +547,13 @@ public class Penosa : MonoBehaviour
             Instantiate_1stShot();
         else if (fire1ButtonPressed && PlayerData._1stWeaponLevel == 2 && fire1ButtonPressed)
             Instantiate_1stShotLv2();
-        else if (fire1ButtonPressed && !isShooting && PlayerData._1stWeaponLevel == 3)
+        else if (fire1ButtonPressed && !_isShooting && PlayerData._1stWeaponLevel == 3)
             Instantiate_1stShot();
         else if (fire2ButtonPressed && PlayerData._2ndWeaponAmmoProp > 0)
             InstantiateSecondaryShot();
         else if (fire3ButtonPressed) UseSpecialItem();
 
-        if (isShooting) ResetShootAnim();
+        if (_isShooting) ResetShootAnim();
     }
 
     public void SetAmmo(WeaponType weaponType, int ammo)
@@ -568,6 +581,39 @@ public class Penosa : MonoBehaviour
     public void SetPlayerController(PlayerController controller)
     {
         _playerController = controller;
+    }
+
+    public void SetPlayerOnSceneAfterGameOver(bool val)
+    {
+        _isInCountdown = !val;
+
+        if(_isInCountdown)
+        {
+            if (_parachute.activeSelf)
+                _parachute.SetActive(false);
+
+            if (JetCopterObject.activeSelf)
+            {
+                JetCopterObject.SetActive(false);
+                JetCopterActivated = false;
+                Animator.SetBool(ConstantStrings.JetCopter, false);
+            }
+
+            if (Adrenaline)
+                _speed = PlayerConsts.DefaultSpeed;
+
+            if(Inventory.SlotGameObject.activeSelf)
+            {
+                Inventory.ResetTemporizerCounter();
+                Inventory.SlotGameObject.SetActive(false);
+            }
+        }
+
+        _body.gameObject.SetActive(val);
+        _legs.gameObject.SetActive(val);
+        _groundCheck.gameObject.SetActive(val);
+        _wallCheckCollider.gameObject.SetActive(val);
+        Inventory.gameObject.SetActive(val);
     }
 }
 

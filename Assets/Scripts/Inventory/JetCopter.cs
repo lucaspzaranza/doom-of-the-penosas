@@ -29,7 +29,7 @@ public class JetCopter : SpecialItem
 
         // Se true, coloca uma gravidade menor, senão, a gravidade normal
         ItemSlot.Player.GetComponent<Rigidbody2D>().gravityScale = 
-            value? ItemSlot.Player.Inventory.JetCopterGravity : ItemSlot.Player.defaultGravity;
+            value? ItemSlot.Player.Inventory.JetCopterGravity : PlayerConsts.DefaultGravity;
         ItemInUse = value;
     }
 

@@ -91,9 +91,9 @@ public class UIController : ControllerUnit
         return PlayerInGameUIController.GetCountdownText();
     }
 
-    public void GameOverActivation(bool val)
+    public void GameOverActivation(byte playerID, bool val)
     {
-        PlayerInGameUIController.GameOverContainerActivation(val);
+        PlayerInGameUIController.GameOverActivation(playerID, val);
     }
 
     private void ReturnCursorsToDefaultPosition()
