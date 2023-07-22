@@ -13,6 +13,7 @@ TagManager:
   - CharacterSelectionButton
   - DeviceSelectionButton
   - HUD
+  - GameOver
   layers:
   - Default
   - TransparentFX

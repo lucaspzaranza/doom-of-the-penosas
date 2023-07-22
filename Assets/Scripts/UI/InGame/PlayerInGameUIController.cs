@@ -2,15 +2,27 @@ using SharedData.Enumerations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+[Serializable]
+public class PlayerIcon
+{
+    public Penosas Character;
+    public Sprite PlayerIconSprite;
+}
+
 public class PlayerInGameUIController : ControllerUnit, IUIController
 {
+    public Action<byte> OnCountdownIsOver;
+    
     [Space]
     [Header("HUD")]
     [SerializeField] private PlayerHUD[] _huds = new PlayerHUD[ConstantNumbers.NumberOfPlayers];
     public PlayerHUD[] HUDs => _huds;
+
+    [SerializeField] private PlayerIcon[] _playerIcons = new PlayerIcon[ConstantNumbers.NumberOfPlayers];
 
     [SerializeField] private GameObject _HUDPrefab;
 
@@ -22,6 +34,8 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
 
     private Canvas _gameSceneCanvas;
     private Transform _hudTransform;
+
+    private UIController UICtrl => (UIController)_parentController;
 
     public void Setup(Canvas gameSceneCanvas, IReadOnlyList<PlayerData> playersData)
     {
@@ -35,8 +49,6 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
         }
 
         CreatePlayersHUDs(playersData);
-
-        Penosa.OnPlayerRespawn += HandleOnPlayerRespawn;
     }
 
     public override void Dispose()
@@ -45,13 +57,15 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
         for (int i = 0; i < _huds.Length; i++)
         {
             if (_huds[i] != null)
-            {
+            {                
+                _huds[i].Player.OnPlayerRespawn -= HandleOnPlayerRespawn;
+                _huds[i].OnCountdownIsOver -= OnCountdownIsOver;
                 _huds[i].EventDispose();
                 _huds[i] = null;
             }
         }
 
-        Penosa.OnPlayerRespawn -= HandleOnPlayerRespawn;
+        OnCountdownIsOver -= UICtrl.OnCountdownIsOver;
         gameObject.SetActive(false);
     }
 
@@ -65,28 +79,46 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
             if(playerHUD != null)
             {
                 playerHUD.Player = playerData.Player;
+
+                playerHUD.PlayerIcon = _playerIcons
+                    .SingleOrDefault(icon => icon.Character == playerHUD.Player.PlayerData.Character)
+                    .PlayerIconSprite;
+
                 playerHUD.UpdateHUDValues();
                 playerHUD.EventSetup();
+
+                playerHUD.OnCountdownIsOver += OnCountdownIsOver;
+                playerData.Player.OnPlayerRespawn += HandleOnPlayerRespawn;
             }
 
             _huds[playerData.LocalID] = playerHUD;
         }
     }
-    
-    public Text GetCountdownText()
-    {
-        return _countdown.GetComponent<Text>();
-    }
 
-    public void GameOverActivation(byte playerID, bool val)
+    public void ContinueActivation(byte playerID, bool val)
     {
         _huds[playerID].HUDContainer.SetActive(!val);
-        _huds[playerID].GameOverContainer.SetActive(val);
+        _huds[playerID].ContinueContainer.SetActive(val);
         _huds[playerID].CountdownActivated = val;
     }
 
     public void HandleOnPlayerRespawn(byte playerID)
     {
-        GameOverActivation(playerID, false);
+        ContinueActivation(playerID, false);
+    }
+
+    public void HideHUDs()
+    {
+        foreach (var hud in _huds)
+        {
+            if(hud != null)
+                hud.gameObject.SetActive(false);
+        }
+    }
+
+    public void SetGameOverContainerOnPlayerActive(byte playerID, bool val)
+    {
+        _huds[playerID].ContinueContainer.SetActive(!val);
+        _huds[playerID].GameOverContainer.SetActive(val);
     }
 }

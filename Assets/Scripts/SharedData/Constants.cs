@@ -108,6 +108,7 @@ public static class ConstantNumbers
 
     // Stage
     public const float TimeToShowStageClearTxt = 2f;
+    public const float TimeToReturnToMapaMundiAfterGameOver = 3f;
 }   
 
 public static class ScenesBuildIndexes

@@ -15,6 +15,7 @@ public class PlayerController : ControllerUnit
     // Events
     public Action<byte, bool> OnCountdownActivation;
     public Action<bool> OnPlayerPause;
+    public Action<byte> OnPlayerGameOver;
 
     // Vars
     [Space]
@@ -31,31 +32,31 @@ public class PlayerController : ControllerUnit
     [SerializeField] private List<PlayerData> _playersData = null;
     public List<PlayerData> PlayersData => _playersData;
 
-    private Text _gameOverCountdownText;
-
-    private void Update()
-    {
-        if (PlayersData.Count == 0) return;
-        //if (PlayersData[0].OnCountdown && PlayersData[0].Countdown >= 0)
-        //    GameOverCountdown(0);
-    }
-   
     public void Setup(IReadOnlyList<Penosas> characters, IReadOnlyList<InputDevice> selectedDevices = null)
     {
         base.Setup();
-        Penosa.OnPlayerGameOver += RemovePlayerFromScene;
-        Penosa.OnPlayerRespawn += RespawnPlayer;
-
+       
         for (int i = 0; i < characters.Count; i++)
         {
             AddNewPlayerData(characters[i], i, selectedDevices[i]);
         }
     }
 
+    private void PlayersEventSetup(Penosa player)
+    {
+        player.OnPlayerLostAllContinues += InvokeGameOverEvent;
+        player.OnPlayerLostAllLives += RemovePlayerFromScene;
+        player.OnPlayerRespawn += RespawnPlayer;
+    }
+
     public void EventDispose()
     {
-        Penosa.OnPlayerGameOver -= RemovePlayerFromScene;
-        Penosa.OnPlayerRespawn -= RespawnPlayer;
+        foreach (var playerData in PlayersData)
+        {
+            playerData.Player.OnPlayerLostAllContinues -= InvokeGameOverEvent;
+            playerData.Player.OnPlayerLostAllLives -= RemovePlayerFromScene;
+            playerData.Player.OnPlayerRespawn -= RespawnPlayer;
+        }
     }
 
     public override void Dispose()
@@ -103,23 +104,28 @@ public class PlayerController : ControllerUnit
                 return;
             }
 
-            var newPlayerScript = newPlayer.GetComponent<Penosa>();
-            GameController gameController = TryToGetGameControllerFromParent();
-
-            playerData.SetPlayerScriptFromInstance(newPlayerScript);
-            playerData.SetPlayerGameObjectFromInstance(newPlayer);
-            playerData.InventoryDataSetup(newPlayerScript, gameController.IsNewGame);
-
-            newPlayerScript.SetPlayerData(playerData);
-            newPlayerScript.SetPlayerController(this);
-            if(!gameController.IsNewGame) // Must find a way to load 1st and 2nd weapon level only between stage changing.
-                newPlayerScript.Inventory.LoadInventoryData(playerData.InventoryData);
-
-            //newPlayer.transform.position = new Vector2
-            //    (_playerStartPosition.x + (_offsetX * playerData.LocalID), _playerStartPosition.y);
-
-            SetPlayerStartPosition(newPlayer, playerData.LocalID);
+            PlayerDataSetup(playerData, newPlayer);
         }
+    }
+
+    private void PlayerDataSetup(PlayerData playerData, GameObject newPlayer)
+    {
+        var newPlayerScript = newPlayer.GetComponent<Penosa>();
+        GameController gameController = TryToGetGameControllerFromParent();
+
+        playerData.SetPlayerScriptFromInstance(newPlayerScript);
+        playerData.SetPlayerGameObjectFromInstance(newPlayer);
+        playerData.InventoryDataSetup(newPlayerScript, gameController.IsNewGame);
+
+        newPlayerScript.SetPlayerData(playerData);
+        newPlayerScript.SetPlayerController(this);
+
+        PlayersEventSetup(newPlayerScript);
+
+        if (!gameController.IsNewGame) // It will load 1st and 2nd weapon level only between stage changing.
+            newPlayerScript.Inventory.LoadInventoryData(playerData.InventoryData);
+
+        SetPlayerStartPosition(newPlayer, playerData.LocalID);
     }
    
     public void ResetPlayerEquipmentData()
@@ -164,10 +170,8 @@ public class PlayerController : ControllerUnit
         PlayersData[playerID].Player.ResetPlayerData();
         PlayersData[playerID].Continues--;
 
-        if (PlayersData[playerID].Continues == 0)
-        {
-            // Game over...
-        }
+        if (PlayersData[playerID].Continues <= 0)
+            InvokeGameOverEvent(playerID);
         else
             OnCountdownActivation?.Invoke(playerID, true);
     }
@@ -181,48 +185,9 @@ public class PlayerController : ControllerUnit
     public void RespawnPlayer(byte playerID)
     {
         PlayersData[playerID].Player.SetPlayerOnSceneAfterGameOver(true);
-
-        //PlayersData[playerID].Countdown = ConstantNumbers.CountdownSeconds;
-        //PlayersData[playerID].Lives = PlayerConsts.Initial_Lives;
-        //PlayersData[playerID].Player.ResetPlayerData();
         PlayersData[playerID].Lives = PlayerConsts.Initial_Lives;
         PlayersData[playerID].Player.Inventory.ClearInventory();
         PlayersData[playerID].Player.InitiateBlink();
-        //_gameOverCountdownText.text = ConstantNumbers.CountdownSeconds.ToString();
-    }
-
-    private void GameOverCountdown(byte ID)
-    {
-        //PlayersData[ID].Countdown -= Time.deltaTime;
-        //if (PlayersData[ID].Countdown >= 0)
-        //{
-        //    int currentCountdown = Mathf.FloorToInt(PlayersData[ID].Countdown);
-        //    if (currentCountdown.ToString() != _gameOverCountdownText.text)
-        //        _gameOverCountdownText.text = currentCountdown.ToString();
-
-        //    if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown(InputStrings.Start)) // Respawn Penosa
-        //    {
-        //        PlayersData[ID].PlayerGameObject.SetActive(true);
-        //        PlayersData[ID].Countdown = ConstantNumbers.CountdownSeconds;
-        //        PlayersData[ID].Lives = PlayerConsts.Initial_Lives;
-        //        PlayersData[ID].Player.ResetPlayerData();
-        //        PlayersData[ID].Player.Inventory.ClearInventory();
-        //        PlayersData[ID].Player.InitiateBlink();
-        //        _gameOverCountdownText.text = ConstantNumbers.CountdownSeconds.ToString();
-        //        //OnCountdownActivation?.Invoke(false);
-        //    }
-        //}
-        //else
-        //{
-        //    _gameOverCountdownText.text = string.Empty;
-        //    // Mais pra frente, adicionar funcionalidade de navegar de volta ao 
-        //    // menu inicial.
-        //}
-    }
-
-    public void SetGameOverCountdownText(Text countdownTxt)
-    {
-        _gameOverCountdownText = countdownTxt;
     }
 
     public void RemoveInputController()
@@ -235,5 +200,10 @@ public class PlayerController : ControllerUnit
     public GameObject RequestProjectileFromGameController(GameObject projectile)
     {
         return ((GameController)_parentController).GetProjectileFromPool(projectile);
+    }
+
+    public void InvokeGameOverEvent(byte playerID)
+    {
+        OnPlayerGameOver?.Invoke(playerID);
     }
 }

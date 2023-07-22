@@ -16,6 +16,7 @@ public class UIController : ControllerUnit
     public Action<IReadOnlyList<InputDevice>> OnUISelectedDevices;
     public Action<int> OnUIGameSelectedSceneIndex;
     public Action OnUIBackToMainMenuFromMapaMundi;
+    public Action<byte> OnCountdownIsOver;
 
     [Space]
     [Header("Variables")]
@@ -39,6 +40,9 @@ public class UIController : ControllerUnit
     [Header("Prefabs")]
     [SerializeField] private GameObject _pauseMenuPrefab;
     private GameObject _pauseMenuInstance;
+
+    [Header("Game Over")]
+    [SerializeField] private GameObject _gameOverContainer;
 
     public override void Setup()
     {
@@ -86,14 +90,9 @@ public class UIController : ControllerUnit
         OnUIGameModeSelected?.Invoke(gameMode);
     }
 
-    public Text GetCountdownTextFromInGameController()
+    public void CountdownActivation(byte playerID, bool val)
     {
-        return PlayerInGameUIController.GetCountdownText();
-    }
-
-    public void GameOverActivation(byte playerID, bool val)
-    {
-        PlayerInGameUIController.GameOverActivation(playerID, val);
+        PlayerInGameUIController.ContinueActivation(playerID, val);
     }
 
     private void ReturnCursorsToDefaultPosition()
@@ -188,6 +187,7 @@ public class UIController : ControllerUnit
             var prefab = GetControllerFromPrefabList<PlayerInGameUIController>();
             var instance = Instantiate(prefab, transform);
             _playerInGameUIController = instance.GetComponent<PlayerInGameUIController>();
+            _playerInGameUIController.OnCountdownIsOver += OnCountdownIsOver;
             _playerInGameUIController.Setup(_gameSceneCanvas, 
                 TryToGetGameControllerFromParent().PlayerController.PlayersData);
         }
@@ -233,5 +233,11 @@ public class UIController : ControllerUnit
         }
 
         _pauseMenuInstance.SetActive(val);
+    }
+
+    public void GameOverActivation()
+    {
+        _playerInGameUIController.HideHUDs();
+        Instantiate(_gameOverContainer, _gameSceneCanvas.transform);
     }
 }

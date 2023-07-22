@@ -8,6 +8,8 @@ using System;
 
 public class PlayerHUD : MonoBehaviour
 {
+    public Action<byte> OnCountdownIsOver;
+
     [SerializeField] private Penosa player;
     [SerializeField] private TMP_Text _nameTxt = null;
     [SerializeField] private TMP_Text _livesTxt = null;
@@ -15,7 +17,11 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private Image _armorLifebarImg = null;
     [SerializeField] private Image _specialItemImg = null;
     [SerializeField] private GameObject _hudContainer = null;
+    [SerializeField] private GameObject _continueContainer = null;
     [SerializeField] private GameObject _gameOverContainer = null;
+    [SerializeField] private Sprite _playerIcon = null;
+    [SerializeField] private Image _HUDIcon = null;
+    [SerializeField] private Image _gameOverIcon = null;
     [SerializeField] private byte playerID;
     [SerializeField] private float _countdownTimer;
 
@@ -36,7 +42,19 @@ public class PlayerHUD : MonoBehaviour
     private bool _countdownActivated;
 
     public GameObject HUDContainer => _hudContainer;
+    public GameObject ContinueContainer => _continueContainer;
     public GameObject GameOverContainer => _gameOverContainer;
+
+    public Sprite PlayerIcon
+    {
+        get => _playerIcon;
+        set
+        {
+            _playerIcon = value;
+            _HUDIcon.sprite = _playerIcon;
+            _gameOverIcon.sprite = _playerIcon;
+        }
+    }
 
     public int Life
     {
@@ -83,7 +101,11 @@ public class PlayerHUD : MonoBehaviour
     public Penosa Player
     {
         get => player;
-        set => player = value;
+        set
+        {
+            player = value;
+            playerID = player.PlayerData.LocalID;
+        }
     }
 
     public bool CountdownActivated
@@ -91,9 +113,9 @@ public class PlayerHUD : MonoBehaviour
         get => _countdownActivated;
         set
         {
-            if (value)
-                _countdownTimer = ConstantNumbers.CountdownSeconds + 1;
             _countdownActivated = value;
+            if (_countdownActivated)
+                _countdownTimer = ConstantNumbers.CountdownSeconds + 1;
         }
     }
 
@@ -110,7 +132,7 @@ public class PlayerHUD : MonoBehaviour
         _specialItemImg.sprite = newSprite;
         _specialItemImg.gameObject.SetActive(newSprite != null);
     }
-
+    
     public void UpdateHUDValues()
     {
         Name = player.PlayerData.Character.ToString();
@@ -179,11 +201,13 @@ public class PlayerHUD : MonoBehaviour
     private void GameOverCountdown()
     {
         _countdownTimer -= Time.deltaTime;
-        if(_countdownTimer >= 0 )
+        if (_countdownTimer >= 0)
         {
             int currentCountdown = Mathf.FloorToInt(_countdownTimer);
             if (currentCountdown.ToString() != _countdownText.text)
                 _countdownText.text = currentCountdown.ToString();
         }
+        else
+            OnCountdownIsOver?.Invoke(playerID);
     }
 }

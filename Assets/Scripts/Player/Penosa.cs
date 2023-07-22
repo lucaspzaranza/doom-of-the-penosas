@@ -19,8 +19,9 @@ public class AnimatorHashes
 
 public class Penosa : MonoBehaviour
 {
-    public static Action<byte> OnPlayerGameOver;
-    public static Action<byte> OnPlayerRespawn;
+    public Action<byte> OnPlayerLostAllLives;
+    public Action<byte> OnPlayerLostAllContinues;
+    public Action<byte> OnPlayerRespawn;
 
     #region Vars
 
@@ -260,7 +261,7 @@ public class Penosa : MonoBehaviour
         ResetPlayerData();
 
         if (PlayerData.Lives == PlayerConsts.GameOverLives)
-            OnPlayerGameOver(PlayerData.LocalID);
+            OnPlayerLostAllLives(PlayerData.LocalID);
         else
             // Play some death animation...
             InitiateBlink();

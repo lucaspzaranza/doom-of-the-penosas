@@ -49,6 +49,11 @@ MonoBehaviour:
   _huds:
   - {fileID: 0}
   - {fileID: 0}
+  _playerIcons:
+  - Character: 0
+    PlayerIconSprite: {fileID: 21300000, guid: 7e521cd1ae5b36343997d3af4e0e881a, type: 3}
+  - Character: 1
+    PlayerIconSprite: {fileID: 21300000, guid: 898a5839d23f7df43987a486bdd61b55, type: 3}
   _HUDPrefab: {fileID: 5687146501528632545, guid: 1177c7028911f784ca6fbabff84dc212,
     type: 3}
   _gameOverContainerObject: {fileID: 0}

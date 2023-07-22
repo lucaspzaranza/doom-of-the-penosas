@@ -37,6 +37,10 @@ public class GameController : Controller
     private IReadOnlyList<InputDevice> _selectedDevices;
     public IReadOnlyList<InputDevice> SelectedDevices => _selectedDevices;
 
+    public bool GameIsPaused => Time.timeScale == 0f;
+
+    private bool IsSingleInstance => instance == this;
+
     [Header("Controllers")]
     [SerializeField] private PersistenceController _persistenceController;
     public PersistenceController PersistenceController => _persistenceController;
@@ -54,11 +58,7 @@ public class GameController : Controller
     public SceneController SceneController => _sceneController;
 
     [SerializeField] private StageController _stageController;
-    public StageController StageController => _stageController;
-
-    public bool GameIsPaused => Time.timeScale == 0f;
-
-    private bool IsSingleInstance => instance == this;
+    public StageController StageController => _stageController;    
 
     private void Awake()
     {
@@ -94,6 +94,7 @@ public class GameController : Controller
         UIController.OnUIGameSelectedSceneIndex += HandleOnGameSceneSelectedIndex;
         UIController.OnUIBackToMainMenuFromMapaMundi += HandleOnUIBackToMainMenuFromMapaMundi;
         UIController.OnUISelectedDevices += HandleOnUISelectedDevices;
+        UIController.OnCountdownIsOver += GameOver;
 
         SceneController.OnSceneLoaded += HandleOnSceneLoaded;
 
@@ -103,11 +104,9 @@ public class GameController : Controller
 
     public override void Dispose()
     {
-        Penosa.OnPlayerGameOver -= PlayerController.RemovePlayerFromScene;
-
-        //PlayerController.OnGameOverCountdownTextIsNull -= HandleOnGameOverCountdownTextIsNull;
         PlayerController.OnCountdownActivation -= HandleOnCoutdownActivation;
         PlayerController.OnPlayerPause -= HandleOnPlayerPause;
+        PlayerController.OnPlayerGameOver -= GameOver;
 
         UIController.OnUISelectedCharacters -= HandleOnUISelectedCharacters;
         UIController.OnUIGameModeSelected -= SetGameMode;
@@ -115,6 +114,7 @@ public class GameController : Controller
         UIController.OnUIGameSelectedSceneIndex -= HandleOnGameSceneSelectedIndex;
         UIController.OnUIBackToMainMenuFromMapaMundi -= HandleOnUIBackToMainMenuFromMapaMundi;
         UIController.OnUISelectedDevices -= HandleOnUISelectedDevices;
+        UIController.OnCountdownIsOver -= GameOver;
 
         SceneController.OnSceneLoaded -= HandleOnSceneLoaded;
 
@@ -156,7 +156,7 @@ public class GameController : Controller
 
     private void HandleOnCoutdownActivation(byte playerID, bool val)
     {
-        UIController.GameOverActivation(playerID, val);
+        UIController.CountdownActivation(playerID, val);
     }
    
     private void HandleOnUISelectedCharacters(IReadOnlyList<Penosas> characterSelectionList)
@@ -228,9 +228,9 @@ public class GameController : Controller
             _playerController = instance.GetComponent<PlayerController>();
             _playerController.Setup(_characterSelectionList, _selectedDevices);
 
-            //_playerController.OnGameOverCountdownTextIsNull += HandleOnGameOverCountdownTextIsNull;
             _playerController.OnCountdownActivation += HandleOnCoutdownActivation;
-            _playerController.OnPlayerPause += HandleOnPlayerPause;
+            _playerController.OnPlayerPause += HandleOnPlayerPause;            
+            _playerController.OnPlayerGameOver += GameOver;            
         }
         else
             _playerController.Setup(_characterSelectionList, _selectedDevices);
@@ -320,6 +320,11 @@ public class GameController : Controller
     public void BackToMainMenuButton()
     {
         PlayerController.OnPlayerPause?.Invoke(false);
+        BackToMainMenuFromStage();
+    }
+
+    private void BackToMainMenuFromStage()
+    {
         PlayerController.RemoveInputController();
 
         if (IsNewGame)
@@ -330,7 +335,6 @@ public class GameController : Controller
             PlayerController.ResetPlayerEquipmentData();
         }
 
-        SetGameStatus(GameStatus.Menu);
         UIController.PlayerInGameUIController.Dispose();
         SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
     }
@@ -351,5 +355,29 @@ public class GameController : Controller
     {
         int completedStages = IsNewGame ? 0 : PersistenceController.LoadCompletedStages();
         UIController.MapaMundiController.ActivateStageLoaders(completedStages);
+    }
+
+    public void GameOver(byte playerID)
+    {
+        print($"Game over to {_characterSelectionList[playerID]}. Die, motherfucker.");
+
+        if(GameMode == GameMode.Singleplayer)
+        {
+            PlayerController.PlayersData[0].Player.enabled = false;
+            StartCoroutine(nameof(ActivateGameOverAndReturnToMapaMundi));
+        }
+        else
+        {
+            print("Game over on multiplayer");
+            PlayerController.PlayersData[playerID].Player.enabled = false;
+            UIController.PlayerInGameUIController.SetGameOverContainerOnPlayerActive(playerID, true);
+        }
+    }
+
+    private IEnumerator ActivateGameOverAndReturnToMapaMundi()
+    {
+        UIController.GameOverActivation();
+        yield return new WaitForSeconds(ConstantNumbers.TimeToReturnToMapaMundiAfterGameOver);
+        BackToMainMenuFromStage();
     }
 }
