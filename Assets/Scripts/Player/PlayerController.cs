@@ -95,13 +95,21 @@ public class PlayerController : ControllerUnit
             var playerPrefab = PlayerPrefabs.SingleOrDefault(prefab => prefab.Character == character);
             var playerData = PlayersData.SingleOrDefault(data => data.Character == character);
 
+            if (playerData.GameOver)
+            {
+                if (playerData.Continues > 0)
+                    playerData.Lives = PlayerConsts.Initial_Lives;
+                else
+                    continue;
+            }
+
             var newPlayer = _inputSystemController.
                 AddPlayerWithIDAndDevice(playerData.LocalID, playerPrefab.PlayerPrefab, playerData.InputDevice);
 
             if(newPlayer == null)
             {
                 WarningMessages.CantAddPlayerMessage(playerPrefab.Character.ToString());
-                return;
+                continue;
             }
 
             PlayerDataSetup(playerData, newPlayer);

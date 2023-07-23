@@ -359,18 +359,20 @@ public class GameController : Controller
 
     public void GameOver(byte playerID)
     {
-        print($"Game over to {_characterSelectionList[playerID]}. Die, motherfucker.");
-
         if(GameMode == GameMode.Singleplayer)
         {
-            PlayerController.PlayersData[0].Player.enabled = false;
+            PlayerController.PlayersData[0].GameOver = true;
             StartCoroutine(nameof(ActivateGameOverAndReturnToMapaMundi));
         }
         else
         {
-            print("Game over on multiplayer");
-            PlayerController.PlayersData[playerID].Player.enabled = false;
-            UIController.PlayerInGameUIController.SetGameOverContainerOnPlayerActive(playerID, true);
+            PlayerController.PlayersData[playerID].GameOver = true;
+            bool allPlayersAreGameOver = PlayerController.PlayersData.All(playerData => playerData.GameOver);
+
+            if(allPlayersAreGameOver)
+                StartCoroutine(nameof(ActivateGameOverAndReturnToMapaMundi));
+            else
+                UIController.PlayerInGameUIController.SetGameOverContainerOnPlayerActive(playerID, true);
         }
     }
 

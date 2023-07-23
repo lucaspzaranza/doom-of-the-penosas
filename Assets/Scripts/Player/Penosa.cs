@@ -316,6 +316,10 @@ public class Penosa : MonoBehaviour
 
     private void Jump(InputAction.CallbackContext context)
     {
+        //TakeDamage(100, true); TEMPORARY!!
+        PlayerData.Lives = 0;
+        Death();
+
         if (_playerController.GameIsPaused())
             return;
 

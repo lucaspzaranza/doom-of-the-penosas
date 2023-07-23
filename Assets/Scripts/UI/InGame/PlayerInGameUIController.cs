@@ -48,6 +48,7 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
             _hudTransform = _gameSceneCanvas.transform.Find(ConstantStrings.HUD).transform;
         }
 
+        OnCountdownIsOver += UICtrl.OnCountdownIsOver;
         CreatePlayersHUDs(playersData);
     }
 
@@ -118,6 +119,9 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
 
     public void SetGameOverContainerOnPlayerActive(byte playerID, bool val)
     {
+        if(_huds[playerID].HUDContainer.activeSelf)
+            _huds[playerID].HUDContainer.SetActive(!val);
+
         _huds[playerID].ContinueContainer.SetActive(!val);
         _huds[playerID].GameOverContainer.SetActive(val);
     }

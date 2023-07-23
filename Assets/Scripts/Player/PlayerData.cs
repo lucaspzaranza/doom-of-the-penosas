@@ -33,6 +33,18 @@ public class PlayerData
     [SerializeField] private List<GameObject> _1stShot;
     [SerializeField] private List<GameObject> _2ndShot;
     [SerializeField] private InventoryData _inventoryData;
+    [SerializeField] private bool _playerGameOver;
+
+    public bool GameOver
+    {
+        get => _playerGameOver;
+        set
+        {
+            _playerGameOver = value;
+            if (_playerGameOver)
+                Player.enabled = false;
+        }
+    }
 
     public int _1stWeaponAmmoProp
     {

@@ -187,7 +187,6 @@ public class UIController : ControllerUnit
             var prefab = GetControllerFromPrefabList<PlayerInGameUIController>();
             var instance = Instantiate(prefab, transform);
             _playerInGameUIController = instance.GetComponent<PlayerInGameUIController>();
-            _playerInGameUIController.OnCountdownIsOver += OnCountdownIsOver;
             _playerInGameUIController.Setup(_gameSceneCanvas, 
                 TryToGetGameControllerFromParent().PlayerController.PlayersData);
         }
