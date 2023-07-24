@@ -357,6 +357,13 @@ public class GameController : Controller
         UIController.MapaMundiController.ActivateStageLoaders(completedStages);
     }
 
+    private IEnumerator ActivateGameOverAndReturnToMapaMundi()
+    {
+        UIController.GameOverActivation();
+        yield return new WaitForSeconds(ConstantNumbers.TimeToReturnToMapaMundiAfterGameOver);
+        BackToMainMenuFromStage();
+    }
+
     public void GameOver(byte playerID)
     {
         if(GameMode == GameMode.Singleplayer)
@@ -374,12 +381,5 @@ public class GameController : Controller
             else
                 UIController.PlayerInGameUIController.SetGameOverContainerOnPlayerActive(playerID, true);
         }
-    }
-
-    private IEnumerator ActivateGameOverAndReturnToMapaMundi()
-    {
-        UIController.GameOverActivation();
-        yield return new WaitForSeconds(ConstantNumbers.TimeToReturnToMapaMundiAfterGameOver);
-        BackToMainMenuFromStage();
     }
 }

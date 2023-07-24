@@ -33,15 +33,15 @@ public class PlayerData
     [SerializeField] private List<GameObject> _1stShot;
     [SerializeField] private List<GameObject> _2ndShot;
     [SerializeField] private InventoryData _inventoryData;
-    [SerializeField] private bool _playerGameOver;
+    [SerializeField] private bool _gameOver;
 
     public bool GameOver
     {
-        get => _playerGameOver;
+        get => _gameOver;
         set
         {
-            _playerGameOver = value;
-            if (_playerGameOver)
+            _gameOver = value;
+            if (_gameOver)
                 Player.enabled = false;
         }
     }
@@ -178,6 +178,8 @@ public class PlayerData
         _2ndWeaponAmmo = PlayerConsts._2ndWeaponInitialAmmo;
 
         _continues = PlayerConsts.Continues;
+
+        _gameOver = false;
 
         if (device != null)
             _inputDevice = device;

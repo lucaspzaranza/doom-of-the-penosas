@@ -11,6 +11,7 @@ public class PlayerIcon
 {
     public Penosas Character;
     public Sprite PlayerIconSprite;
+    public byte PlayerID;
 }
 
 public class PlayerInGameUIController : ControllerUnit, IUIController
@@ -37,6 +38,8 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
 
     private UIController UICtrl => (UIController)_parentController;
 
+    private GameController GameController => UICtrl.TryToGetGameControllerFromParent();
+
     public void Setup(Canvas gameSceneCanvas, IReadOnlyList<PlayerData> playersData)
     {
         if(_parentController == null)
@@ -59,7 +62,8 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
         {
             if (_huds[i] != null)
             {                
-                _huds[i].Player.OnPlayerRespawn -= HandleOnPlayerRespawn;
+                if(_huds[i].Player != null)
+                    _huds[i].Player.OnPlayerRespawn -= HandleOnPlayerRespawn;
                 _huds[i].OnCountdownIsOver -= OnCountdownIsOver;
                 _huds[i].EventDispose();
                 _huds[i] = null;
@@ -76,23 +80,23 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
         {
             GameObject newHUD = Instantiate(_HUDPrefab, _hudTransform);
             PlayerHUD playerHUD = newHUD.GetComponent<PlayerHUD>();
+            _huds[playerData.LocalID] = playerHUD;
 
-            if(playerHUD != null)
+            playerHUD.PlayerIcon = _playerIcons
+                        .SingleOrDefault(icon => icon.Character == GameController
+                        .PlayerController.PlayersData[playerData.LocalID].Character)
+                        .PlayerIconSprite;
+
+            if (!playerData.GameOver && playerHUD != null)
             {
                 playerHUD.Player = playerData.Player;
-
-                playerHUD.PlayerIcon = _playerIcons
-                    .SingleOrDefault(icon => icon.Character == playerHUD.Player.PlayerData.Character)
-                    .PlayerIconSprite;
-
                 playerHUD.UpdateHUDValues();
                 playerHUD.EventSetup();
-
                 playerHUD.OnCountdownIsOver += OnCountdownIsOver;
                 playerData.Player.OnPlayerRespawn += HandleOnPlayerRespawn;
             }
-
-            _huds[playerData.LocalID] = playerHUD;
+            else if(playerData.GameOver)
+                SetGameOverContainerOnPlayerActive(playerData.LocalID, true);
         }
     }
 
@@ -124,5 +128,13 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
 
         _huds[playerID].ContinueContainer.SetActive(!val);
         _huds[playerID].GameOverContainer.SetActive(val);
+
+        if (val)
+        {
+            if (GameController.PlayerController.PlayersData[playerID].Continues <= 0)
+                _huds[playerID].GameOverText.text = ConstantStrings.HUDNoMoreContinues;
+            else
+                _huds[playerID].GameOverText.text = ConstantStrings.HUDGameOver;
+        }
     }
 }

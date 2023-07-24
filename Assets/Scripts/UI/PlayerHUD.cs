@@ -33,7 +33,9 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private TMP_Text SecondaryWeaponAmmoText;
 
     [Space]
+    [Header("HUD Text")]
     [SerializeField] private TMP_Text _countdownText;
+    [SerializeField] private TMP_Text _gameOverText;
 
     private string _name;
     private int _lives;
@@ -55,6 +57,8 @@ public class PlayerHUD : MonoBehaviour
             _gameOverIcon.sprite = _playerIcon;
         }
     }
+
+    public TMP_Text GameOverText => _gameOverText;
 
     public int Life
     {
@@ -104,7 +108,9 @@ public class PlayerHUD : MonoBehaviour
         set
         {
             player = value;
-            playerID = player.PlayerData.LocalID;
+
+            if(player != null)
+                playerID = player.PlayerData.LocalID;
         }
     }
 

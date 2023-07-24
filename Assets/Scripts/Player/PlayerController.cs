@@ -97,8 +97,11 @@ public class PlayerController : ControllerUnit
 
             if (playerData.GameOver)
             {
-                if (playerData.Continues > 0)
+                if (playerData.Continues >= 1)
+                {
+                    playerData.GameOver = false;
                     playerData.Lives = PlayerConsts.Initial_Lives;
+                }
                 else
                     continue;
             }
@@ -140,6 +143,9 @@ public class PlayerController : ControllerUnit
     {
         foreach (var playerData in _playersData)
         {
+            if (playerData.GameOver) 
+                continue;
+
             playerData._1stWeaponLevel = PlayerConsts.WeaponInitialLevel;
             playerData._2ndWeaponLevel = PlayerConsts.WeaponInitialLevel;
             playerData._1stWeaponAmmoProp = PlayerConsts._1stWeaponInitialAmmo;

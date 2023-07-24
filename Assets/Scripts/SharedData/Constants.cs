@@ -43,6 +43,8 @@ public static class ConstantStrings
     public const string DeviceSelectionButtonTag = "DeviceSelectionButton";
 
     // Menu Messages
+    public const string HUDGameOver = "Wait until the stage is over.";
+    public const string HUDNoMoreContinues = "No more continues.";
 
     // Lobby
     public const string SelectCharacterMsg = "Select your character to play.";

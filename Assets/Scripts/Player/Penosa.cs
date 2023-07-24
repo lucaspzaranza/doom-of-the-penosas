@@ -315,11 +315,7 @@ public class Penosa : MonoBehaviour
     }
 
     private void Jump(InputAction.CallbackContext context)
-    {
-        //TakeDamage(100, true); TEMPORARY!!
-        PlayerData.Lives = 0;
-        Death();
-
+    {        
         if (_playerController.GameIsPaused())
             return;
 
@@ -539,6 +535,13 @@ public class Penosa : MonoBehaviour
     private void Shoot()
     {
         bool fire1ButtonPressed = _fire1Action.ReadValue<float>() > 0;
+
+        if(fire1ButtonPressed)
+        {
+            //TakeDamage(100, true); TEMPORARY!!
+            PlayerData.Lives = 0;
+            Death();
+        }
 
         // Lvl Diferente de 2, porque com o nível 2 o comportamento do tiro é diferente,
         // precisa verificar se está pressionado a cada frame, enquanto que nos lvls 1 e 3 

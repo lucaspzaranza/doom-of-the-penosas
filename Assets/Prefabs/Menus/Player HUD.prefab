@@ -634,6 +634,7 @@ MonoBehaviour:
   SecondaryWeaponText: {fileID: 5687146503105563632}
   SecondaryWeaponAmmoText: {fileID: 5687146502982034208}
   _countdownText: {fileID: 1373352687726868466}
+  _gameOverText: {fileID: 1108570425044902910}
 --- !u!1 &5687146501673329435
 GameObject:
   m_ObjectHideFlags: 0
