@@ -35,6 +35,9 @@ public class PlayerController : ControllerUnit
     public void Setup(IReadOnlyList<Penosas> characters, IReadOnlyList<InputDevice> selectedDevices = null)
     {
         base.Setup();
+
+        if(_playersData.Count != characters.Count)
+            _playersData = new List<PlayerData>();
        
         for (int i = 0; i < characters.Count; i++)
         {
@@ -154,6 +157,17 @@ public class PlayerController : ControllerUnit
             playerData.ArmorLife = 0;
             playerData.Continues = PlayerConsts.Continues;
         }
+    }
+
+    public void ResetSinglePlayerData(byte playerID)
+    {
+        _playersData[playerID]._1stWeaponLevel = PlayerConsts.WeaponInitialLevel;
+        _playersData[playerID]._2ndWeaponLevel = PlayerConsts.WeaponInitialLevel;
+        _playersData[playerID]._1stWeaponAmmoProp = PlayerConsts._1stWeaponInitialAmmo;
+        _playersData[playerID]._2ndWeaponAmmoProp = PlayerConsts._2ndWeaponInitialAmmo;
+        _playersData[playerID].Life = PlayerConsts.Max_Life;
+        _playersData[playerID].ArmorLife = 0;
+        _playersData[playerID].Continues = PlayerConsts.Continues;
     }
 
     private void SetPlayerProjectilesPrefabs(PlayerData playerData)

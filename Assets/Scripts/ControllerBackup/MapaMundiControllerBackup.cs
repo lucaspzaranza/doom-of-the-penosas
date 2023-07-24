@@ -41,5 +41,25 @@ public class MapaMundiControllerBackup : ControllerBackup
         {
             mapaMundiController.SelectSceneIndex(ScenesBuildIndexes._2ndStage);
         });
+
+        _stageButtons[2].onClick.AddListener(() =>
+        {
+            mapaMundiController.SelectSceneIndex(ScenesBuildIndexes._3rdStage);
+        });
+
+        _stageButtons[3].onClick.AddListener(() =>
+        {
+            mapaMundiController.SelectSceneIndex(ScenesBuildIndexes._4thStage);
+        });
+
+        _stageButtons[4].onClick.AddListener(() =>
+        {
+            mapaMundiController.SelectSceneIndex(ScenesBuildIndexes._5thStage);
+        });
+
+        _stageButtons[5].onClick.AddListener(() =>
+        {
+            mapaMundiController.SelectSceneIndex(ScenesBuildIndexes._6thStage);
+        });
     }
 }

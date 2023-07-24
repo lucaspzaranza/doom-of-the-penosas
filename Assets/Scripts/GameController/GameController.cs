@@ -264,6 +264,7 @@ public class GameController : Controller
 
     private IEnumerator WaitAndLoadNextStage(int nextStageIndex)
     {
+        PlayerController.InputSystemController.UnpairDevices();
         yield return new WaitForSeconds(ConstantNumbers.TimeToShowStageClearTxt);
 
         SetGameStatus(GameStatus.Loading);
@@ -366,18 +367,27 @@ public class GameController : Controller
 
     public void GameOver(byte playerID)
     {
+        PlayerController.PlayersData[playerID].GameOver = true;
+
         if(GameMode == GameMode.Singleplayer)
         {
-            PlayerController.PlayersData[0].GameOver = true;
             StartCoroutine(nameof(ActivateGameOverAndReturnToMapaMundi));
+
+            if (PlayerController.PlayersData[playerID].Continues <= 0) // Restore one player da data
+                PlayerController.ResetSinglePlayerData(playerID);
         }
         else
         {
-            PlayerController.PlayersData[playerID].GameOver = true;
             bool allPlayersAreGameOver = PlayerController.PlayersData.All(playerData => playerData.GameOver);
-
             if(allPlayersAreGameOver)
+            {
                 StartCoroutine(nameof(ActivateGameOverAndReturnToMapaMundi));
+
+                foreach (var player in PlayerController.PlayersData)
+                {
+                    PlayerController.ResetSinglePlayerData(player.LocalID);
+                }
+            }
             else
                 UIController.PlayerInGameUIController.SetGameOverContainerOnPlayerActive(playerID, true);
         }

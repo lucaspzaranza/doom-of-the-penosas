@@ -118,7 +118,7 @@ public class LobbyControllerBackup : ControllerBackup
             lobbyController.QuitGame();
         });
 
-        // For some reason, a for loop didn't worked here ¬¬"
+        // The for loop didn't worked here, it has to be hardcoded ¬¬"
         _characterButtons[0].onClick.AddListener(() =>
         {
             lobbyController.ChooseCharacter(0);

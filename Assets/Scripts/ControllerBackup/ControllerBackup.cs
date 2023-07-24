@@ -16,7 +16,6 @@ public abstract class ControllerBackup : MonoBehaviour
     public virtual void OnEnable()
     {
         var controllerType = GetControllerType();
-        //print($"ControllerBackup OnEnable with type: {controllerType}.");
         StartCoroutine(FindControllerForBackupCoroutine(controllerType));
     }
 
