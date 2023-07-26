@@ -301,9 +301,4 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
     {
         OnLobbySelectedCharacters?.Invoke(CharacterSelectionList);
     }
-
-    public void SetDeviceControlsPanelActivation()
-    {
-
-    }
 }

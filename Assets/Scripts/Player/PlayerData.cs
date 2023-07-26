@@ -136,6 +136,7 @@ public class PlayerData
         {
             _life = Mathf.Clamp(value, 0, PlayerConsts.Max_Life);
             OnLifeChanged?.Invoke(_life);
+
             if (_life == 0 && !Player.Adrenaline && !Player.IsBlinking)
             {
                 Lives--;

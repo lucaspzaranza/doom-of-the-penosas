@@ -89,13 +89,16 @@ public class PlayerController : ControllerUnit
         }
     }
 
+    private PlayerDataPrefabs GetPlayerPrefabs(Penosas character) =>
+        PlayerPrefabs.SingleOrDefault(prefab => prefab.Character == character);
+
     public void AddPlayers()
     {
         InstantiatePlayerInputController();
 
         foreach (var character in GetCharacterSelectionList())
         {
-            var playerPrefab = PlayerPrefabs.SingleOrDefault(prefab => prefab.Character == character);
+            var playerPrefabs = GetPlayerPrefabs(character);
             var playerData = PlayersData.SingleOrDefault(data => data.Character == character);
 
             if (playerData.GameOver)
@@ -110,16 +113,30 @@ public class PlayerController : ControllerUnit
             }
 
             var newPlayer = _inputSystemController.
-                AddPlayerWithIDAndDevice(playerData.LocalID, playerPrefab.PlayerPrefab, playerData.InputDevice);
+                AddPlayerWithIDAndDevice(playerData.LocalID, playerPrefabs.PlayerPrefab, playerData.InputDevice);
 
             if(newPlayer == null)
             {
-                WarningMessages.CantAddPlayerMessage(playerPrefab.Character.ToString());
+                WarningMessages.CantAddPlayerMessage(playerPrefabs.Character.ToString());
                 continue;
             }
 
             PlayerDataSetup(playerData, newPlayer);
         }
+    }
+
+    public void AddSinglePlayer(byte playerID, Penosas newCharacter)
+    {
+        var playerPrefabs = GetPlayerPrefabs(newCharacter);
+        var playerData = PlayersData.SingleOrDefault(data => data.Character == newCharacter);
+
+        var newPlayer = _inputSystemController.
+                AddPlayerWithIDAndDevice(playerData.LocalID, playerPrefabs.PlayerPrefab, playerData.InputDevice);
+
+        if (newPlayer == null)
+            WarningMessages.CantAddPlayerMessage(playerPrefabs.Character.ToString());
+        else
+            PlayerDataSetup(playerData, newPlayer);
     }
 
     private void PlayerDataSetup(PlayerData playerData, GameObject newPlayer)
@@ -227,11 +244,26 @@ public class PlayerController : ControllerUnit
 
     public GameObject RequestProjectileFromGameController(GameObject projectile)
     {
-        return ((GameController)_parentController).GetProjectileFromPool(projectile);
+        return TryToGetGameControllerFromParent().GetProjectileFromPool(projectile);
     }
 
     public void InvokeGameOverEvent(byte playerID)
     {
         OnPlayerGameOver?.Invoke(playerID);
+    }
+
+    public void ChangePlayerCharacter(byte playerID, Penosas newCharacter)
+    {
+        Vector2 oldPosition = PlayersData[playerID].Player.transform.position;
+
+        Destroy(PlayersData[playerID].Player.gameObject);
+        InputSystemController.UnpairDevices();
+        AddNewPlayerData(newCharacter, playerID, PlayersData[playerID].InputDevice);
+        AddSinglePlayer(playerID, newCharacter);
+
+        var newCharacters = PlayersData.Select(data => data.Character).ToList();
+        TryToGetGameControllerFromParent().SelectCharacters(newCharacters);
+
+        PlayersData[playerID].Player.transform.position = oldPosition;
     }
 }

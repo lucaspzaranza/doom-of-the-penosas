@@ -9,6 +9,7 @@ using System;
 using UnityEngine.InputSystem;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEditor;
+using UnityEngine.TextCore.Text;
 
 public class GameController : Controller
 {
@@ -100,6 +101,7 @@ public class GameController : Controller
 
         PauseMenu.OnResume += ResumeGame;
         PauseMenu.OnBackToMainMenu += BackToMainMenuButton;
+        WalkTalk.OnWalkTalk += HandleOnWalkTalk;
     }
 
     public override void Dispose()
@@ -120,6 +122,7 @@ public class GameController : Controller
 
         PauseMenu.OnResume -= ResumeGame;
         PauseMenu.OnBackToMainMenu -= BackToMainMenuButton;
+        WalkTalk.OnWalkTalk -= HandleOnWalkTalk;
 
         PlayerController.Dispose();
         UIController.Dispose();
@@ -159,14 +162,17 @@ public class GameController : Controller
         UIController.CountdownActivation(playerID, val);
     }
    
+    public void SelectCharacters(IReadOnlyList<Penosas> characterSelectionList)
+    {
+        if (_characterSelectionList == null)
+            _characterSelectionList = new List<Penosas>();
+        _characterSelectionList = characterSelectionList.ToList();
+    }
+
     private void HandleOnUISelectedCharacters(IReadOnlyList<Penosas> characterSelectionList)
     {
         UIController.DisposeLobbyController();
-
-        if(_characterSelectionList == null)
-            _characterSelectionList = new List<Penosas>();
-        _characterSelectionList = characterSelectionList.ToList();
-
+        SelectCharacters(characterSelectionList);
         SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
 
         UIController.InstantiateMapaMundiController();
@@ -264,7 +270,7 @@ public class GameController : Controller
 
     private IEnumerator WaitAndLoadNextStage(int nextStageIndex)
     {
-        PlayerController.InputSystemController.UnpairDevices();
+        PlayerController.RemoveInputController();
         yield return new WaitForSeconds(ConstantNumbers.TimeToShowStageClearTxt);
 
         SetGameStatus(GameStatus.Loading);
@@ -390,6 +396,19 @@ public class GameController : Controller
             }
             else
                 UIController.PlayerInGameUIController.SetGameOverContainerOnPlayerActive(playerID, true);
+        }
+    }
+
+    public void HandleOnWalkTalk(byte playerID)
+    {
+        int complementaryIndex = (int)(CharacterSelectionList[playerID] + 1) % 2;
+        Penosas inverseCharacter = (Penosas)complementaryIndex;
+        if (GameMode == GameMode.Singleplayer)
+        {
+            //print($"must change player character to {inverseCharacter}");
+            PlayerController.ChangePlayerCharacter(playerID, inverseCharacter);
+            UIController.PlayerInGameUIController.DestroyAllHUDs();
+            UIController.PlayerInGameUIController.CreatePlayersHUDs(PlayerController.PlayersData);
         }
     }
 }

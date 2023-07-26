@@ -31,13 +31,13 @@ public class Mayday : SpecialItem
 
     public override void Use()
     {
-        missile = Inventory.MissilePrefab;
+        missile = PlayerInventory.MissilePrefab;
         base.Use();
         StartCoroutine(InstantiateMissiles(0.5f));            
     }
 
     public override void GetPlayerValues()
     {
-        throw new System.NotImplementedException();
+        
     }
 }

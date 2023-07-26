@@ -9,8 +9,8 @@ public class Adrenaline : SpecialItem
 
     public override void GetPlayerValues()
     {
-        duration = Inventory.ItemEffectDuration;
-        speedEnhancingRate = Inventory.AdrenalineSpeedEnhancingRate;
+        duration = PlayerInventory.ItemEffectDuration;
+        speedEnhancingRate = PlayerInventory.AdrenalineSpeedEnhancingRate;
     }
    
     void Update()

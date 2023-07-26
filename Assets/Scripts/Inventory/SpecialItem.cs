@@ -10,7 +10,7 @@ public abstract class SpecialItem : MonoBehaviour
 
     protected float timeCounter;
     protected Penosa Player => _player;
-    protected Inventory Inventory => _inventory;
+    protected Inventory PlayerInventory => _inventory;
     public ItemSlot ItemSlot => _itemSlot;
     public SpecialItemType ItemType => _type;
 
@@ -31,7 +31,7 @@ public abstract class SpecialItem : MonoBehaviour
 
     public virtual void Use()
     {
-        Inventory.DecreaseItemAmount(ItemSlot);
+        PlayerInventory.DecreaseItemAmount(ItemSlot);
     }
 
     public void SetSlot(ItemSlot slotToSet)
@@ -42,7 +42,7 @@ public abstract class SpecialItem : MonoBehaviour
 
     public void RemoveItemIfAmountEqualsZero()
     {
-        if (Inventory.SelectedSlot.Amount == 0)
-            Inventory.RemoveItem(ItemSlot);
+        if (PlayerInventory.SelectedSlot.Amount == 0)
+            PlayerInventory.RemoveItem(ItemSlot);
     }
 }

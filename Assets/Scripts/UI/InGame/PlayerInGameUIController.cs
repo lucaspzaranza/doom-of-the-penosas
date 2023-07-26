@@ -74,7 +74,7 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
         gameObject.SetActive(false);
     }
 
-    private void CreatePlayersHUDs(IReadOnlyList<PlayerData> playersData)
+    public void CreatePlayersHUDs(IReadOnlyList<PlayerData> playersData)
     {
         foreach (var playerData in playersData)
         {
@@ -136,5 +136,16 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
             else
                 _huds[playerID].GameOverText.text = ConstantStrings.HUDGameOver;
         }
+    }
+
+    public void DestroyAllHUDs()
+    {
+        for (int i = 0; i < _huds.Length; i++)
+        {
+            if (_huds[i] != null)
+               Destroy(_huds[i].gameObject);
+        }
+
+        _huds = new PlayerHUD[ConstantNumbers.NumberOfPlayers];
     }
 }

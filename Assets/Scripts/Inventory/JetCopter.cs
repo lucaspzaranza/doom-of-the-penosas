@@ -42,6 +42,6 @@ public class JetCopter : SpecialItem
 
     public override void GetPlayerValues()
     {
-        maxDuration = Inventory.ItemEffectDuration;
+        maxDuration = PlayerInventory.ItemEffectDuration;
     }
 }

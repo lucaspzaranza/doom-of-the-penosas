@@ -139,7 +139,7 @@ public class Inventory : MonoBehaviour
     {
         int index = Slots.IndexOf(slot);
         Slots.Remove(slot);
-        Destroy(slot.Item);
+        //Destroy(slot.Item);
         int newIndex = index == Slots.Count ? index - 1 : index;
         SelectedSlot = IsEmpty ? null : Slots[newIndex];
         SelectSlotSprite(IsEmpty ? null : Slots[newIndex].Sprite);

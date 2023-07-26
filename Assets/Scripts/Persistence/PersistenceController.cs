@@ -16,7 +16,7 @@ public class PersistenceController : ControllerUnit
     
     public void SaveCompletedStages(int completedStages)
     {
-        print("completedStages: " + completedStages);
+        //print("completedStages: " + completedStages);
         PlayerPrefs.SetInt(ConstantStrings.CompletedStagesKey, completedStages);
     }
 

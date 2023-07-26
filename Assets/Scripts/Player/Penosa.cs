@@ -536,11 +536,12 @@ public class Penosa : MonoBehaviour
     {
         bool fire1ButtonPressed = _fire1Action.ReadValue<float>() > 0;
 
-        if(fire1ButtonPressed)
+        // TEMPORARY!!
+        if (fire1ButtonPressed && Input.GetKeyDown(KeyCode.LeftControl))
         {
-            //TakeDamage(100, true); TEMPORARY!!
-            PlayerData.Lives = 0;
-            Death();
+            TakeDamage(30, true);
+            //PlayerData.Lives = 0;
+            //Death();
         }
 
         // Lvl Diferente de 2, porque com o nível 2 o comportamento do tiro é diferente,
