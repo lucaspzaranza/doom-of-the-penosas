@@ -1,29 +1,32 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class AutoRotate : MonoBehaviour
 {
-    public float rotationSpeed;
-    private float oldX;
-    private bool directionSetted = false;
+    public static Action<AutoRotate> OnSpinningProjectileEnabled;
+
+    [SerializeField] private float _rotationSpeed;
+
+    private void OnEnable()
+    {
+        OnSpinningProjectileEnabled?.Invoke(this);
+    }
 
     void FixedUpdate()
     {
-        if(!directionSetted)
-        {
-            float newX = transform.position.x;
-            rotationSpeed *= (newX < oldX)? -1 : 1;
-            directionSetted = true;
-        }
-
-        transform.Rotate(Vector3.forward, rotationSpeed * Time.fixedDeltaTime);
+        transform.Rotate(Vector3.forward, _rotationSpeed * Time.fixedDeltaTime);
     }
 
-    private void LateUpdate()
+    public void SetRotationDirection(int direction)
     {
-        if (directionSetted) return;
+        _rotationSpeed *= direction;
+    }
 
-        oldX = transform.position.x;
+    private void OnDisable()
+    {
+        // It always has to be negative by default;
+        _rotationSpeed = -MathF.Abs(_rotationSpeed);
     }
 }

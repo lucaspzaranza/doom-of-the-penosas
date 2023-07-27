@@ -50,7 +50,15 @@ namespace SharedData.Enumerations
     public enum Penosas
     {
         None = -1,
+
+        /// <summary>
+        /// The Tanker Penosa.
+        /// </summary>
         Geruza = 0,
+
+        /// <summary>
+        /// The Ninja Penosa.
+        /// </summary>
         Dolores = 1
     }
 

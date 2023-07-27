@@ -55,18 +55,23 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
         CreatePlayersHUDs(playersData);
     }
 
+    private void HUDEventDispose(int index)
+    {
+        if (_huds[index].Player != null)
+            _huds[index].Player.OnPlayerRespawn -= HandleOnPlayerRespawn;
+        _huds[index].OnCountdownIsOver -= OnCountdownIsOver;
+        _huds[index].EventDispose();
+        _huds[index] = null;
+    }
+
     public override void Dispose()
     {
         _gameSceneCanvas = null;
         for (int i = 0; i < _huds.Length; i++)
         {
             if (_huds[i] != null)
-            {                
-                if(_huds[i].Player != null)
-                    _huds[i].Player.OnPlayerRespawn -= HandleOnPlayerRespawn;
-                _huds[i].OnCountdownIsOver -= OnCountdownIsOver;
-                _huds[i].EventDispose();
-                _huds[i] = null;
+            {
+                HUDEventDispose(i);
             }
         }
 
@@ -143,7 +148,10 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
         for (int i = 0; i < _huds.Length; i++)
         {
             if (_huds[i] != null)
-               Destroy(_huds[i].gameObject);
+            {
+                Destroy(_huds[i].gameObject);
+                HUDEventDispose(i);
+            }
         }
 
         _huds = new PlayerHUD[ConstantNumbers.NumberOfPlayers];

@@ -135,8 +135,21 @@ public class PlayerHUD : MonoBehaviour
 
     public void SetSpecialItemIconSprite(Sprite newSprite)
     {
-        _specialItemImg.sprite = newSprite;
-        _specialItemImg.gameObject.SetActive(newSprite != null);
+        //try
+        //{
+        //    _specialItemImg.sprite = newSprite;
+        //    _specialItemImg.gameObject.SetActive(newSprite != null);
+        //}
+        //catch (Exception e)
+        //{
+        //    Debug.Log(e.Message);
+        //}
+
+        if(_specialItemImg != null)
+        {
+            _specialItemImg.sprite = newSprite;
+            _specialItemImg.gameObject.SetActive(newSprite != null);
+        }
     }
     
     public void UpdateHUDValues()

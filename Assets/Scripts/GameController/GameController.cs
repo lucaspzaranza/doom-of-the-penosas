@@ -401,14 +401,15 @@ public class GameController : Controller
 
     public void HandleOnWalkTalk(byte playerID)
     {
-        int complementaryIndex = (int)(CharacterSelectionList[playerID] + 1) % 2;
-        Penosas inverseCharacter = (Penosas)complementaryIndex;
+        int complementaryCharacter = SharedFunctions.GetComplementaryIndex((int)CharacterSelectionList[playerID]);
+        Penosas inverseCharacter = (Penosas)complementaryCharacter;
+
         if (GameMode == GameMode.Singleplayer)
-        {
-            //print($"must change player character to {inverseCharacter}");
             PlayerController.ChangePlayerCharacter(playerID, inverseCharacter);
-            UIController.PlayerInGameUIController.DestroyAllHUDs();
-            UIController.PlayerInGameUIController.CreatePlayersHUDs(PlayerController.PlayersData);
-        }
+        else
+            PlayerController.ExchangePlayers();
+
+        UIController.PlayerInGameUIController.DestroyAllHUDs();
+        UIController.PlayerInGameUIController.CreatePlayersHUDs(PlayerController.PlayersData);
     }
 }

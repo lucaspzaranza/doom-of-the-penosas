@@ -42,20 +42,8 @@ public class ItemSlot
         Item = specialItem;
         Amount = amount;
         Player = currentPlayer;
+
         if (newSprite != null)
             Sprite = newSprite;
-    }
-
-    public ItemSlot(SpecialItem specialItem, byte amount, Penosa currentPlayer)
-    {
-        Item = specialItem;
-        Player = currentPlayer;
-        Amount = amount;
-    }
-
-    public ItemSlot(SpecialItem specialItem, Penosa currentPlayer)
-    {
-        Item = specialItem;
-        Player = currentPlayer;
     }
 }

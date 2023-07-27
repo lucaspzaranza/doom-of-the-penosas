@@ -37,7 +37,7 @@ public class PlayerController : ControllerUnit
         base.Setup();
 
         if(_playersData.Count != characters.Count)
-            _playersData = new List<PlayerData>();
+            ResetPlayerData();
        
         for (int i = 0; i < characters.Count; i++)
         {
@@ -64,7 +64,7 @@ public class PlayerController : ControllerUnit
 
     public override void Dispose()
     {
-        _playersData = null;
+        ResetPlayerData();
         EventDispose();
     }
 
@@ -252,12 +252,17 @@ public class PlayerController : ControllerUnit
         OnPlayerGameOver?.Invoke(playerID);
     }
 
+    /// <summary>
+    /// Solution to change character in a singleplayer game.
+    /// </summary>
+    /// <param name="playerID">The player local ID.</param>
+    /// <param name="newCharacter">The character you want to choose.</param>
     public void ChangePlayerCharacter(byte playerID, Penosas newCharacter)
     {
         Vector2 oldPosition = PlayersData[playerID].Player.transform.position;
+        bool isLeft = PlayersData[playerID].Player.IsLeft;
 
         Destroy(PlayersData[playerID].Player.gameObject);
-        InputSystemController.UnpairDevices();
         AddNewPlayerData(newCharacter, playerID, PlayersData[playerID].InputDevice);
         AddSinglePlayer(playerID, newCharacter);
 
@@ -265,5 +270,37 @@ public class PlayerController : ControllerUnit
         TryToGetGameControllerFromParent().SelectCharacters(newCharacters);
 
         PlayersData[playerID].Player.transform.position = oldPosition;
+
+        if (isLeft)
+            PlayersData[playerID].Player.Flip();
+    }
+    
+    /// <summary>
+    /// It works with a 2-Player multiplayer logic only.
+    /// </summary>
+    public void ExchangePlayers()
+    {
+        if (TryToGetGameControllerFromParent().GameMode == GameMode.Singleplayer)
+            return;
+
+        InputSystemController.UnpairDevices();
+        List<Vector3> positions = PlayersData.Select(data => data.Player.transform.position).ToList();
+        List<byte> ids = PlayersData.Select(data => data.LocalID).ToList();
+
+        PlayerData dataAux = PlayersData[0];
+        PlayersData[0] = PlayersData[1];
+        PlayersData[1] = dataAux;
+
+        for (byte i = 0; i < PlayersData.Count; i++)
+        {
+            PlayersData[i].Player.gameObject.transform.localPosition = positions[i];
+            PlayersData[i].LocalID = ids[i];
+            InputSystemController.PairDeviceWithPlayer(i, PlayersData[i].InputDevice);
+        }
+    }
+
+    public void ResetPlayerData()
+    {
+        _playersData = new List<PlayerData>();
     }
 }

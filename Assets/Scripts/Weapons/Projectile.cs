@@ -13,14 +13,11 @@ public class Projectile : MonoBehaviour
     public float Speed 
     {
         get => _speed;
-
         set => _speed = value;
     }
 
-    protected bool TouchedProjectileInteractable
-    {
-        get { return Physics2D.OverlapCircle(transform.position, 0.1f, interactableLayerMask);}
-    }
+    protected bool TouchedProjectileInteractable => 
+        Physics2D.OverlapCircle(transform.position, 0.1f, interactableLayerMask);
     
     public virtual void Update()
     {
@@ -29,7 +26,6 @@ public class Projectile : MonoBehaviour
         {
             if (!isMissile)
                 OnReturnProjectileToPool?.Invoke(gameObject);
-                //ObjectPool.instance.ReturnGameObject(gameObject);
             else
                 Destroy(gameObject);
         }

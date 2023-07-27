@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using System;
 using Newtonsoft.Json.Linq;
+using SharedData.Enumerations;
 
 public class AnimatorHashes
 {
@@ -117,6 +118,8 @@ public class Penosa : MonoBehaviour
         }
     }
 
+    public bool IsLeft => _isLeft;
+
     #endregion
 
     private void OnEnable()
@@ -125,12 +128,17 @@ public class Penosa : MonoBehaviour
         _inventory = GetComponentInChildren<Inventory>();
         _inventory.OnInventorySpecialItemAdded += HandleOnInventorySpecialItemAdded;
         _inventory.OnInventoryCleared += HandleOnInventoryCleared;
+
+        AutoRotate.OnSpinningProjectileEnabled += HandleOnSpinningProjectileEnabled;
     }
 
     private void OnDisable()
     {
         _inventory.OnInventorySpecialItemAdded -= HandleOnInventorySpecialItemAdded;
         _inventory.OnInventoryCleared -= HandleOnInventoryCleared;
+
+        AutoRotate.OnSpinningProjectileEnabled -= HandleOnSpinningProjectileEnabled;
+
         InputSystemReset();
     }
 
@@ -149,7 +157,8 @@ public class Penosa : MonoBehaviour
         Parachute();
         Shoot();
 
-        if (Input.GetKeyDown(KeyCode.X)) // Remove this!   
+        // TEMPORARY!! Remove this!
+        if (Input.GetKeyDown(KeyCode.X)) 
         {
             //TakeDamage(100, true);
             PlayerData.Lives = 0;
@@ -213,6 +222,12 @@ public class Penosa : MonoBehaviour
 
         _jumpAction.performed -= Jump;
         _jumpAction.canceled -= Fall;
+    }
+
+    private void HandleOnSpinningProjectileEnabled(AutoRotate projectile)
+    {
+        if(_playerData.Character == Penosas.Dolores && _isLeft)
+            projectile.SetRotationDirection(-1);
     }
 
     private void HandleOnInventorySpecialItemAdded(InventoryListItem inventoryListItem)
@@ -365,7 +380,7 @@ public class Penosa : MonoBehaviour
         _anim.SetBool(_animHashes.down, vertical < 0);
     }
 
-    private void Flip()
+    public void Flip()
     {
         _isLeft = !_isLeft;
         transform.localScale = new Vector2
@@ -537,12 +552,12 @@ public class Penosa : MonoBehaviour
         bool fire1ButtonPressed = _fire1Action.ReadValue<float>() > 0;
 
         // TEMPORARY!!
-        if (fire1ButtonPressed && Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            TakeDamage(30, true);
-            //PlayerData.Lives = 0;
-            //Death();
-        }
+        //if (fire1ButtonPressed && Input.GetKeyDown(KeyCode.LeftControl))
+        //{
+        //    TakeDamage(30, true);
+        //    //PlayerData.Lives = 0;
+        //    //Death();
+        //}
 
         // Lvl Diferente de 2, porque com o nível 2 o comportamento do tiro é diferente,
         // precisa verificar se está pressionado a cada frame, enquanto que nos lvls 1 e 3 

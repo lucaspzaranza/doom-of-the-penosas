@@ -36,8 +36,7 @@ public abstract class SpecialItem : MonoBehaviour
 
     public void SetSlot(ItemSlot slotToSet)
     {
-        if(_itemSlot == null)
-            _itemSlot = slotToSet;
+        _itemSlot = slotToSet;
     }
 
     public void RemoveItemIfAmountEqualsZero()

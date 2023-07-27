@@ -166,7 +166,8 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
         // Considering a 2-player multiplayer logic
         if (GetGameMode() == GameMode.Multiplayer)
         {
-            int otherPlayer = GetComplementaryPlayerIndex(characterIndex);
+            //int otherPlayer = GetComplementaryPlayerIndex(characterIndex);
+            int otherPlayer = SharedFunctions.GetComplementaryIndex(characterIndex);
             _characterSelectionList.Add((Penosas)otherPlayer);
             SetCharacterTextColors(otherPlayer, _selectedColors[1]);
         }
@@ -273,12 +274,12 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
             if(GetGameMode() == GameMode.Multiplayer)
             {
                 int index = _cursors.IndexOf(cursor);
-                int complementaryCursorIndex = GetComplementaryPlayerIndex(index);
+                int complementaryCursorIndex = SharedFunctions.GetComplementaryIndex(index);
                 CursorPosition _2ndCursor = _cursors[complementaryCursorIndex];
 
                 Button parentBtn = cursor.transform.parent.GetComponent<Button>();
                 int btnIndex = _characterButtons.IndexOf(parentBtn);
-                int complementaryBtnIndex = GetComplementaryPlayerIndex(btnIndex);
+                int complementaryBtnIndex = SharedFunctions.GetComplementaryIndex(btnIndex);
                 GameObject complementaryButton = _characterButtons[complementaryBtnIndex].gameObject;
 
                 if (coordinates.y == 0 && cursor.transform.parent.gameObject.IsCharacterSelectionButton()) // Horizontal Cursor Movement

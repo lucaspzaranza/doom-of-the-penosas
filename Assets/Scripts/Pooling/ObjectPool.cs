@@ -30,7 +30,9 @@ public class ObjectPool : MonoBehaviour
 
     private GameObject CreateNewObject(GameObject gameObj)
     {
-        GameObject newGameObj = Instantiate(gameObj);
+        Transform parent = transform.Find($"{gameObj.name} Pool");
+
+        GameObject newGameObj = Instantiate(gameObj, parent);
         newGameObj.name = gameObj.name;
         return newGameObj;
     }

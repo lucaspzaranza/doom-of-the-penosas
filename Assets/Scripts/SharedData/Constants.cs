@@ -106,8 +106,7 @@ public static class ConstantNumbers
 {
     // Player
     public const int NumberOfPlayers = 2;
-    //public const int CountdownSeconds = 10;
-    public const int CountdownSeconds = 2;
+    public const int CountdownSeconds = 10;
 
     // Stage
     public const float TimeToShowStageClearTxt = 2f;
@@ -161,4 +160,18 @@ public static class PlayerConsts
     public const string ParachuteAction = "Parachute";
     public const string JumpAction = "Jump";
     public const string ChangeSpecialItemAction = "ChangeSpecialItem";
+}
+
+public static class SharedFunctions
+{
+    /// <summary>
+    /// Considering a 2-Player Multiplayer game, it'll return the complementary index number<br>
+    /// with 2 players as a basis. If you pass 0, it'll return 1, and vice versa. </br>
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static int GetComplementaryIndex(int value)
+    {
+        return (value + 1) % 2;
+    }
 }

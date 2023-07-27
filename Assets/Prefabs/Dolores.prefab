@@ -864,7 +864,6 @@ MonoBehaviour:
     _playerScript: {fileID: 6435880766563690138}
     _localID: 0
     _playerGameObject: {fileID: 0}
-    _countdown: 10
     _continues: 5
     _lives: 5
     _life: 100
@@ -882,6 +881,7 @@ MonoBehaviour:
     _inventoryData:
       _specialItems: []
       _player: {fileID: 0}
+    _gameOver: 0
   _speed: 2
   _jumpForce: 260
   _groundCheck: {fileID: 6435880765277024125}
@@ -889,7 +889,6 @@ MonoBehaviour:
   _terrainLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  _defaultGravity: 1.5
   _parachute: {fileID: 6435880765243448272}
   _parachuteGravity: 0.2
   _shotspeed: 8

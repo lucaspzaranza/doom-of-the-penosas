@@ -65,12 +65,4 @@ public abstract class ControllerUnit: Controller
         else
             return ((ControllerUnit)_parentController).GetCharacterSelectionList();
     }
-
-    /// <summary>
-    /// If we pass the index 0, it'll return the index 1 and vice versa.
-    /// </summary>
-    public int GetComplementaryPlayerIndex(int currentIndex)
-    {
-        return (currentIndex + 1) % 2;
-    }
 }

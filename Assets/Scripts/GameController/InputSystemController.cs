@@ -23,7 +23,7 @@ public class InputSystemController : ControllerUnit
         _playerInputManager = null;
     }
 
-    public GameObject AddPlayerWithIDAndDevice(int playerIndex, GameObject prefab, InputDevice device = null)
+    public GameObject AddPlayerWithIDAndDevice(byte playerIndex, GameObject prefab, InputDevice device = null)
     {
         _playerInputManager.playerPrefab = prefab;
 
@@ -42,6 +42,11 @@ public class InputSystemController : ControllerUnit
         var playersInputs = FindObjectsOfType<UnityEngine.InputSystem.PlayerInput>().ToList();
         var player = playersInputs.SingleOrDefault(input => input.playerIndex == playerIndex)?.gameObject;
         return player;
+    }
+
+    public void PairDeviceWithPlayer(byte playerIndex, InputDevice device)
+    {
+        InputUser.PerformPairingWithDevice(device, InputUser.all[playerIndex]);
     }
 
     public void UnpairDevices()
