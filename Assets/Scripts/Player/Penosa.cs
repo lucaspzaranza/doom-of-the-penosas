@@ -174,9 +174,6 @@ public class Penosa : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (_playerController.GameIsPaused() || _isInCountdown)
-            return;
-
         _isGrounded = Physics2D.OverlapCircle(_groundCheck.position, PlayerConsts.OverlapCircleDiameter, _terrainLayerMask);
         _anim.SetBool(_animHashes.isGrounded, _isGrounded);
 
@@ -276,7 +273,7 @@ public class Penosa : MonoBehaviour
         ResetPlayerData();
 
         if (PlayerData.Lives == PlayerConsts.GameOverLives)
-            OnPlayerLostAllLives(PlayerData.LocalID);
+            OnPlayerLostAllLives?.Invoke(PlayerData.LocalID);
         else
             // Play some death animation...
             InitiateBlink();
