@@ -72,6 +72,7 @@ public class Penosa : MonoBehaviour
     private bool _isLeft;
     private bool _isGrounded;
     private bool _isInCountdown;
+    private bool _canRideArmor;
     private AnimatorHashes _animHashes = new AnimatorHashes();
 
     [Header("Blink")]
@@ -82,6 +83,12 @@ public class Penosa : MonoBehaviour
     [SerializeField] private SpriteRenderer _body;
     [SerializeField] private SpriteRenderer _legs;
     [SerializeField] private bool _isBlinking = false;
+
+    [Header("Ride Armor")]
+    [SerializeField] private bool _rideArmorEquipped;
+    [SerializeField] private RideArmorActivator _rideArmorActivator;
+    [SerializeField] private RideArmor _rideArmor;
+
     #endregion
 
     #region Props
@@ -119,6 +126,16 @@ public class Penosa : MonoBehaviour
     }
 
     public bool IsLeft => _isLeft;
+
+    public bool RideArmorEquipped => _rideArmorEquipped;
+
+    private UnityEngine.InputSystem.PlayerInput PlayerInput => _playerInput;
+    public InputAction MoveAction => _moveAction;
+    public InputAction JumpAction => _jumpAction;
+    public InputAction PauseAction => _pauseAction;
+    public InputAction Fire1Action => _fire1Action;
+    public InputAction Fire2Action => _fire2Action;
+    public InputAction Fire3Action => _fire3Action;
 
     #endregion
 
@@ -303,11 +320,45 @@ public class Penosa : MonoBehaviour
         }
     }
 
-    private void UseSpecialItem()
+    private void UseSpecialItemOrRideArmor()
     {
         if (Inventory.SelectedSlot != null && Inventory.SelectedSlot.Item != null &&
             !Inventory.SelectedSlot.Item.ItemInUse)
             Inventory.SelectedSlot.Item.Use();
+        else if (_canRideArmor)
+            RideArmor(_rideArmorActivator.RideArmor);
+        else if (RideArmorEquipped)
+            EjectRideArmor();
+    }
+
+    private void RideArmor(RideArmor rideArmorToEquip)
+    {
+        _rideArmor = rideArmorToEquip;
+        _rideArmor.Equip(this);
+
+        if((IsLeft && _rideArmor.transform.localScale.x > 0) || 
+        (!IsLeft && _rideArmor.transform.localScale.x < 0))
+        {
+            _rideArmor.transform.localScale = new Vector2(_rideArmor.transform.localScale.x * -1,
+                _rideArmor.transform.localScale.y);
+        }
+        _rideArmor.gameObject.transform.SetParent(transform, true);
+
+        _rideArmorEquipped = true;
+        _body.enabled = false;
+        _legs.enabled = false;
+        _canRideArmor = false;
+    }
+
+    private void EjectRideArmor()
+    {
+        _rideArmor.Eject();
+        _rideArmor.gameObject.transform.SetParent(null, true);
+        _body.enabled = true;
+        _legs.enabled = true;
+        _rideArmor = null;
+        _rideArmorActivator = null;
+        _rideArmorEquipped = false;
     }
 
     private void Move()
@@ -321,7 +372,15 @@ public class Penosa : MonoBehaviour
         else if (horizontal < 0 && !_isLeft) Flip();
 
         if (!HitWall() && Rigidbody2D != null)
-            Rigidbody2D.velocity = new Vector2(_speed * horizontal, Rigidbody2D.velocity.y);
+        {
+            Vector2 direction = new Vector2(_speed * horizontal, Rigidbody2D.velocity.y);
+            Rigidbody2D.velocity = direction;
+            if (RideArmorEquipped)
+            {
+                _rideArmor.Move(direction);
+                _rideArmor.Aim(vertical);
+            }
+        }
 
         SetMovementAnimators(vertical);
     }
@@ -330,6 +389,12 @@ public class Penosa : MonoBehaviour
     {        
         if (_playerController.GameIsPaused())
             return;
+
+        if (RideArmorEquipped)
+        {
+            _rideArmor.Jump();
+            return;
+        }
 
         if (!JetCopterActivated)
         {
@@ -348,7 +413,7 @@ public class Penosa : MonoBehaviour
         Rigidbody2D.velocity = new Vector2(Rigidbody2D.velocity.x, newY);
     }
 
-    private float GetNormalizedMovementValue(float raw)
+    public float GetNormalizedMovementValue(float raw)
     {
         if (raw > 0) return 1f;
         else if (raw < 0) return -1f;
@@ -382,6 +447,7 @@ public class Penosa : MonoBehaviour
         _isLeft = !_isLeft;
         transform.localScale = new Vector2
             (transform.localScale.x * -1, transform.localScale.y);
+
         Inventory.transform.localScale = new Vector2(_isLeft ? -1f : 1f, 1f);
     }
 
@@ -548,6 +614,12 @@ public class Penosa : MonoBehaviour
     {
         bool fire1ButtonPressed = _fire1Action.ReadValue<float>() > 0;
 
+        if (RideArmorEquipped && fire1ButtonPressed)
+        {
+            _rideArmor.Shoot();
+            return;
+        }
+
         // TEMPORARY!!
         //if (fire1ButtonPressed && Input.GetKeyDown(KeyCode.LeftControl))
         //{
@@ -572,7 +644,7 @@ public class Penosa : MonoBehaviour
             Instantiate_1stShot();
         else if (fire2ButtonPressed && PlayerData._2ndWeaponAmmoProp > 0)
             InstantiateSecondaryShot();
-        else if (fire3ButtonPressed) UseSpecialItem();
+        else if (fire3ButtonPressed) UseSpecialItemOrRideArmor();
 
         if (_isShooting) ResetShootAnim();
     }
@@ -635,6 +707,27 @@ public class Penosa : MonoBehaviour
         _groundCheck.gameObject.SetActive(val);
         _wallCheckCollider.gameObject.SetActive(val);
         Inventory.gameObject.SetActive(val);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == ConstantStrings.RideArmorTag)
+        {
+            //print("Player can enter the ride armor. Press Special Item do enter the ride armor.");
+            _canRideArmor = true;
+            _rideArmorActivator = other.GetComponent<RideArmorActivator>();
+        }
+    }
+
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag == ConstantStrings.RideArmorTag)
+        {
+            //print("Player can't enter the ride armor anymore");
+            _canRideArmor = false;
+            _rideArmorActivator = null;
+        }
     }
 }
 

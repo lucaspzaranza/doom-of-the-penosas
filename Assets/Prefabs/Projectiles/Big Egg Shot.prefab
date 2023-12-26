@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1617454459024769964, guid: 01c60fe339bafbd42aa4817129bfb0ec,
@@ -72,6 +73,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1617454459024769965, guid: 01c60fe339bafbd42aa4817129bfb0ec,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1617454459024769970, guid: 01c60fe339bafbd42aa4817129bfb0ec,
         type: 3}
       propertyPath: projectileDestroyer.m_Bits
@@ -93,4 +99,7 @@ PrefabInstance:
       value: Big Egg Shot
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01c60fe339bafbd42aa4817129bfb0ec, type: 3}

@@ -15,6 +15,7 @@ public static class ConstantStrings
 
     // Player
     public const string PlayerTag = "Player";
+    public const string RideArmorTag = "RideArmor";
 
     // Animator
     public const string Shoot = "Shoot";
