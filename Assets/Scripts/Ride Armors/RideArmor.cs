@@ -5,6 +5,12 @@ using UnityEngine;
 
 public class RideArmor : MonoBehaviour
 {
+    [SerializeField]
+    private float _upperLimitDegree = 90f;
+
+    [SerializeField]
+    private float _lowerLimitDegree = 345f;
+
     [SerializeField] private RideArmorType _type;
     public RideArmorType RideArmorType => _type;
 
@@ -16,6 +22,12 @@ public class RideArmor : MonoBehaviour
 
     protected Rigidbody2D _rb;
     public Rigidbody2D RigiBody2DComponent => _rb;
+
+    [SerializeField] protected GameObject _cannon;
+    public GameObject Cannon => _cannon;
+
+    [SerializeField] private float _rotationSpeed;
+    public float RotationSpeed => _rotationSpeed;
 
     private void OnEnable()
     {
@@ -34,7 +46,15 @@ public class RideArmor : MonoBehaviour
 
     public virtual void Aim(float direction)
     {
+        Cannon.transform.Rotate(Vector3.forward * direction * _rotationSpeed * Time.deltaTime);
 
+        float eulerZ = _cannon.transform.localEulerAngles.z;
+
+        if (direction == 1 && eulerZ > _upperLimitDegree && eulerZ < _lowerLimitDegree)
+            Cannon.transform.localEulerAngles = new Vector3(0f, 0f,
+                Mathf.Clamp(eulerZ, 0f, _upperLimitDegree));
+        else if (direction == -1 && eulerZ > _upperLimitDegree && eulerZ < 360f && eulerZ < _lowerLimitDegree)
+            Cannon.transform.localEulerAngles = new Vector3(0f, 0f, _lowerLimitDegree);
     }
 
     public virtual void Shoot()

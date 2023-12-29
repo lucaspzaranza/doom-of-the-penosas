@@ -342,18 +342,20 @@ public class Penosa : MonoBehaviour
             _rideArmor.transform.localScale = new Vector2(_rideArmor.transform.localScale.x * -1,
                 _rideArmor.transform.localScale.y);
         }
-        _rideArmor.gameObject.transform.SetParent(transform, true);
+        Rigidbody2D.velocity = Vector2.zero;
+        transform.SetParent(_rideArmor.transform, true);
 
         _rideArmorEquipped = true;
-        _body.enabled = false;
-        _legs.enabled = false;
+        //_body.enabled = false;
+        //_legs.enabled = false;
         _canRideArmor = false;
     }
 
     private void EjectRideArmor()
     {
         _rideArmor.Eject();
-        _rideArmor.gameObject.transform.SetParent(null, true);
+        //_rideArmor.gameObject.transform.SetParent(null, true);
+        transform.parent = null;
         _body.enabled = true;
         _legs.enabled = true;
         _rideArmor = null;
@@ -374,12 +376,13 @@ public class Penosa : MonoBehaviour
         if (!HitWall() && Rigidbody2D != null)
         {
             Vector2 direction = new Vector2(_speed * horizontal, Rigidbody2D.velocity.y);
-            Rigidbody2D.velocity = direction;
             if (RideArmorEquipped)
             {
                 _rideArmor.Move(direction);
                 _rideArmor.Aim(vertical);
             }
+            else 
+                Rigidbody2D.velocity = direction;
         }
 
         SetMovementAnimators(vertical);
@@ -445,8 +448,16 @@ public class Penosa : MonoBehaviour
     public void Flip()
     {
         _isLeft = !_isLeft;
-        transform.localScale = new Vector2
-            (transform.localScale.x * -1, transform.localScale.y);
+        if(!RideArmorEquipped)
+        {
+            transform.localScale = new Vector2
+                (transform.localScale.x * -1, transform.localScale.y);
+        }
+        else
+        {
+            _rideArmor.transform.localScale = new Vector2
+                (_rideArmor.transform.localScale.x * -1, _rideArmor.transform.localScale.y);
+        }
 
         Inventory.transform.localScale = new Vector2(_isLeft ? -1f : 1f, 1f);
     }
