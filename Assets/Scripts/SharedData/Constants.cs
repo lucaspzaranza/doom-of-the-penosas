@@ -129,6 +129,7 @@ public static class ScenesBuildIndexes
 public static class PlayerConsts
 {
     public const float MachineGunInterval = 0.1f;
+    public const float RideArmorMachineGunInterval = 0.075f;
     public const float ShotLvl3Duration = 0.5f;
     public const float ShotLvl2VariationRate = 0.1f;
     public const float ShotAnimDuration = 0.25f;

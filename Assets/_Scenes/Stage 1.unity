@@ -871,7 +871,7 @@ PrefabInstance:
     - target: {fileID: 742759606539004929, guid: 54f11de70eea196468bf5d8408b554b7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.255
+      value: -0.58
       objectReference: {fileID: 0}
     - target: {fileID: 742759606539004929, guid: 54f11de70eea196468bf5d8408b554b7,
         type: 3}
@@ -926,7 +926,7 @@ PrefabInstance:
     - target: {fileID: 742759606539004931, guid: 54f11de70eea196468bf5d8408b554b7,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1623,7 +1623,7 @@ PrefabInstance:
     - target: {fileID: 849103225893220652, guid: 90da3cd1c267a904abbdbe9421062f66,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.1137805
+      value: -1.86
       objectReference: {fileID: 0}
     - target: {fileID: 849103225893220652, guid: 90da3cd1c267a904abbdbe9421062f66,
         type: 3}
@@ -1678,7 +1678,7 @@ PrefabInstance:
     - target: {fileID: 849103225893220654, guid: 90da3cd1c267a904abbdbe9421062f66,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2503,7 +2503,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 6
   m_TargetDisplay: 0
 --- !u!224 &1885065180
 RectTransform:

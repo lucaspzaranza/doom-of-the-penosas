@@ -16,11 +16,4 @@ public class EggTank : RideArmor
         base.Eject();
         RigiBody2DComponent.velocity = Vector2.zero;
     }
-
-    public override void Shoot()
-    {
-        base.Shoot();
-
-        print("PEI PEI PEI!");
-    }
 }

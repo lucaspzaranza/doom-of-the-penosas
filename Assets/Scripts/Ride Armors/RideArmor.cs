@@ -29,6 +29,14 @@ public class RideArmor : MonoBehaviour
     [SerializeField] private float _rotationSpeed;
     public float RotationSpeed => _rotationSpeed;
 
+    [SerializeField] protected GameObject _eggShot;
+    [SerializeField] protected GameObject _shurikenShot;
+    [SerializeField] protected Transform _shotSpawnPos;
+
+    private PlayerController _playerController;
+    private float _continuousTimeCounter;
+    private int _direction = 1;
+
     private void OnEnable()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -59,12 +67,33 @@ public class RideArmor : MonoBehaviour
 
     public virtual void Shoot()
     {
+        if(_continuousTimeCounter >= PlayerConsts.RideArmorMachineGunInterval)
+        {
+            _continuousTimeCounter = 0;
 
+            GameObject newBullet = _playerController.RequestProjectileFromGameController
+                (_player.PlayerData.Character == Penosas.Geruza? _eggShot : _shurikenShot);
+            newBullet.transform.position = _shotSpawnPos.position;
+            newBullet.transform.rotation = _cannon.transform.rotation;
+            newBullet.transform.localScale =
+                new Vector2(newBullet.transform.localScale.x * _direction, newBullet.transform.localScale.y);
+
+            _player.SetShotLevel2VariationRate(ref newBullet);
+            newBullet.GetComponent<Projectile>().Speed = _player.ShotSpeed * _direction;
+        }
+        else
+            _continuousTimeCounter += Time.deltaTime;
     }
 
-    public void Equip(Penosa player)
+    public void SetDirection(int direction)
+    {
+        _direction = direction;
+    }
+
+    public void Equip(Penosa player, PlayerController playerController)
     {
         _player = player;
+        _playerController = playerController;
     }
 
     public virtual void Eject()

@@ -53,7 +53,7 @@ public class Penosa : MonoBehaviour
     public GameObject _parachute;
     public float _parachuteGravity;
 
-    public float _shotspeed;
+    [SerializeField] private float _shotspeed;
     private GameObject _currentGrenade;
     [SerializeField] private GameObject _spawnCoordinatesContainer;
     [SerializeField] private Transform[] _horizontalShotSpawnCoordinates = null;
@@ -128,6 +128,8 @@ public class Penosa : MonoBehaviour
     public bool IsLeft => _isLeft;
 
     public bool RideArmorEquipped => _rideArmorEquipped;
+
+    public float ShotSpeed => _shotspeed;
 
     private UnityEngine.InputSystem.PlayerInput PlayerInput => _playerInput;
     public InputAction MoveAction => _moveAction;
@@ -308,7 +310,7 @@ public class Penosa : MonoBehaviour
 
     private void ChangeSpecialItem(InputAction.CallbackContext context)
     {
-        if (!Inventory.IsEmpty)
+        if (!Inventory.IsEmpty && !RideArmorEquipped)
         {
             float value = _changespecialItemAction.ReadValue<float>();
             int length = Inventory.Slots.Count;
@@ -322,8 +324,8 @@ public class Penosa : MonoBehaviour
 
     private void UseSpecialItemOrRideArmor()
     {
-        if (Inventory.SelectedSlot != null && Inventory.SelectedSlot.Item != null &&
-            !Inventory.SelectedSlot.Item.ItemInUse)
+        if (!_canRideArmor && !RideArmorEquipped && Inventory.SelectedSlot != null && 
+            Inventory.SelectedSlot.Item != null && !Inventory.SelectedSlot.Item.ItemInUse)
             Inventory.SelectedSlot.Item.Use();
         else if (_canRideArmor)
             RideArmor(_rideArmorActivator.RideArmor);
@@ -334,20 +336,21 @@ public class Penosa : MonoBehaviour
     private void RideArmor(RideArmor rideArmorToEquip)
     {
         _rideArmor = rideArmorToEquip;
-        _rideArmor.Equip(this);
+        _rideArmor.Equip(this, _playerController);
 
         if((IsLeft && _rideArmor.transform.localScale.x > 0) || 
         (!IsLeft && _rideArmor.transform.localScale.x < 0))
         {
             _rideArmor.transform.localScale = new Vector2(_rideArmor.transform.localScale.x * -1,
                 _rideArmor.transform.localScale.y);
+            _rideArmor.SetDirection(_isLeft ? -1 : 1);
         }
         Rigidbody2D.velocity = Vector2.zero;
         transform.SetParent(_rideArmor.transform, true);
 
         _rideArmorEquipped = true;
-        //_body.enabled = false;
-        //_legs.enabled = false;
+        _body.enabled = false;
+        _legs.enabled = false;
         _canRideArmor = false;
     }
 
@@ -455,6 +458,7 @@ public class Penosa : MonoBehaviour
         }
         else
         {
+            _rideArmor.SetDirection(_isLeft ? -1 : 1);
             _rideArmor.transform.localScale = new Vector2
                 (_rideArmor.transform.localScale.x * -1, _rideArmor.transform.localScale.y);
         }
@@ -500,7 +504,7 @@ public class Penosa : MonoBehaviour
         return Vertical ? Quaternion.AngleAxis(90f, Vector3.forward) : Quaternion.identity;
     }
 
-    private int GetShotDirection()
+    public int GetShotDirection()
     {
         int direction = 0;
         if (Vertical)
@@ -510,7 +514,7 @@ public class Penosa : MonoBehaviour
         return direction;
     }
 
-    private void SetShotLevel2VariationRate(ref GameObject projectile)
+    public void SetShotLevel2VariationRate(ref GameObject projectile)
     {
         float posVariationRate = UnityEngine.Random.Range(PlayerConsts.ShotLvl2VariationRate,
                                             -PlayerConsts.ShotLvl2VariationRate);
@@ -631,14 +635,6 @@ public class Penosa : MonoBehaviour
             return;
         }
 
-        // TEMPORARY!!
-        //if (fire1ButtonPressed && Input.GetKeyDown(KeyCode.LeftControl))
-        //{
-        //    TakeDamage(30, true);
-        //    //PlayerData.Lives = 0;
-        //    //Death();
-        //}
-
         // Lvl Diferente de 2, porque com o nível 2 o comportamento do tiro é diferente,
         // precisa verificar se está pressionado a cada frame, enquanto que nos lvls 1 e 3 
         // a função de tiro só deve ser chamada no frame em que o botão foi pressionado.
@@ -653,7 +649,7 @@ public class Penosa : MonoBehaviour
             Instantiate_1stShotLv2();
         else if (fire1ButtonPressed && !_isShooting && PlayerData._1stWeaponLevel == 3)
             Instantiate_1stShot();
-        else if (fire2ButtonPressed && PlayerData._2ndWeaponAmmoProp > 0)
+        else if (fire2ButtonPressed && PlayerData._2ndWeaponAmmoProp > 0 && !RideArmorEquipped)
             InstantiateSecondaryShot();
         else if (fire3ButtonPressed) UseSpecialItemOrRideArmor();
 
@@ -720,22 +716,19 @@ public class Penosa : MonoBehaviour
         Inventory.gameObject.SetActive(val);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.tag == ConstantStrings.RideArmorTag)
+        if (other.gameObject.tag == ConstantStrings.RideArmorTag && !_canRideArmor && !RideArmorEquipped)
         {
-            //print("Player can enter the ride armor. Press Special Item do enter the ride armor.");
             _canRideArmor = true;
             _rideArmorActivator = other.GetComponent<RideArmorActivator>();
         }
     }
 
-
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.tag == ConstantStrings.RideArmorTag)
         {
-            //print("Player can't enter the ride armor anymore");
             _canRideArmor = false;
             _rideArmorActivator = null;
         }
