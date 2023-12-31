@@ -242,8 +242,8 @@ MonoBehaviour:
   _upperLimitDegree: 90
   _lowerLimitDegree: 345
   _type: 0
+  _life: 100
   _player: {fileID: 0}
-  _health: 0
   _cannon: {fileID: 7512111401430287610}
   _rotationSpeed: 400
   _eggShot: {fileID: 1617454459024769971, guid: 01c60fe339bafbd42aa4817129bfb0ec,

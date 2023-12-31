@@ -1,10 +1,13 @@
 using SharedData.Enumerations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class RideArmor : MonoBehaviour
 {
+    public Action<int> OnRideArmorLifeChanged;
+
     [SerializeField]
     private float _upperLimitDegree = 90f;
 
@@ -14,11 +17,19 @@ public class RideArmor : MonoBehaviour
     [SerializeField] private RideArmorType _type;
     public RideArmorType RideArmorType => _type;
 
+    [SerializeField][Range(0, PlayerConsts.Max_Life)] private int _life;
+    public int Life
+    {
+        get => _life;
+        set
+        {
+            _life = Mathf.Clamp(value, 0, PlayerConsts.Max_Life); ;
+            OnRideArmorLifeChanged?.Invoke(_life);
+        }
+    }
+
     [SerializeField] private Penosa _player;
     public Penosa Player => _player;
-
-    [SerializeField] private int _health;
-    public int Health => _health;
 
     protected Rigidbody2D _rb;
     public Rigidbody2D RigiBody2DComponent => _rb;
@@ -93,16 +104,11 @@ public class RideArmor : MonoBehaviour
     public void Equip(Penosa player, PlayerController playerController)
     {
         _player = player;
-        _playerController = playerController;
+        _playerController = playerController;        
     }
 
     public virtual void Eject()
     {
         _player = null;
-    }
-
-    public void TakeDamage(int damage)
-    {
-        _health -= Mathf.Clamp(damage, 0, PlayerConsts.Max_Life);
     }
 }

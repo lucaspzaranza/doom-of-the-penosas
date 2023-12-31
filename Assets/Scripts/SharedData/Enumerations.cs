@@ -72,6 +72,7 @@ namespace SharedData.Enumerations
 
     public enum RideArmorType
     {
+        None = -1,
         EggTank = 0,
         ChickenBounceTireBall = 1,
         JetSkinha = 2,

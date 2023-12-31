@@ -15,6 +15,7 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private TMP_Text _livesTxt = null;
     [SerializeField] private Image _lifebarImg = null;
     [SerializeField] private Image _armorLifebarImg = null;
+    [SerializeField] private Image _rideArmorLifebarImg = null;
     [SerializeField] private Image _specialItemImg = null;
     [SerializeField] private GameObject _hudContainer = null;
     [SerializeField] private GameObject _continueContainer = null;
@@ -41,6 +42,7 @@ public class PlayerHUD : MonoBehaviour
     private int _lives;
     private int _life;
     private int _armorLife;
+    private int _rideArmorLife;
     private bool _countdownActivated;
 
     public GameObject HUDContainer => _hudContainer;
@@ -79,6 +81,17 @@ public class PlayerHUD : MonoBehaviour
             _armorLife = value;
             float res = _armorLife;
             _armorLifebarImg.fillAmount = res / 100;
+        }
+    }
+
+    public int RideArmorLife
+    {
+        get => _rideArmorLife;
+        set
+        {
+            _rideArmorLife = value;
+            float res = _rideArmorLife;
+            _rideArmorLifebarImg.fillAmount = res / 100;
         }
     }
 
@@ -215,6 +228,7 @@ public class PlayerHUD : MonoBehaviour
 
     private void UpdateArmorLife(int newValue) => ArmorLife = newValue;
     private void UpdateLife(int newValue) => Life = newValue;
+    public void UpdateRideArmorLife(int newValue) => RideArmorLife = newValue;
     private void UpdateLives(int newValue) => Lives = newValue;
 
     private void GameOverCountdown()

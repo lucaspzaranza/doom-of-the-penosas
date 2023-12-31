@@ -50,6 +50,7 @@ public class PlayerController : ControllerUnit
         player.OnPlayerLostAllContinues += InvokeGameOverEvent;
         player.OnPlayerLostAllLives += RemovePlayerFromScene;
         player.OnPlayerRespawn += RespawnPlayer;
+        player.OnPlayerRideArmor += HandleOnPlayerRideArmor;
     }
 
     public void EventDispose()
@@ -59,6 +60,7 @@ public class PlayerController : ControllerUnit
             playerData.Player.OnPlayerLostAllContinues -= InvokeGameOverEvent;
             playerData.Player.OnPlayerLostAllLives -= RemovePlayerFromScene;
             playerData.Player.OnPlayerRespawn -= RespawnPlayer;
+            playerData.Player.OnPlayerRideArmor -= HandleOnPlayerRideArmor;
         }
     }
 
@@ -302,5 +304,15 @@ public class PlayerController : ControllerUnit
     public void ResetPlayerData()
     {
         _playersData = new List<PlayerData>();
+    }
+
+    public void HandleOnPlayerRideArmor(byte playerID, RideArmor rideArmor, bool isEquipping)
+    {
+        GameController gameCtrl = TryToGetGameControllerFromParent();
+        if(gameCtrl != null)
+        {
+            gameCtrl.UIController.PlayerInGameUIController
+                .UpdateHUDWithRideArmor(playerID, rideArmor, isEquipping);
+        }
     }
 }

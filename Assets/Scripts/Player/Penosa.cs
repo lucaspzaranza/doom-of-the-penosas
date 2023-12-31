@@ -24,6 +24,12 @@ public class Penosa : MonoBehaviour
     public Action<byte> OnPlayerLostAllContinues;
     public Action<byte> OnPlayerRespawn;
 
+    /// <summary>
+    /// The boolean is to send to the event if you are equipping the rideArmor or ejecting it. <br/>
+    /// True for equipping, False for ejecting.
+    /// </summary>
+    public Action<byte, RideArmor, bool> OnPlayerRideArmor;
+
     #region Vars
 
     private UnityEngine.InputSystem.PlayerInput _playerInput;
@@ -179,9 +185,9 @@ public class Penosa : MonoBehaviour
         // TEMPORARY!! Remove this!
         if (Input.GetKeyDown(KeyCode.X)) 
         {
-            //TakeDamage(100, true);
-            PlayerData.Lives = 0;
-            Death();
+            TakeDamage(30, true);
+            //PlayerData.Lives = 0;
+            //Death();
         }
 
         if (PlayerData.Life <= PlayerConsts.DeathLife && !Adrenaline && !IsBlinking)
@@ -352,18 +358,21 @@ public class Penosa : MonoBehaviour
         _body.enabled = false;
         _legs.enabled = false;
         _canRideArmor = false;
+        
+        OnPlayerRideArmor?.Invoke(PlayerData.LocalID, rideArmorToEquip, true);
     }
 
     private void EjectRideArmor()
     {
         _rideArmor.Eject();
-        //_rideArmor.gameObject.transform.SetParent(null, true);
         transform.parent = null;
         _body.enabled = true;
         _legs.enabled = true;
+        OnPlayerRideArmor?.Invoke(PlayerData.LocalID, _rideArmor, false);
         _rideArmor = null;
         _rideArmorActivator = null;
         _rideArmorEquipped = false;
+
     }
 
     private void Move()
@@ -666,6 +675,12 @@ public class Penosa : MonoBehaviour
 
     public void TakeDamage(int dmg, bool force = false) // Remove this default parameter. It's for test usage only.
     {
+        if (RideArmorEquipped)
+        {
+            _rideArmor.Life -= dmg;
+            return;
+        }
+
         if (!IsBlinking || force)
         {
             if (HasArmor) PlayerData.ArmorLife -= dmg;
