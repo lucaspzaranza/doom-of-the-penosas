@@ -7,4 +7,10 @@ public class RideArmorActivator : MonoBehaviour
 {
     [SerializeField] private RideArmor _rideArmor;
     public RideArmor RideArmor => _rideArmor;
+
+    private void OnEnable()
+    {
+        if(_rideArmor == null)
+            _rideArmor = GetComponentInParent<RideArmor>();
+    }
 }

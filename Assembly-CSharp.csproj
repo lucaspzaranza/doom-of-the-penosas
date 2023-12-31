@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\Inventory\SpecialItem.cs" />
     <Compile Include="Assets\Scripts\UI\LoadingProgress.cs" />
     <Compile Include="Assets\Scripts\Scenes\SceneController.cs" />
+    <Compile Include="Assets\Scripts\Ride Armors\Chickencopter.cs" />
     <Compile Include="Assets\Scripts\SharedData\Constants.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerData.cs" />

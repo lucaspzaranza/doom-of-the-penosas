@@ -104,7 +104,7 @@ public class RideArmor : MonoBehaviour
         _direction = direction;
     }
 
-    public void Equip(Penosa player, PlayerController playerController)
+    public virtual void Equip(Penosa player, PlayerController playerController)
     {
         _player = player;
         _playerController = playerController;        

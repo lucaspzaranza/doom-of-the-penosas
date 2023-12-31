@@ -62,7 +62,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 65e6cf0779be9424a8cf6519daf71fa1, type: 3}
   - {fileID: 21300000, guid: 28ed6c2d25f77e34390da9443dd37784, type: 3}
   - {fileID: 21300000, guid: d294a970ed6b5884fa786222dac78f46, type: 3}
-  - {fileID: 21300000, guid: 9b4d468664383d84497640f53c025276, type: 3}
+  - {fileID: 21300000, guid: fe09c9bf1d7e4fb479a86d6cf249e26a, type: 3}
   _gameOverContainerObject: {fileID: 0}
   _title: {fileID: 0}
   _countdown: {fileID: 0}
