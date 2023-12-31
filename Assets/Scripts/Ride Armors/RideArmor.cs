@@ -25,6 +25,9 @@ public class RideArmor : MonoBehaviour
         {
             _life = Mathf.Clamp(value, 0, PlayerConsts.Max_Life); ;
             OnRideArmorLifeChanged?.Invoke(_life);
+
+            if (_life == 0)
+                DestroyRideArmor();
         }
     }
 
@@ -105,6 +108,12 @@ public class RideArmor : MonoBehaviour
     {
         _player = player;
         _playerController = playerController;        
+    }
+
+    public virtual void DestroyRideArmor()
+    {
+        _player.EjectRideArmor();
+        Destroy(gameObject);
     }
 
     public virtual void Eject()

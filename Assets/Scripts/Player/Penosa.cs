@@ -362,7 +362,7 @@ public class Penosa : MonoBehaviour
         OnPlayerRideArmor?.Invoke(PlayerData.LocalID, rideArmorToEquip, true);
     }
 
-    private void EjectRideArmor()
+    public void EjectRideArmor()
     {
         _rideArmor.Eject();
         transform.parent = null;
@@ -372,7 +372,6 @@ public class Penosa : MonoBehaviour
         _rideArmor = null;
         _rideArmorActivator = null;
         _rideArmorEquipped = false;
-
     }
 
     private void Move()
@@ -733,7 +732,8 @@ public class Penosa : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.tag == ConstantStrings.RideArmorTag && !_canRideArmor && !RideArmorEquipped)
+        if (other.gameObject.tag == ConstantStrings.RideArmorTag && !JetCopterActivated &&
+            !_canRideArmor && !RideArmorEquipped)
         {
             _canRideArmor = true;
             _rideArmorActivator = other.GetComponent<RideArmorActivator>();
