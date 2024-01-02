@@ -98,6 +98,7 @@
     <Compile Include="Assets\Scripts\UI\PlayerHUD.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerLobby\GameModeTitleSelector.cs" />
     <Compile Include="Assets\Scripts\Stages\StageSO.cs" />
+    <Compile Include="Assets\Scripts\SharedData\SharedFunctions.cs" />
     <Compile Include="Assets\Scripts\UI\InputDevices\InputDevicesSelector.cs" />
     <Compile Include="Assets\Scripts\UI\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />

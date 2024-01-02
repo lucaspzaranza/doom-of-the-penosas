@@ -202,7 +202,8 @@ public class Penosa : MonoBehaviour
         _isGrounded = Physics2D.OverlapCircle(_groundCheck.position, PlayerConsts.OverlapCircleDiameter, _terrainLayerMask);
         _anim.SetBool(_animHashes.isGrounded, _isGrounded);
 
-        if (_isGrounded && Rigidbody2D.gravityScale != PlayerConsts.DefaultGravity && !JetCopterActivated) 
+        if (_isGrounded && Rigidbody2D.gravityScale != PlayerConsts.DefaultGravity && !JetCopterActivated && 
+            (RideArmorEquipped && _rideArmor.RideArmorType != RideArmorType.Chickencopter)) 
             ResetGravity();
 
         if (_isBlinking)
@@ -353,10 +354,11 @@ public class Penosa : MonoBehaviour
         }
         Rigidbody2D.velocity = Vector2.zero;
         transform.SetParent(_rideArmor.transform, true);
+        transform.localPosition = _rideArmor.PlayerPosition.localPosition;
 
         _rideArmorEquipped = true;
-        _body.enabled = false;
-        _legs.enabled = false;
+        //_body.enabled = false;
+        //_legs.enabled = false;
         _canRideArmor = false;
         
         OnPlayerRideArmor?.Invoke(PlayerData.LocalID, rideArmorToEquip, true);
@@ -384,11 +386,14 @@ public class Penosa : MonoBehaviour
         if (horizontal > 0 && _isLeft) Flip();
         else if (horizontal < 0 && !_isLeft) Flip();
 
-        if (!HitWall() && Rigidbody2D != null)
+        if (!SharedFunctions.HitWall(_wallCheckCollider, _terrainLayerMask, out Collider2D hitWall) 
+        && Rigidbody2D != null)
         {
-            Vector2 direction = new Vector2(_speed * horizontal, Rigidbody2D.velocity.y);
+            Vector2 direction = new Vector2(horizontal * _speed, Rigidbody2D.velocity.y);
             if (RideArmorEquipped)
             {
+                if (_rideArmor.RideArmorType == RideArmorType.Chickencopter)
+                    direction = new Vector2(direction.x, vertical * _speed);
                 _rideArmor.Move(direction);
                 _rideArmor.Aim(vertical);
             }
@@ -435,15 +440,6 @@ public class Penosa : MonoBehaviour
         return 0f;
     }
 
-    private bool HitWall()
-    {
-        ContactFilter2D contactFilter = new ContactFilter2D();
-        Collider2D[] results = new Collider2D[1];
-        contactFilter.SetLayerMask(_terrainLayerMask);
-        _wallCheckCollider.OverlapCollider(contactFilter, results);
-        return results[0] != null;
-    }
-
     private void SetMovementAnimators(float vertical)
     {
         if (_rb == null)
@@ -478,7 +474,7 @@ public class Penosa : MonoBehaviour
     {
         bool buttonPressed = _parachuteAction.ReadValue<float>() > 0f;
 
-        if (JetCopterActivated) return;
+        if (JetCopterActivated || RideArmorEquipped) return;
 
         if (buttonPressed && !_parachute.activeSelf && !_isGrounded && Rigidbody2D.velocity.y < 0)
         {

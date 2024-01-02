@@ -43,9 +43,14 @@ public class RideArmor : MonoBehaviour
     [SerializeField] private float _rotationSpeed;
     public float RotationSpeed => _rotationSpeed;
 
+    public Transform PlayerPosition => _playerPos;
+
     [SerializeField] protected GameObject _eggShot;
     [SerializeField] protected GameObject _shurikenShot;
     [SerializeField] protected Transform _shotSpawnPos;
+    [SerializeField] protected Transform _playerPos;
+    [SerializeField] protected Collider2D _wallCheckCollider = null;
+    [SerializeField] protected LayerMask _terrainLayerMask;
 
     private PlayerController _playerController;
     private float _continuousTimeCounter;
