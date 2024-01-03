@@ -357,8 +357,8 @@ public class Penosa : MonoBehaviour
         transform.localPosition = _rideArmor.PlayerPosition.localPosition;
 
         _rideArmorEquipped = true;
-        //_body.enabled = false;
-        //_legs.enabled = false;
+        _body.enabled = false;
+        _legs.enabled = false;
         _canRideArmor = false;
         
         OnPlayerRideArmor?.Invoke(PlayerData.LocalID, rideArmorToEquip, true);

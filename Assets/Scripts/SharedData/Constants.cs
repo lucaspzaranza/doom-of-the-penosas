@@ -135,6 +135,7 @@ public static class PlayerConsts
     public const float ShotAnimDuration = 0.25f;
     public const float DefaultSpeed = 2f;
     public const float OverlapCircleDiameter = 0.1f;
+    public const float ChickencopterOverlapCircleDiameter = 0.65f;
     public const float BlinkInitialValue = 0.1f;
     public const float DefaultGravity = 1.5f;
     public const byte Max_Life = 100;

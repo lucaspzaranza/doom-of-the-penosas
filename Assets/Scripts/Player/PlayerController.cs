@@ -57,6 +57,8 @@ public class PlayerController : ControllerUnit
     {
         foreach (var playerData in PlayersData)
         {
+            if (playerData.Player == null) continue;
+
             playerData.Player.OnPlayerLostAllContinues -= InvokeGameOverEvent;
             playerData.Player.OnPlayerLostAllLives -= RemovePlayerFromScene;
             playerData.Player.OnPlayerRespawn -= RespawnPlayer;
