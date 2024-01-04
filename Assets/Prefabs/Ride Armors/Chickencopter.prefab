@@ -67,6 +67,73 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0.026503503}
   m_Size: {x: 0.13371024, y: 0.69348204}
   m_Direction: 0
+--- !u!1 &1070641539903489368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7949894700315683396}
+  - component: {fileID: 1471925083204586335}
+  m_Layer: 3
+  m_Name: AbandonedCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &7949894700315683396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070641539903489368}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.23, y: 0.26, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7512111401175367660}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &1471925083204586335
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070641539903489368}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.35
 --- !u!1 &1684046375543681661
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,7 +199,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.026503503}
-  m_Size: {x: 1, y: 0.1337102}
+  m_Size: {x: 0.5, y: 0.1337102}
   m_Direction: 1
 --- !u!1 &4343475759292801753
 GameObject:
@@ -407,6 +474,7 @@ Transform:
   - {fileID: 8588728167043046027}
   - {fileID: 5551984177755549162}
   - {fileID: 913624159054617594}
+  - {fileID: 7949894700315683396}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &7512111401175367663
@@ -511,8 +579,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   _propellerAnimator: {fileID: 4540524069446297530}
+  _abandonedHitLayerMask:
+    serializedVersion: 2
+    m_Bits: 768
+  _overlapBoxSize: {x: 0, y: 1}
   _verticalCheckCollider: {fileID: 3187733427188422153}
+  _abandonedCheckCollider: {fileID: 1471925083204586335}
   _activatorTransform: {fileID: 913624159054617594}
+  _groundDistance: 0.5
   _upperCheckY: 0.858
   _lowerCheckY: -0.2
 --- !u!1 &7512111401430287610

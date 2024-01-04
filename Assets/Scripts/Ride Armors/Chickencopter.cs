@@ -6,19 +6,38 @@ using UnityEngine;
 public class Chickencopter : RideArmor
 {
     [SerializeField] private Animator _propellerAnimator;
+    [SerializeField] protected LayerMask _abandonedHitLayerMask;
+    [SerializeField] protected Vector2 _overlapBoxSize;
     [SerializeField] private Collider2D _verticalCheckCollider = null;
+    [SerializeField] private Collider2D _abandonedCheckCollider = null;
     [SerializeField] private Transform _activatorTransform = null;
+    [SerializeField] protected float _groundDistance;
     [SerializeField] private float _upperCheckY;
     [SerializeField] private float _lowerCheckY;
 
-    private bool _isGrounded = true;
-    public bool IsGrounded => _isGrounded;
+    private bool _chickencopterAbandoned = false;
 
-    private void FixedUpdate()
+    private bool _isNearGround = true;
+    public bool IsGrounded => _isNearGround;
+
+    private void Update()
     {
-        _isGrounded = Physics2D.OverlapCircle(_activatorTransform.position, 
-            PlayerConsts.ChickencopterOverlapCircleDiameter, _terrainLayerMask);
-        print(_isGrounded);
+        _isNearGround = Physics2D.OverlapBox(_activatorTransform.position, 
+            _overlapBoxSize, 0f, _terrainLayerMask);
+        print(_isNearGround);
+
+        if(_chickencopterAbandoned)
+        {
+            bool hitDestroyerStuff = Physics2D.OverlapBox(_abandonedCheckCollider.transform.position,
+                new Vector2(0f, _groundDistance), 0f, _abandonedHitLayerMask);
+
+            if(hitDestroyerStuff)
+            {
+                // Add explosion effect here...
+                print("CABUM!");
+                Destroy(gameObject);
+            }
+        }
     }
 
     public override void Equip(Penosa player, PlayerController playerController)
@@ -52,17 +71,20 @@ public class Chickencopter : RideArmor
 
     public override void Eject()
     {
-        if (_isGrounded)
-        {
-            print("Para normalmente");
+        Player.Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
+        RigiBody2DComponent.gravityScale = PlayerConsts.DefaultGravity;
 
+        if (_isNearGround)
+        {
             _propellerAnimator.enabled = false;
             _propellerAnimator.transform.rotation = Quaternion.identity;
-            Player.Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
-            RigiBody2DComponent.gravityScale = PlayerConsts.DefaultGravity;
             base.Eject();
         }
         else
-            print("Menino destrói essa bagaça!");
+        {
+            GetComponent<BoxCollider2D>().enabled = false;
+            _abandonedCheckCollider.gameObject.SetActive(true);
+            _chickencopterAbandoned = true;
+        }
     }
 }
