@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using System;
 using Newtonsoft.Json.Linq;
 using SharedData.Enumerations;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class AnimatorHashes
 {
@@ -202,8 +203,8 @@ public class Penosa : MonoBehaviour
         _isGrounded = Physics2D.OverlapCircle(_groundCheck.position, PlayerConsts.OverlapCircleDiameter, _terrainLayerMask);
         _anim.SetBool(_animHashes.isGrounded, _isGrounded);
 
-        if (_isGrounded && Rigidbody2D.gravityScale != PlayerConsts.DefaultGravity && !JetCopterActivated && 
-            (RideArmorEquipped && _rideArmor.RideArmorType != RideArmorType.Chickencopter)) 
+        if (_isGrounded && Rigidbody2D.gravityScale != PlayerConsts.DefaultGravity 
+            && !JetCopterActivated && !RideArmorEquipped) 
             ResetGravity();
 
         if (_isBlinking)
@@ -342,10 +343,15 @@ public class Penosa : MonoBehaviour
 
     private void RideArmor(RideArmor rideArmorToEquip)
     {
+        if (rideArmorToEquip.RideArmorType == RideArmorType.Chickencopter && 
+            ((Chickencopter)rideArmorToEquip).ChickencopterAbandoned)
+            return;
+
+        Rigidbody2D.gravityScale = 0f;
         _rideArmor = rideArmorToEquip;
         _rideArmor.Equip(this, _playerController);
 
-        if((IsLeft && _rideArmor.transform.localScale.x > 0) || 
+        if ((IsLeft && _rideArmor.transform.localScale.x > 0) || 
         (!IsLeft && _rideArmor.transform.localScale.x < 0))
         {
             _rideArmor.transform.localScale = new Vector2(_rideArmor.transform.localScale.x * -1,
@@ -360,12 +366,22 @@ public class Penosa : MonoBehaviour
         _body.enabled = false;
         _legs.enabled = false;
         _canRideArmor = false;
-        
+        SetAllCollidersActivation(false);
+
         OnPlayerRideArmor?.Invoke(PlayerData.LocalID, rideArmorToEquip, true);
+    }
+
+    private void SetAllCollidersActivation(bool value)
+    {
+        _wallCheckCollider.enabled = value;
+        gameObject.GetComponent<BoxCollider2D>().enabled = value;
+        _groundCheck.gameObject.SetActive(value);
     }
 
     public void EjectRideArmor()
     {
+        SetAllCollidersActivation(true);
+        Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
         _rideArmor.Eject();
         transform.parent = null;
         _body.enabled = true;
@@ -386,19 +402,20 @@ public class Penosa : MonoBehaviour
         if (horizontal > 0 && _isLeft) Flip();
         else if (horizontal < 0 && !_isLeft) Flip();
 
-        if (!SharedFunctions.HitWall(_wallCheckCollider, _terrainLayerMask, out Collider2D hitWall) 
-        && Rigidbody2D != null)
+        Vector2 direction = new Vector2(horizontal * _speed, Rigidbody2D.velocity.y);
+
+        if (!RideArmorEquipped && Rigidbody2D != null &&
+        !SharedFunctions.HitWall(_wallCheckCollider, _terrainLayerMask, out Collider2D hitWall))
         {
-            Vector2 direction = new Vector2(horizontal * _speed, Rigidbody2D.velocity.y);
-            if (RideArmorEquipped)
-            {
-                if (_rideArmor.RideArmorType == RideArmorType.Chickencopter)
-                    direction = new Vector2(direction.x, vertical * _speed);
-                _rideArmor.Move(direction);
-                _rideArmor.Aim(vertical);
-            }
-            else 
-                Rigidbody2D.velocity = direction;
+            Rigidbody2D.velocity = direction;
+        }
+        else if(RideArmorEquipped)
+        {
+            if (_rideArmor.RideArmorType == RideArmorType.Chickencopter)
+                direction = new Vector2(direction.x, vertical * _speed);
+
+            _rideArmor.Move(direction);
+            _rideArmor.Aim(vertical);
         }
 
         SetMovementAnimators(vertical);
@@ -731,8 +748,8 @@ public class Penosa : MonoBehaviour
         if (other.gameObject.tag == ConstantStrings.RideArmorTag && !JetCopterActivated &&
             !_canRideArmor && !RideArmorEquipped)
         {
-            _canRideArmor = true;
             _rideArmorActivator = other.GetComponent<RideArmorActivator>();
+            _canRideArmor = true;
         }
     }
 

@@ -61,9 +61,15 @@ public class RideArmor : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
     }
 
-    public virtual void Move(Vector2 direction)
+    protected virtual void Update()
     {
         
+    }
+
+    public virtual void Move(Vector2 direction)
+    {
+        if (_player != null)
+            _player.transform.localPosition = PlayerPosition.localPosition;
     }
 
     public virtual void Jump()
@@ -111,8 +117,8 @@ public class RideArmor : MonoBehaviour
 
     public virtual void Equip(Penosa player, PlayerController playerController)
     {
-        _player = player;
-        _playerController = playerController;        
+        _player = player;        
+        _playerController = playerController;
     }
 
     public virtual void DestroyRideArmor()

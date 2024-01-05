@@ -271,7 +271,7 @@ PrefabInstance:
     - target: {fileID: 742759606539004931, guid: ec33c2dfb084f024bbc5ca4fe923a1f8,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2052,7 +2052,7 @@ GameObject:
   - component: {fileID: 1632120278}
   - component: {fileID: 1632120277}
   m_Layer: 8
-  m_Name: tileset_3 right (1)
+  m_Name: tileset_3 right (1) THISSS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2165,7 +2165,7 @@ Transform:
   m_GameObject: {fileID: 1632120276}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.47, y: 2.17, z: 0}
+  m_LocalPosition: {x: -1.62, y: 1.84, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

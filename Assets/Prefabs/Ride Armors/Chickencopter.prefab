@@ -578,17 +578,18 @@ MonoBehaviour:
   _terrainLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  _propellerAnimator: {fileID: 4540524069446297530}
   _abandonedHitLayerMask:
     serializedVersion: 2
     m_Bits: 768
-  _overlapBoxSize: {x: 0, y: 1}
+  _propellerAnimator: {fileID: 4540524069446297530}
   _verticalCheckCollider: {fileID: 3187733427188422153}
   _abandonedCheckCollider: {fileID: 1471925083204586335}
   _activatorTransform: {fileID: 913624159054617594}
-  _groundDistance: 0.5
+  _distanceToGround: 1
+  _distanceToBeDestroyed: 0.5
   _upperCheckY: 0.858
   _lowerCheckY: -0.2
+  _fallRate: 1.5
 --- !u!1 &7512111401430287610
 GameObject:
   m_ObjectHideFlags: 0
