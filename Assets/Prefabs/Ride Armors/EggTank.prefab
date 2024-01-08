@@ -312,6 +312,7 @@ MonoBehaviour:
   _lowerLimitDegree: 345
   _type: 0
   _life: 100
+  _required: 0
   _player: {fileID: 0}
   _cannon: {fileID: 7512111401430287610}
   _rotationSpeed: 400
@@ -325,6 +326,8 @@ MonoBehaviour:
   _terrainLayerMask:
     serializedVersion: 2
     m_Bits: 256
+  _spriteRenderer: {fileID: 7512111401704588697}
+  _cannonSR: {fileID: 7512111400415615704}
 --- !u!1 &7512111401430287610
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,7 +371,7 @@ GameObject:
   - component: {fileID: 7512111401704588694}
   - component: {fileID: 7512111401704588697}
   m_Layer: 0
-  m_Name: Base
+  m_Name: TankImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -383,8 +386,8 @@ Transform:
   m_GameObject: {fileID: 7512111401704588699}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.0129, z: 0}
-  m_LocalScale: {x: 1, y: 0.60221, z: 1}
+  m_LocalPosition: {x: 0, y: 0.23, z: 0}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7512111401175367660}
@@ -430,10 +433,9 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 65e6cf0779be9424a8cf6519daf71fa1, type: 3}
   m_Color: {r: 0.7207546, g: 0.7207546, b: 0.7207546, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 0.74, y: 1.12}
@@ -458,7 +460,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7512111401881182383
 Transform:
   m_ObjectHideFlags: 0

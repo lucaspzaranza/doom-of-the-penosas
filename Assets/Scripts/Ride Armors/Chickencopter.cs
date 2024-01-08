@@ -7,6 +7,7 @@ public class Chickencopter : RideArmor
 {
     [SerializeField] private LayerMask _abandonedHitLayerMask;
     [SerializeField] private Animator _propellerAnimator;
+    [SerializeField] private SpriteRenderer _propellerSpriteRenderer;
     [SerializeField] private Collider2D _verticalCheckCollider = null;
     [SerializeField] private Collider2D _abandonedCheckCollider = null;
     [SerializeField] private Transform _activatorTransform = null;
@@ -91,5 +92,11 @@ public class Chickencopter : RideArmor
             _chickencopterAbandoned = true;
             RigiBody2DComponent.velocity = _currentDirection * _fallRate;
         }
+    }
+
+    public override void Blink(Color newColor)
+    {
+        base.Blink(newColor);
+        _propellerSpriteRenderer.color = newColor;
     }
 }

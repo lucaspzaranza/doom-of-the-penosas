@@ -22,11 +22,15 @@ public class StageController : ControllerUnit
     [SerializeField] private GameObject _stageClearText;
     public GameObject StageClearText => _stageClearText;
 
+    [SerializeField] private RideArmorType _rideArmorRequired;
+    public RideArmorType RideArmorRequired => _rideArmorRequired;
+
     public override void Setup()
     {
         base.Setup();
 
         _currentStage = _stages[0];
+        RideArmor.OnRideArmorEquipped += HandleOnRideArmorEquipped;
 
         // When I Add boss logic, this line will be necessary.
         // Boss.OnBossDefeated += HandleOnBossDefeated;
@@ -34,6 +38,8 @@ public class StageController : ControllerUnit
 
     public override void Dispose()
     {
+        RideArmor.OnRideArmorEquipped -= HandleOnRideArmorEquipped;
+
         // When I Add boss logic, this line will be necessary.
         // Boss.OnBossDefeated -= HandleOnBossDefeated;
     }
@@ -78,6 +84,15 @@ public class StageController : ControllerUnit
         yield return new WaitForSeconds(ConstantNumbers.TimeToShowStageClearTxt);
 
         Destroy(stageClearTxt);
+    }
+
+    public void HandleOnRideArmorEquipped(RideArmor rideArmor)
+    {
+        // A instância tá desaparecendo depois que eu destruo a Ride Armor.
+        // Preciso criar uma nova. Armazene só o tipo dela pela enumerator e crie
+        // uma lista com todas as ride armors pra ele tirar dessa lista e fazer uma instância nova.
+        if (rideArmor.Required)
+            _rideArmorRequired = rideArmor.RideArmorType;
     }
 
     /// <summary>

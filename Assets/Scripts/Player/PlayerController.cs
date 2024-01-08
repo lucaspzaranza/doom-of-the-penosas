@@ -32,6 +32,8 @@ public class PlayerController : ControllerUnit
     [SerializeField] private List<PlayerData> _playersData = null;
     public List<PlayerData> PlayersData => _playersData;
 
+    [SerializeField] private List<GameObject> _rideArmors;
+
     public void Setup(IReadOnlyList<Penosas> characters, IReadOnlyList<InputDevice> selectedDevices = null)
     {
         base.Setup();
@@ -51,6 +53,7 @@ public class PlayerController : ControllerUnit
         player.OnPlayerLostAllLives += RemovePlayerFromScene;
         player.OnPlayerRespawn += RespawnPlayer;
         player.OnPlayerRideArmor += HandleOnPlayerRideArmor;
+        player.OnPlayerDeath += HandleOnPlayerDeath;
     }
 
     public void EventDispose()
@@ -63,6 +66,7 @@ public class PlayerController : ControllerUnit
             playerData.Player.OnPlayerLostAllLives -= RemovePlayerFromScene;
             playerData.Player.OnPlayerRespawn -= RespawnPlayer;
             playerData.Player.OnPlayerRideArmor -= HandleOnPlayerRideArmor;
+            playerData.Player.OnPlayerDeath -= HandleOnPlayerDeath;
         }
     }
 
@@ -236,7 +240,7 @@ public class PlayerController : ControllerUnit
         PlayersData[playerID].Player.SetPlayerOnSceneAfterGameOver(true);
         PlayersData[playerID].Lives = PlayerConsts.Initial_Lives;
         PlayersData[playerID].Player.Inventory.ClearInventory();
-        PlayersData[playerID].Player.InitiateBlink();
+        PlayersData[playerID].Player.InitiateBlink();        
     }
 
     public void RemoveInputController()
@@ -301,6 +305,10 @@ public class PlayerController : ControllerUnit
             PlayersData[i].LocalID = ids[i];
             InputSystemController.PairDeviceWithPlayer(i, PlayersData[i].InputDevice);
         }
+
+        var prefabAux = _playerPrefabs[0];
+        _playerPrefabs[0] = _playerPrefabs[1];
+        _playerPrefabs[1] = prefabAux;
     }
 
     public void ResetPlayerData()
@@ -315,6 +323,28 @@ public class PlayerController : ControllerUnit
         {
             gameCtrl.UIController.PlayerInGameUIController
                 .UpdateHUDWithRideArmor(playerID, rideArmor, isEquipping);
+        }
+    }
+
+    public void HandleOnPlayerDeath(byte playerID)
+    {
+        RideArmorType rideArmorRequired = TryToGetGameControllerFromParent()
+            .StageController.RideArmorRequired;
+
+        if (rideArmorRequired != RideArmorType.None)
+        {
+            GameObject rideArmorPrefab = _rideArmors
+                .FirstOrDefault(armor => armor.GetComponent<RideArmor>().RideArmorType == rideArmorRequired);
+
+            if (rideArmorPrefab != null)
+            {
+                GameObject instance = Instantiate(rideArmorPrefab,
+                    _playersData[playerID].Player.transform.position, Quaternion.identity);
+                RideArmor rideArmor = instance.GetComponent<RideArmor>();
+
+                _playersData[playerID].Player.RideArmor(rideArmor);
+                rideArmor.SetRequired(true);
+            }
         }
     }
 }

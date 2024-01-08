@@ -121,6 +121,7 @@
     <Compile Include="Assets\Scripts\UI\MenuWithCursor.cs" />
     <Compile Include="Assets\Scripts\Weapons\Grenade.cs" />
     <Compile Include="Assets\Scripts\Stages\StageController.cs" />
+    <Compile Include="Assets\Scripts\Ride Armors\JetSkinha.cs" />
     <Compile Include="Assets\Scripts\Pooling\ObjectPool.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerDataPrefabs.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemSlot.cs" />

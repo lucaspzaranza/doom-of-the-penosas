@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class RideArmor : MonoBehaviour
 {
+    public static Action<RideArmor> OnRideArmorEquipped;
+
     public Action<int> OnRideArmorLifeChanged;
 
     [SerializeField]
@@ -31,6 +33,11 @@ public class RideArmor : MonoBehaviour
         }
     }
 
+    [Tooltip("Set this value if this Ride Armor is necessary to traverse the stage. For example, " +
+    "a water stage must require the Jet Skinha, or an air stage will require the Chickencopter.")]
+    [SerializeField] protected bool _required;
+    public bool Required => _required;
+
     [SerializeField] private Penosa _player;
     public Penosa Player => _player;
 
@@ -41,7 +48,7 @@ public class RideArmor : MonoBehaviour
     public GameObject Cannon => _cannon;
 
     [SerializeField] private float _rotationSpeed;
-    public float RotationSpeed => _rotationSpeed;
+    public float RotationSpeed => _rotationSpeed;    
 
     public Transform PlayerPosition => _playerPos;
 
@@ -51,6 +58,8 @@ public class RideArmor : MonoBehaviour
     [SerializeField] protected Transform _playerPos;
     [SerializeField] protected Collider2D _wallCheckCollider = null;
     [SerializeField] protected LayerMask _terrainLayerMask;
+    [SerializeField] protected SpriteRenderer _spriteRenderer;
+    [SerializeField] protected SpriteRenderer _cannonSR;
 
     private PlayerController _playerController;
     private float _continuousTimeCounter;
@@ -64,6 +73,11 @@ public class RideArmor : MonoBehaviour
     protected virtual void Update()
     {
         
+    }
+
+    public void SetRequired(bool value)
+    {
+        _required = value;
     }
 
     public virtual void Move(Vector2 direction)
@@ -119,6 +133,7 @@ public class RideArmor : MonoBehaviour
     {
         _player = player;        
         _playerController = playerController;
+        OnRideArmorEquipped?.Invoke(this);
     }
 
     public virtual void DestroyRideArmor()
@@ -130,5 +145,11 @@ public class RideArmor : MonoBehaviour
     public virtual void Eject()
     {
         _player = null;
+    }
+
+    public virtual void Blink(Color newColor)
+    {
+        _spriteRenderer.color = newColor;
+        _cannonSR.color = newColor;
     }
 }

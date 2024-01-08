@@ -1465,7 +1465,10 @@ MonoBehaviour:
   _wallCheckCollider: {fileID: 5257087421191820688}
   _terrainLayerMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 272
+  _waterLayerMask:
+    serializedVersion: 2
+    m_Bits: 16
   _parachute: {fileID: 5257087422953267525}
   _parachuteGravity: 0.2
   _shotspeed: 8
