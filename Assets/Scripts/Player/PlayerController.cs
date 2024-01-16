@@ -51,7 +51,7 @@ public class PlayerController : ControllerUnit
     {
         player.OnPlayerLostAllContinues += InvokeGameOverEvent;
         player.OnPlayerLostAllLives += RemovePlayerFromScene;
-        player.OnPlayerRespawn += RespawnPlayer;
+        player.OnPlayerRespawn += RespawnPlayerAfterLostAllLives;
         player.OnPlayerRideArmor += HandleOnPlayerRideArmor;
         player.OnPlayerDeath += HandleOnPlayerDeath;
     }
@@ -64,7 +64,7 @@ public class PlayerController : ControllerUnit
 
             playerData.Player.OnPlayerLostAllContinues -= InvokeGameOverEvent;
             playerData.Player.OnPlayerLostAllLives -= RemovePlayerFromScene;
-            playerData.Player.OnPlayerRespawn -= RespawnPlayer;
+            playerData.Player.OnPlayerRespawn -= RespawnPlayerAfterLostAllLives;
             playerData.Player.OnPlayerRideArmor -= HandleOnPlayerRideArmor;
             playerData.Player.OnPlayerDeath -= HandleOnPlayerDeath;
         }
@@ -235,12 +235,14 @@ public class PlayerController : ControllerUnit
             (_playerStartPosition.x + (_offsetX * PlayersData[playerID].LocalID), _playerStartPosition.y);
     }
 
-    public void RespawnPlayer(byte playerID)
+    public void RespawnPlayerAfterLostAllLives(byte playerID)
     {
         PlayersData[playerID].Player.SetPlayerOnSceneAfterGameOver(true);
         PlayersData[playerID].Lives = PlayerConsts.Initial_Lives;
         PlayersData[playerID].Player.Inventory.ClearInventory();
-        PlayersData[playerID].Player.InitiateBlink();        
+        PlayersData[playerID].Player.InitiateBlink();
+
+        ReinstantiateRideArmorIfNecessary(playerID);
     }
 
     public void RemoveInputController()
@@ -327,6 +329,14 @@ public class PlayerController : ControllerUnit
     }
 
     public void HandleOnPlayerDeath(byte playerID)
+    {
+        if (_playersData[playerID].Lives <= 0)
+            return;
+
+        ReinstantiateRideArmorIfNecessary(playerID);
+    }
+
+    public void ReinstantiateRideArmorIfNecessary(byte playerID)
     {
         RideArmorType rideArmorRequired = TryToGetGameControllerFromParent()
             .StageController.RideArmorRequired;

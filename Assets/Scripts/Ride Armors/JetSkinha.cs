@@ -4,19 +4,14 @@ using System.Linq;
 using UnityEngine;
 
 public class JetSkinha : RideArmor
-{
-    [SerializeField] private List<GameObject> _equippedPlayerList;
+{    
     [SerializeField] private float _speed;
     [SerializeField] private float _playerEjectOffset;
-    [SerializeField] private float _ejectForce;
-
-    private GameObject _equippedPlayer;
+    [SerializeField] private float _ejectForce;    
 
     public override void Equip(Penosa player, PlayerController playerController)
     {
-        base.Equip(player, playerController);
-
-        SetEquippedPlayerActivation(player, true);
+        base.Equip(player, playerController);        
     }
 
     public override void Eject()
@@ -37,19 +32,7 @@ public class JetSkinha : RideArmor
             return;
 
         transform.Translate(direction * _speed * Time.deltaTime);
-    }
-
-    private void SetEquippedPlayerActivation(Penosa player, bool value)
-    {
-        var playerToShow = _equippedPlayerList
-            .FirstOrDefault(p => p.name == player.PlayerData.Character.ToString());
-
-        if(playerToShow != null)
-        {
-            _equippedPlayer = playerToShow;
-            _equippedPlayer.SetActive(value);
-        }
-    }
+    }    
 
     public override void Blink(Color newColor)
     {

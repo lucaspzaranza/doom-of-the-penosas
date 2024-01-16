@@ -88,9 +88,6 @@ public class StageController : ControllerUnit
 
     public void HandleOnRideArmorEquipped(RideArmor rideArmor)
     {
-        // A instância tá desaparecendo depois que eu destruo a Ride Armor.
-        // Preciso criar uma nova. Armazene só o tipo dela pela enumerator e crie
-        // uma lista com todas as ride armors pra ele tirar dessa lista e fazer uma instância nova.
         if (rideArmor.Required)
             _rideArmorRequired = rideArmor.RideArmorType;
     }

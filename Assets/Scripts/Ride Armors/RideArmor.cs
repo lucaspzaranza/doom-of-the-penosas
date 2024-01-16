@@ -2,6 +2,7 @@ using SharedData.Enumerations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RideArmor : MonoBehaviour
@@ -60,6 +61,9 @@ public class RideArmor : MonoBehaviour
     [SerializeField] protected LayerMask _terrainLayerMask;
     [SerializeField] protected SpriteRenderer _spriteRenderer;
     [SerializeField] protected SpriteRenderer _cannonSR;
+    [SerializeField] protected List<GameObject> _equippedPlayerList;
+
+    protected GameObject _equippedPlayer;
 
     private PlayerController _playerController;
     private float _continuousTimeCounter;
@@ -133,6 +137,10 @@ public class RideArmor : MonoBehaviour
     {
         _player = player;        
         _playerController = playerController;
+
+        if(RideArmorType != RideArmorType.EggTank)
+            SetEquippedPlayerActivation(player, true);
+
         OnRideArmorEquipped?.Invoke(this);
     }
 
@@ -151,5 +159,17 @@ public class RideArmor : MonoBehaviour
     {
         _spriteRenderer.color = newColor;
         _cannonSR.color = newColor;
+    }
+
+    protected void SetEquippedPlayerActivation(Penosa player, bool value)
+    {
+        var playerToShow = _equippedPlayerList
+            .FirstOrDefault(p => p.name == player.PlayerData.Character.ToString());
+
+        if (playerToShow != null)
+        {
+            _equippedPlayer = playerToShow;
+            _equippedPlayer.SetActive(value);
+        }
     }
 }

@@ -379,7 +379,7 @@ public class GameController : Controller
         {
             StartCoroutine(nameof(ActivateGameOverAndReturnToMapaMundi));
 
-            if (PlayerController.PlayersData[playerID].Continues <= 0) // Restore one player da data
+            if (PlayerController.PlayersData[playerID].Continues <= 0) // Restore one player data
                 PlayerController.ResetSinglePlayerData(playerID);
         }
         else
