@@ -212,6 +212,13 @@ public class Penosa : MonoBehaviour
             && !JetCopterActivated && !RideArmorEquipped) 
             ResetGravity();
 
+        if(_isGrounded && RideArmorEquipped && Rigidbody2D.gravityScale > 0)
+        {
+            _groundCheck.gameObject.SetActive(false);
+            Rigidbody2D.gravityScale = 0;
+            Rigidbody2D.velocity = Vector2.zero;
+        }
+
         if (_isBlinking)
         {
             _blinkIntervalTimeCounter += Time.fixedDeltaTime;
@@ -363,13 +370,24 @@ public class Penosa : MonoBehaviour
             EjectRideArmor();
     }
 
+    private void DeactivateParachuteIfActive()
+    {
+        if (_parachute.activeSelf)
+            _parachute.GetComponent<Animator>().SetTrigger(ConstantStrings.TurnOff);
+    }
+
     public void RideArmor(RideArmor rideArmorToEquip)
     {
         if (rideArmorToEquip.RideArmorType == RideArmorType.Chickencopter && 
             ((Chickencopter)rideArmorToEquip).ChickencopterAbandoned)
             return;
 
+        DeactivateParachuteIfActive();
+
         Rigidbody2D.gravityScale = 0f;
+        if(!_isGrounded && _parachute.activeSelf)
+            Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
+
         _rideArmor = rideArmorToEquip;
         _rideArmor.Equip(this, _playerController);
 
@@ -388,16 +406,18 @@ public class Penosa : MonoBehaviour
         _body.enabled = false;
         _legs.enabled = false;
         _canRideArmor = false;
-        SetAllCollidersActivation(false);
+        SetCollidersActivation(false, false);
 
         OnPlayerRideArmor?.Invoke(PlayerData.LocalID, rideArmorToEquip, true);
     }
 
-    private void SetAllCollidersActivation(bool value)
+    private void SetCollidersActivation(bool value, bool changeGroundCheck = true)
     {
         _wallCheckCollider.enabled = value;
         gameObject.GetComponent<BoxCollider2D>().enabled = value;
-        _groundCheck.gameObject.SetActive(value);
+
+        if(changeGroundCheck)
+            _groundCheck.gameObject.SetActive(value);
     }
 
     public void EjectRideArmor()
@@ -406,7 +426,7 @@ public class Penosa : MonoBehaviour
         if (_rideArmor.Required && _rideArmor.Life > 0) 
             return;
 
-        SetAllCollidersActivation(true);
+        SetCollidersActivation(true);
         Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
         _rideArmor.Eject();
         transform.parent = null;
@@ -530,8 +550,7 @@ public class Penosa : MonoBehaviour
     private void ResetGravity()
     {
         Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
-        if (_parachute.activeSelf)
-            _parachute.GetComponent<Animator>().SetTrigger(ConstantStrings.TurnOff);
+        DeactivateParachuteIfActive();
     }
 
     private Transform GetShotSpawnCoordinates()
@@ -772,7 +791,7 @@ public class Penosa : MonoBehaviour
     private void OnTriggerStay2D(Collider2D other)
     {
         if (other.gameObject.tag == ConstantStrings.RideArmorTag && !JetCopterActivated &&
-            !_canRideArmor && !RideArmorEquipped)
+            !_canRideArmor && !RideArmorEquipped && !_parachute.activeSelf)
         {
             _rideArmorActivator = other.GetComponent<RideArmorActivator>();
             _canRideArmor = true;
