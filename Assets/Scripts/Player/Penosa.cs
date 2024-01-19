@@ -212,12 +212,20 @@ public class Penosa : MonoBehaviour
             && !JetCopterActivated && !RideArmorEquipped) 
             ResetGravity();
 
-        if(_isGrounded && RideArmorEquipped && Rigidbody2D.gravityScale > 0)
+        if (_isGrounded && RideArmorEquipped && Rigidbody2D.gravityScale > 0)
         {
             _groundCheck.gameObject.SetActive(false);
             Rigidbody2D.gravityScale = 0;
             Rigidbody2D.velocity = Vector2.zero;
         }
+
+        //if(RideArmorEquipped && _rideArmor.RigiBody2DComponent.velocity.y < 0 
+        //    && Rigidbody2D.gravityScale == 0f) // falling
+        //{
+        //    print("Faz o bicho cair com o tanque");
+        //    Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
+        //    _groundCheck.gameObject.SetActive(true);
+        //}
 
         if (_isBlinking)
         {
@@ -385,7 +393,8 @@ public class Penosa : MonoBehaviour
         DeactivateParachuteIfActive();
 
         Rigidbody2D.gravityScale = 0f;
-        if(!_isGrounded && _parachute.activeSelf)
+        if (!_isGrounded && _parachute.activeSelf && 
+            rideArmorToEquip.RideArmorType != RideArmorType.Chickencopter)
             Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
 
         _rideArmor = rideArmorToEquip;

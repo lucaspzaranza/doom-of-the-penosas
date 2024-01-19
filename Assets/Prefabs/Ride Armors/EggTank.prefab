@@ -295,7 +295,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 0
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &5706479421170623255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,6 +328,7 @@ MonoBehaviour:
     m_Bits: 256
   _spriteRenderer: {fileID: 7512111401704588697}
   _cannonSR: {fileID: 7512111400415615704}
+  _equippedPlayerList: []
 --- !u!1 &7512111401430287610
 GameObject:
   m_ObjectHideFlags: 0

@@ -172,4 +172,10 @@ public class RideArmor : MonoBehaviour
             _equippedPlayer.SetActive(value);
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if(RideArmorType != RideArmorType.JetSkinha && other.gameObject.layer == 4) //Water layer
+            Life = 0;
+    }
 }

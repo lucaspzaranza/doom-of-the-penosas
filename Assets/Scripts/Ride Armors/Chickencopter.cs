@@ -50,6 +50,7 @@ public class Chickencopter : RideArmor
     {
         base.Equip(player, playerController);
         RigiBody2DComponent.gravityScale = 0f;
+        player.Rigidbody2D.velocity = Vector2.zero;
         _propellerAnimator.enabled = true;
     }
 

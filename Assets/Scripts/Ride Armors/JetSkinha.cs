@@ -31,6 +31,7 @@ public class JetSkinha : RideArmor
         if (SharedFunctions.HitWall(_wallCheckCollider, _terrainLayerMask, out Collider2D hitWall))
             return;
 
+        //RigiBody2DComponent.velocity = new Vector2(direction.x, RigiBody2DComponent.velocity.y);
         transform.Translate(direction * _speed * Time.deltaTime);
     }    
 
