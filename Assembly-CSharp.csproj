@@ -86,6 +86,7 @@
     <Compile Include="Assets\Scripts\Inventory\JetCopter.cs" />
     <Compile Include="Assets\Scripts\GameController\Controller.cs" />
     <Compile Include="Assets\Scripts\Inventory\WeaponLvlUp.cs" />
+    <Compile Include="Assets\Scripts\Ride Armors\TireMonoWheel.cs" />
     <Compile Include="Assets\Scripts\Ride Armors\RideArmorActivator.cs" />
     <Compile Include="Assets\Scripts\UI\InGame\PlayerInGameUIController.cs" />
     <Compile Include="Assets\Scripts\GameController\InputSystemController.cs" />

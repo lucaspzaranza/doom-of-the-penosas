@@ -29,7 +29,6 @@ public class Chickencopter : RideArmor
     {
         _isNearGround = Physics2D.OverlapBox(_activatorTransform.position, 
             new Vector2(0f, _distanceToGround), 0f, _terrainLayerMask);
-        //print($"Near Ground? {_isNearGround}");
 
         if(_chickencopterAbandoned)
         {

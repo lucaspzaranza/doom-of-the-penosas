@@ -427,6 +427,9 @@ public class Penosa : MonoBehaviour
         _canRideArmor = false;
         SetCollidersActivation(false, false);
 
+        if (CurrentGrenade != null)
+            Destroy(CurrentGrenade);
+
         OnPlayerRideArmor?.Invoke(PlayerData.LocalID, rideArmorToEquip, true);
     }
 

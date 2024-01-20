@@ -74,7 +74,7 @@ namespace SharedData.Enumerations
     {
         None = -1,
         EggTank = 0,
-        ChickenBounceTireBall = 1,
+        TireMonoWheel = 1,
         JetSkinha = 2,
         Chickencopter = 3
     }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EggTank : RideArmor
+public class TireMonoWheel : RideArmor
 {
     public override void Move(Vector2 direction)
     {
@@ -16,7 +16,8 @@ public class EggTank : RideArmor
 
     public override void Eject()
     {
+        SetEquippedPlayerActivation(Player, false);
+
         base.Eject();
-        RigiBody2DComponent.velocity = Vector2.zero;
     }
 }
