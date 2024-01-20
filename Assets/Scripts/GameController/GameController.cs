@@ -109,6 +109,7 @@ public class GameController : Controller
         PlayerController.OnCountdownActivation -= HandleOnCoutdownActivation;
         PlayerController.OnPlayerPause -= HandleOnPlayerPause;
         PlayerController.OnPlayerGameOver -= GameOver;
+        PlayerController.OnPlayersExchanged -= HandleOnPlayersExchanged;
 
         UIController.OnUISelectedCharacters -= HandleOnUISelectedCharacters;
         UIController.OnUIGameModeSelected -= SetGameMode;
@@ -237,6 +238,7 @@ public class GameController : Controller
             _playerController.OnCountdownActivation += HandleOnCoutdownActivation;
             _playerController.OnPlayerPause += HandleOnPlayerPause;            
             _playerController.OnPlayerGameOver += GameOver;            
+            _playerController.OnPlayersExchanged += HandleOnPlayersExchanged;            
         }
         else
             _playerController.Setup(_characterSelectionList, _selectedDevices);
@@ -411,5 +413,10 @@ public class GameController : Controller
 
         UIController.PlayerInGameUIController.DestroyAllHUDs();
         UIController.PlayerInGameUIController.CreatePlayersHUDs(PlayerController.PlayersData);
+    }
+
+    public void HandleOnPlayersExchanged(IReadOnlyList<Penosas> characters)
+    {
+        _characterSelectionList = new List<Penosas>(characters);
     }
 }

@@ -6,6 +6,7 @@ using System;
 using Newtonsoft.Json.Linq;
 using SharedData.Enumerations;
 using static UnityEditor.Experimental.GraphView.GraphView;
+using UnityEditor.iOS.Xcode;
 
 public class AnimatorHashes
 {
@@ -134,6 +135,8 @@ public class Penosa : MonoBehaviour
         }
     }
 
+    public GameObject CurrentGrenade => _currentGrenade;
+
     public bool IsLeft => _isLeft;
 
     public bool RideArmorEquipped => _rideArmorEquipped;
@@ -243,7 +246,7 @@ public class Penosa : MonoBehaviour
     {
         PlayerData.Lives--;
         ResetGravity();
-        Death();
+        Death();        
     }
 
     private void InputSystemSetup()
@@ -332,6 +335,13 @@ public class Penosa : MonoBehaviour
 
     public void Death()
     {
+        if (JetCopterObject.activeSelf)
+        {
+            var jetCopterScript = Inventory.SelectedSlot.Item.GetComponent<JetCopter>();
+            jetCopterScript.SetJetCopterActivation(false);
+            jetCopterScript.RemoveItemIfAmountEqualsZero();
+        }
+
         ResetPlayerData();
 
         if (PlayerData.Lives == PlayerConsts.GameOverLives)
@@ -764,6 +774,13 @@ public class Penosa : MonoBehaviour
         _playerController = controller;
     }
 
+    private void DeactivateJetCopter()
+    {
+        JetCopterObject.SetActive(false);
+        JetCopterActivated = false;
+        Animator.SetBool(ConstantStrings.JetCopter, false);
+    }
+
     public void SetPlayerOnSceneAfterGameOver(bool val)
     {
         _isInCountdown = !val;
@@ -774,11 +791,7 @@ public class Penosa : MonoBehaviour
                 _parachute.SetActive(false);
 
             if (JetCopterObject.activeSelf)
-            {
-                JetCopterObject.SetActive(false);
-                JetCopterActivated = false;
-                Animator.SetBool(ConstantStrings.JetCopter, false);
-            }
+                DeactivateJetCopter();
 
             if (Adrenaline)
                 _speed = PlayerConsts.DefaultSpeed;
