@@ -26,6 +26,9 @@ public class RideArmor : MonoBehaviour
         get => _life;
         set
         {
+            if (_player == null)
+                return;
+
             _life = Mathf.Clamp(value, 0, PlayerConsts.Max_Life); ;
             OnRideArmorLifeChanged?.Invoke(_life);
 

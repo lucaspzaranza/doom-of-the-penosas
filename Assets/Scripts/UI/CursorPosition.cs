@@ -8,6 +8,7 @@ using System;
 public class CursorPosition : MonoBehaviour
 {
     public static Action<CursorPosition, Vector2> OnCursorMoved;
+    public static Action<CursorPosition> OnCursorReleased;
 
     [SerializeField] private bool _isLocked;
 
@@ -106,6 +107,8 @@ public class CursorPosition : MonoBehaviour
         // Only sends one per time and if it is a horizontal move
         if (isPressing)
             OnCursorMoved?.Invoke(this, _pressed);
+        else if(_pressed != Vector2.zero)
+            OnCursorReleased?.Invoke(this);
     }
 
     /// <summary>

@@ -79,6 +79,7 @@ public class Chickencopter : RideArmor
     {
         Player.Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
         RigiBody2DComponent.gravityScale = PlayerConsts.DefaultGravity;
+        SetEquippedPlayerActivation(Player, false);
 
         if (_isNearGround)
         {
