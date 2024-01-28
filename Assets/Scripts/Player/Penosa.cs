@@ -490,7 +490,7 @@ public class Penosa : MonoBehaviour
     }
 
     private void Jump(InputAction.CallbackContext context)
-    {        
+    {
         if (_playerController.GameIsPaused())
             return;
 
@@ -515,6 +515,9 @@ public class Penosa : MonoBehaviour
         float newY = yVelocity < 0 ? yVelocity : 0;
 
         Rigidbody2D.velocity = new Vector2(Rigidbody2D.velocity.x, newY);
+
+        if (RideArmorEquipped && _rideArmor.RideArmorType == RideArmorType.TireMonoWheel)
+            _rideArmor.GetComponent<TireMonoWheel>().DeactivateBounciness();
     }
 
     public float GetNormalizedMovementValue(float raw)

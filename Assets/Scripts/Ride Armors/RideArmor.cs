@@ -72,7 +72,7 @@ public class RideArmor : MonoBehaviour
     private float _continuousTimeCounter;
     private int _direction = 1;
 
-    private void OnEnable()
+    public virtual void OnEnable()
     {
         _rb = GetComponent<Rigidbody2D>();
     }
@@ -162,6 +162,9 @@ public class RideArmor : MonoBehaviour
     {
         _spriteRenderer.color = newColor;
         _cannonSR.color = newColor;
+
+        if(_equippedPlayer != null)
+            _equippedPlayer.GetComponent<SpriteRenderer>().color = newColor;
     }
 
     protected void SetEquippedPlayerActivation(Penosa player, bool value)

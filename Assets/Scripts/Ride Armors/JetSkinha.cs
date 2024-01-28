@@ -7,7 +7,8 @@ public class JetSkinha : RideArmor
 {    
     [SerializeField] private float _speed;
     [SerializeField] private float _playerEjectOffset;
-    [SerializeField] private float _ejectForce;    
+    [SerializeField] private float _ejectForce;
+    [SerializeField] private ParticleSystem _particleSystem;
 
     public override void Equip(Penosa player, PlayerController playerController)
     {
@@ -29,10 +30,24 @@ public class JetSkinha : RideArmor
         base.Move(direction);
 
         if (SharedFunctions.HitWall(_wallCheckCollider, _terrainLayerMask, out Collider2D hitWall))
+        {
+            if(_particleSystem.isEmitting)
+                _particleSystem.Stop();
             return;
+        }
 
-        //RigiBody2DComponent.velocity = new Vector2(direction.x, RigiBody2DComponent.velocity.y);
         transform.Translate(direction * _speed * Time.deltaTime);
+
+        if(direction.x != 0)
+        {
+            _particleSystem.Play();
+            if(direction.x > 0)
+                _particleSystem.transform.rotation = Quaternion.identity;
+            else
+                _particleSystem.transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
+        }
+        else if (_particleSystem.isEmitting)
+            _particleSystem.Stop();
     }    
 
     public override void Blink(Color newColor)
