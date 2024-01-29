@@ -8,7 +8,8 @@ public class JetSkinha : RideArmor
     [SerializeField] private float _speed;
     [SerializeField] private float _playerEjectOffset;
     [SerializeField] private float _ejectForce;
-    [SerializeField] private ParticleSystem _particleSystem;
+    [SerializeField] private ParticleSystem _frontParticleSystem;
+    [SerializeField] private ParticleSystem _backParticleSystem;
 
     public override void Equip(Penosa player, PlayerController playerController)
     {
@@ -22,7 +23,30 @@ public class JetSkinha : RideArmor
         Player.transform.position = new Vector2(transform.position.x, 
             transform.position.y + _playerEjectOffset);
 
+        StopWaterParticleEmission();
+
         base.Eject();
+    }
+
+    private void StartWaterParticleEmission()
+    {
+        _backParticleSystem.Play();
+        _frontParticleSystem.Play();
+    }
+
+    private void StopWaterParticleEmission()
+    {
+        if (_backParticleSystem.isEmitting)
+            _backParticleSystem.Stop();
+
+        if (_frontParticleSystem.isEmitting)
+            _frontParticleSystem.Stop();
+    }
+
+    private void SetWaterParticleRotation(Quaternion rotation)
+    {
+        _frontParticleSystem.transform.rotation = rotation;
+        _backParticleSystem.transform.rotation = rotation;
     }
 
     public override void Move(Vector2 direction)
@@ -31,23 +55,24 @@ public class JetSkinha : RideArmor
 
         if (SharedFunctions.HitWall(_wallCheckCollider, _terrainLayerMask, out Collider2D hitWall))
         {
-            if(_particleSystem.isEmitting)
-                _particleSystem.Stop();
+            StopWaterParticleEmission();
             return;
         }
 
         transform.Translate(direction * _speed * Time.deltaTime);
 
         if(direction.x != 0)
-        {
-            _particleSystem.Play();
-            if(direction.x > 0)
-                _particleSystem.transform.rotation = Quaternion.identity;
+        {            
+            StartWaterParticleEmission();
+            if (direction.x > 0)
+                SetWaterParticleRotation(Quaternion.identity);
             else
-                _particleSystem.transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
+                SetWaterParticleRotation(new Quaternion(0f, 180f, 0f, 0f));
         }
-        else if (_particleSystem.isEmitting)
-            _particleSystem.Stop();
+        else if (_backParticleSystem.isEmitting)
+        {
+            StopWaterParticleEmission();
+        }
     }    
 
     public override void Blink(Color newColor)

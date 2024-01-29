@@ -242,7 +242,7 @@ public class Penosa : MonoBehaviour
         }
     }
 
-    private void PlayerLostALife()
+    public void PlayerLostALife()
     {
         PlayerData.Lives--;
         ResetGravity();

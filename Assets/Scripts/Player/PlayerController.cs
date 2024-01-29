@@ -20,10 +20,12 @@ public class PlayerController : ControllerUnit
 
     // Vars
     [Space]
-    [SerializeField] private Vector2 _playerStartPosition;
     [SerializeField] private float _offsetX;
 
     // Props
+    [SerializeField] private Vector2 _playerStartPosition;
+    public Vector2 PlayerStartPosition => _playerStartPosition;
+
     [SerializeField] private InputSystemController _inputSystemController;
     public InputSystemController InputSystemController => _inputSystemController;
 
