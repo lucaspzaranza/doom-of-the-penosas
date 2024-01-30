@@ -5,9 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class RideArmor : MonoBehaviour
+public abstract class RideArmor : MonoBehaviour
 {
     public static Action<RideArmor> OnRideArmorEquipped;
+    public static Action<RideArmorType, bool> OnRideArmorChangedRequired;
 
     public Action<int> OnRideArmorLifeChanged;
 
@@ -40,7 +41,16 @@ public class RideArmor : MonoBehaviour
     [Tooltip("Set this value if this Ride Armor is necessary to traverse the stage. For example, " +
     "a water stage must require the Jet Skinha, or an air stage will require the Chickencopter.")]
     [SerializeField] protected bool _required;
-    public bool Required => _required;
+    //public bool Required => _required;
+    public bool Required
+    {
+        get => _required;
+        set
+        {
+            _required = value;
+            OnRideArmorChangedRequired?.Invoke(_type, value);
+        }
+    }
 
     [SerializeField] private Penosa _player;
     public Penosa Player => _player;
@@ -56,6 +66,7 @@ public class RideArmor : MonoBehaviour
 
     public Transform PlayerPosition => _playerPos;
 
+    [SerializeField] protected RideArmorActivator _armorActivator;
     [SerializeField] protected GameObject _eggShot;
     [SerializeField] protected GameObject _shurikenShot;
     [SerializeField] protected Transform _shotSpawnPos;
@@ -80,11 +91,6 @@ public class RideArmor : MonoBehaviour
     protected virtual void Update()
     {
         
-    }
-
-    public void SetRequired(bool value)
-    {
-        _required = value;
     }
 
     public virtual void Move(Vector2 direction)

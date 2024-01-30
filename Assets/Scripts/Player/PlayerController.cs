@@ -366,7 +366,7 @@ public class PlayerController : ControllerUnit
                 RideArmor rideArmor = instance.GetComponent<RideArmor>();
 
                 _playersData[playerID].Player.RideArmor(rideArmor);
-                rideArmor.SetRequired(true);
+                rideArmor.Required = true;
             }
         }
     }

@@ -31,6 +31,7 @@ public class StageController : ControllerUnit
 
         _currentStage = _stages[0];
         RideArmor.OnRideArmorEquipped += HandleOnRideArmorEquipped;
+        RideArmor.OnRideArmorChangedRequired += HandleOnRideArmorChangedRequired;
 
         // When I Add boss logic, this line will be necessary.
         // Boss.OnBossDefeated += HandleOnBossDefeated;
@@ -39,6 +40,7 @@ public class StageController : ControllerUnit
     public override void Dispose()
     {
         RideArmor.OnRideArmorEquipped -= HandleOnRideArmorEquipped;
+        RideArmor.OnRideArmorChangedRequired += HandleOnRideArmorChangedRequired;
 
         // When I Add boss logic, this line will be necessary.
         // Boss.OnBossDefeated -= HandleOnBossDefeated;
@@ -90,6 +92,14 @@ public class StageController : ControllerUnit
     {
         if (rideArmor.Required)
             _rideArmorRequired = rideArmor.RideArmorType;
+    }
+
+    public void HandleOnRideArmorChangedRequired(RideArmorType type, bool value)
+    {
+        if(value)
+            _rideArmorRequired = type;
+        else
+            _rideArmorRequired = RideArmorType.None;
     }
 
     /// <summary>

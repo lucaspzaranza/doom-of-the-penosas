@@ -896,6 +896,7 @@ MonoBehaviour:
   _player: {fileID: 0}
   _cannon: {fileID: 7512111401430287610}
   _rotationSpeed: 400
+  _armorActivator: {fileID: 725010474927806793}
   _eggShot: {fileID: 1617454459024769971, guid: 01c60fe339bafbd42aa4817129bfb0ec,
     type: 3}
   _shurikenShot: {fileID: 2652151204235091336, guid: 40d6b29f2c1675146845205518d32812,

@@ -222,14 +222,6 @@ public class Penosa : MonoBehaviour
             Rigidbody2D.velocity = Vector2.zero;
         }
 
-        //if(RideArmorEquipped && _rideArmor.RigiBody2DComponent.velocity.y < 0 
-        //    && Rigidbody2D.gravityScale == 0f) // falling
-        //{
-        //    print("Faz o bicho cair com o tanque");
-        //    Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
-        //    _groundCheck.gameObject.SetActive(true);
-        //}
-
         if (_isBlinking)
         {
             _blinkIntervalTimeCounter += Time.fixedDeltaTime;
@@ -819,10 +811,12 @@ public class Penosa : MonoBehaviour
     private void OnTriggerStay2D(Collider2D other)
     {
         if (other.gameObject.tag == ConstantStrings.RideArmorTag && !JetCopterActivated &&
-            !_canRideArmor && !RideArmorEquipped && !_parachute.activeSelf)
+            !_canRideArmor && !RideArmorEquipped)
         {
             _rideArmorActivator = other.GetComponent<RideArmorActivator>();
-            _canRideArmor = true;
+
+            if(!_parachute.activeSelf)
+                _canRideArmor = true;
 
             if(_rideArmorActivator.RideArmor.RideArmorType == RideArmorType.JetSkinha)
                 RideArmor(_rideArmorActivator.RideArmor);
