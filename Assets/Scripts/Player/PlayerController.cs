@@ -16,13 +16,16 @@ public class PlayerController : ControllerUnit
     public Action<byte, bool> OnCountdownActivation;
     public Action<bool> OnPlayerPause;
     public Action<byte> OnPlayerGameOver;
+    public Action<List<Penosas>> OnPlayersExchanged;
 
     // Vars
     [Space]
-    [SerializeField] private Vector2 _playerStartPosition;
     [SerializeField] private float _offsetX;
 
     // Props
+    [SerializeField] private Vector2 _playerStartPosition;
+    public Vector2 PlayerStartPosition => _playerStartPosition;
+
     [SerializeField] private InputSystemController _inputSystemController;
     public InputSystemController InputSystemController => _inputSystemController;
 
@@ -31,6 +34,8 @@ public class PlayerController : ControllerUnit
 
     [SerializeField] private List<PlayerData> _playersData = null;
     public List<PlayerData> PlayersData => _playersData;
+
+    [SerializeField] private List<GameObject> _rideArmors;
 
     public void Setup(IReadOnlyList<Penosas> characters, IReadOnlyList<InputDevice> selectedDevices = null)
     {
@@ -43,22 +48,30 @@ public class PlayerController : ControllerUnit
         {
             AddNewPlayerData(characters[i], i, selectedDevices[i]);
         }
+
+        WalkTalk.OnRequestWalkTalkUse += HandleOnRequestWalkTalkUse;        
     }
 
     private void PlayersEventSetup(Penosa player)
     {
         player.OnPlayerLostAllContinues += InvokeGameOverEvent;
         player.OnPlayerLostAllLives += RemovePlayerFromScene;
-        player.OnPlayerRespawn += RespawnPlayer;
+        player.OnPlayerRespawn += RespawnPlayerAfterLostAllLives;
+        player.OnPlayerRideArmor += HandleOnPlayerRideArmor;
+        player.OnPlayerDeath += HandleOnPlayerDeath;
     }
 
     public void EventDispose()
     {
         foreach (var playerData in PlayersData)
         {
+            if (playerData.Player == null) continue;
+
             playerData.Player.OnPlayerLostAllContinues -= InvokeGameOverEvent;
             playerData.Player.OnPlayerLostAllLives -= RemovePlayerFromScene;
-            playerData.Player.OnPlayerRespawn -= RespawnPlayer;
+            playerData.Player.OnPlayerRespawn -= RespawnPlayerAfterLostAllLives;
+            playerData.Player.OnPlayerRideArmor -= HandleOnPlayerRideArmor;
+            playerData.Player.OnPlayerDeath -= HandleOnPlayerDeath;
         }
     }
 
@@ -66,6 +79,8 @@ public class PlayerController : ControllerUnit
     {
         ResetPlayerData();
         EventDispose();
+
+        WalkTalk.OnRequestWalkTalkUse -= HandleOnRequestWalkTalkUse;
     }
 
     private void AddNewPlayerData(Penosas characterToAdd, int idToAdd, InputDevice device = null)
@@ -227,12 +242,14 @@ public class PlayerController : ControllerUnit
             (_playerStartPosition.x + (_offsetX * PlayersData[playerID].LocalID), _playerStartPosition.y);
     }
 
-    public void RespawnPlayer(byte playerID)
+    public void RespawnPlayerAfterLostAllLives(byte playerID)
     {
         PlayersData[playerID].Player.SetPlayerOnSceneAfterGameOver(true);
         PlayersData[playerID].Lives = PlayerConsts.Initial_Lives;
         PlayersData[playerID].Player.Inventory.ClearInventory();
         PlayersData[playerID].Player.InitiateBlink();
+
+        ReinstantiateRideArmorIfNecessary(playerID);
     }
 
     public void RemoveInputController()
@@ -284,8 +301,8 @@ public class PlayerController : ControllerUnit
             return;
 
         InputSystemController.UnpairDevices();
-        List<Vector3> positions = PlayersData.Select(data => data.Player.transform.position).ToList();
         List<byte> ids = PlayersData.Select(data => data.LocalID).ToList();
+        List<Vector3> positions = PlayersData.Select(data => data.Player.transform.position).ToList();
 
         PlayerData dataAux = PlayersData[0];
         PlayersData[0] = PlayersData[1];
@@ -296,11 +313,66 @@ public class PlayerController : ControllerUnit
             PlayersData[i].Player.gameObject.transform.localPosition = positions[i];
             PlayersData[i].LocalID = ids[i];
             InputSystemController.PairDeviceWithPlayer(i, PlayersData[i].InputDevice);
+            Destroy(PlayersData[i].Player.CurrentGrenade);
         }
+
+        InputDevice inputAux = PlayersData[0].InputDevice;
+        PlayersData[0].InputDevice = PlayersData[1].InputDevice;
+        PlayersData[1].InputDevice = inputAux;
+
+        var prefabAux = _playerPrefabs[0];
+        _playerPrefabs[0] = _playerPrefabs[1];
+        _playerPrefabs[1] = prefabAux;
+        OnPlayersExchanged?.Invoke(_playerPrefabs.Select(player => player.Character).ToList());
     }
 
     public void ResetPlayerData()
     {
         _playersData = new List<PlayerData>();
+    }
+
+    public void HandleOnPlayerRideArmor(byte playerID, RideArmor rideArmor, bool isEquipping)
+    {
+        GameController gameCtrl = TryToGetGameControllerFromParent();
+        if(gameCtrl != null)
+        {
+            gameCtrl.UIController.PlayerInGameUIController
+                .UpdateHUDWithRideArmor(playerID, rideArmor, isEquipping);
+        }
+    }
+
+    public void HandleOnPlayerDeath(byte playerID)
+    {
+        if (_playersData[playerID].Lives <= 0)
+            return;
+
+        ReinstantiateRideArmorIfNecessary(playerID);
+    }
+
+    public void ReinstantiateRideArmorIfNecessary(byte playerID)
+    {
+        RideArmorType rideArmorRequired = TryToGetGameControllerFromParent()
+            .StageController.RideArmorRequired;
+
+        if (rideArmorRequired != RideArmorType.None)
+        {
+            GameObject rideArmorPrefab = _rideArmors
+                .FirstOrDefault(armor => armor.GetComponent<RideArmor>().RideArmorType == rideArmorRequired);
+
+            if (rideArmorPrefab != null)
+            {
+                GameObject instance = Instantiate(rideArmorPrefab,
+                    _playersData[playerID].Player.transform.position, Quaternion.identity);
+                RideArmor rideArmor = instance.GetComponent<RideArmor>();
+
+                _playersData[playerID].Player.RideArmor(rideArmor);
+                rideArmor.Required = true;
+            }
+        }
+    }
+
+    private bool HandleOnRequestWalkTalkUse()
+    {
+        return PlayersData.All(playerData => !playerData.Player.RideArmorEquipped);
     }
 }

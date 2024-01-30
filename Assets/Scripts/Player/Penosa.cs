@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 using System;
 using Newtonsoft.Json.Linq;
 using SharedData.Enumerations;
+using static UnityEditor.Experimental.GraphView.GraphView;
+using UnityEditor.iOS.Xcode;
 
 public class AnimatorHashes
 {
@@ -23,6 +25,13 @@ public class Penosa : MonoBehaviour
     public Action<byte> OnPlayerLostAllLives;
     public Action<byte> OnPlayerLostAllContinues;
     public Action<byte> OnPlayerRespawn;
+    public Action<byte> OnPlayerDeath;
+
+    /// <summary>
+    /// The boolean is to send to the event if you are equipping the rideArmor or ejecting it. <br/>
+    /// True for equipping, False for ejecting.
+    /// </summary>
+    public Action<byte, RideArmor, bool> OnPlayerRideArmor;
 
     #region Vars
 
@@ -47,13 +56,14 @@ public class Penosa : MonoBehaviour
     [Header(InputStrings.Jump)]
     [SerializeField] private Transform _groundCheck = null;
     [SerializeField] private Collider2D _wallCheckCollider = null;
-    public LayerMask _terrainLayerMask;
+    [SerializeField] private LayerMask _terrainLayerMask;
+    [SerializeField] private LayerMask _waterLayerMask;
 
     [Header("Parachute")]
     public GameObject _parachute;
     public float _parachuteGravity;
 
-    public float _shotspeed;
+    [SerializeField] private float _shotspeed;
     private GameObject _currentGrenade;
     [SerializeField] private GameObject _spawnCoordinatesContainer;
     [SerializeField] private Transform[] _horizontalShotSpawnCoordinates = null;
@@ -72,6 +82,7 @@ public class Penosa : MonoBehaviour
     private bool _isLeft;
     private bool _isGrounded;
     private bool _isInCountdown;
+    private bool _canRideArmor;
     private AnimatorHashes _animHashes = new AnimatorHashes();
 
     [Header("Blink")]
@@ -82,6 +93,12 @@ public class Penosa : MonoBehaviour
     [SerializeField] private SpriteRenderer _body;
     [SerializeField] private SpriteRenderer _legs;
     [SerializeField] private bool _isBlinking = false;
+
+    [Header("Ride Armor")]
+    [SerializeField] private bool _rideArmorEquipped;
+    [SerializeField] private RideArmorActivator _rideArmorActivator;
+    [SerializeField] private RideArmor _rideArmor;
+
     #endregion
 
     #region Props
@@ -118,7 +135,21 @@ public class Penosa : MonoBehaviour
         }
     }
 
+    public GameObject CurrentGrenade => _currentGrenade;
+
     public bool IsLeft => _isLeft;
+
+    public bool RideArmorEquipped => _rideArmorEquipped;
+
+    public float ShotSpeed => _shotspeed;
+
+    private UnityEngine.InputSystem.PlayerInput PlayerInput => _playerInput;
+    public InputAction MoveAction => _moveAction;
+    public InputAction JumpAction => _jumpAction;
+    public InputAction PauseAction => _pauseAction;
+    public InputAction Fire1Action => _fire1Action;
+    public InputAction Fire2Action => _fire2Action;
+    public InputAction Fire3Action => _fire3Action;
 
     #endregion
 
@@ -160,28 +191,36 @@ public class Penosa : MonoBehaviour
         // TEMPORARY!! Remove this!
         if (Input.GetKeyDown(KeyCode.X)) 
         {
-            //TakeDamage(100, true);
-            PlayerData.Lives = 0;
-            Death();
+            TakeDamage(30, true);
+            //PlayerData.Lives = 0;
+            //Death();
         }
 
         if (PlayerData.Life <= PlayerConsts.DeathLife && !Adrenaline && !IsBlinking)
-        {
-            PlayerData.Lives--;
-            Death();
-        }
+            PlayerLostALife();
     }
 
     void FixedUpdate()
     {
-        if (_playerController.GameIsPaused() || _isInCountdown)
-            return;
-
-        _isGrounded = Physics2D.OverlapCircle(_groundCheck.position, PlayerConsts.OverlapCircleDiameter, _terrainLayerMask);
+        _isGrounded = Physics2D.OverlapCircle(_groundCheck.position, 
+            PlayerConsts.OverlapCircleDiameter, _terrainLayerMask);
         _anim.SetBool(_animHashes.isGrounded, _isGrounded);
 
-        if (_isGrounded && Rigidbody2D.gravityScale != PlayerConsts.DefaultGravity && !JetCopterActivated) 
+        bool insideWater = Physics2D.OverlapCircle(_groundCheck.position, 
+            PlayerConsts.OverlapCircleDiameter, _waterLayerMask);
+        if(insideWater && !IsBlinking && !RideArmorEquipped)
+            PlayerLostALife();
+
+        if (_isGrounded && Rigidbody2D.gravityScale != PlayerConsts.DefaultGravity 
+            && !JetCopterActivated && !RideArmorEquipped) 
             ResetGravity();
+
+        if (_isGrounded && RideArmorEquipped && Rigidbody2D.gravityScale > 0)
+        {
+            _groundCheck.gameObject.SetActive(false);
+            Rigidbody2D.gravityScale = 0;
+            Rigidbody2D.velocity = Vector2.zero;
+        }
 
         if (_isBlinking)
         {
@@ -193,6 +232,13 @@ public class Penosa : MonoBehaviour
                 _blinkIntervalTimeCounter = PlayerConsts.BlinkInitialValue;
             }
         }
+    }
+
+    public void PlayerLostALife()
+    {
+        PlayerData.Lives--;
+        ResetGravity();
+        Death();        
     }
 
     private void InputSystemSetup()
@@ -252,17 +298,25 @@ public class Penosa : MonoBehaviour
     {
         if (_blinkTimeCounter < _blinkDuration)
         {
-            float alpha = _body.color.a;
-            float transparency = alpha == 1 ? 0f : 1f;
-            _body.color = new Color(255f, 255f, 255f, transparency);
-            _legs.color = new Color(255f, 255f, 255f, transparency);
+            float transparency = _body.color.a == 1 ? 0f : 1f;
+            Color blinkColor = new Color(255f, 255f, 255f, transparency);
+            _body.color = blinkColor;
+            _legs.color = blinkColor;
+
+            if (RideArmorEquipped)
+                _rideArmor.Blink(blinkColor);
         }
         else
         {
             _isBlinking = false;
-            _body.color = new Color(255f, 255f, 255f, 1f);
-            _legs.color = new Color(255f, 255f, 255f, 1f);
+            Color normalColor = new Color(255f, 255f, 255f, 1f);
+
+            _body.color = normalColor;
+            _legs.color = normalColor;
             _blinkTimeCounter = 0f;
+
+            if(RideArmorEquipped)
+                _rideArmor.Blink(normalColor);
         }
     }
 
@@ -273,13 +327,22 @@ public class Penosa : MonoBehaviour
 
     public void Death()
     {
+        if (JetCopterObject.activeSelf)
+        {
+            var jetCopterScript = Inventory.SelectedSlot.Item.GetComponent<JetCopter>();
+            jetCopterScript.SetJetCopterActivation(false);
+            jetCopterScript.RemoveItemIfAmountEqualsZero();
+        }
+
         ResetPlayerData();
 
         if (PlayerData.Lives == PlayerConsts.GameOverLives)
-            OnPlayerLostAllLives(PlayerData.LocalID);
+            OnPlayerLostAllLives?.Invoke(PlayerData.LocalID);
         else
             // Play some death animation...
             InitiateBlink();
+
+        OnPlayerDeath?.Invoke(PlayerData.LocalID);
     }
 
     public void ResetPlayerData()
@@ -294,7 +357,7 @@ public class Penosa : MonoBehaviour
 
     private void ChangeSpecialItem(InputAction.CallbackContext context)
     {
-        if (!Inventory.IsEmpty)
+        if (!Inventory.IsEmpty && !RideArmorEquipped)
         {
             float value = _changespecialItemAction.ReadValue<float>();
             int length = Inventory.Slots.Count;
@@ -306,11 +369,87 @@ public class Penosa : MonoBehaviour
         }
     }
 
-    private void UseSpecialItem()
+    private void UseSpecialItemOrRideArmor()
     {
-        if (Inventory.SelectedSlot != null && Inventory.SelectedSlot.Item != null &&
-            !Inventory.SelectedSlot.Item.ItemInUse)
+        if (!_canRideArmor && !RideArmorEquipped && Inventory.SelectedSlot != null && 
+            Inventory.SelectedSlot.Item != null && !Inventory.SelectedSlot.Item.ItemInUse)
             Inventory.SelectedSlot.Item.Use();
+        else if (_canRideArmor)
+            RideArmor(_rideArmorActivator.RideArmor);
+        else if (RideArmorEquipped)
+            EjectRideArmor();
+    }
+
+    private void DeactivateParachuteIfActive()
+    {
+        if (_parachute.activeSelf)
+            _parachute.GetComponent<Animator>().SetTrigger(ConstantStrings.TurnOff);
+    }
+
+    public void RideArmor(RideArmor rideArmorToEquip)
+    {
+        if (rideArmorToEquip.RideArmorType == RideArmorType.Chickencopter && 
+            ((Chickencopter)rideArmorToEquip).ChickencopterAbandoned)
+            return;
+
+        DeactivateParachuteIfActive();
+
+        Rigidbody2D.gravityScale = 0f;
+        if (!_isGrounded && _parachute.activeSelf && 
+            rideArmorToEquip.RideArmorType != RideArmorType.Chickencopter)
+            Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
+
+        _rideArmor = rideArmorToEquip;
+        _rideArmor.Equip(this, _playerController);
+
+        if ((IsLeft && _rideArmor.transform.localScale.x > 0) || 
+        (!IsLeft && _rideArmor.transform.localScale.x < 0))
+        {
+            _rideArmor.transform.localScale = new Vector2(_rideArmor.transform.localScale.x * -1,
+                _rideArmor.transform.localScale.y);
+            _rideArmor.SetDirection(_isLeft ? -1 : 1);
+        }
+        Rigidbody2D.velocity = Vector2.zero;
+        transform.SetParent(_rideArmor.transform, true);
+        transform.localPosition = _rideArmor.PlayerPosition.localPosition;
+
+        _rideArmorEquipped = true;
+        _body.enabled = false;
+        _legs.enabled = false;
+        _canRideArmor = false;
+        SetCollidersActivation(false, false);
+
+        if (CurrentGrenade != null)
+            Destroy(CurrentGrenade);
+
+        OnPlayerRideArmor?.Invoke(PlayerData.LocalID, rideArmorToEquip, true);
+    }
+
+    private void SetCollidersActivation(bool value, bool changeGroundCheck = true)
+    {
+        _wallCheckCollider.enabled = value;
+        gameObject.GetComponent<BoxCollider2D>().enabled = value;
+
+        if(changeGroundCheck)
+            _groundCheck.gameObject.SetActive(value);
+    }
+
+    public void EjectRideArmor()
+    {
+        // Can eject only ride armors with optional use and with some life
+        if (_rideArmor.Required && _rideArmor.Life > 0) 
+            return;
+
+        SetCollidersActivation(true);
+        Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
+        _rideArmor.Eject();
+        transform.parent = null;
+        _body.enabled = true;
+        _legs.enabled = true;
+        OnPlayerRideArmor?.Invoke(PlayerData.LocalID, _rideArmor, false);
+        _rideArmor = null;
+        _rideArmorActivator = null;
+        _rideArmorEquipped = false;
     }
 
     private void Move()
@@ -323,16 +462,35 @@ public class Penosa : MonoBehaviour
         if (horizontal > 0 && _isLeft) Flip();
         else if (horizontal < 0 && !_isLeft) Flip();
 
-        if (!HitWall() && Rigidbody2D != null)
-            Rigidbody2D.velocity = new Vector2(_speed * horizontal, Rigidbody2D.velocity.y);
+        Vector2 direction = new Vector2(horizontal * _speed, Rigidbody2D.velocity.y);
+
+        if (!RideArmorEquipped && Rigidbody2D != null &&
+        !SharedFunctions.HitWall(_wallCheckCollider, _terrainLayerMask, out Collider2D hitWall))
+        {
+            Rigidbody2D.velocity = direction;
+        }
+        else if(RideArmorEquipped)
+        {
+            if (_rideArmor.RideArmorType == RideArmorType.Chickencopter)
+                direction = new Vector2(direction.x, vertical * _speed);
+
+            _rideArmor.Move(direction);
+            _rideArmor.Aim(vertical);
+        }
 
         SetMovementAnimators(vertical);
     }
 
     private void Jump(InputAction.CallbackContext context)
-    {        
+    {
         if (_playerController.GameIsPaused())
             return;
+
+        if (RideArmorEquipped)
+        {
+            _rideArmor.Jump();
+            return;
+        }
 
         if (!JetCopterActivated)
         {
@@ -349,23 +507,17 @@ public class Penosa : MonoBehaviour
         float newY = yVelocity < 0 ? yVelocity : 0;
 
         Rigidbody2D.velocity = new Vector2(Rigidbody2D.velocity.x, newY);
+
+        if (RideArmorEquipped && _rideArmor.RideArmorType == RideArmorType.TireMonoWheel)
+            _rideArmor.GetComponent<TireMonoWheel>().DeactivateBounciness();
     }
 
-    private float GetNormalizedMovementValue(float raw)
+    public float GetNormalizedMovementValue(float raw)
     {
         if (raw > 0) return 1f;
         else if (raw < 0) return -1f;
 
         return 0f;
-    }
-
-    private bool HitWall()
-    {
-        ContactFilter2D contactFilter = new ContactFilter2D();
-        Collider2D[] results = new Collider2D[1];
-        contactFilter.SetLayerMask(_terrainLayerMask);
-        _wallCheckCollider.OverlapCollider(contactFilter, results);
-        return results[0] != null;
     }
 
     private void SetMovementAnimators(float vertical)
@@ -383,8 +535,18 @@ public class Penosa : MonoBehaviour
     public void Flip()
     {
         _isLeft = !_isLeft;
-        transform.localScale = new Vector2
-            (transform.localScale.x * -1, transform.localScale.y);
+        if(!RideArmorEquipped)
+        {
+            transform.localScale = new Vector2
+                (transform.localScale.x * -1, transform.localScale.y);
+        }
+        else
+        {
+            _rideArmor.SetDirection(_isLeft ? -1 : 1);
+            _rideArmor.transform.localScale = new Vector2
+                (_rideArmor.transform.localScale.x * -1, _rideArmor.transform.localScale.y);
+        }
+
         Inventory.transform.localScale = new Vector2(_isLeft ? -1f : 1f, 1f);
     }
 
@@ -392,7 +554,7 @@ public class Penosa : MonoBehaviour
     {
         bool buttonPressed = _parachuteAction.ReadValue<float>() > 0f;
 
-        if (JetCopterActivated) return;
+        if (JetCopterActivated || RideArmorEquipped) return;
 
         if (buttonPressed && !_parachute.activeSelf && !_isGrounded && Rigidbody2D.velocity.y < 0)
         {
@@ -405,8 +567,7 @@ public class Penosa : MonoBehaviour
     private void ResetGravity()
     {
         Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
-        if (_parachute.activeSelf)
-            _parachute.GetComponent<Animator>().SetTrigger(ConstantStrings.TurnOff);
+        DeactivateParachuteIfActive();
     }
 
     private Transform GetShotSpawnCoordinates()
@@ -426,7 +587,7 @@ public class Penosa : MonoBehaviour
         return Vertical ? Quaternion.AngleAxis(90f, Vector3.forward) : Quaternion.identity;
     }
 
-    private int GetShotDirection()
+    public int GetShotDirection()
     {
         int direction = 0;
         if (Vertical)
@@ -436,7 +597,7 @@ public class Penosa : MonoBehaviour
         return direction;
     }
 
-    private void SetShotLevel2VariationRate(ref GameObject projectile)
+    public void SetShotLevel2VariationRate(ref GameObject projectile)
     {
         float posVariationRate = UnityEngine.Random.Range(PlayerConsts.ShotLvl2VariationRate,
                                             -PlayerConsts.ShotLvl2VariationRate);
@@ -551,13 +712,11 @@ public class Penosa : MonoBehaviour
     {
         bool fire1ButtonPressed = _fire1Action.ReadValue<float>() > 0;
 
-        // TEMPORARY!!
-        //if (fire1ButtonPressed && Input.GetKeyDown(KeyCode.LeftControl))
-        //{
-        //    TakeDamage(30, true);
-        //    //PlayerData.Lives = 0;
-        //    //Death();
-        //}
+        if (RideArmorEquipped && fire1ButtonPressed)
+        {
+            _rideArmor.Shoot();
+            return;
+        }
 
         // Lvl Diferente de 2, porque com o nível 2 o comportamento do tiro é diferente,
         // precisa verificar se está pressionado a cada frame, enquanto que nos lvls 1 e 3 
@@ -573,9 +732,9 @@ public class Penosa : MonoBehaviour
             Instantiate_1stShotLv2();
         else if (fire1ButtonPressed && !_isShooting && PlayerData._1stWeaponLevel == 3)
             Instantiate_1stShot();
-        else if (fire2ButtonPressed && PlayerData._2ndWeaponAmmoProp > 0)
+        else if (fire2ButtonPressed && PlayerData._2ndWeaponAmmoProp > 0 && !RideArmorEquipped)
             InstantiateSecondaryShot();
-        else if (fire3ButtonPressed) UseSpecialItem();
+        else if (fire3ButtonPressed) UseSpecialItemOrRideArmor();
 
         if (_isShooting) ResetShootAnim();
     }
@@ -590,6 +749,12 @@ public class Penosa : MonoBehaviour
 
     public void TakeDamage(int dmg, bool force = false) // Remove this default parameter. It's for test usage only.
     {
+        if (RideArmorEquipped)
+        {
+            _rideArmor.Life -= dmg;
+            return;
+        }
+
         if (!IsBlinking || force)
         {
             if (HasArmor) PlayerData.ArmorLife -= dmg;
@@ -607,6 +772,13 @@ public class Penosa : MonoBehaviour
         _playerController = controller;
     }
 
+    private void DeactivateJetCopter()
+    {
+        JetCopterObject.SetActive(false);
+        JetCopterActivated = false;
+        Animator.SetBool(ConstantStrings.JetCopter, false);
+    }
+
     public void SetPlayerOnSceneAfterGameOver(bool val)
     {
         _isInCountdown = !val;
@@ -617,11 +789,7 @@ public class Penosa : MonoBehaviour
                 _parachute.SetActive(false);
 
             if (JetCopterObject.activeSelf)
-            {
-                JetCopterObject.SetActive(false);
-                JetCopterActivated = false;
-                Animator.SetBool(ConstantStrings.JetCopter, false);
-            }
+                DeactivateJetCopter();
 
             if (Adrenaline)
                 _speed = PlayerConsts.DefaultSpeed;
@@ -638,6 +806,30 @@ public class Penosa : MonoBehaviour
         _groundCheck.gameObject.SetActive(val);
         _wallCheckCollider.gameObject.SetActive(val);
         Inventory.gameObject.SetActive(val);
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.tag == ConstantStrings.RideArmorTag && !JetCopterActivated &&
+            !_canRideArmor && !RideArmorEquipped)
+        {
+            _rideArmorActivator = other.GetComponent<RideArmorActivator>();
+
+            if(!_parachute.activeSelf)
+                _canRideArmor = true;
+
+            if(_rideArmorActivator.RideArmor.RideArmorType == RideArmorType.JetSkinha)
+                RideArmor(_rideArmorActivator.RideArmor);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag == ConstantStrings.RideArmorTag)
+        {
+            _canRideArmor = false;
+            _rideArmorActivator = null;
+        }
     }
 }
 

@@ -22,11 +22,16 @@ public class StageController : ControllerUnit
     [SerializeField] private GameObject _stageClearText;
     public GameObject StageClearText => _stageClearText;
 
+    [SerializeField] private RideArmorType _rideArmorRequired;
+    public RideArmorType RideArmorRequired => _rideArmorRequired;
+
     public override void Setup()
     {
         base.Setup();
 
         _currentStage = _stages[0];
+        RideArmor.OnRideArmorEquipped += HandleOnRideArmorEquipped;
+        RideArmor.OnRideArmorChangedRequired += HandleOnRideArmorChangedRequired;
 
         // When I Add boss logic, this line will be necessary.
         // Boss.OnBossDefeated += HandleOnBossDefeated;
@@ -34,6 +39,9 @@ public class StageController : ControllerUnit
 
     public override void Dispose()
     {
+        RideArmor.OnRideArmorEquipped -= HandleOnRideArmorEquipped;
+        RideArmor.OnRideArmorChangedRequired += HandleOnRideArmorChangedRequired;
+
         // When I Add boss logic, this line will be necessary.
         // Boss.OnBossDefeated -= HandleOnBossDefeated;
     }
@@ -78,6 +86,20 @@ public class StageController : ControllerUnit
         yield return new WaitForSeconds(ConstantNumbers.TimeToShowStageClearTxt);
 
         Destroy(stageClearTxt);
+    }
+
+    public void HandleOnRideArmorEquipped(RideArmor rideArmor)
+    {
+        if (rideArmor.Required)
+            _rideArmorRequired = rideArmor.RideArmorType;
+    }
+
+    public void HandleOnRideArmorChangedRequired(RideArmorType type, bool value)
+    {
+        if(value)
+            _rideArmorRequired = type;
+        else
+            _rideArmorRequired = RideArmorType.None;
     }
 
     /// <summary>

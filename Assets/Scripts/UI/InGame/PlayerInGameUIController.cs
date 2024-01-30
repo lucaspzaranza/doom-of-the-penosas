@@ -27,6 +27,8 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
 
     [SerializeField] private GameObject _HUDPrefab;
 
+    [SerializeField] private List<Sprite> _rideArmorsSprites;
+
     [Space]
     [Header("Game Over")]
     [SerializeField] private GameObject _gameOverContainerObject;
@@ -155,5 +157,24 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
         }
 
         _huds = new PlayerHUD[ConstantNumbers.NumberOfPlayers];
+    }
+
+    public void UpdateHUDWithRideArmor(byte playerID, RideArmor rideArmor, bool isEquipping)
+    {
+        if (isEquipping)
+        {
+            _huds[playerID].PlayerIcon = _rideArmorsSprites[(int)rideArmor.RideArmorType];
+            rideArmor.OnRideArmorLifeChanged += HUDs[playerID].UpdateRideArmorLife;
+            _huds[playerID].UpdateRideArmorLife(rideArmor.Life);
+        }
+        else
+        {
+            _huds[playerID].PlayerIcon = _playerIcons
+                .Single(playerIconData => playerIconData.Character == 
+                _huds[playerID].Player.PlayerData.Character).PlayerIconSprite;
+
+            _huds[playerID].UpdateRideArmorLife(0);
+            rideArmor.OnRideArmorLifeChanged -= HUDs[playerID].UpdateRideArmorLife;
+        }
     }
 }

@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3978230461744049896}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2453820987859206327
 MonoBehaviour:
@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _childControllersPrefabs: []
   _parentController: {fileID: 0}
+  _stageCanvas: {fileID: 0}
   _currentStage: {fileID: 0}
   _stages:
   - {fileID: 11400000, guid: 9c4273686a67a144b99150fa1e154574, type: 2}
@@ -56,3 +57,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d8856508b00b919449afc63f7274be27, type: 2}
   _stageClearText: {fileID: 3518337361043025360, guid: aab5804680ace2b4d91c7e6c012b1596,
     type: 3}
+  _rideArmorRequired: -1
+  _rideArmors: []

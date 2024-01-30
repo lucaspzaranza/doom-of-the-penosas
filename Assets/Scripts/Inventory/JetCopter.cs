@@ -21,7 +21,7 @@ public class JetCopter : SpecialItem
         }
     }
 
-    private void SetJetCopterActivation(bool value)
+    public void SetJetCopterActivation(bool value)
     {
         ItemSlot.Player.JetCopterObject.SetActive(value);
         ItemSlot.Player.JetCopterActivated = value;

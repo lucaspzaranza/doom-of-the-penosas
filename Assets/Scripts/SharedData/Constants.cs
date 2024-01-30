@@ -15,6 +15,7 @@ public static class ConstantStrings
 
     // Player
     public const string PlayerTag = "Player";
+    public const string RideArmorTag = "RideArmor";
 
     // Animator
     public const string Shoot = "Shoot";
@@ -128,11 +129,13 @@ public static class ScenesBuildIndexes
 public static class PlayerConsts
 {
     public const float MachineGunInterval = 0.1f;
+    public const float RideArmorMachineGunInterval = 0.075f;
     public const float ShotLvl3Duration = 0.5f;
     public const float ShotLvl2VariationRate = 0.1f;
     public const float ShotAnimDuration = 0.25f;
     public const float DefaultSpeed = 2f;
     public const float OverlapCircleDiameter = 0.1f;
+    public const float ChickencopterOverlapCircleDiameter = 0.7f;
     public const float BlinkInitialValue = 0.1f;
     public const float DefaultGravity = 1.5f;
     public const byte Max_Life = 100;
@@ -160,18 +163,4 @@ public static class PlayerConsts
     public const string ParachuteAction = "Parachute";
     public const string JumpAction = "Jump";
     public const string ChangeSpecialItemAction = "ChangeSpecialItem";
-}
-
-public static class SharedFunctions
-{
-    /// <summary>
-    /// Considering a 2-Player Multiplayer game, it'll return the complementary index number<br>
-    /// with 2 players as a basis. If you pass 0, it'll return 1, and vice versa. </br>
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    public static int GetComplementaryIndex(int value)
-    {
-        return (value + 1) % 2;
-    }
 }

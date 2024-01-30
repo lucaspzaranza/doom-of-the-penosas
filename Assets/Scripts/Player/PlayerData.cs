@@ -35,6 +35,9 @@ public class PlayerData
     [SerializeField] private InventoryData _inventoryData;
     [SerializeField] private bool _gameOver;
 
+    public List<GameObject> _1stShotProp => _1stShot;
+    public List<GameObject> _2ndShotProp => _2ndShot;
+
     public bool GameOver
     {
         get => _gameOver;
@@ -159,7 +162,11 @@ public class PlayerData
 
     public Penosas Character => _character;
 
-    public InputDevice InputDevice => _inputDevice;
+    public InputDevice InputDevice
+    {
+        get => _inputDevice;
+        set => _inputDevice = value;
+    }
 
     public InventoryData InventoryData => _inventoryData;
 
@@ -185,6 +192,27 @@ public class PlayerData
         if (device != null)
             _inputDevice = device;
     }
+
+    public PlayerData(PlayerData newData)
+    {
+        _character = newData.Character;
+        _inputDevice = newData.InputDevice;
+        _playerScript = newData.Player;
+        _localID = newData.LocalID;
+        _playerGameObject = newData.PlayerGameObject;
+        _continues = newData.Continues;
+        _lives = newData.Lives;
+        _life = newData.Life;
+        _armorLife = newData.ArmorLife;
+        _1stWeaponLvl = newData._1stWeaponLevel;
+        _2ndWeaponLvl = newData._2ndWeaponLevel;
+        _1stWeaponAmmo = newData._1stWeaponAmmoProp;
+        _2ndWeaponAmmo = newData._2ndWeaponAmmoProp;
+        _1stShot = newData._1stShotProp;
+        _2ndShot = newData._2ndShotProp;
+        _inventoryData = newData.InventoryData;
+        _gameOver = newData.GameOver;
+}
 
     public void SetProjectilesPrefabs(PlayerDataPrefabs prefabs)
     {

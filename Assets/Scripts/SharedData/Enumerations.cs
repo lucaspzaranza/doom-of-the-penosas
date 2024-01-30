@@ -69,4 +69,13 @@ namespace SharedData.Enumerations
         Mayday = 2,
         WalkTalk = 3
     }
+
+    public enum RideArmorType
+    {
+        None = -1,
+        EggTank = 0,
+        TireMonoWheel = 1,
+        JetSkinha = 2,
+        Chickencopter = 3
+    }
 }

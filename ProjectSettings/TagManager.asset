@@ -14,14 +14,16 @@ TagManager:
   - DeviceSelectionButton
   - HUD
   - GameOver
+  - RideArmor
+  - Water
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ride Armor
   - Water
   - UI
-  - 
+  - RideArmorPlayerGround
   - 
   - Terrain
   - Enemy
