@@ -62,7 +62,7 @@ public class JetSkinha : RideArmor
     {
         base.Move(direction);
 
-        if (!_canMove || SharedFunctions.HitWall(_wallCheckCollider, _terrainLayerMask, out Collider2D hitWall))
+        if (!_canMove || SharedFunctions.HitWall(_wallCheckCollider, _terrainWithoutPlatformLayerMask, out Collider2D hitWall))
         {
             StopWaterParticleEmission();
             return;

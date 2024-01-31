@@ -65,7 +65,7 @@ public class TireMonoWheel : RideArmor
 
     public override void Move(Vector2 direction)
     {
-        if (SharedFunctions.HitWall(_wallCheckCollider, _terrainLayerMask, out Collider2D hitWall))
+        if (SharedFunctions.HitWall(_wallCheckCollider, _terrainWithoutPlatformLayerMask, out Collider2D hitWall))
             return;
 
         RigiBody2DComponent.velocity = new Vector2(direction.x, RigiBody2DComponent.velocity.y);

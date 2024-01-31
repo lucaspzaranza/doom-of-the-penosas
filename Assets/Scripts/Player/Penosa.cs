@@ -56,7 +56,10 @@ public class Penosa : MonoBehaviour
     [Header(InputStrings.Jump)]
     [SerializeField] private Transform _groundCheck = null;
     [SerializeField] private Collider2D _wallCheckCollider = null;
+    [Tooltip("It'll be used to detect if the player is in the ground.")]
     [SerializeField] private LayerMask _terrainLayerMask;
+    [Tooltip("It'll be used to detect if the player can move forward.")]
+    [SerializeField] private LayerMask _terrainWithoutPlatformLayerMask;
     [SerializeField] private LayerMask _waterLayerMask;
 
     [Header("Parachute")]
@@ -204,6 +207,7 @@ public class Penosa : MonoBehaviour
     {
         _isGrounded = Physics2D.OverlapCircle(_groundCheck.position, 
             PlayerConsts.OverlapCircleDiameter, _terrainLayerMask);
+        _isGrounded &= Rigidbody2D.velocity.y == 0;
         _anim.SetBool(_animHashes.isGrounded, _isGrounded);
 
         bool insideWater = Physics2D.OverlapCircle(_groundCheck.position, 
@@ -465,7 +469,7 @@ public class Penosa : MonoBehaviour
         Vector2 direction = new Vector2(horizontal * _speed, Rigidbody2D.velocity.y);
 
         if (!RideArmorEquipped && Rigidbody2D != null &&
-        !SharedFunctions.HitWall(_wallCheckCollider, _terrainLayerMask, out Collider2D hitWall))
+        !SharedFunctions.HitWall(_wallCheckCollider, _terrainWithoutPlatformLayerMask, out Collider2D hitWall))
         {
             Rigidbody2D.velocity = direction;
         }

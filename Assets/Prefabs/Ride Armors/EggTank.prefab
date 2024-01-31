@@ -326,6 +326,9 @@ MonoBehaviour:
   _wallCheckCollider: {fileID: 2266133647812701375}
   _terrainLayerMask:
     serializedVersion: 2
+    m_Bits: 384
+  _terrainWithoutPlatformLayerMask:
+    serializedVersion: 2
     m_Bits: 256
   _spriteRenderer: {fileID: 7512111401704588697}
   _cannonSR: {fileID: 7512111400415615704}

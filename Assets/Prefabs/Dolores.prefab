@@ -935,7 +935,10 @@ MonoBehaviour:
   _wallCheckCollider: {fileID: 6435880765630058480}
   _terrainLayerMask:
     serializedVersion: 2
-    m_Bits: 272
+    m_Bits: 400
+  _terrainWithoutPlatformLayerMask:
+    serializedVersion: 2
+    m_Bits: 144
   _waterLayerMask:
     serializedVersion: 2
     m_Bits: 16

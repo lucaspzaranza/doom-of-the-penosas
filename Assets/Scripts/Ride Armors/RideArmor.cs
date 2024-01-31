@@ -73,6 +73,7 @@ public abstract class RideArmor : MonoBehaviour
     [SerializeField] protected Transform _playerPos;
     [SerializeField] protected Collider2D _wallCheckCollider = null;
     [SerializeField] protected LayerMask _terrainLayerMask;
+    [SerializeField] protected LayerMask _terrainWithoutPlatformLayerMask;
     [SerializeField] protected SpriteRenderer _spriteRenderer;
     [SerializeField] protected SpriteRenderer _cannonSR;
     [SerializeField] protected List<GameObject> _equippedPlayerList;
