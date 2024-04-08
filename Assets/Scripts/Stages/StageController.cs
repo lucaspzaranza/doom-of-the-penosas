@@ -91,7 +91,7 @@ public class StageController : ControllerUnit
     public void HandleOnRideArmorEquipped(RideArmor rideArmor)
     {
         if (rideArmor.Required)
-            _rideArmorRequired = rideArmor.RideArmorType;
+            _rideArmorRequired = rideArmor.Type;
     }
 
     public void HandleOnRideArmorChangedRequired(RideArmorType type, bool value)

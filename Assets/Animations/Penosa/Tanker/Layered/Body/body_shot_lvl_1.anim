@@ -7,7 +7,7 @@ AnimationClip:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: body_shot_lvl_1
-  serializedVersion: 6
+  serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
   m_UseHighQualityCurve: 1
@@ -18,9 +18,10 @@ AnimationClip:
   m_ScaleCurves: []
   m_FloatCurves: []
   m_PPtrCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
     - time: 0
-      value: {fileID: -978119706252055642, guid: 1cc0a52f4e53af24f9814bd5ed866908,
+      value: {fileID: -4578428571113117267, guid: 1cc0a52f4e53af24f9814bd5ed866908,
         type: 3}
     - time: 0.033333335
       value: {fileID: -2139310860109074693, guid: 1cc0a52f4e53af24f9814bd5ed866908,
@@ -53,6 +54,7 @@ AnimationClip:
     path: Body
     classID: 212
     script: {fileID: 0}
+    flags: 2
   m_SampleRate: 60
   m_WrapMode: 0
   m_Bounds:
@@ -67,8 +69,10 @@ AnimationClip:
       typeID: 212
       customType: 23
       isPPtrCurve: 1
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: -978119706252055642, guid: 1cc0a52f4e53af24f9814bd5ed866908, type: 3}
+    - {fileID: -4578428571113117267, guid: 1cc0a52f4e53af24f9814bd5ed866908, type: 3}
     - {fileID: -2139310860109074693, guid: 1cc0a52f4e53af24f9814bd5ed866908, type: 3}
     - {fileID: -4516223991997974817, guid: 1cc0a52f4e53af24f9814bd5ed866908, type: 3}
     - {fileID: 8683831150456051646, guid: 1cc0a52f4e53af24f9814bd5ed866908, type: 3}

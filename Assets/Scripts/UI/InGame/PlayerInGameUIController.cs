@@ -163,7 +163,7 @@ public class PlayerInGameUIController : ControllerUnit, IUIController
     {
         if (isEquipping)
         {
-            _huds[playerID].PlayerIcon = _rideArmorsSprites[(int)rideArmor.RideArmorType];
+            _huds[playerID].PlayerIcon = _rideArmorsSprites[(int)rideArmor.Type];
             rideArmor.OnRideArmorLifeChanged += HUDs[playerID].UpdateRideArmorLife;
             _huds[playerID].UpdateRideArmorLife(rideArmor.Life);
         }

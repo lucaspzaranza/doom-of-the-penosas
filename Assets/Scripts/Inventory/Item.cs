@@ -35,5 +35,14 @@ public abstract class Item : MonoBehaviour
             GetItem(player);
             Destroy(gameObject);
         }
+        else if(other.CompareTag(ConstantStrings.RideArmorCoreTag))
+        {
+            RideArmorActivator rideArmorCore = other.gameObject.GetComponent<RideArmorActivator>();
+            if(rideArmorCore.RideArmor.Player != null)
+            {
+                GetItem(rideArmorCore.RideArmor.Player);
+                Destroy(gameObject);
+            }
+        }
     }
 }

@@ -16,6 +16,7 @@ TagManager:
   - GameOver
   - RideArmor
   - Water
+  - RideArmorCore
   layers:
   - Default
   - TransparentFX

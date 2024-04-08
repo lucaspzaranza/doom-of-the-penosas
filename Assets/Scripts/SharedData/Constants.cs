@@ -15,7 +15,7 @@ public static class ConstantStrings
 
     // Player
     public const string PlayerTag = "Player";
-    public const string RideArmorTag = "RideArmor";
+    public const string RideArmorCoreTag = "RideArmorCore";
 
     // Animator
     public const string Shoot = "Shoot";
@@ -108,6 +108,7 @@ public static class ConstantNumbers
     // Player
     public const int NumberOfPlayers = 2;
     public const int CountdownSeconds = 10;
+    public const float TimeToReactivatePlayerColliderAfterFallingFromPlatform = 0.3f;
 
     // Stage
     public const float TimeToShowStageClearTxt = 2f;

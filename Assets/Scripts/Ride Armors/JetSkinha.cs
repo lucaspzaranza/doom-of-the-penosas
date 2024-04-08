@@ -62,7 +62,7 @@ public class JetSkinha : RideArmor
     {
         base.Move(direction);
 
-        if (!_canMove || SharedFunctions.HitWall(_wallCheckCollider, _terrainWithoutPlatformLayerMask, out Collider2D hitWall))
+        if (!_canMove || SharedFunctions.HitSomething(_wallCheckCollider, _terrainWithoutPlatformLayerMask, out Collider2D hitWall))
         {
             StopWaterParticleEmission();
             return;
@@ -96,14 +96,14 @@ public class JetSkinha : RideArmor
 
         if (!_canMove)
         {
-            _armorActivator.gameObject.SetActive(false);
+            _armorCore.gameObject.SetActive(false);
 
             if(Required)
                 Required = false;
         }
         else if(_canMove)
         {
-            _armorActivator.gameObject.SetActive(true);
+            _armorCore.gameObject.SetActive(true);
 
             if(!Required && _requiredSinceTheBeginning)
                 Required = true;

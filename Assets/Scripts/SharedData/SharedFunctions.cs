@@ -15,13 +15,13 @@ public static class SharedFunctions
         return (value + 1) % 2;
     }
 
-    public static bool HitWall(Collider2D colliderToCheck, LayerMask layerMask, out Collider2D hitWall)
+    public static bool HitSomething(Collider2D colliderToCheck, LayerMask layerMask, out Collider2D hitSomething)
     {
         ContactFilter2D contactFilter = new ContactFilter2D();
         Collider2D[] results = new Collider2D[1];
         contactFilter.SetLayerMask(layerMask);
         colliderToCheck.OverlapCollider(contactFilter, results);
-        hitWall = results[0];
-        return hitWall != null;
+        hitSomething = results[0];
+        return hitSomething != null;
     }
 }

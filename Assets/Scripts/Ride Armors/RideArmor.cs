@@ -19,7 +19,7 @@ public abstract class RideArmor : MonoBehaviour
     private float _lowerLimitDegree = 345f;
 
     [SerializeField] private RideArmorType _type;
-    public RideArmorType RideArmorType => _type;
+    public RideArmorType Type => _type;
 
     [SerializeField][Range(0, PlayerConsts.Max_Life)] private int _life;
     public int Life
@@ -66,7 +66,7 @@ public abstract class RideArmor : MonoBehaviour
 
     public Transform PlayerPosition => _playerPos;
 
-    [SerializeField] protected RideArmorActivator _armorActivator;
+    [SerializeField] protected RideArmorActivator _armorCore;
     [SerializeField] protected GameObject _eggShot;
     [SerializeField] protected GameObject _shurikenShot;
     [SerializeField] protected Transform _shotSpawnPos;
@@ -148,7 +148,7 @@ public abstract class RideArmor : MonoBehaviour
         _player = player;        
         _playerController = playerController;
 
-        if(RideArmorType != RideArmorType.EggTank)
+        if(Type != RideArmorType.EggTank)
             SetEquippedPlayerActivation(player, true);
 
         OnRideArmorEquipped?.Invoke(this);
@@ -188,7 +188,7 @@ public abstract class RideArmor : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if(RideArmorType != RideArmorType.JetSkinha && other.gameObject.layer == 4) //Water layer
+        if(Type != RideArmorType.JetSkinha && other.gameObject.layer == 4) //Water layer
             Life = 0;
     }
 }

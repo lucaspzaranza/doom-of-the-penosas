@@ -55,7 +55,7 @@ public class Chickencopter : RideArmor
 
     public override void Move(Vector2 direction)
     {        
-        if (SharedFunctions.HitWall(_wallCheckCollider, _terrainWithoutPlatformLayerMask, out Collider2D hitWall) && 
+        if (SharedFunctions.HitSomething(_wallCheckCollider, _terrainWithoutPlatformLayerMask, out Collider2D hitWall) && 
             (direction.x != 0 && hitWall.transform.position.x != transform.position.x))
             return;
 
@@ -65,7 +65,7 @@ public class Chickencopter : RideArmor
         else if (direction.y < 0)
             _verticalCheckCollider.transform.localPosition = new Vector2(posX, _lowerCheckY);
 
-        if (SharedFunctions.HitWall(_verticalCheckCollider, _terrainLayerMask, out Collider2D upperHitWall) &&
+        if (SharedFunctions.HitSomething(_verticalCheckCollider, _terrainLayerMask, out Collider2D upperHitWall) &&
             (direction.y != 0 && upperHitWall.transform.position.y != transform.position.y))
             return;
 

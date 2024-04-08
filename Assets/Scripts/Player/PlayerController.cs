@@ -357,7 +357,7 @@ public class PlayerController : ControllerUnit
         if (rideArmorRequired != RideArmorType.None)
         {
             GameObject rideArmorPrefab = _rideArmors
-                .FirstOrDefault(armor => armor.GetComponent<RideArmor>().RideArmorType == rideArmorRequired);
+                .FirstOrDefault(armor => armor.GetComponent<RideArmor>().Type == rideArmorRequired);
 
             if (rideArmorPrefab != null)
             {

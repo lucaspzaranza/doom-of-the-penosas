@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4330093296665523783}
   - component: {fileID: 3340473082299678942}
   - component: {fileID: 6071608304877252539}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Kawarimi
   m_TagString: Projectile
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ MonoBehaviour:
   isMissile: 0
   interactableLayerMask:
     serializedVersion: 2
-    m_Bits: 4864
+    m_Bits: 4992
   torque: 0.375
   penosa: {fileID: 0}
 --- !u!61 &6071608304877252539

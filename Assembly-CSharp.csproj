@@ -90,6 +90,7 @@
     <Compile Include="Assets\Scripts\Ride Armors\RideArmorActivator.cs" />
     <Compile Include="Assets\Scripts\UI\InGame\PlayerInGameUIController.cs" />
     <Compile Include="Assets\Scripts\GameController\InputSystemController.cs" />
+    <Compile Include="Assets\Scripts\Terrain\FallFromPlatform.cs" />
     <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
     <Compile Include="Assets\Scripts\UI\InputDevices\DevicePopupPanelUI.cs" />
     <Compile Include="Assets\Scripts\SharedData\ExtensionMethods.cs" />

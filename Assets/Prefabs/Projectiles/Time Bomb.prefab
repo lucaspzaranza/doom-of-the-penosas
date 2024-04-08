@@ -263,7 +263,7 @@ MonoBehaviour:
   isMissile: 0
   interactableLayerMask:
     serializedVersion: 2
-    m_Bits: 4864
+    m_Bits: 4992
   remoteSpeed: 2
   overlapRadius: 0.01
   bombColliders:

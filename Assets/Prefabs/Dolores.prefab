@@ -932,6 +932,8 @@ MonoBehaviour:
   _speed: 2
   _jumpForce: 260
   _groundCheck: {fileID: 6435880765277024125}
+  _playerCollider: {fileID: 6435880766563690140}
+  _groundCheckCollider: {fileID: 6435880765277024124}
   _wallCheckCollider: {fileID: 6435880765630058480}
   _terrainLayerMask:
     serializedVersion: 2
@@ -942,6 +944,9 @@ MonoBehaviour:
   _waterLayerMask:
     serializedVersion: 2
     m_Bits: 16
+  _platformOnlyLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
   _parachute: {fileID: 6435880765243448272}
   _parachuteGravity: 0.2
   _shotspeed: 8
