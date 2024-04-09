@@ -9,6 +9,7 @@ public class JetSkinha : RideArmor
     [SerializeField] private float _speed;
     [SerializeField] private float _playerEjectOffset;
     [SerializeField] private float _ejectForce;
+    [SerializeField] private float _frontalParticleSystemXForce;
     [SerializeField] private ParticleSystem _frontParticleSystem;
     [SerializeField] private ParticleSystem _backParticleSystem;
 
@@ -39,8 +40,17 @@ public class JetSkinha : RideArmor
 
     private void StartWaterParticleEmission()
     {
-        _backParticleSystem.Play();
-        _frontParticleSystem.Play();
+        if(!_backParticleSystem.isEmitting)
+        {
+            _backParticleSystem.Stop();
+            _backParticleSystem.Play();
+        }
+
+        if(!_frontParticleSystem.isEmitting)
+        {
+            _frontParticleSystem.Stop();
+            _frontParticleSystem.Play();
+        }
     }
 
     private void StopWaterParticleEmission()
@@ -71,12 +81,23 @@ public class JetSkinha : RideArmor
         transform.Translate(direction * _speed * Time.deltaTime);
 
         if(direction.x != 0)
-        {            
-            StartWaterParticleEmission();
+        {
+            var frontalParticlesForceOverLifetime = _frontParticleSystem.forceOverLifetime;
             if (direction.x > 0)
-                SetWaterParticleRotation(Quaternion.identity);
-            else
-                SetWaterParticleRotation(new Quaternion(0f, 180f, 0f, 0f));
+            {
+                if (_frontParticleSystem.transform.rotation.eulerAngles.y == 180f)
+                {
+                    SetWaterParticleRotation(Quaternion.identity);
+                    frontalParticlesForceOverLifetime.x = -_frontalParticleSystemXForce;
+                }
+            }
+            else if(_frontParticleSystem.transform.rotation.eulerAngles.y == 0f)
+            {
+                SetWaterParticleRotation(new Quaternion(0f, -180f, 0f, 0f));
+                frontalParticlesForceOverLifetime.x = _frontalParticleSystemXForce;
+            }
+
+            StartWaterParticleEmission();
         }
         else if (_backParticleSystem.isEmitting)
         {
