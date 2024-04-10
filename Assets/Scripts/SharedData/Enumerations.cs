@@ -78,4 +78,12 @@ namespace SharedData.Enumerations
         JetSkinha = 2,
         Chickencopter = 3
     }
+
+    public enum EnemyState
+    {
+        Idle,
+        Patrol,
+        PlayerTargeted,
+        Critical
+    }
 }

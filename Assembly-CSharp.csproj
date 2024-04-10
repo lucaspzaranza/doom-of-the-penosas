@@ -65,6 +65,7 @@
     <Compile Include="Assets\Scripts\Pooling\PoolController.cs" />
     <Compile Include="Assets\Scripts\Weapons\Kawarimi.cs" />
     <Compile Include="Assets\Scripts\Weapons\AutoRotate.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Enemy.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerLobby\PlayerLobbyUIController.cs" />
     <Compile Include="Assets\Scripts\Inventory\InventoryData.cs" />
     <Compile Include="Assets\ParrelSync\Examples\CustomArgumentExample.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Assets\Scripts\UI\InputDevices\InputControlsPanel.cs" />
     <Compile Include="Assets\Scripts\UI\MenuWithCursor.cs" />
     <Compile Include="Assets\Scripts\Weapons\Grenade.cs" />
+    <Compile Include="Assets\Scripts\Enemies\BaiscEnemy.cs" />
     <Compile Include="Assets\Scripts\Stages\StageController.cs" />
     <Compile Include="Assets\Scripts\Ride Armors\JetSkinha.cs" />
     <Compile Include="Assets\Scripts\Pooling\ObjectPool.cs" />
