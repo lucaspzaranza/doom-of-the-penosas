@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\Inventory\SpecialItem.cs" />
     <Compile Include="Assets\Scripts\UI\LoadingProgress.cs" />
     <Compile Include="Assets\Scripts\Scenes\SceneController.cs" />
+    <Compile Include="Assets\Scripts\Enemies\BasicEnemy.cs" />
     <Compile Include="Assets\Scripts\Ride Armors\Chickencopter.cs" />
     <Compile Include="Assets\Scripts\SharedData\Constants.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IController.cs" />
@@ -125,14 +126,15 @@
     <Compile Include="Assets\Scripts\UI\InputDevices\InputControlsPanel.cs" />
     <Compile Include="Assets\Scripts\UI\MenuWithCursor.cs" />
     <Compile Include="Assets\Scripts\Weapons\Grenade.cs" />
-    <Compile Include="Assets\Scripts\Enemies\BaiscEnemy.cs" />
     <Compile Include="Assets\Scripts\Stages\StageController.cs" />
     <Compile Include="Assets\Scripts\Ride Armors\JetSkinha.cs" />
     <Compile Include="Assets\Scripts\Pooling\ObjectPool.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerDataPrefabs.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemSlot.cs" />
     <Compile Include="Assets\Scripts\Weapons\TimeBomb.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyWeaponController.cs" />
     <Compile Include="Assets\Scripts\Inventory\WalkTalk.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyWeaponUnit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />

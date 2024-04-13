@@ -11,8 +11,17 @@ public abstract class Enemy : MonoBehaviour
         get => _life;
     }
 
-    [SerializeField] private EnemyState _state;
+    [SerializeField] protected EnemyState _state;
     public EnemyState State => _state;
+
+    [SerializeField] private EnemyWeaponController _weaponController;
+    public EnemyWeaponController WeaponController => _weaponController;
+
+    [SerializeField] protected Rigidbody2D _rigidBody;
+    public Rigidbody2D RigidBody => _rigidBody;
+
+    [SerializeField] protected Transform _shotSpawn;
+    public Transform ShotSpawn => _shotSpawn;
 
     public virtual void Patrol() { }
 
@@ -25,7 +34,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Move() { }
 
-    protected virtual void Shoot() { }
+    protected virtual void Shoot(Vector2 coordinates) { }
 
     protected virtual void CheckForNewState() { }
 
