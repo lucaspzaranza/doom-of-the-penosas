@@ -906,6 +906,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerController: {fileID: 0}
+  _landCharacterProps:
+    GroundCheck: {fileID: 6435880765277024125}
+    CharacterCollider: {fileID: 6435880766563690140}
+    GroundCheckCollider: {fileID: 6435880765277024124}
+    WallCheckCollider: {fileID: 6435880765630058480}
+    TerrainLayerMask:
+      serializedVersion: 2
+      m_Bits: 400
+    TerrainWithoutPlatformLayerMask:
+      serializedVersion: 2
+      m_Bits: 144
+    WaterLayerMask:
+      serializedVersion: 2
+      m_Bits: 16
+    PlatformOnlyLayerMask:
+      serializedVersion: 2
+      m_Bits: 256
+    IsGrounded: 0
+    IsOnPlatform: 0
   _playerData:
     _character: 1
     _playerScript: {fileID: 6435880766563690138}
@@ -931,22 +950,6 @@ MonoBehaviour:
     _gameOver: 0
   _speed: 2
   _jumpForce: 260
-  _groundCheck: {fileID: 6435880765277024125}
-  _playerCollider: {fileID: 6435880766563690140}
-  _groundCheckCollider: {fileID: 6435880765277024124}
-  _wallCheckCollider: {fileID: 6435880765630058480}
-  _terrainLayerMask:
-    serializedVersion: 2
-    m_Bits: 400
-  _terrainWithoutPlatformLayerMask:
-    serializedVersion: 2
-    m_Bits: 144
-  _waterLayerMask:
-    serializedVersion: 2
-    m_Bits: 16
-  _platformOnlyLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
   _parachute: {fileID: 6435880765243448272}
   _parachuteGravity: 0.2
   _shotspeed: 8

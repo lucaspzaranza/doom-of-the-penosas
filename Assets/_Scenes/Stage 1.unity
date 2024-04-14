@@ -123,37 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &51033534
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 51033535}
-  m_Layer: 0
-  m_Name: Shot Spawn Coordinates
-  m_TagString: Untagged
-  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &51033535
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 51033534}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2046103757}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &55822501
 GameObject:
   m_ObjectHideFlags: 0
@@ -4001,7 +3970,7 @@ GameObject:
   - component: {fileID: 2046103755}
   - component: {fileID: 2046103758}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: BasicEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4020,12 +3989,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _life: 100
+  _speed: 0
   _state: 0
+  _isCritical: 0
   _weaponController:
     _weaponUnits:
     - {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b, type: 2}
-  _rigidBody: {fileID: 2046103758}
-  _shotSpawn: {fileID: 51033535}
+  _rigidbody: {fileID: 2046103758}
+  _isLandCharacter: 1
+  _landCharacterProps:
+    GroundCheck: {fileID: 2137795402}
+    CharacterCollider: {fileID: 2046103759}
+    GroundCheckCollider: {fileID: 2137795403}
+    WallCheckCollider: {fileID: 285566019}
+    TerrainLayerMask:
+      serializedVersion: 2
+      m_Bits: 400
+    TerrainWithoutPlatformLayerMask:
+      serializedVersion: 2
+      m_Bits: 144
+    WaterLayerMask:
+      serializedVersion: 2
+      m_Bits: 16
+    PlatformOnlyLayerMask:
+      serializedVersion: 2
+      m_Bits: 128
+    IsGrounded: 0
+    IsOnPlatform: 0
 --- !u!4 &2046103757
 Transform:
   m_ObjectHideFlags: 0
@@ -4042,7 +4032,6 @@ Transform:
   - {fileID: 1016685581}
   - {fileID: 2137795402}
   - {fileID: 285566018}
-  - {fileID: 51033535}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &2046103758

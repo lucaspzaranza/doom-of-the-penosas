@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: BasicWeapon
   m_EditorClassIdentifier: 
   _name: Basic Weapon
-  _image: {fileID: 0}
+  _sprite: {fileID: 21300000, guid: 7e521cd1ae5b36343997d3af4e0e881a, type: 3}
   _projectile: {fileID: 0}
-  _isContinuous: 0
+  _shotSpawn: {fileID: 0}
+  _isContinuous: 1
   _continuousRate: 0
-  _damageHit: 10
+  _damageHit: 20

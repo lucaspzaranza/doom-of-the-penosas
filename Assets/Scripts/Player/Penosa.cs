@@ -46,6 +46,7 @@ public class Penosa : MonoBehaviour
     private InputAction _fire3Action;
 
     [SerializeField] private PlayerController _playerController;
+    [SerializeField] private LandCharacterProps _landCharacterProps;
     [SerializeField] private PlayerData _playerData;
     private Inventory _inventory = null;
 
@@ -53,19 +54,19 @@ public class Penosa : MonoBehaviour
     public float _speed;
     public float _jumpForce;
 
-    [Header(InputStrings.Jump)]
-    [SerializeField] private Transform _groundCheck = null;
-    [SerializeField] private Collider2D _playerCollider = null;
-    [SerializeField] private Collider2D _groundCheckCollider = null;
-    [SerializeField] private Collider2D _wallCheckCollider = null;
-    [Tooltip("It'll be used to detect if the player is in the ground.")]
-    [SerializeField] private LayerMask _terrainLayerMask;
-    [Tooltip("It'll be used to detect if the player can move forward.")]
-    [SerializeField] private LayerMask _terrainWithoutPlatformLayerMask;
-    [SerializeField] private LayerMask _waterLayerMask;
-    [SerializeField] private LayerMask _platformOnlyLayerMask;
+    //[Header(InputStrings.Jump)]
+    //[SerializeField] private Transform _groundCheck = null;
+    //[SerializeField] private Collider2D _playerCollider = null;
+    //[SerializeField] private Collider2D _groundCheckCollider = null;
+    //[SerializeField] private Collider2D _wallCheckCollider = null;
+    //[Tooltip("It'll be used to detect if the player is in the ground.")]
+    //[SerializeField] private LayerMask _terrainLayerMask;
+    //[Tooltip("It'll be used to detect if the player can move forward.")]
+    //[SerializeField] private LayerMask _terrainWithoutPlatformLayerMask;
+    //[SerializeField] private LayerMask _waterLayerMask;
+    //[SerializeField] private LayerMask _platformOnlyLayerMask;
 
-    [Header("Parachute")]
+    //[Header("Parachute")]
     public GameObject _parachute;
     public float _parachuteGravity;
 
@@ -86,12 +87,9 @@ public class Penosa : MonoBehaviour
     private bool _isShooting;
     private bool _isWalking;
     private bool _isLeft;
-    private bool _isGrounded;
-    private bool _isOnPlatform;
     private bool _isInCountdown;
     private bool _canRideArmor;
     private AnimatorHashes _animHashes = new AnimatorHashes();
-    //private FallFromPlatform _platform = null;
 
     [Header("Blink")]
     public float _blinkDuration;
@@ -210,26 +208,26 @@ public class Penosa : MonoBehaviour
 
     void FixedUpdate()
     {
-        _isGrounded = Physics2D.OverlapCircle(_groundCheck.position, 
-            PlayerConsts.OverlapCircleDiameter, _terrainLayerMask);
-        _isGrounded &= Rigidbody2D.velocity.y == 0;
-        _anim.SetBool(_animHashes.isGrounded, _isGrounded);
+        _landCharacterProps.IsGrounded = Physics2D.OverlapCircle(_landCharacterProps.GroundCheck.position, 
+            PlayerConsts.OverlapCircleDiameter, _landCharacterProps.TerrainLayerMask);
+        _landCharacterProps.IsGrounded &= Rigidbody2D.velocity.y == 0;
+        _anim.SetBool(_animHashes.isGrounded, _landCharacterProps.IsGrounded);
 
-        bool insideWater = Physics2D.OverlapCircle(_groundCheck.position, 
-            PlayerConsts.OverlapCircleDiameter, _waterLayerMask);
+        bool insideWater = Physics2D.OverlapCircle(_landCharacterProps.GroundCheck.position, 
+            PlayerConsts.OverlapCircleDiameter, _landCharacterProps.WaterLayerMask);
         if(insideWater && !IsBlinking && !RideArmorEquipped)
             PlayerLostALife();
 
-        if (_isGrounded && Rigidbody2D.gravityScale != PlayerConsts.DefaultGravity 
+        if (_landCharacterProps.IsGrounded && Rigidbody2D.gravityScale != PlayerConsts.DefaultGravity 
             && !JetCopterActivated && !RideArmorEquipped) 
             ResetGravity();
 
-        _isOnPlatform = SharedFunctions.HitSomething(
-            _groundCheckCollider, _platformOnlyLayerMask, out Collider2D platformCollider);
+        _landCharacterProps.IsOnPlatform = SharedFunctions.HitSomething(
+            _landCharacterProps.GroundCheckCollider, _landCharacterProps.PlatformOnlyLayerMask, out Collider2D platformCollider);
 
-        if (_isGrounded && RideArmorEquipped && Rigidbody2D.gravityScale > 0)
+        if (_landCharacterProps.IsGrounded && RideArmorEquipped && Rigidbody2D.gravityScale > 0)
         {
-            _groundCheck.gameObject.SetActive(false);
+            _landCharacterProps.GroundCheck.gameObject.SetActive(false);
             Rigidbody2D.gravityScale = 0;
             Rigidbody2D.velocity = Vector2.zero;
         }
@@ -248,10 +246,10 @@ public class Penosa : MonoBehaviour
 
     private IEnumerator FallFromPlatform()
     {
-        _playerCollider.enabled = false;
+        _landCharacterProps.CharacterCollider.enabled = false;
         yield return new WaitForSeconds(
             ConstantNumbers.TimeToReactivatePlayerColliderAfterFallingFromPlatform);
-        _playerCollider.enabled = true;
+        _landCharacterProps.CharacterCollider.enabled = true;
     }
 
     public void PlayerLostALife()
@@ -415,7 +413,7 @@ public class Penosa : MonoBehaviour
         DeactivateParachuteIfActive();
 
         Rigidbody2D.gravityScale = 0f;
-        if (!_isGrounded && _parachute.activeSelf && 
+        if (!_landCharacterProps.IsGrounded && _parachute.activeSelf && 
             rideArmorToEquip.Type != RideArmorType.Chickencopter)
             Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
 
@@ -447,11 +445,11 @@ public class Penosa : MonoBehaviour
 
     private void SetCollidersActivation(bool value, bool changeGroundCheck = true)
     {
-        _wallCheckCollider.enabled = value;
+        _landCharacterProps.WallCheckCollider.enabled = value;
         gameObject.GetComponent<BoxCollider2D>().enabled = value;
 
         if(changeGroundCheck)
-            _groundCheck.gameObject.SetActive(value);
+            _landCharacterProps.GroundCheck.gameObject.SetActive(value);
     }
 
     public void EjectRideArmor()
@@ -485,7 +483,8 @@ public class Penosa : MonoBehaviour
         Vector2 direction = new Vector2(horizontal * _speed, Rigidbody2D.velocity.y);
 
         if (!RideArmorEquipped && Rigidbody2D != null &&
-        !SharedFunctions.HitSomething(_wallCheckCollider, _terrainWithoutPlatformLayerMask, out Collider2D hitWall))
+        !SharedFunctions.HitSomething(_landCharacterProps.WallCheckCollider, 
+            _landCharacterProps.TerrainWithoutPlatformLayerMask, out Collider2D hitWall))
             Rigidbody2D.velocity = direction;
         else if(RideArmorEquipped)
         {
@@ -496,8 +495,8 @@ public class Penosa : MonoBehaviour
             _rideArmor.Aim(vertical);
         }
 
-        if (_isOnPlatform && !RideArmorEquipped && vertical < 0 && 
-            _playerCollider.enabled && Rigidbody2D.velocity.y == 0f)
+        if (_landCharacterProps.IsOnPlatform && !RideArmorEquipped && vertical < 0 &&
+            _landCharacterProps.CharacterCollider.enabled && Rigidbody2D.velocity.y == 0f)
             StartCoroutine(nameof(FallFromPlatform));
 
         SetMovementAnimators(vertical);
@@ -516,7 +515,7 @@ public class Penosa : MonoBehaviour
 
         if (!JetCopterActivated)
         {
-            if (_isGrounded)
+            if (_landCharacterProps.IsGrounded)
                 Rigidbody2D.AddForce(Vector2.up * _jumpForce);
         }
         else
@@ -578,7 +577,7 @@ public class Penosa : MonoBehaviour
 
         if (JetCopterActivated || RideArmorEquipped) return;
 
-        if (buttonPressed && !_parachute.activeSelf && !_isGrounded && Rigidbody2D.velocity.y < 0)
+        if (buttonPressed && !_parachute.activeSelf && !_landCharacterProps.IsGrounded && Rigidbody2D.velocity.y < 0)
         {
             Rigidbody2D.gravityScale = _parachuteGravity;
             _parachute.SetActive(true);
@@ -825,8 +824,8 @@ public class Penosa : MonoBehaviour
 
         _body.gameObject.SetActive(val);
         _legs.gameObject.SetActive(val);
-        _groundCheck.gameObject.SetActive(val);
-        _wallCheckCollider.gameObject.SetActive(val);
+        _landCharacterProps.GroundCheck.gameObject.SetActive(val);
+        _landCharacterProps.WallCheckCollider.gameObject.SetActive(val);
         Inventory.gameObject.SetActive(val);
     }
 

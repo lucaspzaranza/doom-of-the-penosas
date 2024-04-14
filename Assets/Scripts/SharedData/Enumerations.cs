@@ -83,7 +83,7 @@ namespace SharedData.Enumerations
     {
         Idle,
         Patrol,
-        PlayerTargeted,
-        Critical
+        ChasingPlayer,
+        Attacking,
     }
 }

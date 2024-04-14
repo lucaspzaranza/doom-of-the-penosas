@@ -7,13 +7,20 @@ public class BasicEnemy : Enemy
 {
     private void Update()
     {
-        if(State == EnemyState.Idle)
-        {
-            Patrol();
-        }
+        Patrol();
     }
 
     public override void Patrol()
+    {
+        Move();
+    }
+
+    protected override void Move()
+    {
+        print("MOVIN', MOVIN'!");
+    }
+
+    protected override void CheckForNewState()
     {
 
     }

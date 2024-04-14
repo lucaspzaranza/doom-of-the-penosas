@@ -71,6 +71,7 @@
     <Compile Include="Assets\ParrelSync\Examples\CustomArgumentExample.cs" />
     <Compile Include="Assets\Scripts\UI\CursorPosition.cs" />
     <Compile Include="Assets\Scripts\Inventory\SpecialItem.cs" />
+    <Compile Include="Assets\Scripts\SharedData\LandCharacter.cs" />
     <Compile Include="Assets\Scripts\UI\LoadingProgress.cs" />
     <Compile Include="Assets\Scripts\Scenes\SceneController.cs" />
     <Compile Include="Assets\Scripts\Enemies\BasicEnemy.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Assets\Scripts\Player\PlayerDataPrefabs.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemSlot.cs" />
     <Compile Include="Assets\Scripts\Weapons\TimeBomb.cs" />
+    <Compile Include="Assets\Scripts\Attributes\DrawIfBoolEqualsToAttribute.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyWeaponController.cs" />
     <Compile Include="Assets\Scripts\Inventory\WalkTalk.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyWeaponUnit.cs" />
