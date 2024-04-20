@@ -177,7 +177,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "1D Axis",
+                    "name": "1D Axis [D-PAD]",
                     "id": "ec11ffa6-4f51-41b8-8198-314ebb05a1a6",
                     "path": "1DAxis",
                     "interactions": "",
@@ -202,6 +202,39 @@
                     "name": "positive",
                     "id": "8f3247e4-29df-4741-b91a-f704fccf1531",
                     "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TimeBombMovement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "1D Axis [KEYBOARD]",
+                    "id": "0b24373d-8420-495f-9617-b4c7dc20709f",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TimeBombMovement",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "2846e294-2eac-4df8-9278-7a52488f0f3f",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TimeBombMovement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "017fe26f-282d-46b1-a703-6095ef0ec106",
+                    "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

@@ -259,7 +259,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 4
-  damage: 2
+  _collider: {fileID: 8682810346284367586}
+  damage: 30
   isMissile: 0
   interactableLayerMask:
     serializedVersion: 2

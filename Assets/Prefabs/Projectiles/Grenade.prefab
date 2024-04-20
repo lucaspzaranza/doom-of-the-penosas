@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4960535987248976749}
   - component: {fileID: 1092687857533456311}
   - component: {fileID: 1092687857533456296}
+  - component: {fileID: 8965485093349943704}
   m_Layer: 11
   m_Name: Grenade
   m_TagString: Projectile
@@ -126,8 +127,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 5
-  damage: 2
+  _collider: {fileID: 8965485093349943704}
+  damage: 20
   isMissile: 0
   interactableLayerMask:
     serializedVersion: 2
     m_Bits: 4864
+--- !u!58 &8965485093349943704
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092687857533456297}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.1, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.075

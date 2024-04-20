@@ -57,6 +57,11 @@ public class TimeBomb : Grenade
     // Sobrescrevendo o método de explosão porque as bombas nível 2 não estão utilizando pooling
     public override void Explode()
     {
+        if (SharedFunctions.HitSomething(_collider, interactableLayerMask, out Collider2D hitObject))
+        {
+            TryToDamageEnemy(ref hitObject);
+        }
+
         Destroy(gameObject);
     }
 

@@ -66,7 +66,7 @@ public class Penosa : MonoBehaviour
     //[SerializeField] private LayerMask _waterLayerMask;
     //[SerializeField] private LayerMask _platformOnlyLayerMask;
 
-    //[Header("Parachute")]
+    [Header("Parachute")]
     public GameObject _parachute;
     public float _parachuteGravity;
 

@@ -916,13 +916,13 @@ MonoBehaviour:
       m_Bits: 400
     TerrainWithoutPlatformLayerMask:
       serializedVersion: 2
-      m_Bits: 144
+      m_Bits: 272
     WaterLayerMask:
       serializedVersion: 2
       m_Bits: 16
     PlatformOnlyLayerMask:
       serializedVersion: 2
-      m_Bits: 256
+      m_Bits: 128
     IsGrounded: 0
     IsOnPlatform: 0
   _playerData:

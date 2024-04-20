@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1617454459024769970}
   - component: {fileID: 1617454459024769967}
   m_Layer: 11
-  m_Name: Egg Shot
+  m_Name: Egg shot
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -100,7 +100,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 0
-  damage: 0
+  _collider: {fileID: 1617454459024769967}
+  damage: 10
   isMissile: 0
   interactableLayerMask:
     serializedVersion: 2
