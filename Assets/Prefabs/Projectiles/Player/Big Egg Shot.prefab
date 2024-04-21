@@ -85,6 +85,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1617454459024769970, guid: 01c60fe339bafbd42aa4817129bfb0ec,
         type: 3}
+      propertyPath: _damage
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 1617454459024769970, guid: 01c60fe339bafbd42aa4817129bfb0ec,
+        type: 3}
       propertyPath: projectileDestroyer.m_Bits
       value: 768
       objectReference: {fileID: 0}

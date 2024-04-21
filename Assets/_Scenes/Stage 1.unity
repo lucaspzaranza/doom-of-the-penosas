@@ -1529,6 +1529,7 @@ GameObject:
   m_Component:
   - component: {fileID: 794702323}
   - component: {fileID: 794702324}
+  - component: {fileID: 794702325}
   m_Layer: 0
   m_Name: Weapon
   m_TagString: Untagged
@@ -1548,7 +1549,8 @@ Transform:
   m_LocalPosition: {x: 0.4, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.15, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1401242801}
   m_Father: {fileID: 2046103757}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &794702324
@@ -1604,6 +1606,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &794702325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794702322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86516d10d2e39624087ff265c255b3f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spawnTransform: {fileID: 1401242801}
 --- !u!4 &866069113 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5405324850216297520, guid: 3583131a4b5668e4dad8bed6d458cfc7,
@@ -2663,6 +2678,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90da3cd1c267a904abbdbe9421062f66, type: 3}
+--- !u!1 &1401242800
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1401242801}
+  m_Layer: 0
+  m_Name: SpawnPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1401242801
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1401242800}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.7, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 794702323}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1442785437
 GameObject:
   m_ObjectHideFlags: 0
@@ -4078,8 +4124,9 @@ MonoBehaviour:
   _state: 0
   _isCritical: 0
   _weaponController:
-    _weaponUnits:
-    - {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b, type: 2}
+    _weaponDataList:
+    - _weaponUnit: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b, type: 2}
+      _enemyWeaponSpawnTransform: {fileID: 794702325}
   _rigidbody: {fileID: 2046103758}
   _isLandCharacter: 1
   _landCharacterProps:

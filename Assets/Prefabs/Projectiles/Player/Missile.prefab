@@ -99,10 +99,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 5
+  _isEnemyFire: 0
+  _isMissile: 1
   _collider: {fileID: 6234314618595113253}
-  damage: 100
-  isMissile: 1
-  interactableLayerMask:
+  _damage: 100
+  _interactableLayerMask:
     serializedVersion: 2
     m_Bits: 768
 --- !u!58 &6234314618595113253

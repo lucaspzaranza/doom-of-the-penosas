@@ -14,7 +14,6 @@ public static class ConstantStrings
     public const string FuumaShuriken = "Fuuma Shuriken";
 
     // Player
-    public const string PlayerTag = "Player";
     public const string RideArmorCoreTag = "RideArmorCore";
 
     // Animator
@@ -40,8 +39,10 @@ public static class ConstantStrings
     public const string Joystick = "Joystick";
 
     // Tags
+    public const string PlayerTag = "Player";
     public const string CharacterSelectionButtonTag = "CharacterSelectionButton";
     public const string DeviceSelectionButtonTag = "DeviceSelectionButton";
+    public const string EnemyProjectileTag = "Enemy Projectile";
 
     // Menu Messages
     public const string HUDGameOver = "Wait until the stage is over.";

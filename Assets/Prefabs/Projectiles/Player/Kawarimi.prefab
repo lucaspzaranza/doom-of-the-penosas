@@ -127,10 +127,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 2.5
+  _isEnemyFire: 0
+  _isMissile: 0
   _collider: {fileID: 6071608304877252539}
-  damage: 0
-  isMissile: 0
-  interactableLayerMask:
+  _damage: 0
+  _interactableLayerMask:
     serializedVersion: 2
     m_Bits: 4992
   torque: 0.375

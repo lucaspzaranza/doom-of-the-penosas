@@ -57,7 +57,7 @@ public class TimeBomb : Grenade
     // Sobrescrevendo o método de explosão porque as bombas nível 2 não estão utilizando pooling
     public override void Explode()
     {
-        if (SharedFunctions.HitSomething(_collider, interactableLayerMask, out Collider2D hitObject))
+        if (SharedFunctions.HitSomething(_collider, InteractableLayerMask, out Collider2D hitObject))
         {
             TryToDamageEnemy(ref hitObject);
         }
@@ -73,7 +73,7 @@ public class TimeBomb : Grenade
 
             // Checa se tem colisão com os layers Enemy ou Map. Se for nulo, a bomba não colidiu com nada,
             // e sofrerá uma rotação pra se adaptar ao terreno.
-            var other = Physics2D.OverlapCircle(pos, overlapRadius, interactableLayerMask);                   
+            var other = Physics2D.OverlapCircle(pos, overlapRadius, InteractableLayerMask);                   
             if(other == null)
             {
                 if(i == 0 && fixedOnTheGround) // Bottom collider          

@@ -6,13 +6,21 @@ using UnityEngine.UIElements;
 
 public class BasicEnemy : Enemy
 {
+    // Temporary variable.
     public bool chooseRight;
+
     protected bool _isLeft;
     protected float _xDirection;
 
     protected void Update()
     {
         Patrol();
+
+        // Temporary for test usage only
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            Shoot(0);
+        }
     }
 
     public override void Patrol()

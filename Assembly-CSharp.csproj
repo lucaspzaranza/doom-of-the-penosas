@@ -133,6 +133,7 @@
     <Compile Include="Assets\Scripts\Player\PlayerDataPrefabs.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemSlot.cs" />
     <Compile Include="Assets\Scripts\Weapons\TimeBomb.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyWeaponSpawnTransform.cs" />
     <Compile Include="Assets\Scripts\Attributes\DrawIfBoolEqualsToAttribute.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyWeaponController.cs" />
     <Compile Include="Assets\Scripts\Inventory\WalkTalk.cs" />

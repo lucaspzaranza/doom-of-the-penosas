@@ -9,14 +9,19 @@ public class EnemyWeaponUnit : ScriptableObject
     [SerializeField] private string _name;
     public string Name => _name;
 
+    [SerializeField] private byte _id;
+    public int ID => _id;
+
     [SerializeField] private Sprite _sprite;
     public Sprite Sprite => _sprite;
 
+    [Tooltip("Check this if this weapon will use pooling to get the projectiles. " +
+    "If unchecked, it'll use GameObject Instantiating instead.")]
+    [SerializeField] private bool _usePooling;
+    public bool UsePooling => _usePooling;
+
     [SerializeField] private GameObject _projectile;
     public GameObject Projectile => _projectile;
-
-    [SerializeField] private Transform _shotSpawn;
-    public Transform ShowSpawn => _shotSpawn;
 
     [Tooltip("Check this if this weapon has continuous fire, like a machinegun, for example.")]
     [SerializeField] private bool _isContinuous;
@@ -31,6 +36,18 @@ public class EnemyWeaponUnit : ScriptableObject
     public int DamageHit => _damageHit;
 
     public void Shoot(Vector2 coordinates)
+    {
+        if(UsePooling) 
+        { 
+            // Do the pooling
+        }
+        else
+        {
+            var newProjectile = Instantiate(Projectile, coordinates, Quaternion.identity);
+        }
+    }
+
+    public void SetShotSpawnTransform(Transform transformToSet) 
     {
 
     }

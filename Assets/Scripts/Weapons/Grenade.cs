@@ -13,7 +13,7 @@ public class Grenade : Projectile
 
     public override void Update()
     {
-        if(SharedFunctions.HitSomething(_collider, interactableLayerMask, out Collider2D hitObject))
+        if(SharedFunctions.HitSomething(_collider, InteractableLayerMask, out Collider2D hitObject))
         {
             TryToDamageEnemy(ref hitObject);
             Explode();

@@ -1,6 +1,7 @@
 using SharedData.Enumerations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
@@ -86,7 +87,13 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Move() { }
 
-    public virtual void Shoot(Vector2 coordinates) { }
+    public virtual void Shoot(int weaponId)
+    {
+        Vector2 position = WeaponController.WeaponDataList.First
+            (weaponData => weaponData.WeaponUnit.ID == weaponId).
+            EnemyWeaponSpawnTransform.SpawnTransform.position;
+        WeaponController.WeaponDataList[weaponId].WeaponUnit.Shoot(position);
+    }
 
     protected virtual void CheckForNewState() { }
 
