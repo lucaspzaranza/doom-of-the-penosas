@@ -288,7 +288,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 2237b1c8fcd39ca438a60fd3e24f1ee9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
@@ -473,7 +473,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: -5898572833816749705, guid: 98d3d79e226051f4189d418effc756d8,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -590,7 +590,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 95bfc4a31427f5f48882b3a6570976a1, type: 3}
   m_Color: {r: 0.90943396, g: 0.89928603, b: 0.51992166, a: 1}
   m_FlipX: 0
@@ -674,7 +674,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: -894387173527953005, guid: 1cc0a52f4e53af24f9814bd5ed866908,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -787,7 +787,7 @@ GameObject:
   - component: {fileID: 5829223887740761716}
   m_Layer: 3
   m_Name: Tire MonoWheel
-  m_TagString: Untagged
+  m_TagString: RideArmor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

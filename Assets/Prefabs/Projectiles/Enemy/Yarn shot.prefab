@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1617454459024769964}
   - component: {fileID: 1617454459024769965}
-  - component: {fileID: 1617454459024769970}
+  - component: {fileID: 9046891350772037513}
   - component: {fileID: 1617454459024769967}
   m_Layer: 11
   m_Name: Yarn shot
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1617454459024769970
+--- !u!114 &9046891350772037513
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,17 +95,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1617454459024769971}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7d732f458b3b53409c423811261baf2, type: 3}
+  m_Script: {fileID: 11500000, guid: c0161a949a8f076419cfac2ddefb1111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 8
-  _isEnemyFire: 1
   _isMissile: 0
   _collider: {fileID: 1617454459024769967}
   _damage: 30
   _interactableLayerMask:
     serializedVersion: 2
-    m_Bits: 4353
+    m_Bits: 4361
 --- !u!58 &1617454459024769967
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -35,20 +35,47 @@ public class EnemyWeaponUnit : ScriptableObject
     [SerializeField] private int _damageHit;
     public int DamageHit => _damageHit;
 
-    public void Shoot(Vector2 coordinates)
+    private GameController _gameControllerInstance;
+
+    private void OnEnable()
     {
-        if(UsePooling) 
-        { 
-            // Do the pooling
-        }
-        else
-        {
-            var newProjectile = Instantiate(Projectile, coordinates, Quaternion.identity);
-        }
+        _gameControllerInstance = FindObjectOfType<GameController>();
     }
 
-    public void SetShotSpawnTransform(Transform transformToSet) 
+    private void OnDisable()
     {
+        _gameControllerInstance = null;
+    }
 
+    public void Shoot(Vector2 coordinates, int currentDirection)
+    {
+        GameObject newProjectile = null;
+
+        if(UsePooling) 
+        {
+            // Do the pooling
+            if (_gameControllerInstance != null)
+            {
+                newProjectile = _gameControllerInstance.GetProjectileFromPool(_projectile);
+                newProjectile.transform.position = coordinates;
+            }
+            else
+            {
+                Debug.LogWarning($"{_projectile.name} not found on Object Pool.");
+                return;
+            }
+        }
+        else
+            newProjectile = Instantiate(Projectile, coordinates, Quaternion.identity);
+
+        newProjectile.transform.localScale =
+                new Vector2(newProjectile.transform.localScale.x * currentDirection,
+                newProjectile.transform.localScale.y);
+
+        var projectileScript = newProjectile.GetComponent<Projectile>();
+        projectileScript.Speed = Mathf.Abs(projectileScript.Speed) * currentDirection;
+
+        if (newProjectile.TryGetComponent(out EnemyProjectile enemyProjectile))
+            enemyProjectile.SetEnemyWeaponUnit(this);
     }
 }

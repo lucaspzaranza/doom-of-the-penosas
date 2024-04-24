@@ -9,6 +9,8 @@ public class ObjectPool : MonoBehaviour
     public Dictionary<string, Queue<GameObject>> objectPool = new Dictionary<string, Queue<GameObject>>();
 
     [SerializeField] private List<GameObject> prefabsList;
+    public List<GameObject> PrefabsList => prefabsList;
+
     [SerializeField] private int poolInitialSize = 10;
 
     public GameObject GetObject(GameObject gameObj)

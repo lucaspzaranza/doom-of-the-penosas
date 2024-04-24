@@ -13,9 +13,6 @@ public class Projectile : MonoBehaviour
         set => _speed = value;
     }
 
-    [SerializeField] private bool _isEnemyFire;
-    public bool IsEnemyFire => _isEnemyFire;
-
     [SerializeField] private bool _isMissile = false;
     public bool IsMissile => _isMissile;
 
@@ -27,35 +24,35 @@ public class Projectile : MonoBehaviour
 
     [SerializeField] protected LayerMask _interactableLayerMask;
     public LayerMask InteractableLayerMask => _interactableLayerMask;
-
+    
     public virtual void Update()
     {
+        MoveProjectile();
+        CheckForCollision();
+    }
+
+    protected virtual void MoveProjectile()
+    {
         transform.Translate(Vector3.right * Speed * Time.deltaTime);
+    }
+
+    protected virtual void CheckForCollision()
+    {
         if (SharedFunctions.HitSomething(_collider, _interactableLayerMask, out Collider2D hitObject))
         {
-            if(IsEnemyFire)
-            {
-                print("If hit player, do damage on him.");
-            }
-            else
-            {
-                TryToDamageEnemy(ref hitObject);
+            DamageEnemy(ref hitObject);
 
-                if (!IsMissile)
-                    OnReturnProjectileToPool?.Invoke(gameObject);
-                else
-                    Destroy(gameObject);
-            }
+            if (!IsMissile)
+                OnReturnProjectileToPool?.Invoke(gameObject);
+            else
+                Destroy(gameObject);
         }
     }
 
-    public virtual void TryToDamageEnemy(ref Collider2D hitObject)
+    public virtual void DamageEnemy(ref Collider2D hitObject)
     {
-        var enemy = hitObject.GetComponent<Enemy>();
-        if (enemy != null)
-        {
-            print($"{enemy.name} will take damage of {Damage}.");
+        //print($"{enemy.name} will take damage of {Damage}.");
+        if(hitObject.TryGetComponent(out Enemy enemy))
             enemy.TakeDamage(Damage);
-        }
     }
 }

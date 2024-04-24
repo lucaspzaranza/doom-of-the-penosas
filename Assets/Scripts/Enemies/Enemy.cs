@@ -1,4 +1,5 @@
 using SharedData.Enumerations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,9 @@ using UnityEngine;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 public abstract class Enemy : MonoBehaviour
-{   
+{
+    public static Action<Enemy> OnEnemyDeath;
+    
     [SerializeField] private int _life;
     public int Life
     {
@@ -21,6 +24,8 @@ public abstract class Enemy : MonoBehaviour
 
     [SerializeField] protected bool _isCritical;
     public bool IsCritical => _isCritical;
+
+    [SerializeField] protected bool _fireEventWhenDead;
 
     [SerializeField] private EnemyWeaponController _weaponController;
     public EnemyWeaponController WeaponController => _weaponController;
@@ -43,6 +48,7 @@ public abstract class Enemy : MonoBehaviour
     private float _glowIntervalTimeCounter;
     private const float _glowFrameInterval = 0.05f;
     protected float _glowTimeCounter;
+    protected bool _isLeft;
 
     public virtual void Patrol() { }
 
@@ -54,7 +60,7 @@ public abstract class Enemy : MonoBehaviour
         if (_life <= 0)
         {
             _life = 0;
-            Destroy(gameObject);
+            Death();
         }
     }
 
@@ -89,15 +95,32 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void Shoot(int weaponId)
     {
-        Vector2 position = WeaponController.WeaponDataList.First
+        Vector2 direction = WeaponController.WeaponDataList.First
             (weaponData => weaponData.WeaponUnit.ID == weaponId).
             EnemyWeaponSpawnTransform.SpawnTransform.position;
-        WeaponController.WeaponDataList[weaponId].WeaponUnit.Shoot(position);
+        WeaponController.WeaponDataList[weaponId].WeaponUnit.Shoot(direction, GetShotDirection());
+    }
+
+    public virtual int GetShotDirection()
+    {
+        return _isLeft ? -1 : 1;
     }
 
     protected virtual void CheckForNewState() { }
 
-    protected virtual void Death() { }
+    protected virtual void Flip()
+    {
+        _isLeft = !_isLeft;
+        transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
+    }
+
+    protected virtual void Death() 
+    {
+        if (_fireEventWhenDead)
+            OnEnemyDeath?.Invoke(this);
+
+        Destroy(gameObject);
+    }
 
     protected virtual void FixedUpdate()
     {

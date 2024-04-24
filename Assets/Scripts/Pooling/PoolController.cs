@@ -9,7 +9,6 @@ public class PoolController : ControllerUnit
     [Space]
     [SerializeField] private GameObject _poolPrefab;
 
-
     [SerializeField] private ObjectPool _pool;
     public ObjectPool Pool => _pool;
 
@@ -32,11 +31,10 @@ public class PoolController : ControllerUnit
 
     private void InitiateProjectilesPools()
     {
-        StartCoroutine(_pool.InitializePool(ConstantStrings.EggShot));
-        StartCoroutine(_pool.InitializePool(ConstantStrings.BigEggShot));
-        StartCoroutine(_pool.InitializePool(ConstantStrings.Grenade));
-        StartCoroutine(_pool.InitializePool(ConstantStrings.Shuriken));
-        StartCoroutine(_pool.InitializePool(ConstantStrings.FuumaShuriken));
+        foreach (var poolPrefab in _pool.PrefabsList)
+        {
+            StartCoroutine(_pool.InitializePool(poolPrefab.name));
+        }
     }
 
     public GameObject GetProjectile(GameObject projectile)

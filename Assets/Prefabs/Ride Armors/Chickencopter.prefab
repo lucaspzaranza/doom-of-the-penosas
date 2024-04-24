@@ -358,7 +358,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 1105090176, guid: 404886c9a8ae1134eb6c7db9481095ac, type: 3}
   m_Color: {r: 0.7207546, g: 0.7207546, b: 0.7207546, a: 1}
   m_FlipX: 1
@@ -617,7 +617,7 @@ GameObject:
   - component: {fileID: 5077450708483935797}
   m_Layer: 3
   m_Name: Chickencopter
-  m_TagString: Untagged
+  m_TagString: RideArmor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -768,10 +768,10 @@ MonoBehaviour:
   _abandonedCheckCollider: {fileID: 1471925083204586335}
   _activatorTransform: {fileID: 913624159054617594}
   _distanceToGround: 1
-  _distanceToBeDestroyed: 0.5
   _upperCheckY: 0.858
   _lowerCheckY: -0.2
   _fallRate: 1.5
+  _fallDamage: 100
 --- !u!1 &7512111401430287610
 GameObject:
   m_ObjectHideFlags: 0
@@ -1080,7 +1080,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 2
   m_Sprite: {fileID: -668693589, guid: 9b4d468664383d84497640f53c025276, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

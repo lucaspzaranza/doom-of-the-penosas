@@ -59,7 +59,7 @@ public class TimeBomb : Grenade
     {
         if (SharedFunctions.HitSomething(_collider, InteractableLayerMask, out Collider2D hitObject))
         {
-            TryToDamageEnemy(ref hitObject);
+            DamageEnemy(ref hitObject);
         }
 
         Destroy(gameObject);

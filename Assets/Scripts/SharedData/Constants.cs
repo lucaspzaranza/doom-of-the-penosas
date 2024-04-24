@@ -12,8 +12,10 @@ public static class ConstantStrings
     public const string Grenade = "Grenade";
     public const string Shuriken = "Shuriken";
     public const string FuumaShuriken = "Fuuma Shuriken";
+    public const string YarnShot = "Yarn shot";
 
     // Player
+    public const string RideArmorTag = "RideArmor";
     public const string RideArmorCoreTag = "RideArmorCore";
 
     // Animator

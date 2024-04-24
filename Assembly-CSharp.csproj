@@ -115,6 +115,7 @@
     <Compile Include="Assets\Scripts\GameController\ControllerUnit.cs" />
     <Compile Include="Assets\Scripts\Ride Armors\SpringAnimation.cs" />
     <Compile Include="Assets\Scripts\SharedData\Enumerations.cs" />
+    <Compile Include="Assets\Scripts\Weapons\EnemyProjectile.cs" />
     <Compile Include="Assets\Scripts\Inventory\HealItem.cs" />
     <Compile Include="Assets\Scripts\Inventory\SpriteAddedEventArgs.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerDeathZone.cs" />

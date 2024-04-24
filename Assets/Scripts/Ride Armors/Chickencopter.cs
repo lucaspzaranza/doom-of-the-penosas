@@ -12,10 +12,10 @@ public class Chickencopter : RideArmor
     [SerializeField] private Collider2D _abandonedCheckCollider = null;
     [SerializeField] private Transform _activatorTransform = null;
     [SerializeField] private float _distanceToGround;
-    [SerializeField] private float _distanceToBeDestroyed;
     [SerializeField] private float _upperCheckY;
     [SerializeField] private float _lowerCheckY;
     [SerializeField] private float _fallRate;
+    [SerializeField] private int _fallDamage;
 
     private Vector2 _currentDirection;
 
@@ -32,11 +32,12 @@ public class Chickencopter : RideArmor
 
         if(_chickencopterAbandoned)
         {
-            bool hitDestroyerStuff = Physics2D.OverlapBox(_abandonedCheckCollider.transform.position,
-                new Vector2(0f, _distanceToBeDestroyed), 0f, _abandonedHitLayerMask);
-
-            if(hitDestroyerStuff)
+            if(SharedFunctions.HitSomething(_abandonedCheckCollider, 
+                _abandonedHitLayerMask, out Collider2D hitObject))
             {
+                if (hitObject.TryGetComponent(out Enemy enemy))
+                    enemy.TakeDamage(_fallDamage);
+
                 // Add explosion effect here...
                 Destroy(gameObject);
             }

@@ -198,7 +198,7 @@ GameObject:
   - component: {fileID: 5706479421170623255}
   m_Layer: 3
   m_Name: EggTank
-  m_TagString: Untagged
+  m_TagString: RideArmor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -437,7 +437,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 65e6cf0779be9424a8cf6519daf71fa1, type: 3}
   m_Color: {r: 0.7207546, g: 0.7207546, b: 0.7207546, a: 1}
   m_FlipX: 1

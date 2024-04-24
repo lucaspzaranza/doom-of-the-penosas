@@ -15,7 +15,7 @@ public class Grenade : Projectile
     {
         if(SharedFunctions.HitSomething(_collider, InteractableLayerMask, out Collider2D hitObject))
         {
-            TryToDamageEnemy(ref hitObject);
+            DamageEnemy(ref hitObject);
             Explode();
         }
     }

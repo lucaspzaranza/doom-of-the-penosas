@@ -48,5 +48,11 @@ public class CollectableItem : MonoBehaviour
             GetItem(player);
             Destroy(gameObject);
         }
+        else if(other.gameObject.CompareTag(ConstantStrings.RideArmorTag))
+        {
+            var rideArmor = other.gameObject.GetComponent<RideArmor>();
+            GetItem(rideArmor.Player);
+            Destroy(gameObject);
+        }
     }
 }

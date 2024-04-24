@@ -8,8 +8,7 @@ public class BasicEnemy : Enemy
 {
     // Temporary variable.
     public bool chooseRight;
-
-    protected bool _isLeft;
+   
     protected float _xDirection;
 
     protected void Update()
@@ -25,7 +24,7 @@ public class BasicEnemy : Enemy
 
     public override void Patrol()
     {
-        //Move();
+        Move();
     }
 
     protected override void Move()
@@ -59,13 +58,7 @@ public class BasicEnemy : Enemy
     protected virtual void MoveFlyingEnemy()
     {
 
-    }
-
-    protected virtual void Flip()
-    {
-        _isLeft = !_isLeft;
-        transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
-    }
+    }    
 
     protected override void CheckForNewState()
     {
