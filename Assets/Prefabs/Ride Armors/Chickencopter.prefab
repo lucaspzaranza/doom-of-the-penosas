@@ -593,7 +593,7 @@ SpriteRenderer:
   m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7,
     type: 3}
-  m_Color: {r: 0.6377357, g: 0.6377357, b: 0.6377357, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -732,10 +732,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75bb6aaa5feeaae47abf24ef16437fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _blinkDuration: 2
+  _sprites:
+  - {fileID: 5277644286268930640}
+  - {fileID: 1768268012754321300}
+  - {fileID: 7512111400415615704}
+  _glowDuration: 0.1
+  _1stColor: {r: 1, g: 0, b: 0, a: 1}
+  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _life: 100
   _upperLimitDegree: 75
   _lowerLimitDegree: 270
   _type: 3
-  _life: 100
   _required: 0
   _player: {fileID: 0}
   _cannon: {fileID: 7512111401430287610}

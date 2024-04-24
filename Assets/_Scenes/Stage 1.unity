@@ -1370,7 +1370,7 @@ PrefabInstance:
     - target: {fileID: 742759606539004929, guid: 54f11de70eea196468bf5d8408b554b7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.16
+      value: -0.76
       objectReference: {fileID: 0}
     - target: {fileID: 742759606539004929, guid: 54f11de70eea196468bf5d8408b554b7,
         type: 3}
@@ -1425,7 +1425,7 @@ PrefabInstance:
     - target: {fileID: 742759606539004931, guid: 54f11de70eea196468bf5d8408b554b7,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2050,7 +2050,7 @@ PrefabInstance:
     - target: {fileID: 742759606539004929, guid: e50a30ba9688e344293f798428f1c5ba,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.94
+      value: -1.54
       objectReference: {fileID: 0}
     - target: {fileID: 742759606539004929, guid: e50a30ba9688e344293f798428f1c5ba,
         type: 3}
@@ -2988,7 +2988,7 @@ PrefabInstance:
     - target: {fileID: 742759606539004931, guid: 09d40828159cf7645bea664c1262f9ab,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4118,6 +4118,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0c2ce4271eb287438a66893bec7fab6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _blinkDuration: 2
+  _sprites: []
+  _glowDuration: 0.1
+  _1stColor: {r: 1, g: 0, b: 0, a: 1}
+  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
   _life: 100
   _speed: 2
   _state: 0
@@ -4151,7 +4157,6 @@ MonoBehaviour:
   _enemySprites:
   - {fileID: 1016685582}
   - {fileID: 794702324}
-  _glowDuration: 0.1
   chooseRight: 1
 --- !u!4 &2046103757
 Transform:
@@ -4699,7 +4704,7 @@ PrefabInstance:
     - target: {fileID: 7512111401175367662, guid: 9f012c2875dc37a44be374b2e0f2b70e,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

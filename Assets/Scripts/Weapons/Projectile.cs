@@ -51,7 +51,6 @@ public class Projectile : MonoBehaviour
 
     public virtual void DamageEnemy(ref Collider2D hitObject)
     {
-        //print($"{enemy.name} will take damage of {Damage}.");
         if(hitObject.TryGetComponent(out Enemy enemy))
             enemy.TakeDamage(Damage);
     }

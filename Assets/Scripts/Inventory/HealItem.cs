@@ -8,7 +8,7 @@ public class HealItem : Item
 
     public override void GetItem(Penosa player)
     {
-        if(!player.Adrenaline || (player.Adrenaline && player.PlayerData.Life > 0))
-            player.PlayerData.Life += amount;        
+        if(!player.Adrenaline || (player.Adrenaline && player.Life > 0))
+            player.Life += amount;        
     }
 }

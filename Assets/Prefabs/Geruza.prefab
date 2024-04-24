@@ -1072,7 +1072,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: -3817286286463725148, guid: 1cc0a52f4e53af24f9814bd5ed866908,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1157,7 +1157,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 4
   m_Sprite: {fileID: -4578428571113117267, guid: 1cc0a52f4e53af24f9814bd5ed866908,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1459,6 +1459,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ee3cf25a32235468184bf7e853f6ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _blinkDuration: 2
+  _sprites:
+  - {fileID: 5257087422295494793}
+  - {fileID: 5257087422621857229}
+  _glowDuration: 0.1
+  _1stColor: {r: 1, g: 0, b: 0, a: 1}
+  _2ndColor: {r: 0, g: 0, b: 0, a: 0}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _life: 100
   _playerController: {fileID: 0}
   _landCharacterProps:
     GroundCheck: {fileID: 5257087421400951423}
@@ -1486,8 +1495,6 @@ MonoBehaviour:
     _playerGameObject: {fileID: 0}
     _continues: 5
     _lives: 5
-    _life: 100
-    _armorLife: 0
     _1stWeaponLvl: 1
     _2ndWeaponLvl: 1
     _1stWeaponAmmo: 0
@@ -1521,13 +1528,12 @@ MonoBehaviour:
   - {fileID: 5257087422442211840}
   _secondaryShotSpawnCoordinates: {fileID: 5257087421735016002}
   _jetCopter: {fileID: 5257087421396592317}
-  _blinkDuration: 2
   _body: {fileID: 5257087422295494793}
   _legs: {fileID: 5257087422621857229}
-  _isBlinking: 0
   _rideArmorEquipped: 0
   _rideArmorActivator: {fileID: 0}
   _rideArmor: {fileID: 0}
+  _armorLife: 0
 --- !u!95 &5257087423172685671
 Animator:
   serializedVersion: 5

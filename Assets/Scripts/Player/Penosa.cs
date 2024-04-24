@@ -1,12 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using System;
-using Newtonsoft.Json.Linq;
 using SharedData.Enumerations;
-using static UnityEditor.Experimental.GraphView.GraphView;
-using UnityEditor.iOS.Xcode;
 
 public class AnimatorHashes
 {
@@ -20,12 +16,13 @@ public class AnimatorHashes
     public readonly int jetCopter = Animator.StringToHash(ConstantStrings.JetCopter);
 }
 
-public class Penosa : MonoBehaviour
+public class Penosa : DamageableObject
 {
     public Action<byte> OnPlayerLostAllLives;
     public Action<byte> OnPlayerLostAllContinues;
     public Action<byte> OnPlayerRespawn;
     public Action<byte> OnPlayerDeath;
+    public Action<int> OnArmorLifeChanged;
 
     /// <summary>
     /// The boolean is to send to the event if you are equipping the rideArmor or ejecting it. <br/>
@@ -54,18 +51,6 @@ public class Penosa : MonoBehaviour
     public float _speed;
     public float _jumpForce;
 
-    //[Header(InputStrings.Jump)]
-    //[SerializeField] private Transform _groundCheck = null;
-    //[SerializeField] private Collider2D _playerCollider = null;
-    //[SerializeField] private Collider2D _groundCheckCollider = null;
-    //[SerializeField] private Collider2D _wallCheckCollider = null;
-    //[Tooltip("It'll be used to detect if the player is in the ground.")]
-    //[SerializeField] private LayerMask _terrainLayerMask;
-    //[Tooltip("It'll be used to detect if the player can move forward.")]
-    //[SerializeField] private LayerMask _terrainWithoutPlatformLayerMask;
-    //[SerializeField] private LayerMask _waterLayerMask;
-    //[SerializeField] private LayerMask _platformOnlyLayerMask;
-
     [Header("Parachute")]
     public GameObject _parachute;
     public float _parachuteGravity;
@@ -91,14 +76,8 @@ public class Penosa : MonoBehaviour
     private bool _canRideArmor;
     private AnimatorHashes _animHashes = new AnimatorHashes();
 
-    [Header("Blink")]
-    public float _blinkDuration;
-    private float _blinkTimeCounter;
-    private float _blinkIntervalTimeCounter;
-    private const float _blinkFrameInterval = 0.05f;
     [SerializeField] private SpriteRenderer _body;
     [SerializeField] private SpriteRenderer _legs;
-    [SerializeField] private bool _isBlinking = false;
 
     [Header("Ride Armor")]
     [SerializeField] private bool _rideArmorEquipped;
@@ -109,7 +88,20 @@ public class Penosa : MonoBehaviour
 
     #region Props
 
-    public bool HasArmor => PlayerData.ArmorLife > PlayerConsts.DeathLife;
+    public bool HasArmor => ArmorLife > PlayerConsts.DeathLife;
+
+    [SerializeField][Range(0, PlayerConsts.Max_Life)] private int _armorLife;
+
+    public int ArmorLife
+    {
+        get => _armorLife;
+        set
+        {
+            _armorLife = Mathf.Clamp(value, 0, PlayerConsts.Max_Life);
+            OnArmorLifeChanged?.Invoke(_armorLife);
+            if (value < 0) Life -= (Mathf.Abs(value));
+        }
+    }
 
     public GameObject JetCopterObject => _jetCopter;
 
@@ -128,8 +120,6 @@ public class Penosa : MonoBehaviour
         get => _playerData;
         set => _playerData = value;
     }
-
-    public bool IsBlinking => _isBlinking;
 
     public Rigidbody2D Rigidbody2D
     {
@@ -195,19 +185,19 @@ public class Penosa : MonoBehaviour
         Shoot();
 
         // TEMPORARY!! Remove this!
-        if (Input.GetKeyDown(KeyCode.X)) 
+        if (Input.GetKeyDown(KeyCode.X))
         {
             TakeDamage(30, true);
-            //PlayerData.Lives = 0;
-            //Death();
         }
 
-        if (PlayerData.Life <= PlayerConsts.DeathLife && !Adrenaline && !IsBlinking)
+        if (Life <= PlayerConsts.DeathLife && !Adrenaline && !IsBlinking)
             PlayerLostALife();
     }
 
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
+        base.FixedUpdate();
+
         _landCharacterProps.IsGrounded = Physics2D.OverlapCircle(_landCharacterProps.GroundCheck.position, 
             PlayerConsts.OverlapCircleDiameter, _landCharacterProps.TerrainLayerMask);
         _landCharacterProps.IsGrounded &= Rigidbody2D.velocity.y == 0;
@@ -230,17 +220,6 @@ public class Penosa : MonoBehaviour
             _landCharacterProps.GroundCheck.gameObject.SetActive(false);
             Rigidbody2D.gravityScale = 0;
             Rigidbody2D.velocity = Vector2.zero;
-        }
-
-        if (_isBlinking)
-        {
-            _blinkIntervalTimeCounter += Time.fixedDeltaTime;
-            _blinkTimeCounter += Time.fixedDeltaTime;
-            if (_blinkIntervalTimeCounter >= _blinkFrameInterval)
-            {
-                Blink();
-                _blinkIntervalTimeCounter = PlayerConsts.BlinkInitialValue;
-            }
         }
     }
 
@@ -312,37 +291,32 @@ public class Penosa : MonoBehaviour
             _playerController.OnPlayerPause?.Invoke(true);
     }
 
-    public void Blink()
-    {
-        if (_blinkTimeCounter < _blinkDuration)
-        {
-            float transparency = _body.color.a == 1 ? 0f : 1f;
-            Color blinkColor = new Color(255f, 255f, 255f, transparency);
-            _body.color = blinkColor;
-            _legs.color = blinkColor;
+    //public override void Blink()
+    //{
+    //    if (_blinkTimeCounter < _blinkDuration)
+    //    {
+    //        float transparency = _body.color.a == 1 ? 0f : 1f;
+    //        Color blinkColor = new Color(255f, 255f, 255f, transparency);
+    //        _body.color = blinkColor;
+    //        _legs.color = blinkColor;
 
-            if (RideArmorEquipped)
-                _rideArmor.Blink(blinkColor);
-        }
-        else
-        {
-            _isBlinking = false;
-            Color normalColor = new Color(255f, 255f, 255f, 1f);
+    //        if (RideArmorEquipped)
+    //            _rideArmor.Blink(blinkColor);
+    //    }
+    //    else
+    //    {
+    //        _isBlinking = false;
+    //        Color normalColor = new Color(255f, 255f, 255f, 1f);
 
-            _body.color = normalColor;
-            _legs.color = normalColor;
-            _blinkTimeCounter = 0f;
+    //        _body.color = normalColor;
+    //        _legs.color = normalColor;
+    //        _blinkTimeCounter = 0f;
 
-            if(RideArmorEquipped)
-                _rideArmor.Blink(normalColor);
-        }
-    }
-
-    public void InitiateBlink()
-    {
-        _isBlinking = true;
-    }
-
+    //        if(RideArmorEquipped)
+    //            _rideArmor.Blink(normalColor);
+    //    }
+    //}
+    
     public void Death()
     {
         if (JetCopterObject.activeSelf)
@@ -365,12 +339,12 @@ public class Penosa : MonoBehaviour
 
     public void ResetPlayerData()
     {
-        PlayerData.Life = PlayerConsts.Max_Life;
+        Life = PlayerConsts.Max_Life;
         PlayerData._1stWeaponLevel = PlayerConsts.WeaponInitialLevel;
         PlayerData._2ndWeaponLevel = PlayerConsts.WeaponInitialLevel;
         PlayerData._1stWeaponAmmoProp = PlayerConsts._1stWeaponInitialAmmo;
         PlayerData._2ndWeaponAmmoProp = PlayerConsts._2ndWeaponInitialAmmo;
-        PlayerData.ArmorLife = PlayerConsts.ArmorInitialLife;
+        PlayerData.Player.ArmorLife = PlayerConsts.ArmorInitialLife;
     }
 
     private void ChangeSpecialItem(InputAction.CallbackContext context)
@@ -768,18 +742,26 @@ public class Penosa : MonoBehaviour
             PlayerData._2ndWeaponAmmoProp = ammo;
     }
 
-    public void TakeDamage(int dmg, bool force = false) // Remove this default parameter. It's for test usage only.
+    protected override void SetLife(int value)
     {
-        if (RideArmorEquipped)
-        {
-            _rideArmor.Life -= dmg;
-            return;
-        }
+        _life = Mathf.Clamp(value, 0, PlayerConsts.Max_Life);
+        _playerData.OnLifeChanged?.Invoke(_life);
 
+        if (_life == 0 && !Adrenaline && !IsBlinking)
+        {
+            _playerData.Lives--;
+            Death();
+        }
+    }
+
+    public override void TakeDamage(int dmg, bool force = false) // Remove this default parameter. It's for test usage only.
+    {
         if (!IsBlinking || force)
         {
-            if (HasArmor) PlayerData.ArmorLife -= dmg;
-            else PlayerData.Life -= dmg;
+            if (HasArmor) ArmorLife -= dmg;
+            else Life -= dmg;
+
+            StartGlow();
         }
     }
 

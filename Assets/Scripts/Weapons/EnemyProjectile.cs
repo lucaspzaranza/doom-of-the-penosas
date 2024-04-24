@@ -15,12 +15,10 @@ public class EnemyProjectile : Projectile
     {
         if (SharedFunctions.HitSomething(_collider, _interactableLayerMask, out Collider2D hitObject))
         {
-            if(hitObject.TryGetComponent(out Penosa penosa))
-                penosa.TakeDamage(Damage);
-            else if(hitObject.TryGetComponent(out RideArmor rideArmor))
-                rideArmor.Player?.TakeDamage(Damage);
+            if (hitObject.TryGetComponent(out DamageableObject damageableObject))
+                damageableObject.TakeDamage(Damage);
 
-            if(_enemyWeaponUnit.UsePooling)
+            if (_enemyWeaponUnit.UsePooling)
                 OnReturnProjectileToPool?.Invoke(gameObject);
             else
                 Destroy(gameObject);

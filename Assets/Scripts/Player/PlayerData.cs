@@ -12,7 +12,6 @@ using System.Drawing.Printing;
 public class PlayerData
 {
     public Action<int> OnLifeChanged;
-    public Action<int> OnArmorLifeChanged;
     public Action<int> OnLivesChanged;
     public Action<WeaponType, int> OnWeaponLevelChanged;
     public Action<WeaponType, int> OnWeaponAmmoChanged;
@@ -24,8 +23,6 @@ public class PlayerData
     [SerializeField] private GameObject _playerGameObject = null;
     [SerializeField] private int _continues;
     [SerializeField] [Range(0, PlayerConsts.Max_Lives)] private int _lives;
-    [SerializeField] [Range(0, PlayerConsts.Max_Life)] private int _life;
-    [SerializeField] [Range(0, PlayerConsts.Max_Life)] private int _armorLife;
     [SerializeField] [Range(1, PlayerConsts._1stWeaponMaxLvl)] private byte _1stWeaponLvl;
     [SerializeField] [Range(1, PlayerConsts._2ndWeaponMaxLvl)] private byte _2ndWeaponLvl;
     [SerializeField] private int _1stWeaponAmmo;
@@ -100,17 +97,6 @@ public class PlayerData
         }
     }
 
-    public int ArmorLife
-    {
-        get => _armorLife;
-        set
-        {
-            _armorLife = Mathf.Clamp(value, 0, PlayerConsts.Max_Life);
-            OnArmorLifeChanged?.Invoke(_armorLife);
-            if (value < 0) Life -= (Mathf.Abs(value));
-        }
-    }
-
     public int Continues
     {
         get => _continues;
@@ -131,22 +117,6 @@ public class PlayerData
     public GameObject PlayerGameObject => _playerGameObject;
 
     public byte LocalID { get => _localID; set => _localID = value; }
-
-    public int Life
-    {
-        get => _life;
-        set
-        {
-            _life = Mathf.Clamp(value, 0, PlayerConsts.Max_Life);
-            OnLifeChanged?.Invoke(_life);
-
-            if (_life == 0 && !Player.Adrenaline && !Player.IsBlinking)
-            {
-                Lives--;
-                Player.Death();
-            }
-        }
-    }
 
     public int Lives
     {
@@ -175,8 +145,6 @@ public class PlayerData
         _character = newCharacter;
         _localID = (byte)localID;
 
-        _life = PlayerConsts.Max_Life;
-        _armorLife = PlayerConsts.ArmorInitialLife;
         _lives = PlayerConsts.Initial_Lives;
 
         _1stWeaponLvl = PlayerConsts.WeaponInitialLevel;
@@ -202,8 +170,7 @@ public class PlayerData
         _playerGameObject = newData.PlayerGameObject;
         _continues = newData.Continues;
         _lives = newData.Lives;
-        _life = newData.Life;
-        _armorLife = newData.ArmorLife;
+        _playerScript.Life = newData._playerScript.Life;
         _1stWeaponLvl = newData._1stWeaponLevel;
         _2ndWeaponLvl = newData._2ndWeaponLevel;
         _1stWeaponAmmo = newData._1stWeaponAmmoProp;

@@ -169,8 +169,8 @@ public class PlayerHUD : MonoBehaviour
     {
         Name = player.PlayerData.Character.ToString();
         Lives = player.PlayerData.Lives;
-        Life = player.PlayerData.Life;
-        ArmorLife = player.PlayerData.ArmorLife;
+        Life = player.Life;
+        ArmorLife = player.ArmorLife;
 
         UpdateWeaponAmmoText(WeaponType.Primary, player.PlayerData._1stWeaponAmmoProp);
         UpdateWeaponLevelText(WeaponType.Primary, player.PlayerData._1stWeaponLevel);
@@ -187,7 +187,7 @@ public class PlayerHUD : MonoBehaviour
         if (player == null)
             return;
 
-        player.PlayerData.OnArmorLifeChanged += UpdateArmorLife;
+        player.OnArmorLifeChanged += UpdateArmorLife;
         player.PlayerData.OnLifeChanged += UpdateLife;
         player.PlayerData.OnLivesChanged += UpdateLives;
         player.PlayerData.OnWeaponLevelChanged += UpdateWeaponLevelText;
@@ -201,7 +201,7 @@ public class PlayerHUD : MonoBehaviour
         if (player == null) 
             return;
 
-        player.PlayerData.OnArmorLifeChanged -= UpdateArmorLife;
+        player.OnArmorLifeChanged -= UpdateArmorLife;
         player.PlayerData.OnLifeChanged -= UpdateLife;
         player.PlayerData.OnLivesChanged -= UpdateLives;
         player.PlayerData.OnWeaponLevelChanged -= UpdateWeaponLevelText;

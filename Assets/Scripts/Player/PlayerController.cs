@@ -101,7 +101,7 @@ public class PlayerController : ControllerUnit
             if (_playersData.Count > 0 && idToAdd < _playersData.Count)
                 _playersData.RemoveAt(idToAdd);
             _playersData.Insert(idToAdd, newPlayerData);
-        }
+        }        
     }
 
     private PlayerDataPrefabs GetPlayerPrefabs(Penosas character) =>
@@ -185,8 +185,8 @@ public class PlayerController : ControllerUnit
             playerData._2ndWeaponLevel = PlayerConsts.WeaponInitialLevel;
             playerData._1stWeaponAmmoProp = PlayerConsts._1stWeaponInitialAmmo;
             playerData._2ndWeaponAmmoProp = PlayerConsts._2ndWeaponInitialAmmo;
-            playerData.Life = PlayerConsts.Max_Life;
-            playerData.ArmorLife = 0;
+            playerData.Player.Life = PlayerConsts.Max_Life;
+            playerData.Player.ArmorLife = 0;
             playerData.Continues = PlayerConsts.Continues;
         }
     }
@@ -197,8 +197,8 @@ public class PlayerController : ControllerUnit
         _playersData[playerID]._2ndWeaponLevel = PlayerConsts.WeaponInitialLevel;
         _playersData[playerID]._1stWeaponAmmoProp = PlayerConsts._1stWeaponInitialAmmo;
         _playersData[playerID]._2ndWeaponAmmoProp = PlayerConsts._2ndWeaponInitialAmmo;
-        _playersData[playerID].Life = PlayerConsts.Max_Life;
-        _playersData[playerID].ArmorLife = 0;
+        _playersData[playerID].Player.Life = PlayerConsts.Max_Life;
+        _playersData[playerID].Player.ArmorLife = 0;
         _playersData[playerID].Continues = PlayerConsts.Continues;
     }
 

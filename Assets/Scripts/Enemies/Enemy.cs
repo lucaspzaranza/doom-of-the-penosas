@@ -4,18 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
-public abstract class Enemy : MonoBehaviour
+public abstract class Enemy : DamageableObject
 {
     public static Action<Enemy> OnEnemyDeath;
     
-    [SerializeField] private int _life;
-    public int Life
-    {
-        get => _life;
-    }
-
     [SerializeField] protected float _speed;
     public float Speed => _speed;
 
@@ -42,53 +35,24 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected List<SpriteRenderer> _enemySprites;
     public List<SpriteRenderer> EnemySprites => _enemySprites;
 
-    [SerializeField] protected float _glowDuration;
-    protected Color _colorBeforeGlow;
-    protected bool _isGlowing;
-    private float _glowIntervalTimeCounter;
-    private const float _glowFrameInterval = 0.05f;
-    protected float _glowTimeCounter;
     protected bool _isLeft;
 
     public virtual void Patrol() { }
 
-    public virtual void TakeDamage(int damage) 
+    public virtual void ChangeState(EnemyState newState)
     {
-        _life -= damage;
-        _isGlowing = true;
+        _state = newState;
+    }
+
+    protected override void SetLife(int value)
+    {
+        _life -= value;
 
         if (_life <= 0)
         {
             _life = 0;
             Death();
         }
-    }
-
-    protected virtual void Glow()
-    {
-        if (_glowTimeCounter < _glowDuration)
-        {
-            EnemySprites.ForEach(sprite =>
-            {
-                Color blinkColor = sprite.color == Color.red ? Color.black : Color.red;
-                sprite.color = blinkColor;
-            });
-        }
-        else
-        {
-            _isGlowing = false;
-            EnemySprites.ForEach(sprite =>
-            {
-                sprite.color = Color.white;
-            });
-
-            _glowTimeCounter = 0f;
-        }
-    }
-
-    public virtual void ChangeState(EnemyState newState)
-    {
-        _state = newState;
     }
 
     protected virtual void Move() { }
@@ -101,7 +65,7 @@ public abstract class Enemy : MonoBehaviour
         WeaponController.WeaponDataList[weaponId].WeaponUnit.Shoot(direction, GetShotDirection());
     }
 
-    public virtual int GetShotDirection()
+    protected virtual int GetShotDirection()
     {
         return _isLeft ? -1 : 1;
     }
@@ -120,19 +84,5 @@ public abstract class Enemy : MonoBehaviour
             OnEnemyDeath?.Invoke(this);
 
         Destroy(gameObject);
-    }
-
-    protected virtual void FixedUpdate()
-    {
-        if (_isGlowing)
-        {
-            _glowIntervalTimeCounter += Time.fixedDeltaTime;
-            _glowTimeCounter += Time.fixedDeltaTime;
-            if (_glowIntervalTimeCounter >= _glowFrameInterval)
-            {
-                Glow();
-                _glowIntervalTimeCounter = PlayerConsts.BlinkInitialValue;
-            }
-        }
     }
 }

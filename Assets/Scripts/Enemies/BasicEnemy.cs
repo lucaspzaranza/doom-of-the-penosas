@@ -13,7 +13,7 @@ public class BasicEnemy : Enemy
 
     protected void Update()
     {
-        Patrol();
+        //Patrol();
 
         // Temporary for test usage only
         if(Input.GetKeyDown(KeyCode.O))

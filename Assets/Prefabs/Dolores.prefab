@@ -189,7 +189,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 6d34f413beffe7542b24d1198d869e7e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -471,7 +471,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 4
   m_Sprite: {fileID: -1848548933641633828, guid: 98d3d79e226051f4189d418effc756d8,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -587,7 +587,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: -4952770598051600857, guid: 98d3d79e226051f4189d418effc756d8,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -905,6 +905,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ee3cf25a32235468184bf7e853f6ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _blinkDuration: 2
+  _isBlinking: 0
+  _sprites:
+  - {fileID: 6435880765688207646}
+  - {fileID: 6435880766184842906}
+  _glowDuration: 0.1
+  _1stColor: {r: 1, g: 0, b: 0, a: 1}
+  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _life: 100
   _playerController: {fileID: 0}
   _landCharacterProps:
     GroundCheck: {fileID: 6435880765277024125}
@@ -932,8 +942,6 @@ MonoBehaviour:
     _playerGameObject: {fileID: 0}
     _continues: 5
     _lives: 5
-    _life: 100
-    _armorLife: 0
     _1stWeaponLvl: 1
     _2ndWeaponLvl: 1
     _1stWeaponAmmo: 0
@@ -967,13 +975,12 @@ MonoBehaviour:
   - {fileID: 6435880767054865931}
   _secondaryShotSpawnCoordinates: {fileID: 6435880766679047485}
   _jetCopter: {fileID: 6435880766829899291}
-  _blinkDuration: 2
   _body: {fileID: 6435880765688207646}
   _legs: {fileID: 6435880766184842906}
-  _isBlinking: 0
   _rideArmorEquipped: 0
   _rideArmorActivator: {fileID: 0}
   _rideArmor: {fileID: 0}
+  _armorLife: 0
 --- !u!212 &6435880766563690139
 SpriteRenderer:
   m_ObjectHideFlags: 0
