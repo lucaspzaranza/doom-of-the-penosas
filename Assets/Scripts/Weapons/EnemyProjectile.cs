@@ -16,7 +16,12 @@ public class EnemyProjectile : Projectile
         if (SharedFunctions.HitSomething(_collider, _interactableLayerMask, out Collider2D hitObject))
         {
             if (hitObject.TryGetComponent(out DamageableObject damageableObject))
+            {
+                if (damageableObject.TryGetComponent(out RideArmor rideArmor) && rideArmor.Player == null)
+                    return;
+
                 damageableObject.TakeDamage(Damage);
+            }
 
             if (_enemyWeaponUnit.UsePooling)
                 OnReturnProjectileToPool?.Invoke(gameObject);

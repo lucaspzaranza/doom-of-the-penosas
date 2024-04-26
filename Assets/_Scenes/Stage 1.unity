@@ -1425,7 +1425,7 @@ PrefabInstance:
     - target: {fileID: 742759606539004931, guid: 54f11de70eea196468bf5d8408b554b7,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4119,22 +4119,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _blinkDuration: 2
-  _sprites: []
+  _sprites:
+  - {fileID: 1016685582}
+  - {fileID: 794702324}
   _glowDuration: 0.1
   _1stColor: {r: 1, g: 0, b: 0, a: 1}
   _2ndColor: {r: 0, g: 0, b: 0, a: 1}
   _defaultColor: {r: 1, g: 1, b: 1, a: 1}
   _life: 100
   _speed: 2
-  _state: 0
-  _isCritical: 0
-  _fireEventWhenDead: 1
-  _weaponController:
-    _weaponDataList:
-    - _weaponUnit: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b, type: 2}
-      _enemyWeaponSpawnTransform: {fileID: 794702325}
-  _rigidbody: {fileID: 2046103758}
-  _isLandCharacter: 1
+  _enemyType: 1
   _landCharacterProps:
     GroundCheck: {fileID: 2137795402}
     CharacterCollider: {fileID: 2046103759}
@@ -4145,7 +4139,7 @@ MonoBehaviour:
       m_Bits: 400
     TerrainWithoutPlatformLayerMask:
       serializedVersion: 2
-      m_Bits: 272
+      m_Bits: 4368
     WaterLayerMask:
       serializedVersion: 2
       m_Bits: 16
@@ -4154,6 +4148,20 @@ MonoBehaviour:
       m_Bits: 128
     IsGrounded: 0
     IsOnPlatform: 0
+  _flyingCharacterProps:
+    FlyingCheckCollider: {fileID: 285566019}
+    FlyingLayerMask:
+      serializedVersion: 2
+      m_Bits: 4368
+  _state: 0
+  _isCritical: 0
+  _fireEventWhenDead: 1
+  _weaponController:
+    _weaponDataList:
+    - _weaponUnit: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b, type: 2}
+      _enemyWeaponSpawnTransform: {fileID: 794702325}
+  _rigidbody: {fileID: 2046103758}
+  _isLandCharacter: 0
   _enemySprites:
   - {fileID: 1016685582}
   - {fileID: 794702324}
@@ -4167,7 +4175,7 @@ Transform:
   m_GameObject: {fileID: 2046103754}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4192,7 +4200,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -4704,7 +4712,7 @@ PrefabInstance:
     - target: {fileID: 7512111401175367662, guid: 9f012c2875dc37a44be374b2e0f2b70e,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

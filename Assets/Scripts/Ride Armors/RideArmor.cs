@@ -156,9 +156,17 @@ public abstract class RideArmor : DamageableObject
             _equippedPlayer.GetComponent<SpriteRenderer>().color = newColor;
     }
 
+    public override void TakeDamage(int damage, bool force = false)
+    {
+        if(Player == null) 
+            return;
+
+        base.TakeDamage(damage, force);
+    }
+
     protected override void SetLife(int value)
     {
-        if (_player == null)
+        if (Player == null)
             return;
 
         _life = Mathf.Clamp(value, 0, PlayerConsts.Max_Life); ;

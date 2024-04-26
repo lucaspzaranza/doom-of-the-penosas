@@ -12,6 +12,15 @@ public abstract class Enemy : DamageableObject
     [SerializeField] protected float _speed;
     public float Speed => _speed;
 
+    [SerializeField] private EnemyType _enemyType;
+    public EnemyType EnemyType => _enemyType;
+
+    [DrawIfEnumEqualsTo("_enemyType", new EnemyType(), EnemyType.Land)]
+    [SerializeField] protected LandCharacterProps _landCharacterProps;
+
+    [DrawIfEnumEqualsTo("_enemyType", new EnemyType(), EnemyType.Flying)]
+    [SerializeField] protected FlyingCharaterProps _flyingCharacterProps;
+
     [SerializeField] private EnemyState _state;
     public EnemyState State => _state;
 
@@ -25,12 +34,6 @@ public abstract class Enemy : DamageableObject
 
     [SerializeField] protected Rigidbody2D _rigidbody;
     public Rigidbody2D Rigidbody => _rigidbody;
-
-    [SerializeField] private bool _isLandCharacter;
-    public bool IsLandCharacter => _isLandCharacter;
-
-    [DrawIfBoolEqualsTo("_isLandCharacter", true)]
-    [SerializeField] protected LandCharacterProps _landCharacterProps;
 
     [SerializeField] protected List<SpriteRenderer> _enemySprites;
     public List<SpriteRenderer> EnemySprites => _enemySprites;
@@ -46,7 +49,7 @@ public abstract class Enemy : DamageableObject
 
     protected override void SetLife(int value)
     {
-        _life -= value;
+        _life = value;
 
         if (_life <= 0)
         {
@@ -62,10 +65,10 @@ public abstract class Enemy : DamageableObject
         Vector2 direction = WeaponController.WeaponDataList.First
             (weaponData => weaponData.WeaponUnit.ID == weaponId).
             EnemyWeaponSpawnTransform.SpawnTransform.position;
-        WeaponController.WeaponDataList[weaponId].WeaponUnit.Shoot(direction, GetShotDirection());
+        WeaponController.WeaponDataList[weaponId].WeaponUnit.Shoot(direction, GetDirection());
     }
 
-    protected virtual int GetShotDirection()
+    protected virtual int GetDirection()
     {
         return _isLeft ? -1 : 1;
     }

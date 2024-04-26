@@ -120,6 +120,7 @@
     <Compile Include="Assets\Scripts\Ride Armors\RideArmorActivator.cs" />
     <Compile Include="Assets\Scripts\GameController\InputSystemController.cs" />
     <Compile Include="Assets\Scripts\SharedData\ExtensionMethods.cs" />
+    <Compile Include="Assets\Scripts\Attributes\DrawIfEnumEqualsToAttribute.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerHUD.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerLobby\GameModeTitleSelector.cs" />
     <Compile Include="Assets\Scripts\UI\PauseMenu.cs" />

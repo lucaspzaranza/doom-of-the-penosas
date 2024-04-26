@@ -79,6 +79,12 @@ namespace SharedData.Enumerations
         Chickencopter = 3
     }
 
+    public enum EnemyType
+    {
+        Land,
+        Flying
+    }
+
     public enum EnemyState
     {
         Idle,

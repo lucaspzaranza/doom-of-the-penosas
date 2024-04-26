@@ -51,7 +51,7 @@ public class Projectile : MonoBehaviour
 
     public virtual void DamageEnemy(ref Collider2D hitObject)
     {
-        if(hitObject.TryGetComponent(out Enemy enemy))
-            enemy.TakeDamage(Damage);
+        if (hitObject.TryGetComponent(out DamageableObject damageableObject))
+            damageableObject.TakeDamage(Damage);
     }
 }

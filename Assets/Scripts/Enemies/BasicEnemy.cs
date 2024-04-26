@@ -13,7 +13,7 @@ public class BasicEnemy : Enemy
 
     protected void Update()
     {
-        //Patrol();
+        Patrol();
 
         // Temporary for test usage only
         if(Input.GetKeyDown(KeyCode.O))
@@ -29,27 +29,26 @@ public class BasicEnemy : Enemy
 
     protected override void Move()
     {
-        if (IsLandCharacter)
-            MoveLandEnemy();
-        else
-            MoveFlyingEnemy();
-    }
-
-    protected virtual void MoveLandEnemy()
-    {
         if (chooseRight && transform.localScale.x < 0)
             Flip();
         else if (!chooseRight && transform.localScale.x > 0)
             Flip();
 
+        if (EnemyType == EnemyType.Land)
+            MoveLandEnemy();
+        else if (EnemyType == EnemyType.Flying)
+            MoveFlyingEnemy();
+    }
+
+    protected virtual void MoveLandEnemy()
+    {        
         if (Rigidbody != null && !SharedFunctions.HitSomething(
             _landCharacterProps.WallCheckCollider,
             _landCharacterProps.TerrainWithoutPlatformLayerMask,
-            out Collider2D hitWall)
-        )
+            out Collider2D hitWall))
         {
             //bool chooseRight = Random.Range(0, 2) == 1;
-            _xDirection = chooseRight ? _speed * 1 : _speed * -1;
+            _xDirection = GetDirection() * _speed;
             Vector2 direction = new Vector2(_xDirection, Rigidbody.velocity.y);
             Rigidbody.velocity = direction;
         }
@@ -57,7 +56,16 @@ public class BasicEnemy : Enemy
 
     protected virtual void MoveFlyingEnemy()
     {
-
+        if (Rigidbody != null && !SharedFunctions.HitSomething(_flyingCharacterProps.FlyingCheckCollider,
+            _flyingCharacterProps.FlyingLayerMask,
+            out Collider2D hitWall))
+        {
+            print("I'm flyin'...");
+            //_xDirection = chooseRight ? _speed * 1 : _speed * -1;
+            _xDirection = GetDirection() * _speed;
+            Vector2 direction = new Vector2(_xDirection, 0);
+            transform.Translate(direction * Time.deltaTime);
+        }
     }    
 
     protected override void CheckForNewState()
