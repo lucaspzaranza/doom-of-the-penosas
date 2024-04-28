@@ -1,3 +1,4 @@
+using SharedData.Enumerations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Policy;
@@ -91,6 +92,12 @@ public static class WarningMessages
     public static void SavingProgressFromTheBeggining()
     {
         Debug.Log("Saving game progress from the beginning...");
+    }
+
+    public static void EnemyActionNotFound(EnemyState enemyState)
+    {
+        Debug.LogWarning($"Could not find an action to do for the {enemyState} enemy state. " +
+            $"Did you set it at the Inspector correctly?");
     }
 }
 

@@ -92,4 +92,12 @@ namespace SharedData.Enumerations
         ChasingPlayer,
         Attacking,
     }
+
+    public enum EnemyActionStatus
+    {
+        None,
+        Started,
+        Performed,
+        Canceled
+    }
 }

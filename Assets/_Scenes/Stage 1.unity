@@ -4128,7 +4128,7 @@ MonoBehaviour:
   _defaultColor: {r: 1, g: 1, b: 1, a: 1}
   _life: 100
   _speed: 2
-  _enemyType: 1
+  _enemyType: 0
   _landCharacterProps:
     GroundCheck: {fileID: 2137795402}
     CharacterCollider: {fileID: 2046103759}
@@ -4154,18 +4154,76 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 4368
   _state: 0
+  _timeToCheckNewState: 1
   _isCritical: 0
   _fireEventWhenDead: 1
+  _canStayIdle: 1
   _weaponController:
     _weaponDataList:
     - _weaponUnit: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b, type: 2}
       _enemyWeaponSpawnTransform: {fileID: 794702325}
   _rigidbody: {fileID: 2046103758}
-  _isLandCharacter: 0
   _enemySprites:
   - {fileID: 1016685582}
   - {fileID: 794702324}
-  chooseRight: 1
+  _enemyStateGeneralData:
+    _initialState: 0
+    _statesList:
+    - _name: Idle
+      _enemyState: 0
+      _changeRate: 30
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls: []
+      _possiblesStatesToRandomlyChange: 01000000
+    - _name: Patroling
+      _enemyState: 1
+      _changeRate: 15
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 2046103755}
+              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
+              m_MethodName: Patrol
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _possiblesStatesToRandomlyChange: 00000000
+    - _name: Chasing Player
+      _enemyState: 2
+      _changeRate: 30
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls: []
+      _possiblesStatesToRandomlyChange: 
+    - _name: Attacking Player
+      _enemyState: 3
+      _changeRate: 30
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls: []
+      _possiblesStatesToRandomlyChange: 
+  _movementDuration: 1.5
+  _timeToInvertMovement: 0.5
+  _rightDirection: 1
 --- !u!4 &2046103757
 Transform:
   m_ObjectHideFlags: 0
@@ -4175,7 +4233,7 @@ Transform:
   m_GameObject: {fileID: 2046103754}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4200,7 +4258,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 0
+  m_GravityScale: 1.5
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2

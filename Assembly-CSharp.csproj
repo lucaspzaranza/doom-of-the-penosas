@@ -63,6 +63,7 @@
     <Compile Include="Assets\Scripts\SharedData\DamageableObject.cs" />
     <Compile Include="Assets\Scripts\Pooling\PoolController.cs" />
     <Compile Include="Assets\Scripts\Weapons\Kawarimi.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyStateDataUnit.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerLobby\PlayerLobbyUIController.cs" />
     <Compile Include="Assets\Scripts\UI\CursorPosition.cs" />
     <Compile Include="Assets\Scripts\Inventory\SpecialItem.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Assets\Scripts\Persistence\PersistenceController.cs" />
     <Compile Include="Assets\Scripts\Inventory\Item.cs" />
     <Compile Include="Assets\Scripts\Stages\StageSO.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyStateGeneralData.cs" />
     <Compile Include="Assets\Scripts\SharedData\SharedFunctions.cs" />
     <Compile Include="Assets\Scripts\UI\InputDevices\InputDevicesSelector.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="Assets\Scripts\Interfaces\IController.cs" />
     <Compile Include="Assets\Scripts\Weapons\Projectile.cs" />
     <Compile Include="Assets\Input System\PlayerInput.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyAction.cs" />
     <Compile Include="Assets\Scripts\Inventory\Mayday.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IUIController.cs" />
     <Compile Include="Assets\Scripts\Inventory\AddLives.cs" />
