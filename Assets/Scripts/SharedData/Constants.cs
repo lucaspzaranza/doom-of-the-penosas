@@ -96,8 +96,8 @@ public static class WarningMessages
 
     public static void EnemyActionNotFound(EnemyState enemyState)
     {
-        Debug.LogWarning($"Could not find an action to do for the {enemyState} enemy state. " +
-            $"Did you set it at the Inspector correctly?");
+        Debug.LogWarning($"Could not find a proper action to perform for the {enemyState} enemy state. " +
+            $"Did you add it at the Inspector correctly?");
     }
 }
 

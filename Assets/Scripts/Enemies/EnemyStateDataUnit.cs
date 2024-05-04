@@ -15,14 +15,17 @@ public class EnemyStateDataUnit
         set => _enemyState = value;
     }
 
-    [Tooltip("The percentage (%) to change this state to another.")]
+    [SerializeField] private EnemyAction _action;
+    public EnemyAction Action => _action;
+
+    [Space]
+    [Tooltip("The percentage (%) to change this state to another. Set this to 0 if you don't " +
+    "want this state to be randomly changed.")]
     [Range(0, 100)]
     [SerializeField] private int _changeRate;
     public int ChangeRate => _changeRate;
 
-    [SerializeField] private EnemyAction _action;
-    public EnemyAction Action => _action;
-
+    [Tooltip("The states you can randomly change this state to.")]
     [SerializeField] private List<EnemyState> _possiblesStatesToRandomlyChange;
     public List <EnemyState> PossiblesStatesToRandomlyChange => _possiblesStatesToRandomlyChange;
 }

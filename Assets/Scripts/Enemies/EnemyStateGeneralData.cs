@@ -18,14 +18,18 @@ public class EnemyStateGeneralData
     private EnemyStateDataUnit _currentState;
     public EnemyStateDataUnit CurrentState => _currentState;
 
+    public bool HasStateChangeScheduled => _scheduledStateData != null;
+
     private Enemy _enemy;
     private EnemyStateDataUnit _cachedStateData;
+    private EnemyStateDataUnit _scheduledStateData;
     private bool _changedState;
 
     public void EventHandlerSetup(Enemy enemyToAssign)
     {
-        foreach (var enemyActionData in _statesList)
+        foreach (var enemyActionData in StatesList)
         {
+            enemyActionData.Action.EnemyState = enemyActionData.EnemyState;
             enemyActionData.Action.OnActionStarted += HandleOnActionStarted;
             enemyActionData.Action.OnActionPerformed += HandleOnActionPerformed;
         }
@@ -48,6 +52,9 @@ public class EnemyStateGeneralData
 
     public void DoInitialState()
     {
+        if (InitialState != _enemy.State)
+            _enemy.ChangeState(InitialState);
+            
         EnemyStateDataUnit initialStateData = StatesList.Find(stateData => stateData.EnemyState == _initialState);
         initialStateData?.Action.SetActionStatusStarted();
         _changedState = true;
@@ -58,7 +65,8 @@ public class EnemyStateGeneralData
         int length = CurrentState.PossiblesStatesToRandomlyChange.Count;
         int randomIndex = Random.Range(0, length);
 
-        return CurrentState.PossiblesStatesToRandomlyChange[randomIndex];
+        return length == 0? CurrentState.EnemyState : 
+            CurrentState.PossiblesStatesToRandomlyChange[randomIndex];
     }
 
     public void DoAction(EnemyState enemyState)
@@ -75,37 +83,50 @@ public class EnemyStateGeneralData
             WarningMessages.EnemyActionNotFound(enemyState);
     }
 
-    public void HandleOnActionStarted(EnemyAction enemyAction)
+    public void SetCurrentActionAsPerformed()
     {
-        _currentState = StatesList.Find(stateData => stateData.Action.Equals(enemyAction));
+        CurrentState.Action.SetActionStatusPerformed();
     }
 
-    public void HandleOnActionPerformed(EnemyAction enemyAction)
+    public void HandleOnActionStarted(EnemyAction enemyAction)
     {
-        _currentState = null;
+        _currentState = StatesList.Find(state => state.EnemyState == enemyAction.EnemyState);
+    }
+
+    public void HandleOnActionPerformed()
+    {
+        if (HasStateChangeScheduled)
+        {
+            _currentState = _scheduledStateData;
+            _scheduledStateData = null;
+        }
+
+        CurrentState.Action.SetActionStatusStarted();
     }
 
     public void HandleOnEnemyChangedState(EnemyState newState)
     {
         EnemyStateDataUnit newStateToChange = StatesList.Find(state => state.EnemyState == newState);
 
-        if(newStateToChange != null)
+        if(newStateToChange == null)
         {
-            if (_currentState.Action.CanBeCanceled)
-            {
-                if (!_currentState.Equals(newStateToChange))
-                    _changedState = true;
+            _enemy.ReturnToPreviousState();
+            WarningMessages.EnemyActionNotFound(newState);
+            return;
+        }
 
-                _currentState.Action.SetActionStatusCanceled();
-                newStateToChange.Action.SetActionStatusStarted();
-            }
-            else
-            {
-                // Schedule new state change only when curent State action be performed.
-                // Use Movement Action as a first prototype to test this feature.
-            }
+        if (_currentState == null)
+            return;
+
+        if (_currentState.Action.CanBeCanceled)
+        {
+            if (!_currentState.Equals(newStateToChange))
+                _changedState = true;
+
+            _currentState.Action.SetActionStatusCanceled();
+            newStateToChange.Action.SetActionStatusStarted();
         }
         else
-            WarningMessages.EnemyActionNotFound(newState);
+            _scheduledStateData = newStateToChange;
     }
 }

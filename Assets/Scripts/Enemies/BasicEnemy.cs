@@ -8,12 +8,12 @@ public class BasicEnemy : Enemy
 {
     [Header("BasicEnemy Variables")]
     [SerializeField] protected float _movementDuration;
-    [SerializeField] protected float _timeToInvertMovement;
-    [SerializeField] protected bool _rightDirection;
+    [SerializeField] protected float _timeToInvertMovement;    
 
     private float _xDirection;
     private float _movementTimeCounter;
     private float _timeToInvertMovementTimeCounter;
+    private float _shootTimeCounter;
 
     public override void Patrol()
     {
@@ -22,12 +22,7 @@ public class BasicEnemy : Enemy
 
     protected override void Move()
     {
-        if (_rightDirection && transform.localScale.x < 0)
-            Flip();
-        else if (!_rightDirection && transform.localScale.x > 0)
-            Flip();
-
-        if(_movementTimeCounter < _movementDuration)
+        if (_movementTimeCounter < _movementDuration)
         {
             _movementTimeCounter += Time.deltaTime;
 
@@ -44,8 +39,37 @@ public class BasicEnemy : Enemy
             {
                 _movementTimeCounter = 0;
                 _timeToInvertMovementTimeCounter = 0;
-                _rightDirection = !_rightDirection;
+                Flip(transform.localScale.x < 0 ? 1 : -1);
+                EnemyStateGeneralData.SetCurrentActionAsPerformed();
             }
+        }
+    }
+
+    public override void ChaseEnemy()
+    {
+        if(_detectedPlayer == null)
+        {
+            print("Lost player from sight. Returning to initial state...");
+            ChangeState(EnemyStateGeneralData.InitialState);
+            return;
+        }
+
+        if (ReachedAttackDistance())
+        {
+            print("Reached attack distance, so let's attack.");
+            if(_collidedWithPlayer)
+            {
+                float distance = transform.position.x - _detectedPlayer.transform.position.x;
+                Flip(distance < 0 ? 1 : -1);
+            }
+            ChangeState(EnemyState.Attacking);
+        }
+        else
+        {
+            if (EnemyType == EnemyType.Land)
+                MoveLandEnemy();
+            else if (EnemyType == EnemyType.Flying)
+                MoveFlyingEnemy();
         }
     }
 
@@ -56,10 +80,11 @@ public class BasicEnemy : Enemy
             _landCharacterProps.TerrainWithoutPlatformLayerMask,
             out Collider2D hitWall))
         {
-            //bool chooseRight = Random.Range(0, 2) == 1;
             _xDirection = GetDirection() * _speed;
+
             Vector2 direction = new Vector2(_xDirection, Rigidbody.velocity.y);
             Rigidbody.velocity = direction;
+            Flip((int)_xDirection);
         }
     }
 
@@ -69,11 +94,22 @@ public class BasicEnemy : Enemy
             _flyingCharacterProps.FlyingLayerMask,
             out Collider2D hitWall))
         {
-            //print("I'm flyin'...");
-            //_xDirection = chooseRight ? _speed * 1 : _speed * -1;
             _xDirection = GetDirection() * _speed;
             Vector2 direction = new Vector2(_xDirection, 0);
             transform.Translate(direction * Time.deltaTime);
+
+            Flip((int)_xDirection);
         }
-    }    
+    }
+
+    public override void Attack()
+    {
+        print("Attack!");
+
+        if (!ReachedAttackDistance())
+        {
+            print("Changing to Chase Player after attack.");
+            ChangeState(EnemyState.ChasingPlayer);
+        }
+    }
 }

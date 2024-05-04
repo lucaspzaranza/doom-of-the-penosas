@@ -118,6 +118,7 @@
     <Compile Include="Assets\Scripts\Interfaces\IUIController.cs" />
     <Compile Include="Assets\Scripts\Inventory\AddLives.cs" />
     <Compile Include="Assets\Scripts\GameController\Controller.cs" />
+    <Compile Include="Assets\Scripts\SharedData\PlayerDetector.cs" />
     <Compile Include="Assets\Scripts\Inventory\WeaponLvlUp.cs" />
     <Compile Include="Assets\Scripts\Ride Armors\TireMonoWheel.cs" />
     <Compile Include="Assets\Scripts\Ride Armors\RideArmorActivator.cs" />

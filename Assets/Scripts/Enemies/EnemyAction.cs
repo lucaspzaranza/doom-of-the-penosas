@@ -10,33 +10,35 @@ using UnityEngine.Events;
 public class EnemyAction
 {
     public Action<EnemyAction> OnActionStarted;
-    public Action<EnemyAction> OnActionPerformed;
+    public Action OnActionPerformed;
 
-    [SerializeField] private EnemyActionStatus _status;
+    private EnemyActionStatus _status;
     public EnemyActionStatus Status => _status;
 
+    [Tooltip("If checked, the action may be interrupted by another when another Enemy State be chosen. " +
+    "If not, the next state will start only when this action ends.")]
     [SerializeField] private bool _canBeCanceled;
     public bool CanBeCanceled => _canBeCanceled;
+
+    public EnemyState EnemyState { get; set; }
 
     [SerializeField] private UnityEvent _actionToPerform;
 
     private bool CanPerformAction => _actionToPerform.GetPersistentEventCount() > 0;
 
-    public void SetActionStatusStarted(bool fireEvent = true)
+    public void SetActionStatusStarted()
     {
         _status = EnemyActionStatus.Started;
-        if(fireEvent)
-            OnActionStarted?.Invoke(this);
+        OnActionStarted?.Invoke(this);
     }
 
-    public void SetActionStatusPerformed(bool fireEvent = true)
+    public void SetActionStatusPerformed()
     {
         _status = EnemyActionStatus.Performed;
-        if(fireEvent)
-            OnActionPerformed?.Invoke(this);
+        OnActionPerformed?.Invoke();
     }
 
-    public void SetActionStatusCanceled(bool fireEvent = true)
+    public void SetActionStatusCanceled()
     {
         if (_canBeCanceled)
             _status = EnemyActionStatus.Canceled;
@@ -45,6 +47,6 @@ public class EnemyAction
     public void DoAction()
     {
         if (_status == EnemyActionStatus.Started && CanPerformAction)
-            _actionToPerform.Invoke();
+            _actionToPerform?.Invoke();
     }
 }

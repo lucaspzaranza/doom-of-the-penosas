@@ -13,7 +13,7 @@ public abstract class Enemy : DamageableObject
     [Header("Enemy General Variables")]
     [SerializeField] protected float _speed;
     public float Speed => _speed;
-
+    
     [SerializeField] private EnemyType _enemyType;
     public EnemyType EnemyType => _enemyType;
 
@@ -38,6 +38,24 @@ public abstract class Enemy : DamageableObject
     [SerializeField] protected bool _canStayIdle;
     public bool CanStayIdle => _canStayIdle;
 
+    [DrawIfBoolEqualsTo("_canStayIdle", false)]
+    [SerializeField] private EnemyState _stateToForceChangeIfIdle;
+
+    [Tooltip("Check this if you want this enemy to start attacking the player right after it " +
+    "detects the player presence. Else, it'll chase the player.")]
+    [SerializeField] protected bool _instantAttack;
+    public bool InstantAttack => _instantAttack;
+
+    [Tooltip("The distance the enemy will have to stay from the player to start its attack.")]
+    [DrawIfBoolEqualsTo("_instantAttack", false)]
+    [Range(0f, 5f)]
+    [SerializeField] private float _attackDistance;
+    public float AttackDistance => _attackDistance;
+
+    [DrawIfBoolEqualsTo("_instantAttack", false)]
+    [Range(0.5f, 1f)]
+    [SerializeField] private float _attackMinDistance;
+
     [SerializeField] private EnemyWeaponController _weaponController;
     public EnemyWeaponController WeaponController => _weaponController;
 
@@ -57,12 +75,21 @@ public abstract class Enemy : DamageableObject
     [SerializeField] protected EnemyStateGeneralData _enemyStateGeneralData;
     public EnemyStateGeneralData EnemyStateGeneralData => _enemyStateGeneralData;
 
-    protected bool _isLeft;
+    [SerializeField] protected PlayerDetector _playerDetector;
+    public PlayerDetector PlayerDetector => _playerDetector;
+
+    [SerializeField] protected bool _isLeft;
+
+    protected DamageableObject _detectedPlayer;
+    protected EnemyState _previousState;
+    protected Collider2D _enemyCollider;
+    protected bool _collidedWithPlayer = false;
 
     private void OnEnable()
     {
         EnemyStateGeneralData.EventHandlerSetup(this);
         EnemyStateGeneralData.DoInitialState();
+        _enemyCollider = GetComponent<Collider2D>();
     }
 
     private void OnDisable()
@@ -78,8 +105,19 @@ public abstract class Enemy : DamageableObject
             Shoot(0);
         }
 
-        //if (FoundPlayer() && (State == EnemyState.Idle || State == EnemyState.Patrol))
-        //    ChangeState(EnemyState.ChasingPlayer);
+        if (PlayerDetector.DetectedPlayerNearObject(out _detectedPlayer))
+        {
+            if(State == EnemyState.Idle || State == EnemyState.Patrol)
+            {
+                ChangeState(EnemyState.ChasingPlayer);
+                return;
+            }
+        }
+        else if (CollidedWithPlayer(out _detectedPlayer))
+        {
+            print("Changing to Chase Player...");
+            ChangeState(EnemyState.ChasingPlayer);
+        }
 
         if (EnemyStateGeneralData.CurrentState != null)
         {
@@ -89,27 +127,40 @@ public abstract class Enemy : DamageableObject
             if (CheckForNewStateTimeCounter > TimeToCheckNewState)
             {
                 CheckForNewStateTimeCounter = 0f;
-                CheckForNewState(State);
+                CheckForNewRandomState(State);
             }
         }
         else
-            CheckForNewState(State);
-    }
-
-    public virtual bool FoundPlayer()
-    {
-        return false;
+            CheckForNewRandomState(State);        
     }
 
     public virtual void PerformActionBasedOnState(EnemyState state) 
     {
+        if (!CanStayIdle && state == EnemyState.Idle)
+        {
+            ChangeState(_stateToForceChangeIfIdle);
+            return;
+        }
+
+        if(InstantAttack && state == EnemyState.ChasingPlayer)
+        {
+            ChangeState(EnemyState.Attacking);
+            return;
+        }
+
         EnemyStateGeneralData.DoAction(state);
     }
 
     public virtual void ChangeState(EnemyState newState)
     {
+        _previousState = _state;
         _state = newState;
         OnEnemyChangedState?.Invoke(_state);
+    }
+
+    public void ReturnToPreviousState()
+    {
+        _state = _previousState;
     }
 
     protected override void SetLife(int value)
@@ -124,8 +175,23 @@ public abstract class Enemy : DamageableObject
     }
 
     public virtual void Patrol() { }
-
+    
     protected virtual void Move() { }
+
+    public virtual void ChaseEnemy() { }
+
+    public virtual bool ReachedAttackDistance()
+    {
+        if (_detectedPlayer == null)
+            return false;
+
+        float distance = Vector2.Distance(transform.position, _detectedPlayer.transform.position);
+        bool reachedAtkdistance = distance <= AttackDistance;
+
+        return reachedAtkdistance;
+    }
+
+    public virtual void Attack() { }
 
     public virtual void Shoot(int weaponId)
     {
@@ -137,24 +203,74 @@ public abstract class Enemy : DamageableObject
 
     protected virtual int GetDirection()
     {
-        return _isLeft ? -1 : 1;
+        if(_detectedPlayer == null)
+            return _isLeft ? -1 : 1;
+        else
+        {
+            float distance = transform.position.x - _detectedPlayer.transform.position.x;
+            return distance > 0? -1 : 1;
+        }
     }
 
-    protected virtual void CheckForNewState(EnemyState enemyState) 
+    protected virtual void CheckForNewRandomState(EnemyState enemyState) 
     {
+        if (EnemyStateGeneralData.HasStateChangeScheduled)
+            return;
+
         bool changeState = UnityEngine.Random.Range(1, 101) <= EnemyStateGeneralData.CurrentState.ChangeRate;
         if (changeState)
         {
             EnemyState newState = EnemyStateGeneralData.GetNewRandomState();
-            print($"Changing State to {newState}.");
+
+            if (!CanStayIdle && newState == EnemyState.Idle)
+            {
+                print("Ops, enemy can't stay idle and the selected state is Idle! " +
+                    "So we'll pass it and maintain the current state...");
+                return;
+            }
+
             ChangeState(newState);
         }
     }
 
-    protected virtual void Flip()
+    /// <summary>
+    /// Checks if there is some player colliding with the enemy. Useful to detect when some player is at the same enemy position.
+    /// </summary>
+    /// <param name="_detectedPlayer"></param>
+    /// <returns></returns>
+    public virtual bool CollidedWithPlayer(out DamageableObject _detectedPlayer)
     {
-        _isLeft = !_isLeft;
-        transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
+        DamageableObject damageableObject = null;
+
+        if (SharedFunctions.HitSomething(_enemyCollider, PlayerDetector.RaycastLayer, out Collider2D hit)
+        && hit.TryGetComponent(out damageableObject) && SharedFunctions.DamageableObjectIsPlayer(damageableObject))
+        {
+            _detectedPlayer = damageableObject;
+            _collidedWithPlayer = true;
+        }
+        else
+        {
+            _detectedPlayer = null;
+            _collidedWithPlayer = false;
+        }
+
+        return _collidedWithPlayer;
+    }
+
+    protected virtual void Flip(int direction)
+    {
+        if(direction < 0 && transform.localScale.x > 0)
+        {
+            _isLeft = true;
+            transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x) * -1, transform.localScale.y);
+            PlayerDetector?.Flip();
+        }
+        else if(direction > 0 && transform.localScale.x < 0)
+        {
+            _isLeft = false;
+            transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x), transform.localScale.y);
+            PlayerDetector?.Flip();
+        }
     }
 
     protected virtual void Death() 

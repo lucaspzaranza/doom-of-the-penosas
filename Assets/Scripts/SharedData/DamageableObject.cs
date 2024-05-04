@@ -7,7 +7,6 @@ public class DamageableObject : MonoBehaviour
 {
     private const float _glowFrameInterval = 0.05f;
 
-    [Header("Blink Variables")]
     [SerializeField] protected float _blinkDuration;
     protected float _blinkTimeCounter;
     protected float _blinkIntervalTimeCounter;
@@ -15,7 +14,6 @@ public class DamageableObject : MonoBehaviour
     [Tooltip("Add here the sprites which will be used for blinking and glowing when the object be hit and take damage.")]
     [SerializeField] protected List<SpriteRenderer> _sprites;
 
-    [Header("Glow Variables")]
     [SerializeField] private float _glowDuration; // 0.1f
     [SerializeField] private Color _1stColor;
     [SerializeField] private Color _2ndColor;

@@ -557,6 +557,7 @@ GameObject:
   m_Component:
   - component: {fileID: 285566018}
   - component: {fileID: 285566019}
+  - component: {fileID: 285566020}
   m_Layer: 0
   m_Name: Wall Check
   m_TagString: Untagged
@@ -614,6 +615,25 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.13371024, y: 0.69348204}
   m_Direction: 0
+--- !u!114 &285566020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285566017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4719b7817d426784092b464f9ae861e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _raycastLayer:
+    serializedVersion: 2
+    m_Bits: 8200
+  _resultsLimit: 2
+  _raycastDistance: 2
+  _isLeft: 0
+  _direction: {x: 1, y: 0}
 --- !u!1001 &305978106
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1889,7 +1909,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &1051000094
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1997,7 +2017,7 @@ Transform:
   m_GameObject: {fileID: 1051000093}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.67, y: 0.31, z: 0}
+  m_LocalPosition: {x: -2.52, y: -0.37, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2725,7 +2745,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &1442785438
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2910,7 +2930,7 @@ PrefabInstance:
     - target: {fileID: 849103225893220654, guid: 94954de30c78a3e4881d9e59ea8c097c,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4158,6 +4178,10 @@ MonoBehaviour:
   _isCritical: 0
   _fireEventWhenDead: 1
   _canStayIdle: 1
+  _stateToForceChangeIfIdle: 1
+  _instantAttack: 0
+  _attackDistance: 2
+  _attackMinDistance: 0.5
   _weaponController:
     _weaponDataList:
     - _weaponUnit: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b, type: 2}
@@ -4167,23 +4191,20 @@ MonoBehaviour:
   - {fileID: 1016685582}
   - {fileID: 794702324}
   _enemyStateGeneralData:
-    _initialState: 0
+    _initialState: 1
     _statesList:
     - _name: Idle
       _enemyState: 0
-      _changeRate: 30
       _action:
-        _status: 0
         _canBeCanceled: 1
         _actionToPerform:
           m_PersistentCalls:
             m_Calls: []
+      _changeRate: 30
       _possiblesStatesToRandomlyChange: 01000000
     - _name: Patroling
       _enemyState: 1
-      _changeRate: 15
       _action:
-        _status: 0
         _canBeCanceled: 1
         _actionToPerform:
           m_PersistentCalls:
@@ -4200,30 +4221,54 @@ MonoBehaviour:
                 m_StringArgument: 
                 m_BoolArgument: 0
               m_CallState: 2
+      _changeRate: 20
       _possiblesStatesToRandomlyChange: 00000000
     - _name: Chasing Player
       _enemyState: 2
-      _changeRate: 30
       _action:
-        _status: 0
         _canBeCanceled: 1
         _actionToPerform:
           m_PersistentCalls:
-            m_Calls: []
+            m_Calls:
+            - m_Target: {fileID: 2046103755}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: ChaseEnemy
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
       _possiblesStatesToRandomlyChange: 
     - _name: Attacking Player
       _enemyState: 3
-      _changeRate: 30
       _action:
-        _status: 0
         _canBeCanceled: 1
         _actionToPerform:
           m_PersistentCalls:
-            m_Calls: []
+            m_Calls:
+            - m_Target: {fileID: 2046103755}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Attack
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
       _possiblesStatesToRandomlyChange: 
+  _playerDetector: {fileID: 285566020}
+  _isLeft: 0
   _movementDuration: 1.5
   _timeToInvertMovement: 0.5
-  _rightDirection: 1
 --- !u!4 &2046103757
 Transform:
   m_ObjectHideFlags: 0
@@ -4770,7 +4815,7 @@ PrefabInstance:
     - target: {fileID: 7512111401175367662, guid: 9f012c2875dc37a44be374b2e0f2b70e,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4800,10 +4845,10 @@ SceneRoots:
   - {fileID: 676096181}
   - {fileID: 1714112255}
   - {fileID: 1051000096}
+  - {fileID: 1164758617}
   - {fileID: 1905000768}
   - {fileID: 1945220455}
   - {fileID: 929392889}
-  - {fileID: 1164758617}
   - {fileID: 1632120279}
   - {fileID: 1442785440}
   - {fileID: 417022262}

@@ -25,4 +25,17 @@ public static class SharedFunctions
         hitSomething = results[0];
         return hitSomething != null;
     }
+
+    /// <summary>
+    /// Checks if the DamageableObject is a Player or if it's a Ride Armor with some player inside.
+    /// </summary>
+    /// <param name="dmgObject"></param>
+    /// <returns></returns>
+    public static bool DamageableObjectIsPlayer(DamageableObject dmgObject)
+    {
+        return 
+            dmgObject.TryGetComponent(out Penosa penosa) ||         // Is a player?
+            (dmgObject.TryGetComponent(out RideArmor rideArmor) &&  // Or is it a Ride Armor... 
+            rideArmor.Player != null);                              // ...with some player inside?
+    }
 }

@@ -815,7 +815,7 @@ GameObject:
   - component: {fileID: 6435880766563690139}
   - component: {fileID: 6435880766563690140}
   - component: {fileID: 7141890529576682542}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Dolores
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -906,7 +906,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _blinkDuration: 2
-  _isBlinking: 0
   _sprites:
   - {fileID: 6435880765688207646}
   - {fileID: 6435880766184842906}

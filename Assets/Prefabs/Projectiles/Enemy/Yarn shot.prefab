@@ -104,7 +104,7 @@ MonoBehaviour:
   _damage: 30
   _interactableLayerMask:
     serializedVersion: 2
-    m_Bits: 4361
+    m_Bits: 12553
 --- !u!58 &1617454459024769967
 CircleCollider2D:
   m_ObjectHideFlags: 0

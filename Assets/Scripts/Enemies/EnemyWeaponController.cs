@@ -7,6 +7,9 @@ public class EnemyWeaponController
 {
     [SerializeField] private List<EnemyWeaponData> _weaponDataList;
     public List<EnemyWeaponData> WeaponDataList => _weaponDataList;
+
+    [SerializeField] private float _fireRate;
+    public float FireRate => _fireRate;
 }
 
 [System.Serializable]
