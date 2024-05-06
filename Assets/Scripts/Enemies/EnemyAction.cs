@@ -10,9 +10,9 @@ using UnityEngine.Events;
 public class EnemyAction
 {
     public Action<EnemyAction> OnActionStarted;
-    public Action OnActionPerformed;
+    public Action<bool> OnActionPerformed;
 
-    private EnemyActionStatus _status;
+    [SerializeField] private EnemyActionStatus _status;
     public EnemyActionStatus Status => _status;
 
     [Tooltip("If checked, the action may be interrupted by another when another Enemy State be chosen. " +
@@ -32,10 +32,12 @@ public class EnemyAction
         OnActionStarted?.Invoke(this);
     }
 
-    public void SetActionStatusPerformed()
+    /// <param name="instantLoop">Set this param as true if you wish 
+    /// this action stars right after it reached its end.</param>
+    public void SetActionStatusPerformed(bool instantLoop = false)
     {
         _status = EnemyActionStatus.Performed;
-        OnActionPerformed?.Invoke();
+        OnActionPerformed?.Invoke(instantLoop);
     }
 
     public void SetActionStatusCanceled()
@@ -46,7 +48,7 @@ public class EnemyAction
 
     public void DoAction()
     {
-        if (_status == EnemyActionStatus.Started && CanPerformAction)
+        if (CanPerformAction)
             _actionToPerform?.Invoke();
     }
 }

@@ -9,11 +9,15 @@ public class BasicEnemy : Enemy
     [Header("BasicEnemy Variables")]
     [SerializeField] protected float _movementDuration;
     [SerializeField] protected float _timeToInvertMovement;    
+    [SerializeField] protected float _intervalBetweenAttacks;
+
+    protected float _intervalBetweenAttacksTimeCounter;
+    protected float _attackDurationTimeCounter;
+    protected float _fireRateCounter;    
 
     private float _xDirection;
     private float _movementTimeCounter;
     private float _timeToInvertMovementTimeCounter;
-    private float _shootTimeCounter;
 
     public override void Patrol()
     {
@@ -45,8 +49,9 @@ public class BasicEnemy : Enemy
         }
     }
 
-    public override void ChaseEnemy()
+    public override void ChasePlayer()
     {
+        print("ChasePlayer");
         if(_detectedPlayer == null)
         {
             print("Lost player from sight. Returning to initial state...");
@@ -104,11 +109,50 @@ public class BasicEnemy : Enemy
 
     public override void Attack()
     {
-        print("Attack!");
-
-        if (!ReachedAttackDistance())
+        EnemyActionStatus status = EnemyStateGeneralData.CurrentState.Action.Status;
+        print("Attack(); status: " + status + " Current state: " + EnemyStateGeneralData.CurrentState.EnemyState);
+        
+        if (status == EnemyActionStatus.Started)
         {
-            print("Changing to Chase Player after attack.");
+            if (_attackDurationTimeCounter <= 
+                WeaponController.WeaponDataList[0].WeaponUnit.AttackDuration)
+            {
+                if(_fireRateCounter >
+                    WeaponController.WeaponDataList[0].WeaponUnit.GetFireRate())
+                {
+                    Shoot(0);
+                    _fireRateCounter = 0;
+                }
+                else
+                    _fireRateCounter += Time.deltaTime;
+
+                _attackDurationTimeCounter += Time.deltaTime;
+            }
+            else
+            {
+                //print("End of attack wave.");
+                EnemyStateGeneralData.SetCurrentActionAsPerformed();            
+            }
+        }
+        else if (status == EnemyActionStatus.Performed)
+        {
+            _intervalBetweenAttacksTimeCounter += Time.deltaTime;
+
+            if (_intervalBetweenAttacksTimeCounter >= _intervalBetweenAttacks)
+            {
+                //print("Starting another attack wave...");
+                _intervalBetweenAttacksTimeCounter = 0;
+                _attackDurationTimeCounter = 0;
+                _fireRateCounter = 0;
+                EnemyStateGeneralData.CurrentState.Action.SetActionStatusStarted();
+                return;
+            }
+        }
+
+        if (!_attackCanceled && !ReachedAttackDistance())
+        {
+            print("Couldn't attack player anymore, so let's chase him.");
+            _attackCanceled = true;
             ChangeState(EnemyState.ChasingPlayer);
         }
     }

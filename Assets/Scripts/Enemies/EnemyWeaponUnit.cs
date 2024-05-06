@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,9 +9,6 @@ public class EnemyWeaponUnit : ScriptableObject
 {
     [SerializeField] private string _name;
     public string Name => _name;
-
-    [SerializeField] private byte _id;
-    public int ID => _id;
 
     [SerializeField] private Sprite _sprite;
     public Sprite Sprite => _sprite;
@@ -23,14 +21,22 @@ public class EnemyWeaponUnit : ScriptableObject
     [SerializeField] private GameObject _projectile;
     public GameObject Projectile => _projectile;
 
+    [SerializeField] private float _attackDuration;
+    public float AttackDuration => _attackDuration;
+
     [Tooltip("Check this if this weapon has continuous fire, like a machinegun, for example.")]
     [SerializeField] private bool _isContinuous;
     public bool IsContinuous => _isContinuous;
 
-    [Tooltip("It'll be used only when the \"Is Continuous\" checkbox be marked.")]
+    [Tooltip("It'll be used only when the \"Is Continuous\" option be unchecked.")]
+    [DrawIfBoolEqualsTo("_isContinuous", comparedValue: false, elseDrawItDisabled: true)]
+    [SerializeField] private float _fireRate;
+    public float FireRate => _fireRate;
+
+    [Tooltip("It'll be used only when the \"Is Continuous\" option be marked.")]
     [DrawIfBoolEqualsTo("_isContinuous", comparedValue: true, elseDrawItDisabled: true)]
-    [SerializeField] private float _continuousRate;
-    public float ContinuousRate => _continuousRate;
+    [SerializeField] private float _continuousFireRate;
+    public float ContinuousFireRate => _continuousFireRate;    
 
     [SerializeField] private int _damageHit;
     public int DamageHit => _damageHit;
@@ -42,10 +48,7 @@ public class EnemyWeaponUnit : ScriptableObject
         _gameControllerInstance = FindObjectOfType<GameController>();
     }
 
-    private void OnDisable()
-    {
-        _gameControllerInstance = null;
-    }
+    public float GetFireRate() => IsContinuous ? ContinuousFireRate : FireRate;
 
     public void Shoot(Vector2 coordinates, int currentDirection)
     {
@@ -53,7 +56,9 @@ public class EnemyWeaponUnit : ScriptableObject
 
         if(UsePooling) 
         {
-            // Do the pooling
+            if(_gameControllerInstance == null)
+                _gameControllerInstance = FindObjectOfType<GameController>();
+
             if (_gameControllerInstance != null)
             {
                 newProjectile = _gameControllerInstance.GetProjectileFromPool(_projectile);
@@ -61,7 +66,8 @@ public class EnemyWeaponUnit : ScriptableObject
             }
             else
             {
-                Debug.LogWarning($"{_projectile.name} not found on Object Pool.");
+                Debug.LogWarning("Could not find GameController instance, " +
+                    "so the pooling won't work as expected.");
                 return;
             }
         }

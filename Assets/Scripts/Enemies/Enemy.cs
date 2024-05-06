@@ -84,17 +84,21 @@ public abstract class Enemy : DamageableObject
     protected EnemyState _previousState;
     protected Collider2D _enemyCollider;
     protected bool _collidedWithPlayer = false;
+    protected bool _attackCanceled = false;
 
     private void OnEnable()
     {
         EnemyStateGeneralData.EventHandlerSetup(this);
         EnemyStateGeneralData.DoInitialState();
         _enemyCollider = GetComponent<Collider2D>();
+
+        EnemyStateGeneralData.OnStateChangedSuccess += HandleOnStateChangedSuccess;
     }
 
     private void OnDisable()
     {
         EnemyStateGeneralData.EventHandlerDispose();
+        EnemyStateGeneralData.OnStateChangedSuccess -= HandleOnStateChangedSuccess;
     }
 
     protected virtual void Update()
@@ -114,10 +118,7 @@ public abstract class Enemy : DamageableObject
             }
         }
         else if (CollidedWithPlayer(out _detectedPlayer))
-        {
-            print("Changing to Chase Player...");
             ChangeState(EnemyState.ChasingPlayer);
-        }
 
         if (EnemyStateGeneralData.CurrentState != null)
         {
@@ -151,11 +152,33 @@ public abstract class Enemy : DamageableObject
         EnemyStateGeneralData.DoAction(state);
     }
 
+    /// <summary>
+    /// Fire the event to cancel the current state and change it to the <i>newState</i> parameter. <br/>
+    /// If the current state can't be canceled, the function will schedule the change only when the current state
+    /// be performed.
+    /// </summary>
+    /// <param name="newState"></param>
     public virtual void ChangeState(EnemyState newState)
+    {
+        print($"ChangeState function. _state: {_state}, newState: {newState}");
+        if (_state == newState)
+            return;
+
+        OnEnemyChangedState?.Invoke(newState);
+    }
+
+    /// <summary>
+    /// Function to handle when the EnemyStateGeneralData successfully changed the current state to another.
+    /// It'll handle the event fired to update the enemy states.
+    /// </summary>
+    /// <param name="newState">The new state to update the enemy current state.</param>
+    public virtual void HandleOnStateChangedSuccess(EnemyState newState)
     {
         _previousState = _state;
         _state = newState;
-        OnEnemyChangedState?.Invoke(_state);
+
+        if (_previousState == EnemyState.Attacking && _attackCanceled)
+            _attackCanceled = false;
     }
 
     public void ReturnToPreviousState()
@@ -178,7 +201,7 @@ public abstract class Enemy : DamageableObject
     
     protected virtual void Move() { }
 
-    public virtual void ChaseEnemy() { }
+    public virtual void ChasePlayer() { }
 
     public virtual bool ReachedAttackDistance()
     {
@@ -193,12 +216,11 @@ public abstract class Enemy : DamageableObject
 
     public virtual void Attack() { }
 
-    public virtual void Shoot(int weaponId)
+    public virtual void Shoot(int weaponIndex)
     {
-        Vector2 direction = WeaponController.WeaponDataList.First
-            (weaponData => weaponData.WeaponUnit.ID == weaponId).
-            EnemyWeaponSpawnTransform.SpawnTransform.position;
-        WeaponController.WeaponDataList[weaponId].WeaponUnit.Shoot(direction, GetDirection());
+        Vector2 direction = WeaponController.WeaponDataList[weaponIndex]
+            .EnemyWeaponSpawnTransform.SpawnTransform.position;
+        WeaponController.WeaponDataList[weaponIndex].WeaponUnit.Shoot(direction, GetDirection());
     }
 
     protected virtual int GetDirection()
@@ -214,6 +236,7 @@ public abstract class Enemy : DamageableObject
 
     protected virtual void CheckForNewRandomState(EnemyState enemyState) 
     {
+
         if (EnemyStateGeneralData.HasStateChangeScheduled)
             return;
 
@@ -221,6 +244,7 @@ public abstract class Enemy : DamageableObject
         if (changeState)
         {
             EnemyState newState = EnemyStateGeneralData.GetNewRandomState();
+            print("newState: " + newState);
 
             if (!CanStayIdle && newState == EnemyState.Idle)
             {

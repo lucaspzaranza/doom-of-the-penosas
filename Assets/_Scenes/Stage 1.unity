@@ -4180,7 +4180,7 @@ MonoBehaviour:
   _canStayIdle: 1
   _stateToForceChangeIfIdle: 1
   _instantAttack: 0
-  _attackDistance: 2
+  _attackDistance: 1
   _attackMinDistance: 0.5
   _weaponController:
     _weaponDataList:
@@ -4196,6 +4196,7 @@ MonoBehaviour:
     - _name: Idle
       _enemyState: 0
       _action:
+        _status: 0
         _canBeCanceled: 1
         _actionToPerform:
           m_PersistentCalls:
@@ -4205,6 +4206,7 @@ MonoBehaviour:
     - _name: Patroling
       _enemyState: 1
       _action:
+        _status: 0
         _canBeCanceled: 1
         _actionToPerform:
           m_PersistentCalls:
@@ -4226,13 +4228,14 @@ MonoBehaviour:
     - _name: Chasing Player
       _enemyState: 2
       _action:
+        _status: 0
         _canBeCanceled: 1
         _actionToPerform:
           m_PersistentCalls:
             m_Calls:
             - m_Target: {fileID: 2046103755}
-              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
-              m_MethodName: ChaseEnemy
+              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
+              m_MethodName: ChasePlayer
               m_Mode: 1
               m_Arguments:
                 m_ObjectArgument: {fileID: 0}
@@ -4247,7 +4250,8 @@ MonoBehaviour:
     - _name: Attacking Player
       _enemyState: 3
       _action:
-        _canBeCanceled: 1
+        _status: 0
+        _canBeCanceled: 0
         _actionToPerform:
           m_PersistentCalls:
             m_Calls:
@@ -4269,6 +4273,7 @@ MonoBehaviour:
   _isLeft: 0
   _movementDuration: 1.5
   _timeToInvertMovement: 0.5
+  _intervalBetweenAttacks: 1
 --- !u!4 &2046103757
 Transform:
   m_ObjectHideFlags: 0

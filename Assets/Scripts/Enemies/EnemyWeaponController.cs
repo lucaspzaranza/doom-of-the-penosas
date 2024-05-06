@@ -6,10 +6,7 @@ using UnityEngine;
 public class EnemyWeaponController
 {
     [SerializeField] private List<EnemyWeaponData> _weaponDataList;
-    public List<EnemyWeaponData> WeaponDataList => _weaponDataList;
-
-    [SerializeField] private float _fireRate;
-    public float FireRate => _fireRate;
+    public List<EnemyWeaponData> WeaponDataList => _weaponDataList;    
 }
 
 [System.Serializable]
