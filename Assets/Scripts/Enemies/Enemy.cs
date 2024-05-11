@@ -38,6 +38,8 @@ public abstract class Enemy : DamageableObject
     [SerializeField] protected bool _canStayIdle;
     public bool CanStayIdle => _canStayIdle;
 
+    // Conditional Editor Fields
+
     [DrawIfBoolEqualsTo("_canStayIdle", false)]
     [SerializeField] private EnemyState _stateToForceChangeIfIdle;
 
@@ -55,6 +57,15 @@ public abstract class Enemy : DamageableObject
     [DrawIfBoolEqualsTo("_instantAttack", false)]
     [Range(0.5f, 1f)]
     [SerializeField] private float _attackMinDistance;
+
+    [SerializeField] protected bool _changeStateAfterDamage;
+    public bool ChangeStateAfterDamage => _changeStateAfterDamage;
+
+    [DrawIfBoolEqualsTo("_changeStateAfterDamage", true)]
+    [SerializeField] protected EnemyState _stateAfterDamage;
+    public EnemyState StateAfterDamage => _stateAfterDamage;
+
+    // Basic fields
 
     [SerializeField] private EnemyWeaponController _weaponController;
     public EnemyWeaponController WeaponController => _weaponController;
@@ -89,16 +100,14 @@ public abstract class Enemy : DamageableObject
     private void OnEnable()
     {
         EnemyStateGeneralData.EventHandlerSetup(this);
+
         EnemyStateGeneralData.DoInitialState();
         _enemyCollider = GetComponent<Collider2D>();
-
-        EnemyStateGeneralData.OnStateChangedSuccess += HandleOnStateChangedSuccess;
     }
 
     private void OnDisable()
     {
         EnemyStateGeneralData.EventHandlerDispose();
-        EnemyStateGeneralData.OnStateChangedSuccess -= HandleOnStateChangedSuccess;
     }
 
     protected virtual void Update()
@@ -118,7 +127,12 @@ public abstract class Enemy : DamageableObject
             }
         }
         else if (CollidedWithPlayer(out _detectedPlayer))
-            ChangeState(EnemyState.ChasingPlayer);
+        {
+            if(InstantAttack)
+                ChangeState(EnemyState.Attacking);
+            else if(!InstantAttack)
+                ChangeState(EnemyState.ChasingPlayer);
+        }
 
         if (EnemyStateGeneralData.CurrentState != null)
         {
@@ -143,12 +157,6 @@ public abstract class Enemy : DamageableObject
             return;
         }
 
-        if(InstantAttack && state == EnemyState.ChasingPlayer)
-        {
-            ChangeState(EnemyState.Attacking);
-            return;
-        }
-
         EnemyStateGeneralData.DoAction(state);
     }
 
@@ -160,9 +168,18 @@ public abstract class Enemy : DamageableObject
     /// <param name="newState"></param>
     public virtual void ChangeState(EnemyState newState)
     {
-        print($"ChangeState function. _state: {_state}, newState: {newState}");
+        print($"ChangeState function | State: {State}, newState: {newState}");
         if (_state == newState)
+        {
+            print("There is no need to change to the same state. Canceling ChangeState function");
             return;
+        }
+
+        if (InstantAttack && newState == EnemyState.ChasingPlayer)
+        {
+            print("Can't chase, let's attack instantly!");
+            newState = EnemyState.Attacking;
+        }
 
         OnEnemyChangedState?.Invoke(newState);
     }
@@ -174,6 +191,7 @@ public abstract class Enemy : DamageableObject
     /// <param name="newState">The new state to update the enemy current state.</param>
     public virtual void HandleOnStateChangedSuccess(EnemyState newState)
     {
+        print("HandleOnStateChangedSuccess: " + newState);
         _previousState = _state;
         _state = newState;
 
@@ -221,7 +239,7 @@ public abstract class Enemy : DamageableObject
         Vector2 direction = WeaponController.WeaponDataList[weaponIndex]
             .EnemyWeaponSpawnTransform.SpawnTransform.position;
         WeaponController.WeaponDataList[weaponIndex].WeaponUnit.Shoot(direction, GetDirection());
-    }
+    }    
 
     protected virtual int GetDirection()
     {

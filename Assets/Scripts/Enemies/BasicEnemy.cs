@@ -21,7 +21,7 @@ public class BasicEnemy : Enemy
 
     public override void Patrol()
     {
-        Move();
+        //Move();
     }
 
     protected override void Move()
@@ -71,10 +71,21 @@ public class BasicEnemy : Enemy
         }
         else
         {
-            if (EnemyType == EnemyType.Land)
-                MoveLandEnemy();
-            else if (EnemyType == EnemyType.Flying)
-                MoveFlyingEnemy();
+            //if (EnemyType == EnemyType.Land)
+            //    MoveLandEnemy();
+            //else if (EnemyType == EnemyType.Flying)
+            //    MoveFlyingEnemy();
+        }
+    }
+
+    public override void TakeDamage(int damage, bool force = false)
+    {
+        base.TakeDamage(damage, force);
+
+        if (_tookDamage && ChangeStateAfterDamage && State == EnemyState.Idle)
+        {
+            print($"Took damage, changing state to {StateAfterDamage}...");
+            ChangeState(StateAfterDamage);
         }
     }
 
@@ -130,8 +141,9 @@ public class BasicEnemy : Enemy
             }
             else
             {
-                //print("End of attack wave.");
-                EnemyStateGeneralData.SetCurrentActionAsPerformed();            
+                print("End of attack wave.");
+                EnemyStateGeneralData.SetCurrentActionAsPerformed();
+                return;
             }
         }
         else if (status == EnemyActionStatus.Performed)
@@ -140,7 +152,7 @@ public class BasicEnemy : Enemy
 
             if (_intervalBetweenAttacksTimeCounter >= _intervalBetweenAttacks)
             {
-                //print("Starting another attack wave...");
+                print("Starting another attack wave...");
                 _intervalBetweenAttacksTimeCounter = 0;
                 _attackDurationTimeCounter = 0;
                 _fireRateCounter = 0;
@@ -151,9 +163,17 @@ public class BasicEnemy : Enemy
 
         if (!_attackCanceled && !ReachedAttackDistance())
         {
-            print("Couldn't attack player anymore, so let's chase him.");
             _attackCanceled = true;
-            ChangeState(EnemyState.ChasingPlayer);
+            if(InstantAttack)
+            {
+                print("Couldn't attack player anymore, so let's return to Initial State.");
+                ChangeState(EnemyStateGeneralData.InitialState);
+            }
+            else
+            {
+                print("Couldn't attack player anymore, so let's chase him.");
+                ChangeState(EnemyState.ChasingPlayer);
+            }
         }
     }
 }

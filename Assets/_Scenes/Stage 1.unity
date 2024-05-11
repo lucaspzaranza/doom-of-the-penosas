@@ -4138,10 +4138,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0c2ce4271eb287438a66893bec7fab6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blinkDuration: 2
   _sprites:
   - {fileID: 1016685582}
   - {fileID: 794702324}
+  _blinkDuration: 2
   _glowDuration: 0.1
   _1stColor: {r: 1, g: 0, b: 0, a: 1}
   _2ndColor: {r: 0, g: 0, b: 0, a: 1}
@@ -4174,14 +4174,16 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 4368
   _state: 0
-  _timeToCheckNewState: 1
+  _timeToCheckNewState: 1000000
   _isCritical: 0
   _fireEventWhenDead: 1
   _canStayIdle: 1
   _stateToForceChangeIfIdle: 1
-  _instantAttack: 0
+  _instantAttack: 1
   _attackDistance: 1
   _attackMinDistance: 0.5
+  _changeStateAfterDamage: 1
+  _stateAfterDamage: 1
   _weaponController:
     _weaponDataList:
     - _weaponUnit: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b, type: 2}
@@ -4191,7 +4193,7 @@ MonoBehaviour:
   - {fileID: 1016685582}
   - {fileID: 794702324}
   _enemyStateGeneralData:
-    _initialState: 1
+    _initialState: 0
     _statesList:
     - _name: Idle
       _enemyState: 0
@@ -4251,7 +4253,7 @@ MonoBehaviour:
       _enemyState: 3
       _action:
         _status: 0
-        _canBeCanceled: 0
+        _canBeCanceled: 1
         _actionToPerform:
           m_PersistentCalls:
             m_Calls:

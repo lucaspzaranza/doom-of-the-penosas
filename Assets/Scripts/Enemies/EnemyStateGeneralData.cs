@@ -27,7 +27,7 @@ public class EnemyStateGeneralData
     private Enemy _enemy;
     private EnemyStateDataUnit _cachedStateData;
     private EnemyStateDataUnit _scheduledStateData;
-    private bool _changedState;
+    private bool _changedState = false;
 
     public void EventHandlerSetup(Enemy enemyToAssign)
     {
@@ -40,6 +40,7 @@ public class EnemyStateGeneralData
 
         _enemy = enemyToAssign;
         _enemy.OnEnemyChangedState += HandleOnEnemyChangedState;
+        OnStateChangedSuccess += _enemy.HandleOnStateChangedSuccess;
     }
 
     public void EventHandlerDispose()
@@ -51,6 +52,7 @@ public class EnemyStateGeneralData
         }
 
         _enemy.OnEnemyChangedState -= HandleOnEnemyChangedState;
+        OnStateChangedSuccess -= _enemy.HandleOnStateChangedSuccess;
         _enemy = null;
     }
 
@@ -61,6 +63,7 @@ public class EnemyStateGeneralData
             
         EnemyStateDataUnit initialStateData = StatesList.Find(stateData => stateData.EnemyState == _initialState);
         initialStateData?.Action.SetActionStatusStarted();
+        Debug.Log("_changedState = true");
         _changedState = true;
     }
 
@@ -68,6 +71,8 @@ public class EnemyStateGeneralData
     {
         int length = CurrentState.PossiblesStatesToRandomlyChange.Count;
         int randomIndex = UnityEngine.Random.Range(0, length);
+        Debug.Log("randomIndex: " + randomIndex.ToString() + " CurrentState.EnemyState: " + 
+            CurrentState.EnemyState.ToString());
 
         return length == 0? CurrentState.EnemyState : 
             CurrentState.PossiblesStatesToRandomlyChange[randomIndex];
@@ -123,6 +128,9 @@ public class EnemyStateGeneralData
     {
         Debug.Log("newState: " + newState);
         EnemyStateDataUnit newStateToChange = StatesList.Find(state => state.EnemyState == newState);
+
+        Debug.Log("newStateToChange.EnemyState: " + newStateToChange.EnemyState);
+        Debug.Log("_currentState == null: " + (_currentState == null).ToString());
 
         if(newStateToChange == null)
         {
