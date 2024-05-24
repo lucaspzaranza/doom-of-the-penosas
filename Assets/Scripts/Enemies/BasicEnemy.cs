@@ -21,7 +21,7 @@ public class BasicEnemy : Enemy
 
     public override void Patrol()
     {
-        //Move();
+        Move();
     }
 
     protected override void Move()
@@ -71,10 +71,10 @@ public class BasicEnemy : Enemy
         }
         else
         {
-            //if (EnemyType == EnemyType.Land)
-            //    MoveLandEnemy();
-            //else if (EnemyType == EnemyType.Flying)
-            //    MoveFlyingEnemy();
+            if (EnemyType == EnemyType.Land)
+                MoveLandEnemy();
+            else if (EnemyType == EnemyType.Flying)
+                MoveFlyingEnemy();
         }
     }
 
@@ -161,19 +161,24 @@ public class BasicEnemy : Enemy
             }
         }
 
-        if (!_attackCanceled && !ReachedAttackDistance())
+        if (!InstantAttack && !_attackCanceled && !ReachedAttackDistance())
         {
             _attackCanceled = true;
-            if(InstantAttack)
-            {
-                print("Couldn't attack player anymore, so let's return to Initial State.");
-                ChangeState(EnemyStateGeneralData.InitialState);
-            }
-            else
-            {
-                print("Couldn't attack player anymore, so let's chase him.");
-                ChangeState(EnemyState.ChasingPlayer);
-            }
+            _fireRateCounter = 0;
+            _attackDurationTimeCounter = 0;
+           
+            print("Couldn't attack player anymore, so let's chase him.");
+            ChangeState(EnemyState.ChasingPlayer);
+        }
+        else if (InstantAttack && !_attackCanceled && 
+            !PlayerDetector.DetectedPlayerNearObject(transform.position, out _detectedPlayer))
+        {
+            _attackCanceled = true;
+            _fireRateCounter = 0;
+            _attackDurationTimeCounter = 0;
+
+            print("Couldn't attack player anymore, so let's return to Initial State.");
+            ChangeState(EnemyStateGeneralData.InitialState);
         }
     }
 }

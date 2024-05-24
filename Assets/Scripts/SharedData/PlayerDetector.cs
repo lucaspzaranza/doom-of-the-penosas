@@ -36,19 +36,19 @@ public class PlayerDetector : MonoBehaviour
     /// </summary>
     /// <param name="player">The detected player (if exists any).</param>
     /// <returns>True if encountered some player, otherwise returns false.</returns>
-    public bool DetectedPlayerNearObject(out DamageableObject player)
+    public bool DetectedPlayerNearObject(Vector2 basePosition, out DamageableObject player)
     {
         bool detectedPlayer = false;
         player = null;
         _raycasts = new RaycastHit2D[_resultsLimit];
 
-        if (Physics2D.RaycastNonAlloc(transform.position, _direction, 
+        if (Physics2D.RaycastNonAlloc(basePosition, _direction, 
         _raycasts, RaycastDistance, RaycastLayer) > 0)
         {
             detectedPlayer = _raycasts.Any(raycast =>
-                raycast.collider != null                                            // Found some object at the Layer Mask
-                && raycast.collider.TryGetComponent(out _damageableObject)          // And is something which the enemy can damage
-                && SharedFunctions.DamageableObjectIsPlayer(_damageableObject)      // And this object is a player.
+                raycast.collider != null                                       // Found some object at the Layer Mask
+                && raycast.collider.TryGetComponent(out _damageableObject)     // And is something which the enemy can damage
+                && SharedFunctions.DamageableObjectIsPlayer(_damageableObject) // And this object is a player.
             );
 
             if (detectedPlayer)

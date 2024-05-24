@@ -118,8 +118,9 @@ public abstract class Enemy : DamageableObject
             Shoot(0);
         }
 
-        if (PlayerDetector.DetectedPlayerNearObject(out _detectedPlayer))
+        if (PlayerDetector.DetectedPlayerNearObject(transform.position, out _detectedPlayer))
         {
+            print("Detected Player");
             if(State == EnemyState.Idle || State == EnemyState.Patrol)
             {
                 ChangeState(EnemyState.ChasingPlayer);
@@ -226,7 +227,9 @@ public abstract class Enemy : DamageableObject
         if (_detectedPlayer == null)
             return false;
 
-        float distance = Vector2.Distance(transform.position, _detectedPlayer.transform.position);
+        //float distance = Vector2.Distance(transform.position, _detectedPlayer.transform.position);
+        float distance = Vector2.Distance(_detectedPlayer.transform.position, transform.position);
+        print($"atk distance: {distance}. Ideal Distance is less or equal than: {AttackDistance}");
         bool reachedAtkdistance = distance <= AttackDistance;
 
         return reachedAtkdistance;
