@@ -120,7 +120,7 @@ public abstract class Enemy : DamageableObject
 
         if (PlayerDetector.DetectedPlayerNearObject(transform.position, out _detectedPlayer))
         {
-            print("Detected Player");
+            //print("Detected Player");
             if(State == EnemyState.Idle || State == EnemyState.Patrol)
             {
                 ChangeState(EnemyState.ChasingPlayer);
@@ -129,8 +129,14 @@ public abstract class Enemy : DamageableObject
         }
         else if (CollidedWithPlayer(out _detectedPlayer))
         {
+            print("CollidedWithPlayer");
             if(InstantAttack)
+            {
+                int direction = GetDirection();
+                print($"Let's flip the enemy direction. Current direction: {direction}");
+                Flip(direction);
                 ChangeState(EnemyState.Attacking);
+            }
             else if(!InstantAttack)
                 ChangeState(EnemyState.ChasingPlayer);
         }
@@ -227,9 +233,8 @@ public abstract class Enemy : DamageableObject
         if (_detectedPlayer == null)
             return false;
 
-        //float distance = Vector2.Distance(transform.position, _detectedPlayer.transform.position);
         float distance = Vector2.Distance(_detectedPlayer.transform.position, transform.position);
-        print($"atk distance: {distance}. Ideal Distance is less or equal than: {AttackDistance}");
+        //print($"atk distance: {distance}. Ideal Distance is less or equal than: {AttackDistance}");
         bool reachedAtkdistance = distance <= AttackDistance;
 
         return reachedAtkdistance;
