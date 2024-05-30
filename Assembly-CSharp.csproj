@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\SharedData\Constants.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerData.cs" />
     <Compile Include="Assets\Scripts\MapaMundi\MapaMundiController.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyWeaponGameObjectData.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IControllerBackup.cs" />
     <Compile Include="Assets\Scripts\Inventory\JetCopter.cs" />
     <Compile Include="Assets\Scripts\UI\InGame\PlayerInGameUIController.cs" />
@@ -100,7 +101,6 @@
     <Compile Include="Assets\Scripts\Player\PlayerDataPrefabs.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemSlot.cs" />
     <Compile Include="Assets\Scripts\Weapons\TimeBomb.cs" />
-    <Compile Include="Assets\Scripts\Enemies\EnemyWeaponSpawnTransform.cs" />
     <Compile Include="Assets\Scripts\Inventory\Armor.cs" />
     <Compile Include="Assets\Scripts\Player\Parachute.cs" />
     <Compile Include="Assets\Scripts\Weapons\AutoRotate.cs" />

@@ -106,6 +106,7 @@ public class BasicEnemy : Enemy
 
     protected virtual void MoveFlyingEnemy()
     {
+        print("Moving flying enemy");
         if (Rigidbody != null && !SharedFunctions.HitSomething(_flyingCharacterProps.FlyingCheckCollider,
             _flyingCharacterProps.FlyingLayerMask,
             out Collider2D hitWall))

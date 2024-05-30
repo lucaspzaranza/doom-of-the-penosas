@@ -7,6 +7,8 @@ using UnityEngine;
 
 public abstract class Enemy : DamageableObject
 {
+    #region Vars
+
     public static Action<Enemy> OnEnemyDeath;
     public Action<EnemyState> OnEnemyChangedState;
 
@@ -97,10 +99,12 @@ public abstract class Enemy : DamageableObject
     protected bool _collidedWithPlayer = false;
     protected bool _attackCanceled = false;
 
+    #endregion
+
     private void OnEnable()
     {
         EnemyStateGeneralData.EventHandlerSetup(this);
-
+        UpdateWeaponSprites();
         EnemyStateGeneralData.DoInitialState();
         _enemyCollider = GetComponent<Collider2D>();
     }
@@ -154,6 +158,14 @@ public abstract class Enemy : DamageableObject
         }
         else
             CheckForNewRandomState(State);        
+    }
+
+    protected void UpdateWeaponSprites()
+    {
+        foreach (var weaponData in WeaponController.WeaponDataList)
+        {
+            weaponData.GameObjectData.SetWeaponSprite(weaponData.WeaponUnit.Sprite);
+        }
     }
 
     public virtual void PerformActionBasedOnState(EnemyState state) 
@@ -245,7 +257,7 @@ public abstract class Enemy : DamageableObject
     public virtual void Shoot(int weaponIndex)
     {
         Vector2 direction = WeaponController.WeaponDataList[weaponIndex]
-            .EnemyWeaponSpawnTransform.SpawnTransform.position;
+            .GameObjectData.SpawnTransform.position;
         WeaponController.WeaponDataList[weaponIndex].WeaponUnit.Shoot(direction, GetDirection());
     }    
 

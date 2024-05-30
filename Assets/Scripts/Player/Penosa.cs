@@ -137,6 +137,8 @@ public class Penosa : DamageableObject
 
     public bool RideArmorEquipped => _rideArmorEquipped;
 
+    public RideArmor RideArmorProp => _rideArmor;
+
     public float ShotSpeed => _shotspeed;
 
     private UnityEngine.InputSystem.PlayerInput PlayerInput => _playerInput;
@@ -290,32 +292,6 @@ public class Penosa : DamageableObject
         else if (!_playerController.GameIsPaused())
             _playerController.OnPlayerPause?.Invoke(true);
     }
-
-    //public override void Blink()
-    //{
-    //    if (_blinkTimeCounter < _blinkDuration)
-    //    {
-    //        float transparency = _body.color.a == 1 ? 0f : 1f;
-    //        Color blinkColor = new Color(255f, 255f, 255f, transparency);
-    //        _body.color = blinkColor;
-    //        _legs.color = blinkColor;
-
-    //        if (RideArmorEquipped)
-    //            _rideArmor.Blink(blinkColor);
-    //    }
-    //    else
-    //    {
-    //        _isBlinking = false;
-    //        Color normalColor = new Color(255f, 255f, 255f, 1f);
-
-    //        _body.color = normalColor;
-    //        _legs.color = normalColor;
-    //        _blinkTimeCounter = 0f;
-
-    //        if(RideArmorEquipped)
-    //            _rideArmor.Blink(normalColor);
-    //    }
-    //}
     
     public void Death()
     {
@@ -759,6 +735,7 @@ public class Penosa : DamageableObject
         if (!IsBlinking || force)
         {
             if (HasArmor) ArmorLife -= dmg;
+            else if(RideArmorEquipped) RideArmorProp.Life -= dmg;
             else Life -= dmg;
 
             StartGlow();
