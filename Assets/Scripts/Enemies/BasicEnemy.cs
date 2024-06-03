@@ -21,7 +21,7 @@ public class BasicEnemy : Enemy
 
     public override void Patrol()
     {
-        Move();
+        //Move();
     }
 
     protected override void Move()
@@ -30,10 +30,10 @@ public class BasicEnemy : Enemy
         {
             _movementTimeCounter += Time.deltaTime;
 
-            if (EnemyType == EnemyType.Land)
-                MoveLandEnemy();
-            else if (EnemyType == EnemyType.Flying)
-                MoveFlyingEnemy();
+            //if (EnemyType == EnemyType.Land)
+            //    MoveLandEnemy();
+            //else if (EnemyType == EnemyType.Flying)
+            //    MoveFlyingEnemy();
         }
         else
         {
@@ -127,12 +127,12 @@ public class BasicEnemy : Enemy
         if (status == EnemyActionStatus.Started)
         {
             if (_attackDurationTimeCounter <= 
-                WeaponController.WeaponDataList[0].WeaponUnit.AttackDuration)
+                WeaponController.WeaponDataList[0].WeaponScriptableObject.AttackDuration)
             {
                 if(_fireRateCounter >
-                    WeaponController.WeaponDataList[0].WeaponUnit.GetFireRate())
+                    WeaponController.WeaponDataList[0].WeaponScriptableObject.GetFireRate())
                 {
-                    Shoot(0);
+                    //Shoot(0);
                     _fireRateCounter = 0;
                 }
                 else
@@ -167,12 +167,11 @@ public class BasicEnemy : Enemy
             _attackCanceled = true;
             _fireRateCounter = 0;
             _attackDurationTimeCounter = 0;
-           
+
             print("Couldn't attack player anymore, so let's chase him.");
             ChangeState(EnemyState.ChasingPlayer);
         }
-        else if (InstantAttack && !_attackCanceled && 
-            !PlayerDetector.DetectedPlayerNearObject(transform.position, out _detectedPlayer))
+        else if (InstantAttack && !_attackCanceled && LostPlayerFromSight())
         {
             _attackCanceled = true;
             _fireRateCounter = 0;
@@ -181,5 +180,26 @@ public class BasicEnemy : Enemy
             print("Couldn't attack player anymore, so let's return to Initial State.");
             ChangeState(EnemyStateGeneralData.InitialState);
         }
+    }
+
+    private bool LostPlayerFromSight()
+    {
+        if (!WeaponController.WeaponDataList[0].WeaponGameObjectData.RotateTowardsPlayer)
+        {
+            return !WeaponController.WeaponDataList[0]
+                .WeaponGameObjectData.PlayerDetector.DetectedPlayerNearObject(transform.position, out _detectedPlayer);
+        }
+        else
+        {
+            bool detectedPlayerInsideArea = WeaponController.WeaponDataList[0].
+                WeaponGameObjectData.PlayerDetector.
+                DetectedPlayerNearObjectUsingOverlapArea(transform.position, out _detectedPlayer);
+                //DetectedPlayerNearObject(transform.position, out _detectedPlayer);
+
+            if (detectedPlayerInsideArea)
+                return !ReachedAttackDistance();
+        }
+
+        return false;
     }
 }

@@ -160,6 +160,7 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\CastVisualizer\Third-Party-Notices.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Mobile.shader" />
@@ -1166,6 +1167,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Unity.CastVisualizer.Editor.csproj">
+      <Project>{19D841DC-5003-2D6B-F156-21F4B6C67C54}</Project>
+      <Name>Unity.CastVisualizer.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.CastVisualizer.Samples.SampleScenes.csproj">
+      <Project>{AC9843B8-3A24-B8C5-EE2A-064EFC71A807}</Project>
+      <Name>Unity.CastVisualizer.Samples.SampleScenes</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.CastVisualizer.Runtime.csproj">
+      <Project>{F2A80E5E-78B3-D1FB-C705-31311890735B}</Project>
+      <Name>Unity.CastVisualizer.Runtime</Name>
+    </ProjectReference>
     <ProjectReference Include="ParrelSync.csproj">
       <Project>{EB7104E1-4DF3-E135-60CA-8AFFD44EF06F}</Project>
       <Name>ParrelSync</Name>

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Basic Weapon
   _sprite: {fileID: 21300000, guid: d0c0f2c3fda87da42a337a8947d4f910, type: 3}
-  _usePooling: 1
+  _usePooling: 0
   _projectile: {fileID: 1617454459024769971, guid: a2358c609baf3da43b95a70e8bd1a1fa,
     type: 3}
   _attackDuration: 5

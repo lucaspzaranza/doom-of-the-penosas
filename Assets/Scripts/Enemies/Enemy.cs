@@ -13,6 +13,9 @@ public abstract class Enemy : DamageableObject
     public Action<EnemyState> OnEnemyChangedState;
 
     [Header("Enemy General Variables")]
+    [SerializeField] private bool _isBoss;
+    public bool IsBoss => _isBoss;
+
     [SerializeField] protected float _speed;
     public float Speed => _speed;
     
@@ -88,8 +91,8 @@ public abstract class Enemy : DamageableObject
     [SerializeField] protected EnemyStateGeneralData _enemyStateGeneralData;
     public EnemyStateGeneralData EnemyStateGeneralData => _enemyStateGeneralData;
 
-    [SerializeField] protected PlayerDetector _playerDetector;
-    public PlayerDetector PlayerDetector => _playerDetector;
+    //[SerializeField] protected PlayerDetector _playerDetector;
+    //public PlayerDetector PlayerDetector => _playerDetector;
 
     [SerializeField] protected bool _isLeft;
 
@@ -98,8 +101,11 @@ public abstract class Enemy : DamageableObject
     protected Collider2D _enemyCollider;
     protected bool _collidedWithPlayer = false;
     protected bool _attackCanceled = false;
+    protected List<EnemyWeaponDataListUnit> _weaponsWhichRotateTowardsPlayer;
 
     #endregion
+
+    [SerializeField] private int weaponIndex;
 
     private void OnEnable()
     {
@@ -107,6 +113,10 @@ public abstract class Enemy : DamageableObject
         UpdateWeaponSprites();
         EnemyStateGeneralData.DoInitialState();
         _enemyCollider = GetComponent<Collider2D>();
+
+        _weaponsWhichRotateTowardsPlayer = WeaponController.WeaponDataList.
+            Where(weapon => weapon.WeaponGameObjectData.RotateTowardsPlayer).
+            ToList();
     }
 
     private void OnDisable()
@@ -119,10 +129,19 @@ public abstract class Enemy : DamageableObject
         // Temporary for test usage only
         if (Input.GetKeyDown(KeyCode.O))
         {
-            Shoot(0);
+            Shoot(weaponIndex);
         }
 
-        if (PlayerDetector.DetectedPlayerNearObject(transform.position, out _detectedPlayer))
+        if (_weaponsWhichRotateTowardsPlayer.Count > 0)
+            RotateWeaponsTowardsPlayer();
+
+        // Detecção do jogador aqui é diferente. Se rotacionar atrás do jogador,
+        // tem que usar a Overlap Area e ver se tá na distância permitida
+        //if (PlayerDetector.DetectedPlayerNearObject(transform.position, out _detectedPlayer))
+        if (WeaponController.WeaponDataList[0]
+        .WeaponGameObjectData
+        .PlayerDetector
+        .DetectedPlayerNearObject(transform.position, out _detectedPlayer))
         {
             //print("Detected Player");
             if(State == EnemyState.Idle || State == EnemyState.Patrol)
@@ -133,11 +152,11 @@ public abstract class Enemy : DamageableObject
         }
         else if (CollidedWithPlayer(out _detectedPlayer))
         {
-            print("CollidedWithPlayer");
+            //print("CollidedWithPlayer");
             if(InstantAttack)
             {
                 int direction = GetDirection();
-                print($"Let's flip the enemy direction. Current direction: {direction}");
+                //print($"Let's flip the enemy direction. Current direction: {direction}");
                 Flip(direction);
                 ChangeState(EnemyState.Attacking);
             }
@@ -157,15 +176,20 @@ public abstract class Enemy : DamageableObject
             }
         }
         else
-            CheckForNewRandomState(State);        
+            CheckForNewRandomState(State);
     }
 
     protected void UpdateWeaponSprites()
     {
         foreach (var weaponData in WeaponController.WeaponDataList)
         {
-            weaponData.GameObjectData.SetWeaponSprite(weaponData.WeaponUnit.Sprite);
+            weaponData.WeaponGameObjectData.SetWeaponSprite(weaponData.WeaponScriptableObject.Sprite);
         }
+    }
+
+    protected virtual void RotateWeaponsTowardsPlayer()
+    {
+        _weaponsWhichRotateTowardsPlayer.ForEach(weapon => weapon.WeaponGameObjectData.RotateWeaponTowardsPlayer(_isLeft));
     }
 
     public virtual void PerformActionBasedOnState(EnemyState state) 
@@ -187,16 +211,16 @@ public abstract class Enemy : DamageableObject
     /// <param name="newState"></param>
     public virtual void ChangeState(EnemyState newState)
     {
-        print($"ChangeState function | State: {State}, newState: {newState}");
+        //print($"ChangeState function | State: {State}, newState: {newState}");
         if (_state == newState)
         {
-            print("There is no need to change to the same state. Canceling ChangeState function");
+            //print("There is no need to change to the same state. Canceling ChangeState function");
             return;
         }
 
         if (InstantAttack && newState == EnemyState.ChasingPlayer)
         {
-            print("Can't chase, let's attack instantly!");
+            //print("Can't chase, let's attack instantly!");
             newState = EnemyState.Attacking;
         }
 
@@ -210,7 +234,7 @@ public abstract class Enemy : DamageableObject
     /// <param name="newState">The new state to update the enemy current state.</param>
     public virtual void HandleOnStateChangedSuccess(EnemyState newState)
     {
-        print("HandleOnStateChangedSuccess: " + newState);
+        //print("HandleOnStateChangedSuccess: " + newState);
         _previousState = _state;
         _state = newState;
 
@@ -246,7 +270,7 @@ public abstract class Enemy : DamageableObject
             return false;
 
         float distance = Vector2.Distance(_detectedPlayer.transform.position, transform.position);
-        //print($"atk distance: {distance}. Ideal Distance is less or equal than: {AttackDistance}");
+        print($"atk distance: {distance}. Ideal Distance is less or equal than: {AttackDistance}");
         bool reachedAtkdistance = distance <= AttackDistance;
 
         return reachedAtkdistance;
@@ -256,10 +280,15 @@ public abstract class Enemy : DamageableObject
 
     public virtual void Shoot(int weaponIndex)
     {
-        Vector2 direction = WeaponController.WeaponDataList[weaponIndex]
-            .GameObjectData.SpawnTransform.position;
-        WeaponController.WeaponDataList[weaponIndex].WeaponUnit.Shoot(direction, GetDirection());
+        Transform spawnTransform = WeaponController.WeaponDataList[weaponIndex]
+            .WeaponGameObjectData.SpawnTransform;
+        WeaponController.WeaponDataList[weaponIndex].WeaponScriptableObject.Shoot(spawnTransform, GetDirection());
     }    
+
+    protected int GetIndexFromClosestWeaponFromPlayer()
+    {
+        return 0;
+    }
 
     protected virtual int GetDirection()
     {
@@ -282,12 +311,12 @@ public abstract class Enemy : DamageableObject
         if (changeState)
         {
             EnemyState newState = EnemyStateGeneralData.GetNewRandomState();
-            print("newState: " + newState);
+            //print("newState: " + newState);
 
             if (!CanStayIdle && newState == EnemyState.Idle)
             {
-                print("Ops, enemy can't stay idle and the selected state is Idle! " +
-                    "So we'll pass it and maintain the current state...");
+                //print("Ops, enemy can't stay idle and the selected state is Idle! " +
+                //    "So we'll pass it and maintain the current state...");
                 return;
             }
 
@@ -303,8 +332,9 @@ public abstract class Enemy : DamageableObject
     public virtual bool CollidedWithPlayer(out DamageableObject _detectedPlayer)
     {
         DamageableObject damageableObject = null;
+        LayerMask layerMask = WeaponController.WeaponDataList[0].WeaponGameObjectData.PlayerDetector.RaycastLayer;
 
-        if (SharedFunctions.HitSomething(_enemyCollider, PlayerDetector.RaycastLayer, out Collider2D hit)
+        if (SharedFunctions.HitSomething(_enemyCollider, layerMask, out Collider2D hit)
         && hit.TryGetComponent(out damageableObject) && SharedFunctions.DamageableObjectIsPlayer(damageableObject))
         {
             _detectedPlayer = damageableObject;
@@ -325,13 +355,15 @@ public abstract class Enemy : DamageableObject
         {
             _isLeft = true;
             transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x) * -1, transform.localScale.y);
-            PlayerDetector?.Flip();
+            //PlayerDetector?.Flip();
+            WeaponController.FlipWeaponsPlayerDetectors();
         }
         else if(direction > 0 && transform.localScale.x < 0)
         {
             _isLeft = false;
             transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x), transform.localScale.y);
-            PlayerDetector?.Flip();
+            //PlayerDetector?.Flip();
+            WeaponController.FlipWeaponsPlayerDetectors();
         }
     }
 

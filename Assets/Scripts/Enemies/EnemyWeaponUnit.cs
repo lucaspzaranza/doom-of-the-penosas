@@ -50,9 +50,11 @@ public class EnemyWeaponUnit : ScriptableObject
 
     public float GetFireRate() => IsContinuous ? ContinuousFireRate : FireRate;
 
-    public void Shoot(Vector2 coordinates, int currentDirection)
+    public void Shoot(Transform spawnTransform, int currentDirection)
     {
         GameObject newProjectile = null;
+        Vector2 coordinates = spawnTransform.position;
+        Quaternion newRotation = spawnTransform.rotation;
 
         if(UsePooling) 
         {
@@ -63,6 +65,7 @@ public class EnemyWeaponUnit : ScriptableObject
             {
                 newProjectile = _gameControllerInstance.GetProjectileFromPool(_projectile);
                 newProjectile.transform.position = coordinates;
+                newProjectile.transform.rotation = newRotation;
             }
             else
             {
@@ -72,7 +75,7 @@ public class EnemyWeaponUnit : ScriptableObject
             }
         }
         else
-            newProjectile = Instantiate(Projectile, coordinates, Quaternion.identity);
+            newProjectile = Instantiate(Projectile, coordinates, newRotation);
 
         newProjectile.transform.localScale =
                 new Vector2(newProjectile.transform.localScale.x * currentDirection,

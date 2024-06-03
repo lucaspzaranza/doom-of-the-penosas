@@ -25,10 +25,10 @@ public class Chickencopter : RideArmor
     private bool _chickencopterAbandoned = false;
     public bool ChickencopterAbandoned => _chickencopterAbandoned;
 
-    protected override void Update()
+    protected void Update()
     {
-        _isNearGround = Physics2D.OverlapBox(_activatorTransform.position, 
-            new Vector2(0f, _distanceToGround), 0f, _terrainLayerMask);
+        _isNearGround = Physics2D.Raycast(_activatorTransform.position, 
+            Vector2.down, _distanceToGround, _terrainLayerMask);
 
         if(_chickencopterAbandoned)
         {
@@ -42,8 +42,6 @@ public class Chickencopter : RideArmor
                 Destroy(gameObject);
             }
         }
-
-        base.Update();
     }
 
     public override void Equip(Penosa player, PlayerController playerController)

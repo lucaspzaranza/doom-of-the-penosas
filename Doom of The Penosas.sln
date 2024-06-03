@@ -3,6 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{8E2F30AE-3632-70B2-99F4-C3C040B8886E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.CastVisualizer.Editor", "Unity.CastVisualizer.Editor.csproj", "{19D841DC-5003-2D6B-F156-21F4B6C67C54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.CastVisualizer.Runtime", "Unity.CastVisualizer.Runtime.csproj", "{F2A80E5E-78B3-D1FB-C705-31311890735B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.CastVisualizer.Samples.SampleScenes", "Unity.CastVisualizer.Samples.SampleScenes.csproj", "{AC9843B8-3A24-B8C5-EE2A-064EFC71A807}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParrelSync", "ParrelSync.csproj", "{EB7104E1-4DF3-E135-60CA-8AFFD44EF06F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{5A8C030A-D161-5A93-D2E0-04DA4B6B704C}"
@@ -17,6 +23,18 @@ Global
 		{8E2F30AE-3632-70B2-99F4-C3C040B8886E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E2F30AE-3632-70B2-99F4-C3C040B8886E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E2F30AE-3632-70B2-99F4-C3C040B8886E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19D841DC-5003-2D6B-F156-21F4B6C67C54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19D841DC-5003-2D6B-F156-21F4B6C67C54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19D841DC-5003-2D6B-F156-21F4B6C67C54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19D841DC-5003-2D6B-F156-21F4B6C67C54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2A80E5E-78B3-D1FB-C705-31311890735B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2A80E5E-78B3-D1FB-C705-31311890735B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2A80E5E-78B3-D1FB-C705-31311890735B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2A80E5E-78B3-D1FB-C705-31311890735B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC9843B8-3A24-B8C5-EE2A-064EFC71A807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC9843B8-3A24-B8C5-EE2A-064EFC71A807}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC9843B8-3A24-B8C5-EE2A-064EFC71A807}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC9843B8-3A24-B8C5-EE2A-064EFC71A807}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EB7104E1-4DF3-E135-60CA-8AFFD44EF06F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB7104E1-4DF3-E135-60CA-8AFFD44EF06F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB7104E1-4DF3-E135-60CA-8AFFD44EF06F}.Release|Any CPU.ActiveCfg = Release|Any CPU

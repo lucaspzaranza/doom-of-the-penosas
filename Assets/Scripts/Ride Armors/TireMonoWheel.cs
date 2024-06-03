@@ -36,10 +36,8 @@ public class TireMonoWheel : RideArmor
         _innerPartInitColor = _innerPartSR.color;
     }
 
-    protected override void Update()
+    protected void Update()
     {
-        base.Update();
-
         _isGrounded = Physics2D.OverlapCircle(_groundCheck.position,
             PlayerConsts.OverlapCircleDiameter, _terrainLayerMask);
 

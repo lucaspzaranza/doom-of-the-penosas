@@ -71,11 +71,6 @@ public abstract class RideArmor : DamageableObject
         _rb = GetComponent<Rigidbody2D>();
     }
 
-    protected virtual void Update()
-    {
-        
-    }
-
     public virtual void Move(Vector2 direction)
     {
         if (_player != null)

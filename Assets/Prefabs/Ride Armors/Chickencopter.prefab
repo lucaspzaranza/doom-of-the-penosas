@@ -732,11 +732,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75bb6aaa5feeaae47abf24ef16437fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blinkDuration: 2
   _sprites:
   - {fileID: 5277644286268930640}
   - {fileID: 1768268012754321300}
   - {fileID: 7512111400415615704}
+  _blinkDuration: 2
   _glowDuration: 0.1
   _1stColor: {r: 1, g: 0, b: 0, a: 1}
   _2ndColor: {r: 0, g: 0, b: 0, a: 1}
@@ -776,7 +776,7 @@ MonoBehaviour:
   _verticalCheckCollider: {fileID: 3187733427188422153}
   _abandonedCheckCollider: {fileID: 1471925083204586335}
   _activatorTransform: {fileID: 913624159054617594}
-  _distanceToGround: 1
+  _distanceToGround: 0.8
   _upperCheckY: 0.858
   _lowerCheckY: -0.2
   _fallRate: 1.5
