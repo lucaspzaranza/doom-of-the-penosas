@@ -63,7 +63,7 @@ public class EnemyStateGeneralData
             
         EnemyStateDataUnit initialStateData = StatesList.Find(stateData => stateData.EnemyState == _initialState);
         initialStateData?.Action.SetActionStatusStarted();
-        Debug.Log("_changedState = true");
+        //Debug.Log("_changedState = true");
         _changedState = true;
     }
 
@@ -71,8 +71,8 @@ public class EnemyStateGeneralData
     {
         int length = CurrentState.PossiblesStatesToRandomlyChange.Count;
         int randomIndex = UnityEngine.Random.Range(0, length);
-        Debug.Log("randomIndex: " + randomIndex.ToString() + " CurrentState.EnemyState: " + 
-            CurrentState.EnemyState.ToString());
+        //Debug.Log("randomIndex: " + randomIndex.ToString() + " CurrentState.EnemyState: " + 
+        //    CurrentState.EnemyState.ToString());
 
         return length == 0? CurrentState.EnemyState : 
             CurrentState.PossiblesStatesToRandomlyChange[randomIndex];
@@ -82,7 +82,7 @@ public class EnemyStateGeneralData
     {
         if(_changedState)
         {
-            Debug.Log("Changed state to " + enemyState);
+            //Debug.Log("Changed state to " + enemyState);
             _cachedStateData = StatesList.Find(stateData => stateData.EnemyState == enemyState);
             _changedState = false;
         }
@@ -105,11 +105,11 @@ public class EnemyStateGeneralData
 
     public void HandleOnActionPerformed(bool instantLoop = false)
     {
-        Debug.Log("HandleOnActionPerformed");
+        //Debug.Log("HandleOnActionPerformed");
         if (HasStateChangeScheduled)
         {
-            Debug.Log("Starting Scheduled State: " + _scheduledStateData.EnemyState + 
-                " Action Status: " + _scheduledStateData.Action.Status);
+            //Debug.Log("Starting Scheduled State: " + _scheduledStateData.EnemyState + 
+            //    " Action Status: " + _scheduledStateData.Action.Status);
 
             if (!_currentState.Equals(_scheduledStateData))
                 _changedState = true;
@@ -126,11 +126,11 @@ public class EnemyStateGeneralData
 
     public void HandleOnEnemyChangedState(EnemyState newState)
     {
-        Debug.Log("newState: " + newState);
+        //Debug.Log("newState: " + newState);
         EnemyStateDataUnit newStateToChange = StatesList.Find(state => state.EnemyState == newState);
 
-        Debug.Log("newStateToChange.EnemyState: " + newStateToChange.EnemyState);
-        Debug.Log("_currentState == null: " + (_currentState == null).ToString());
+        //Debug.Log("newStateToChange.EnemyState: " + newStateToChange.EnemyState);
+        //Debug.Log("_currentState == null: " + (_currentState == null).ToString());
 
         if(newStateToChange == null)
         {
@@ -156,7 +156,7 @@ public class EnemyStateGeneralData
         }
         else
         {
-            Debug.Log($"Action can't be immediately canceled, so let's schedule the {newState} action");
+            //Debug.Log($"Action can't be immediately canceled, so let's schedule the {newState} action");
             _scheduledStateData = newStateToChange;
         }
     }

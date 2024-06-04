@@ -54,7 +54,7 @@ public abstract class Enemy : DamageableObject
     public bool InstantAttack => _instantAttack;
 
     [Tooltip("The distance the enemy will have to stay from the player to start its attack.")]
-    [DrawIfBoolEqualsTo("_instantAttack", false)]
+    //[DrawIfBoolEqualsTo("_instantAttack", false)]
     [Range(0f, 5f)]
     [SerializeField] private float _attackDistance;
     public float AttackDistance => _attackDistance;
@@ -90,6 +90,9 @@ public abstract class Enemy : DamageableObject
 
     [SerializeField] protected EnemyStateGeneralData _enemyStateGeneralData;
     public EnemyStateGeneralData EnemyStateGeneralData => _enemyStateGeneralData;
+
+    protected bool IsUsingWeaponWhichRotates =>
+        WeaponController.WeaponDataList[0].WeaponGameObjectData.RotateTowardsPlayer;
 
     //[SerializeField] protected PlayerDetector _playerDetector;
     //public PlayerDetector PlayerDetector => _playerDetector;
@@ -137,15 +140,13 @@ public abstract class Enemy : DamageableObject
 
         // Detecção do jogador aqui é diferente. Se rotacionar atrás do jogador,
         // tem que usar a Overlap Area e ver se tá na distância permitida
-        //if (PlayerDetector.DetectedPlayerNearObject(transform.position, out _detectedPlayer))
-        if (WeaponController.WeaponDataList[0]
-        .WeaponGameObjectData
-        .PlayerDetector
-        .DetectedPlayerNearObject(transform.position, out _detectedPlayer))
+        // if (PlayerDetector.DetectedPlayerNearObject(transform.position, out _detectedPlayer))
+        if (DetectedPlayer())
         {
-            //print("Detected Player");
-            if(State == EnemyState.Idle || State == EnemyState.Patrol)
+            if((State == EnemyState.Idle || State == EnemyState.Patrol) && 
+            (!IsUsingWeaponWhichRotates || (IsUsingWeaponWhichRotates && ReachedAttackDistance())))
             {
+                print("Detected Player");
                 ChangeState(EnemyState.ChasingPlayer);
                 return;
             }
@@ -179,6 +180,20 @@ public abstract class Enemy : DamageableObject
             CheckForNewRandomState(State);
     }
 
+    protected bool DetectedPlayer()
+    {
+        if (!IsUsingWeaponWhichRotates)
+        {
+            return WeaponController.WeaponDataList[0].WeaponGameObjectData
+            .PlayerDetector.DetectedPlayerNearObject(transform.position, out _detectedPlayer);
+        }
+        else
+        {
+            return WeaponController.WeaponDataList[0].WeaponGameObjectData
+            .PlayerDetector.DetectedPlayerNearObjectUsingOverlapArea(transform.position, out _detectedPlayer);
+        }
+    }
+
     protected void UpdateWeaponSprites()
     {
         foreach (var weaponData in WeaponController.WeaponDataList)
@@ -189,7 +204,8 @@ public abstract class Enemy : DamageableObject
 
     protected virtual void RotateWeaponsTowardsPlayer()
     {
-        _weaponsWhichRotateTowardsPlayer.ForEach(weapon => weapon.WeaponGameObjectData.RotateWeaponTowardsPlayer(_isLeft));
+        _weaponsWhichRotateTowardsPlayer.
+            ForEach(weapon => weapon.WeaponGameObjectData.RotateWeaponTowardsPlayer());
     }
 
     public virtual void PerformActionBasedOnState(EnemyState state) 
@@ -270,7 +286,7 @@ public abstract class Enemy : DamageableObject
             return false;
 
         float distance = Vector2.Distance(_detectedPlayer.transform.position, transform.position);
-        print($"atk distance: {distance}. Ideal Distance is less or equal than: {AttackDistance}");
+        //print($"atk distance: {distance}. Ideal Distance is less or equal than: {AttackDistance}");
         bool reachedAtkdistance = distance <= AttackDistance;
 
         return reachedAtkdistance;

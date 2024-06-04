@@ -122,7 +122,7 @@ public class BasicEnemy : Enemy
     public override void Attack()
     {
         EnemyActionStatus status = EnemyStateGeneralData.CurrentState.Action.Status;
-        print("Attack(); status: " + status + " Current state: " + EnemyStateGeneralData.CurrentState.EnemyState);
+        //print("Attack(); status: " + status + " Current state: " + EnemyStateGeneralData.CurrentState.EnemyState);
         
         if (status == EnemyActionStatus.Started)
         {
@@ -133,6 +133,7 @@ public class BasicEnemy : Enemy
                     WeaponController.WeaponDataList[0].WeaponScriptableObject.GetFireRate())
                 {
                     //Shoot(0);
+                    print("SHOOT");
                     _fireRateCounter = 0;
                 }
                 else
@@ -142,7 +143,7 @@ public class BasicEnemy : Enemy
             }
             else
             {
-                print("End of attack wave.");
+                //print("End of attack wave.");
                 EnemyStateGeneralData.SetCurrentActionAsPerformed();
                 return;
             }
@@ -153,7 +154,7 @@ public class BasicEnemy : Enemy
 
             if (_intervalBetweenAttacksTimeCounter >= _intervalBetweenAttacks)
             {
-                print("Starting another attack wave...");
+                //print("Starting another attack wave...");
                 _intervalBetweenAttacksTimeCounter = 0;
                 _attackDurationTimeCounter = 0;
                 _fireRateCounter = 0;
@@ -162,44 +163,49 @@ public class BasicEnemy : Enemy
             }
         }
 
-        if (!InstantAttack && !_attackCanceled && !ReachedAttackDistance())
+        if (!_attackCanceled && LostPlayerFromSight())
         {
             _attackCanceled = true;
             _fireRateCounter = 0;
             _attackDurationTimeCounter = 0;
 
-            print("Couldn't attack player anymore, so let's chase him.");
-            ChangeState(EnemyState.ChasingPlayer);
-        }
-        else if (InstantAttack && !_attackCanceled && LostPlayerFromSight())
-        {
-            _attackCanceled = true;
-            _fireRateCounter = 0;
-            _attackDurationTimeCounter = 0;
-
-            print("Couldn't attack player anymore, so let's return to Initial State.");
-            ChangeState(EnemyStateGeneralData.InitialState);
+            if (InstantAttack)
+            {
+                print("Couldn't attack player anymore, so let's return to Initial State.");
+                ChangeState(EnemyStateGeneralData.InitialState);
+            }
+            else
+            {
+                print("Couldn't attack player anymore, so let's chase him.");
+                ChangeState(EnemyState.ChasingPlayer);
+            }
         }
     }
 
     private bool LostPlayerFromSight()
     {
-        if (!WeaponController.WeaponDataList[0].WeaponGameObjectData.RotateTowardsPlayer)
+        if (!IsUsingWeaponWhichRotates)
         {
-            return !WeaponController.WeaponDataList[0]
-                .WeaponGameObjectData.PlayerDetector.DetectedPlayerNearObject(transform.position, out _detectedPlayer);
+            // If it's NOT an InstantAttack, it means the enemy must approach the player to start the attack.
+            // Therefore it must detect if the player is out of a strikeable distance to set him lost from sight.
+            if (!InstantAttack) 
+                return !ReachedAttackDistance();
+            // Else, it means the enemy mustn't calculate any distance from player to start its attack.
+            // As soon the enemy detects players presence, it'll start attacking.
+            // So the detection will be on player's presence without any need of attack calculation distance.
+            else
+                return !DetectedPlayer();
         }
         else
         {
-            bool detectedPlayerInsideArea = WeaponController.WeaponDataList[0].
-                WeaponGameObjectData.PlayerDetector.
-                DetectedPlayerNearObjectUsingOverlapArea(transform.position, out _detectedPlayer);
-                //DetectedPlayerNearObject(transform.position, out _detectedPlayer);
+            // If the weapon rotates towards player and if the enemy doesn't detect any player's presence, 
+            // it means the enemy lost him from sight;
+            if (!DetectedPlayer())
+                return true;
 
-            if (detectedPlayerInsideArea)
-                return !ReachedAttackDistance();
+            // Else and there's some player detected, the enemy must check if the player is out of some
+            // strikeable distance to lose him from sight.
+            return !ReachedAttackDistance();
         }
-
-        return false;
     }
 }

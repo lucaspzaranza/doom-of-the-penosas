@@ -26,16 +26,29 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
     [SerializeField] private float _rotationSpeed;
     public float RotationSpeed => _rotationSpeed;
 
+    [DrawIfBoolEqualsTo("_rotateTowardsPlayer", true)]
+    [SerializeField] private bool _useRotationLimit;
+    public bool UseRotationLimit => _useRotationLimit;
+
+    [DrawIfBoolEqualsTo("_useRotationLimit", true)]
+    [SerializeField] private float _rotationLimit;
+    public float RotationLimit => _rotationLimit;
+
     private bool _hasDetectedPlayer;
     public bool HasDetectedPlayer => _hasDetectedPlayer;
 
     private DamageableObject _detectedPlayer;
     private float _playerAngle = 0f;
+    private float _upperLimit;
+    private float _lowerLimit;
 
     private void OnEnable()
     {
         if(_weaponSpriteRenderer == null)
             _weaponSpriteRenderer = GetComponent<SpriteRenderer>();
+
+        _upperLimit = transform.rotation.eulerAngles.z + RotationLimit;
+        _lowerLimit = transform.rotation.eulerAngles.z - RotationLimit;
     }
 
     public void SetWeaponSprite(Sprite newSprite)
@@ -64,7 +77,7 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
         }
     }
 
-    public void RotateWeaponTowardsPlayer(bool isLeft)
+    public void RotateWeaponTowardsPlayer()
     {
         if (!RotateTowardsPlayer)
             return;
@@ -75,6 +88,20 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
 
             if (current == _playerAngle)
                 return;
+            
+            if(UseRotationLimit)
+            {
+                // Ver pq tá dando errado com lower limit da Direita, e com os limites da Esquerda
+                print("current: " + current);
+                print("_playerAngle: " + _playerAngle);
+                print("_upperLimit: " + _upperLimit);
+                print("_lowerLimit: " + _lowerLimit);
+
+                if (current < _playerAngle && current >= _upperLimit) // Rotatin up and passed the limit
+                    return;
+                else if (current <= _lowerLimit) // Rotatin down and passed the limit
+                    return;
+            }
 
             current = Mathf.MoveTowardsAngle(current, _playerAngle, RotationSpeed);
             Quaternion newRotation = Quaternion.AngleAxis(current, Vector3.forward);

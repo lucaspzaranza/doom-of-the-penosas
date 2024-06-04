@@ -282,7 +282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectedItem: {fileID: 0}
   _slots: []
-  itemEffectDuration: 30
+  itemEffectDuration: 255
   itemTimeCounter: 0
   jetCopterGravity: 0.1
   adrenalineSpeedEnhancindRate: 2
@@ -1459,10 +1459,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ee3cf25a32235468184bf7e853f6ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blinkDuration: 2
   _sprites:
   - {fileID: 5257087422295494793}
   - {fileID: 5257087422621857229}
+  _blinkDuration: 2
   _glowDuration: 0.1
   _1stColor: {r: 1, g: 0, b: 0, a: 1}
   _2ndColor: {r: 0, g: 0, b: 0, a: 0}
