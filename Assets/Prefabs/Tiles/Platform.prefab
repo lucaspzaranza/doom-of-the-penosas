@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3314969280525163610}
   - component: {fileID: 5297885407430502823}
-  - component: {fileID: 5597737741237667634}
+  - component: {fileID: 4430005591085886379}
   - component: {fileID: 3158088186649763701}
   - component: {fileID: 162288841428286202}
   m_Layer: 7
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.67, y: 0.27, z: 0}
-  m_LocalScale: {x: 3, y: 0.1, z: 1}
+  m_LocalScale: {x: 1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -76,8 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: -1063406731
   m_SortingLayer: -1
   m_SortingOrder: 1
-  m_Sprite: {fileID: -3627264120405484348, guid: 7be436087d5695745a22e0eb47018624,
-    type: 3}
+  m_Sprite: {fileID: -131691678, guid: 2cbf345c5f1abe54f80653df7947b324, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -88,7 +87,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &5597737741237667634
+--- !u!61 &4430005591085886379
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,18 +119,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 1
   m_UsedByComposite: 0
-  m_Offset: {x: -0.050000012, y: -0.05580765}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.74, y: 1.12}
+    oldSize: {x: 2.51, y: 1.01}
     newSize: {x: 0.74, y: 1.12}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.65, y: 1.0283847}
+  m_Size: {x: 2.51, y: 1.01}
   m_EdgeRadius: 0
 --- !u!251 &3158088186649763701
 PlatformEffector2D:
@@ -144,7 +143,7 @@ PlatformEffector2D:
   m_UseColliderMask: 1
   m_ColliderMask:
     serializedVersion: 2
-    m_Bits: 1545
+    m_Bits: 9737
   m_RotationalOffset: 0
   m_UseOneWay: 1
   m_UseOneWayGrouping: 0

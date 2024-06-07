@@ -905,10 +905,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ee3cf25a32235468184bf7e853f6ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blinkDuration: 2
   _sprites:
   - {fileID: 6435880765688207646}
   - {fileID: 6435880766184842906}
+  _blinkDuration: 2
   _glowDuration: 0.1
   _1stColor: {r: 1, g: 0, b: 0, a: 1}
   _2ndColor: {r: 0, g: 0, b: 0, a: 1}

@@ -140,13 +140,12 @@ public abstract class Enemy : DamageableObject
 
         // Detecção do jogador aqui é diferente. Se rotacionar atrás do jogador,
         // tem que usar a Overlap Area e ver se tá na distância permitida
-        // if (PlayerDetector.DetectedPlayerNearObject(transform.position, out _detectedPlayer))
         if (DetectedPlayer())
         {
             if((State == EnemyState.Idle || State == EnemyState.Patrol) && 
             (!IsUsingWeaponWhichRotates || (IsUsingWeaponWhichRotates && ReachedAttackDistance())))
             {
-                print("Detected Player");
+                //print("Detected Player");
                 ChangeState(EnemyState.ChasingPlayer);
                 return;
             }
@@ -180,7 +179,7 @@ public abstract class Enemy : DamageableObject
             CheckForNewRandomState(State);
     }
 
-    protected bool DetectedPlayer()
+    protected virtual bool DetectedPlayer()
     {
         if (!IsUsingWeaponWhichRotates)
         {
@@ -298,7 +297,9 @@ public abstract class Enemy : DamageableObject
     {
         Transform spawnTransform = WeaponController.WeaponDataList[weaponIndex]
             .WeaponGameObjectData.SpawnTransform;
-        WeaponController.WeaponDataList[weaponIndex].WeaponScriptableObject.Shoot(spawnTransform, GetDirection());
+        EnemyWeaponDataListUnit weapon = WeaponController.WeaponDataList[weaponIndex];
+
+        weapon.WeaponScriptableObject.Shoot(spawnTransform, GetDirection(weapon.WeaponGameObjectData.FireInVerticalAxis));
     }    
 
     protected int GetIndexFromClosestWeaponFromPlayer()
@@ -306,14 +307,27 @@ public abstract class Enemy : DamageableObject
         return 0;
     }
 
-    protected virtual int GetDirection()
+    protected virtual int GetDirection(bool useVerticalAxis = false)
     {
-        if(_detectedPlayer == null)
-            return _isLeft ? -1 : 1;
+        if(!useVerticalAxis)
+        {
+            if(_detectedPlayer == null)
+                return _isLeft ? -1 : 1;
+            else
+            {
+                float distance = transform.position.x - _detectedPlayer.transform.position.x;
+                return distance > 0? -1 : 1;
+            }
+        }
         else
         {
-            float distance = transform.position.x - _detectedPlayer.transform.position.x;
-            return distance > 0? -1 : 1;
+            if (_detectedPlayer == null) 
+                return 1; // fire upwards by default
+            else
+            {
+                float distance = transform.position.y - _detectedPlayer.transform.position.y;
+                return distance > 0 ? -1 : 1;
+            }
         }
     }
 

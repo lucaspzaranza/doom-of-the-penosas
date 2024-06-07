@@ -63,6 +63,7 @@
     <Compile Include="Assets\Editor\DrawIfEnumEqualsPropertyDrawer.cs" />
     <Compile Include="Assets\Editor\DrawIfTruePropertyDrawer.cs" />
     <Compile Include="Assets\Editor\CreateAssetBundles.cs" />
+    <Compile Include="Assets\Editor\DrawItDisabledAttributePropertyDrawer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -12,15 +12,17 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
 
     [SerializeField] private PlayerDetector _playerDetector;
     public PlayerDetector PlayerDetector => _playerDetector;
-
-    [SerializeField] private bool _rotateTowardsPlayer;
-    public bool RotateTowardsPlayer => _rotateTowardsPlayer;
+    [SerializeField] private bool _fireInVerticalAxis;
+    public bool FireInVerticalAxis => _fireInVerticalAxis;
 
     [SerializeField] private bool _overwriteScale;
     public bool OverwriteScale => _overwriteScale;
 
     [DrawIfBoolEqualsTo("_overwriteScale", true)]
     [SerializeField] private Vector2 _weaponScale;
+
+    [SerializeField] private bool _rotateTowardsPlayer;
+    public bool RotateTowardsPlayer => _rotateTowardsPlayer;
 
     [DrawIfBoolEqualsTo("_rotateTowardsPlayer", true)]
     [SerializeField] private float _rotationSpeed;
@@ -31,24 +33,41 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
     public bool UseRotationLimit => _useRotationLimit;
 
     [DrawIfBoolEqualsTo("_useRotationLimit", true)]
-    [SerializeField] private float _rotationLimit;
-    public float RotationLimit => _rotationLimit;
+    [SerializeField] private float _rotationUpperLimit;
+    public float RotationUpperLimit => _rotationUpperLimit;
+
+    [DrawIfBoolEqualsTo("_useRotationLimit", true)]
+    [SerializeField] private float _rotationLowerLimit;
+    public float RotationLowerLimit => _rotationLowerLimit;
 
     private bool _hasDetectedPlayer;
     public bool HasDetectedPlayer => _hasDetectedPlayer;
 
     private DamageableObject _detectedPlayer;
     private float _playerAngle = 0f;
+    private float _defaultZValue;
+
+    [DrawIfBoolEqualsTo("_rotateTowardsPlayer", true)]
+    [SerializeField] [DrawItDisabled]
     private float _upperLimit;
+
+    [DrawIfBoolEqualsTo("_rotateTowardsPlayer", true)]
+    [SerializeField] [DrawItDisabled] 
     private float _lowerLimit;
+
+    private bool _hasFlipped;
 
     private void OnEnable()
     {
         if(_weaponSpriteRenderer == null)
             _weaponSpriteRenderer = GetComponent<SpriteRenderer>();
 
-        _upperLimit = transform.rotation.eulerAngles.z + RotationLimit;
-        _lowerLimit = transform.rotation.eulerAngles.z - RotationLimit;
+        _defaultZValue = transform.rotation.eulerAngles.z;
+
+        _upperLimit = _defaultZValue + RotationUpperLimit;
+        _lowerLimit = _defaultZValue + RotationLowerLimit;
+
+        _hasFlipped = false;
     }
 
     public void SetWeaponSprite(Sprite newSprite)
@@ -56,7 +75,7 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
         WeaponSpriteRenderer.sprite = newSprite;
         
         if(OverwriteScale)
-            transform.localScale = new Vector2(_weaponScale.x, _weaponScale.y);
+            WeaponSpriteRenderer.transform.localScale = new Vector2(_weaponScale.x, _weaponScale.y);
     }
 
     private void Update()
@@ -69,7 +88,7 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
 
         if(_hasDetectedPlayer)
         {
-            Vector2 directionVector = PlayerDetector.IsLeft ? 
+            Vector2 directionVector = PlayerDetector.IsLeft ?
                 transform.position - _detectedPlayer.transform.position :
                 _detectedPlayer.transform.position - transform.position;
 
@@ -84,26 +103,36 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
 
         if(_hasDetectedPlayer)
         {
-            float current = transform.rotation.eulerAngles.z;
+            float current = (transform.rotation.z >= 0) ? transform.rotation.eulerAngles.z :
+                transform.rotation.eulerAngles.z - 360f;
 
             if (current == _playerAngle)
                 return;
-            
-            if(UseRotationLimit)
-            {
-                // Ver pq tá dando errado com lower limit da Direita, e com os limites da Esquerda
-                print("current: " + current);
-                print("_playerAngle: " + _playerAngle);
-                print("_upperLimit: " + _upperLimit);
-                print("_lowerLimit: " + _lowerLimit);
-
-                if (current < _playerAngle && current >= _upperLimit) // Rotatin up and passed the limit
-                    return;
-                else if (current <= _lowerLimit) // Rotatin down and passed the limit
-                    return;
-            }
 
             current = Mathf.MoveTowardsAngle(current, _playerAngle, RotationSpeed);
+
+            // Implementar limites quando for uma arma que atire na vertical
+            if(UseRotationLimit)
+            {
+                if (!FireInVerticalAxis && PlayerDetector.IsLeft && !_hasFlipped)
+                {
+                    float sum = _upperLimit + _lowerLimit;
+                    _upperLimit -= sum;
+                    _lowerLimit -= sum;
+                    _hasFlipped = true;
+                    print($"isLeft. current: {current}, upper: {_upperLimit}, lower: {_lowerLimit}");
+                }
+                else if(!FireInVerticalAxis && !PlayerDetector.IsLeft && _hasFlipped)
+                {
+                    _upperLimit = _defaultZValue + RotationUpperLimit;
+                    _lowerLimit = _defaultZValue + RotationLowerLimit;
+                    _hasFlipped = false;
+                    print($"isRight. current: {current}, upper: {_upperLimit}, lower: {_lowerLimit}");
+                }
+
+                current = Mathf.Clamp(current, _lowerLimit, _upperLimit);
+            }
+
             Quaternion newRotation = Quaternion.AngleAxis(current, Vector3.forward);
             transform.rotation = newRotation;
         }
