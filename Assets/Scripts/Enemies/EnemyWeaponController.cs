@@ -1,3 +1,4 @@
+using SharedData.Enumerations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,9 +9,12 @@ public class EnemyWeaponController
     [SerializeField] private List<EnemyWeaponDataListUnit> _weaponDataList;
     public List<EnemyWeaponDataListUnit> WeaponDataList => _weaponDataList;
 
-    public void FlipWeaponsPlayerDetectors()
+    public void FlipWeaponsPlayerDetectors(FlipType type)
     {
-        WeaponDataList.ForEach(weaponData => weaponData.WeaponGameObjectData.PlayerDetector.Flip());
+        WeaponDataList.ForEach(weaponData => {
+            bool invertOverlap = !weaponData.WeaponGameObjectData.FireInVerticalAxis;
+            weaponData.WeaponGameObjectData.PlayerDetector.Flip(type, invertOverlap);
+        });
     }
 }
 

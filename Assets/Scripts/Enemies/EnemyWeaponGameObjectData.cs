@@ -48,11 +48,13 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
     private float _defaultZValue;
 
     [DrawIfBoolEqualsTo("_rotateTowardsPlayer", true)]
-    [SerializeField] [DrawItDisabled]
+    [SerializeField] 
+    //[DrawItDisabled]
     private float _upperLimit;
 
     [DrawIfBoolEqualsTo("_rotateTowardsPlayer", true)]
-    [SerializeField] [DrawItDisabled] 
+    [SerializeField] 
+    //[DrawItDisabled] 
     private float _lowerLimit;
 
     private bool _hasFlipped;
@@ -64,8 +66,8 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
 
         _defaultZValue = transform.rotation.eulerAngles.z;
 
-        _upperLimit = _defaultZValue + RotationUpperLimit;
-        _lowerLimit = _defaultZValue + RotationLowerLimit;
+        _upperLimit = FireInVerticalAxis? RotationUpperLimit : _defaultZValue + RotationUpperLimit;
+        _lowerLimit = FireInVerticalAxis? RotationLowerLimit : _defaultZValue + RotationLowerLimit;
 
         _hasFlipped = false;
     }
@@ -111,30 +113,55 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
 
             current = Mathf.MoveTowardsAngle(current, _playerAngle, RotationSpeed);
 
-            // Implementar limites quando for uma arma que atire na vertical
             if(UseRotationLimit)
             {
-                if (!FireInVerticalAxis && PlayerDetector.IsLeft && !_hasFlipped)
-                {
-                    float sum = _upperLimit + _lowerLimit;
-                    _upperLimit -= sum;
-                    _lowerLimit -= sum;
-                    _hasFlipped = true;
-                    print($"isLeft. current: {current}, upper: {_upperLimit}, lower: {_lowerLimit}");
-                }
-                else if(!FireInVerticalAxis && !PlayerDetector.IsLeft && _hasFlipped)
-                {
-                    _upperLimit = _defaultZValue + RotationUpperLimit;
-                    _lowerLimit = _defaultZValue + RotationLowerLimit;
-                    _hasFlipped = false;
-                    print($"isRight. current: {current}, upper: {_upperLimit}, lower: {_lowerLimit}");
-                }
-
+                UpdateRotationLimits(current);
                 current = Mathf.Clamp(current, _lowerLimit, _upperLimit);
             }
 
             Quaternion newRotation = Quaternion.AngleAxis(current, Vector3.forward);
             transform.rotation = newRotation;
+        }
+    }
+
+    private void UpdateRotationLimits(float current = 0f)
+    {
+        print(PlayerDetector.IsLeft);
+
+        if (PlayerDetector.IsLeft && !_hasFlipped) // Left rotation
+        {
+            print("Is Left and hasn't flipped");
+            if (!FireInVerticalAxis) // Left and Horizontal
+            {
+                float sum = _upperLimit + _lowerLimit;
+                _upperLimit -= sum;
+                _lowerLimit -= sum;
+                _hasFlipped = true;
+                print($"isLeft. current: {current}, upper: {_upperLimit}, lower: {_lowerLimit}");
+            }
+            else // Left and Vertical
+            {
+                current = -current;
+                _hasFlipped = true;
+                print($"isLeft. current: {current}, upper: {_upperLimit}, lower: {_lowerLimit}");
+            }
+        }
+        else if (!PlayerDetector.IsLeft && _hasFlipped) // Right rotation
+        {
+            if(!FireInVerticalAxis) // Right and Horizontal
+            {
+                _upperLimit = _defaultZValue + RotationUpperLimit;
+                _lowerLimit = _defaultZValue + RotationLowerLimit;
+                _hasFlipped = false;
+                print($"isRight. current: {current}, upper: {_upperLimit}, lower: {_lowerLimit}");
+            }
+            else // Right and Vertical
+            {
+                _upperLimit = RotationUpperLimit;
+                _lowerLimit = RotationLowerLimit;
+                _hasFlipped = false;
+                print($"isRight. current: {current}, upper: {_upperLimit}, lower: {_lowerLimit}");
+            }
         }
     }
 }

@@ -94,10 +94,9 @@ public abstract class Enemy : DamageableObject
     protected bool IsUsingWeaponWhichRotates =>
         WeaponController.WeaponDataList[0].WeaponGameObjectData.RotateTowardsPlayer;
 
-    //[SerializeField] protected PlayerDetector _playerDetector;
-    //public PlayerDetector PlayerDetector => _playerDetector;
 
     [SerializeField] protected bool _isLeft;
+    public bool IsLeft => _isLeft;
 
     protected DamageableObject _detectedPlayer;
     protected EnemyState _previousState;
@@ -385,15 +384,13 @@ public abstract class Enemy : DamageableObject
         {
             _isLeft = true;
             transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x) * -1, transform.localScale.y);
-            //PlayerDetector?.Flip();
-            WeaponController.FlipWeaponsPlayerDetectors();
+            WeaponController.FlipWeaponsPlayerDetectors(FlipType.Horizontal);
         }
         else if(direction > 0 && transform.localScale.x < 0)
         {
             _isLeft = false;
             transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x), transform.localScale.y);
-            //PlayerDetector?.Flip();
-            WeaponController.FlipWeaponsPlayerDetectors();
+            WeaponController.FlipWeaponsPlayerDetectors(FlipType.Horizontal);
         }
     }
 

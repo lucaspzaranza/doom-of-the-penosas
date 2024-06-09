@@ -1,3 +1,4 @@
+using SharedData.Enumerations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,6 +47,7 @@ public class PlayerDetector : MonoBehaviour
 
     private ContactFilter2D contactFilter = new ContactFilter2D();
     private List<Collider2D> results = new List<Collider2D>();
+    private Enemy _enemyComponent = null;
 
     /// <summary>
     /// Detects using Raycast if the player is near the Object based on the configured direction Vector2 and
@@ -107,32 +109,66 @@ public class PlayerDetector : MonoBehaviour
     /// Call this function to invert the raycast direction vector horizontally or vertically.
     /// </summary>
     /// <param name="horizontalFlip">Check this as false if you want to invert vertically.</param>
-    /// <param name="invertBoth">Check this as true if you want to invert both axes.</param>
-    public void Flip(bool horizontalFlip = true, bool invertBoth = false)
+    /// <param name="invertOverlapArea">Check this as true if you want to invert Overlap area, if used.</param>
+    public void Flip(FlipType type, bool invertOverlapArea = false)
     {
-        if(invertBoth)
+        switch (type)
         {
-            _direction = new Vector2(-_direction.x, -_direction.y);
-            if (_useOverlapArea)
-                _areaSize = new Vector2(-_areaSize.x, -_areaSize.y);
+            case FlipType.Horizontal:
 
-            IsLeft = _direction.x < 0;
+                _direction = new Vector2(-_direction.x, _direction.y);
+                if (_useOverlapArea && invertOverlapArea)
+                    _areaSize = new Vector2(-_areaSize.x, _areaSize.y);
+
+                break;
+
+            case FlipType.Vertical:
+
+                _direction = new Vector2(_direction.x, -_direction.y);
+                if (_useOverlapArea && invertOverlapArea)
+                    _areaSize = new Vector2(_areaSize.x, -_areaSize.y);
+
+                break;
+
+            case FlipType.Both:
+
+                _direction = new Vector2(-_direction.x, -_direction.y);
+                if (_useOverlapArea && invertOverlapArea)
+                    _areaSize = new Vector2(-_areaSize.x, -_areaSize.y);
+
+                break;
+
+            default:
+                break;
+        }
+
+        UpdateOrientation();
+    }
+
+    public void UpdateOrientation()
+    {
+        GameObject parent = transform.parent?.gameObject;
+
+        while (!parent.TryGetComponent(out _enemyComponent))
+        {
+            parent = parent.transform.parent?.gameObject;
+            if (parent == null)
+            {
+                Debug.LogWarning("Enemy Script not found in any parent. " +
+                    "The orientation will be made based upon object inner variables.");
+                break;
+            }
+        }
+
+        if(_enemyComponent != null)
+        {
+            IsLeft = _enemyComponent.IsLeft;
             return;
         }
 
-        if (horizontalFlip)
-        {
-            _direction = new Vector2(-_direction.x, _direction.y);
-            if (_useOverlapArea)
-                _areaSize = new Vector2(-_areaSize.x, _areaSize.y);
-        }
+        if (_direction.x != 0)
+            IsLeft = _direction.x < 0;
         else
-        {
-            _direction = new Vector2(_direction.x, -_direction.y);
-            if (_useOverlapArea)
-                _areaSize = new Vector2(_areaSize.x, -_areaSize.y);
-        }
-
-        IsLeft = _direction.x < 0;
+            IsLeft = !IsLeft;
     }
 }

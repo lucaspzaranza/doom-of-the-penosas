@@ -100,4 +100,11 @@ namespace SharedData.Enumerations
         Performed,
         Canceled
     }
+
+    public enum FlipType
+    {
+        Horizontal,
+        Vertical,
+        Both
+    }
 }
