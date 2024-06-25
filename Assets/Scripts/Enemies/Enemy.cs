@@ -298,24 +298,20 @@ public abstract class Enemy : DamageableObject
             .WeaponGameObjectData.SpawnTransform;
         EnemyWeaponDataListUnit weapon = WeaponController.WeaponDataList[weaponIndex];
 
-        weapon.WeaponScriptableObject.Shoot(spawnTransform, GetDirection(weapon.WeaponGameObjectData.FireInVerticalAxis));
+        int direction = GetDirection(weapon.WeaponGameObjectData.FireInVerticalAxis);
+        weapon.WeaponScriptableObject.Shoot(spawnTransform, direction);
     }    
-
-    protected int GetIndexFromClosestWeaponFromPlayer()
-    {
-        return 0;
-    }
 
     protected virtual int GetDirection(bool useVerticalAxis = false)
     {
         if(!useVerticalAxis)
         {
-            if(_detectedPlayer == null)
+            if (_detectedPlayer == null)
                 return _isLeft ? -1 : 1;
             else
             {
                 float distance = transform.position.x - _detectedPlayer.transform.position.x;
-                return distance > 0? -1 : 1;
+                return distance > 0 ? -1 : 1;
             }
         }
         else
@@ -323,11 +319,13 @@ public abstract class Enemy : DamageableObject
             if (_detectedPlayer == null) 
                 return 1; // fire upwards by default
             else
-            {
-                float distance = transform.position.y - _detectedPlayer.transform.position.y;
-                return distance > 0 ? -1 : 1;
-            }
+                return IsLeft ? -1 : 1;
         }
+    }
+
+    protected int GetIndexFromClosestWeaponFromPlayer()
+    {
+        return 0;
     }
 
     protected virtual void CheckForNewRandomState(EnemyState enemyState) 

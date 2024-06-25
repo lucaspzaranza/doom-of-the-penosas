@@ -179,7 +179,8 @@ public class Penosa : DamageableObject
 
     void Update()
     {
-        if (_playerController.GameIsPaused() || _isInCountdown)
+        if (_playerController != null && 
+            _playerController.GameIsPaused() || _isInCountdown)
             return;
 
         Move();

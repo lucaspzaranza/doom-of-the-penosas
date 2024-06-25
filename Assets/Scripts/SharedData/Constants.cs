@@ -123,6 +123,9 @@ public static class ConstantNumbers
     // Stage
     public const float TimeToShowStageClearTxt = 2f;
     public const float TimeToReturnToMapaMundiAfterGameOver = 3f;
+
+    // Enemy
+    public const float UpsideDownAngle = 180f;
 }   
 
 public static class ScenesBuildIndexes

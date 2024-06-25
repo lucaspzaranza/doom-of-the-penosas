@@ -124,26 +124,41 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
         }
     }
 
-    private void UpdateRotationLimits(float current = 0f)
+    /// <summary>
+    /// Updates the _upper and _lower limits to the rotations based on the direction, i.e., if it's left oriented or not, <br/>
+    /// if is a vertical or an horizontal weapon, and, if necessary, the enemy rotation as well.
+    /// </summary>
+    /// <param name="current"></param>
+    private void UpdateRotationLimits(float current)
     {
-        print(PlayerDetector.IsLeft);
-
         if (PlayerDetector.IsLeft && !_hasFlipped) // Left rotation
         {
-            print("Is Left and hasn't flipped");
             if (!FireInVerticalAxis) // Left and Horizontal
             {
                 float sum = _upperLimit + _lowerLimit;
                 _upperLimit -= sum;
                 _lowerLimit -= sum;
                 _hasFlipped = true;
-                print($"isLeft. current: {current}, upper: {_upperLimit}, lower: {_lowerLimit}");
             }
-            else // Left and Vertical
+            else if (this.GetComponentInAnyParent(out Enemy enemyComponent)) // Left and Vertical
             {
-                current = -current;
+                float zAngle = enemyComponent.gameObject.transform.rotation.eulerAngles.z;
+                if (zAngle == ConstantNumbers.UpsideDownAngle)
+                {
+                    _upperLimit = -RotationLowerLimit;
+                    _lowerLimit = -RotationUpperLimit;
+                }
+                else if(zAngle > 0f)
+                {
+                    _upperLimit = RotationUpperLimit - 180f;
+                    _lowerLimit = RotationLowerLimit - 180f;
+                }
+                else if (zAngle == 0f)
+                {
+                    _upperLimit = RotationUpperLimit + 180f;
+                    _lowerLimit = RotationLowerLimit + 180f;
+                }
                 _hasFlipped = true;
-                print($"isLeft. current: {current}, upper: {_upperLimit}, lower: {_lowerLimit}");
             }
         }
         else if (!PlayerDetector.IsLeft && _hasFlipped) // Right rotation
@@ -153,14 +168,12 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
                 _upperLimit = _defaultZValue + RotationUpperLimit;
                 _lowerLimit = _defaultZValue + RotationLowerLimit;
                 _hasFlipped = false;
-                print($"isRight. current: {current}, upper: {_upperLimit}, lower: {_lowerLimit}");
             }
             else // Right and Vertical
             {
                 _upperLimit = RotationUpperLimit;
                 _lowerLimit = RotationLowerLimit;
                 _hasFlipped = false;
-                print($"isRight. current: {current}, upper: {_upperLimit}, lower: {_lowerLimit}");
             }
         }
     }

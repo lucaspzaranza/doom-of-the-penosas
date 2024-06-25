@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,5 +38,5 @@ public static class SharedFunctions
             dmgObject.TryGetComponent(out Penosa penosa) ||         // Is a player?
             (dmgObject.TryGetComponent(out RideArmor rideArmor) &&  // Or is it a Ride Armor... 
             rideArmor.Player != null);                              // ... with some player inside?
-    }
+    }    
 }

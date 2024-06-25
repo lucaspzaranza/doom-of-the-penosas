@@ -118,7 +118,10 @@ public class PlayerDetector : MonoBehaviour
 
                 _direction = new Vector2(-_direction.x, _direction.y);
                 if (_useOverlapArea && invertOverlapArea)
+                {
                     _areaSize = new Vector2(-_areaSize.x, _areaSize.y);
+                    _offset = new Vector2(-_offset.x, _offset.y);
+                }
 
                 break;
 
@@ -134,7 +137,10 @@ public class PlayerDetector : MonoBehaviour
 
                 _direction = new Vector2(-_direction.x, -_direction.y);
                 if (_useOverlapArea && invertOverlapArea)
+                {
                     _areaSize = new Vector2(-_areaSize.x, -_areaSize.y);
+                    _offset = new Vector2(-_offset.x, _offset.y);
+                }
 
                 break;
 
@@ -147,20 +153,7 @@ public class PlayerDetector : MonoBehaviour
 
     public void UpdateOrientation()
     {
-        GameObject parent = transform.parent?.gameObject;
-
-        while (!parent.TryGetComponent(out _enemyComponent))
-        {
-            parent = parent.transform.parent?.gameObject;
-            if (parent == null)
-            {
-                Debug.LogWarning("Enemy Script not found in any parent. " +
-                    "The orientation will be made based upon object inner variables.");
-                break;
-            }
-        }
-
-        if(_enemyComponent != null)
+        if(this.GetComponentInAnyParent(out _enemyComponent))
         {
             IsLeft = _enemyComponent.IsLeft;
             return;
