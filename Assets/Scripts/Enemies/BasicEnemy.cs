@@ -16,34 +16,43 @@ public class BasicEnemy : Enemy
     protected float _fireRateCounter;    
 
     private float _xDirection;
+    private float _yDirection;
     private float _movementTimeCounter;
     private float _timeToInvertMovementTimeCounter;
 
     public override void Patrol()
     {
-        //Move();
+        if(CanMove)
+            Move();
     }
 
     protected override void Move()
     {
         if (_movementTimeCounter < _movementDuration)
         {
-            _movementTimeCounter += Time.deltaTime;
+            _movementTimeCounter += Time.deltaTime;            
 
-            //if (EnemyType == EnemyType.Land)
-            //    MoveLandEnemy();
-            //else if (EnemyType == EnemyType.Flying)
-            //    MoveFlyingEnemy();
+            if (EnemyType == EnemyType.Land)
+                MoveLandEnemy();
+            else if (EnemyType == EnemyType.Flying)
+                MoveFlyingEnemy();            
         }
         else
         {
             _timeToInvertMovementTimeCounter += Time.deltaTime;
+            _isMoving = false;
 
             if(_timeToInvertMovementTimeCounter > _timeToInvertMovement)
             {
                 _movementTimeCounter = 0;
                 _timeToInvertMovementTimeCounter = 0;
-                Flip(transform.localScale.x < 0 ? 1 : -1);
+
+                if (EnemyType == EnemyType.Land ||
+                (EnemyType == EnemyType.Flying && FlyingChaseMode != FlyingChaseMode.Vertical))
+                    Flip(transform.localScale.x < 0 ? 1 : -1);
+                else // Flying type and Vertical movement
+                    FlipVerticalDirection();
+
                 EnemyStateGeneralData.SetCurrentActionAsPerformed();
             }
         }
@@ -56,6 +65,7 @@ public class BasicEnemy : Enemy
         {
             print("Lost player from sight. Returning to initial state...");
             ChangeState(EnemyStateGeneralData.InitialState);
+            _isMoving = false;
             return;
         }
 
@@ -67,9 +77,10 @@ public class BasicEnemy : Enemy
                 float distance = transform.position.x - _detectedPlayer.transform.position.x;
                 Flip(distance < 0 ? 1 : -1);
             }
+            _isMoving = false;
             ChangeState(EnemyState.Attacking);
         }
-        else
+        else if(CanMove)
         {
             if (EnemyType == EnemyType.Land)
                 MoveLandEnemy();
@@ -84,24 +95,30 @@ public class BasicEnemy : Enemy
 
         if (_tookDamage && ChangeStateAfterDamage && State == EnemyState.Idle)
         {
-            print($"Took damage, changing state to {StateAfterDamage}...");
+            //print($"Took damage, changing state to {StateAfterDamage}...");
             ChangeState(StateAfterDamage);
         }
     }
 
     protected virtual void MoveLandEnemy()
-    {        
+    {
         if (Rigidbody != null && !SharedFunctions.HitSomething(
             _landCharacterProps.WallCheckCollider,
             _landCharacterProps.TerrainWithoutPlatformLayerMask,
-            out Collider2D hitWall))
+            out Collider2D hitWall)
+        )
         {
+            _isMoving = true;
             _xDirection = GetDirection() * _speed;
 
             Vector2 direction = new Vector2(_xDirection, Rigidbody.velocity.y);
             Rigidbody.velocity = direction;
             Flip((int)_xDirection);
+
+            UpdateOverlapAreasPositions();
         }
+        else
+            _isMoving = false;
     }
 
     protected virtual void MoveFlyingEnemy()
@@ -111,12 +128,25 @@ public class BasicEnemy : Enemy
             _flyingCharacterProps.FlyingLayerMask,
             out Collider2D hitWall))
         {
-            _xDirection = GetDirection() * _speed;
-            Vector2 direction = new Vector2(_xDirection, 0);
+            _isMoving = true;
+            _xDirection = 0f;
+            _yDirection = 0f;
+
+            if(FlyingChaseMode == FlyingChaseMode.Horizontal || FlyingChaseMode == FlyingChaseMode.Both)
+                _xDirection = GetDirection() * _speed;
+
+            if(FlyingChaseMode == FlyingChaseMode.Vertical || FlyingChaseMode == FlyingChaseMode.Both)
+                _yDirection = GetDirection(calculateInVerticalAxis: true) * _speed;
+
+            Vector2 direction = new Vector2(_xDirection, _yDirection);
             transform.Translate(direction * Time.deltaTime);
 
             Flip((int)_xDirection);
+
+            UpdateOverlapAreasPositions();
         }
+        else
+            _isMoving = false;
     }
 
     public override void Attack()
@@ -132,7 +162,7 @@ public class BasicEnemy : Enemy
                 if(_fireRateCounter >
                     WeaponController.WeaponDataList[0].WeaponScriptableObject.GetFireRate())
                 {
-                    //Shoot(0);
+                    //SelectWeaponAndShoot();
                     print("SHOOT");
                     _fireRateCounter = 0;
                 }

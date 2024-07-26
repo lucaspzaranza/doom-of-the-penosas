@@ -48,6 +48,14 @@ public class PlayerDetector : MonoBehaviour
     private ContactFilter2D contactFilter = new ContactFilter2D();
     private List<Collider2D> results = new List<Collider2D>();
     private Enemy _enemyComponent = null;
+    private Vector2 _prevPos;
+    private Vector2 _initialAreaSize;
+
+    private void OnEnable()
+    {
+        _prevPos = transform.position;
+        _initialAreaSize = _areaSize;
+    }
 
     /// <summary>
     /// Detects using Raycast if the player is near the Object based on the configured direction Vector2 and
@@ -112,14 +120,24 @@ public class PlayerDetector : MonoBehaviour
     /// <param name="invertOverlapArea">Check this as true if you want to invert Overlap area, if used.</param>
     public void Flip(FlipType type, bool invertOverlapArea = false)
     {
+        float enemyPosX = 0f;
+        float enemyPosY = 0f;
+
+        if(_enemyComponent != null || this.GetComponentInAnyParent(out _enemyComponent))
+        {
+            enemyPosX = _enemyComponent.gameObject.transform.localPosition.x;
+            enemyPosY = _enemyComponent.gameObject.transform.localPosition.y;
+        }
+
         switch (type)
         {
             case FlipType.Horizontal:
 
                 _direction = new Vector2(-_direction.x, _direction.y);
+                bool isNegative = _direction.x < 0;
                 if (_useOverlapArea && invertOverlapArea)
                 {
-                    _areaSize = new Vector2(-_areaSize.x, _areaSize.y);
+                    _areaSize = new Vector2((isNegative? -_initialAreaSize.x : _initialAreaSize.x) + enemyPosX, _initialAreaSize.y);
                     _offset = new Vector2(-_offset.x, _offset.y);
                 }
 
@@ -128,8 +146,13 @@ public class PlayerDetector : MonoBehaviour
             case FlipType.Vertical:
 
                 _direction = new Vector2(_direction.x, -_direction.y);
+                isNegative = _direction.y < 0;
                 if (_useOverlapArea && invertOverlapArea)
-                    _areaSize = new Vector2(_areaSize.x, -_areaSize.y);
+                {
+                    _areaSize = new Vector2(_initialAreaSize.x, -_initialAreaSize.y);
+                    _areaSize = new Vector2(_initialAreaSize.x, (isNegative ? -_initialAreaSize.y : _initialAreaSize.y) + enemyPosY);
+                    _offset = new Vector2(_offset.x, -_offset.y);
+                }
 
                 break;
 
@@ -138,7 +161,7 @@ public class PlayerDetector : MonoBehaviour
                 _direction = new Vector2(-_direction.x, -_direction.y);
                 if (_useOverlapArea && invertOverlapArea)
                 {
-                    _areaSize = new Vector2(-_areaSize.x, -_areaSize.y);
+                    _areaSize = new Vector2(-_initialAreaSize.x, -_initialAreaSize.y);
                     _offset = new Vector2(-_offset.x, _offset.y);
                 }
 
@@ -163,5 +186,34 @@ public class PlayerDetector : MonoBehaviour
             IsLeft = _direction.x < 0;
         else
             IsLeft = !IsLeft;
+    } 
+
+    public void UpdateOverlapAreaPosition(Vector2 pos)
+    {
+        Vector2 deltaPos = pos - _prevPos;
+        deltaPos = new Vector2(Mathf.Abs(deltaPos.x), Mathf.Abs(deltaPos.y));
+        Vector2 result = Vector2.zero;
+
+        if (_enemyComponent != null || this.GetComponentInAnyParent(out _enemyComponent))
+        {
+            if(_enemyComponent.EnemyType == EnemyType.Land || 
+            (_enemyComponent.EnemyType == EnemyType.Flying && _enemyComponent.FlyingChaseMode == FlyingChaseMode.Horizontal))
+            {
+                if (!IsLeft)
+                    result = new Vector2(_areaSize.x + deltaPos.x, _areaSize.y);
+                else
+                    result = new Vector2(_areaSize.x - deltaPos.x, _areaSize.y);
+            }
+            else if (_enemyComponent.EnemyType == EnemyType.Flying && _enemyComponent.FlyingChaseMode == FlyingChaseMode.Vertical)
+            {
+                if(_enemyComponent.IsDown)
+                    result = new Vector2(_areaSize.x, _areaSize.y - deltaPos.y);
+                else
+                    result = new Vector2(_areaSize.x, _areaSize.y + deltaPos.y);
+            }
+        }
+
+        _areaSize = result;
+        _prevPos = pos;
     }
 }

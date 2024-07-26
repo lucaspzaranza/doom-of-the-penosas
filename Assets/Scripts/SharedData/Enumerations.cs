@@ -85,6 +85,13 @@ namespace SharedData.Enumerations
         Flying
     }
 
+    public enum FlyingChaseMode
+    {
+        Horizontal,
+        Vertical,
+        Both
+    }
+
     public enum EnemyState
     {
         Idle,
@@ -106,5 +113,11 @@ namespace SharedData.Enumerations
         Horizontal,
         Vertical,
         Both
+    }
+
+    public enum EnemyFireType
+    {
+        Simultaneous,
+        Individual
     }
 }

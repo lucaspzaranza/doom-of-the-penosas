@@ -16,11 +16,25 @@ public abstract class Enemy : DamageableObject
     [SerializeField] private bool _isBoss;
     public bool IsBoss => _isBoss;
 
+    [SerializeField] private bool _canMove;
+    public bool CanMove => _canMove;
+
+    [DrawItDisabled]
+    [SerializeField] protected bool _isMoving;
+    public bool IsMoving => _isMoving;
+
     [SerializeField] protected float _speed;
     public float Speed => _speed;
     
     [SerializeField] private EnemyType _enemyType;
     public EnemyType EnemyType => _enemyType;
+
+    [DrawIfEnumEqualsTo("_enemyType", new EnemyType(), EnemyType.Flying)]
+    [SerializeField] private FlyingChaseMode _flyingChaseMode;
+    public FlyingChaseMode FlyingChaseMode => _flyingChaseMode;
+
+    [SerializeField] protected EnemyFireType _fireType;
+    public EnemyFireType FireType => _fireType;
 
     [DrawIfEnumEqualsTo("_enemyType", new EnemyType(), EnemyType.Land)]
     [SerializeField] protected LandCharacterProps _landCharacterProps;
@@ -42,6 +56,9 @@ public abstract class Enemy : DamageableObject
 
     [SerializeField] protected bool _canStayIdle;
     public bool CanStayIdle => _canStayIdle;
+
+    [SerializeField] protected bool _canFlip = true;
+    public bool CanFlip => _canFlip;
 
     // Conditional Editor Fields
 
@@ -94,9 +111,12 @@ public abstract class Enemy : DamageableObject
     protected bool IsUsingWeaponWhichRotates =>
         WeaponController.WeaponDataList[0].WeaponGameObjectData.RotateTowardsPlayer;
 
-
     [SerializeField] protected bool _isLeft;
     public bool IsLeft => _isLeft;
+
+    [DrawIfEnumEqualsTo("_enemyType", new EnemyType(), EnemyType.Flying)]
+    [SerializeField] protected bool _isDown;
+    public bool IsDown => _isDown;
 
     protected DamageableObject _detectedPlayer;
     protected EnemyState _previousState;
@@ -105,9 +125,9 @@ public abstract class Enemy : DamageableObject
     protected bool _attackCanceled = false;
     protected List<EnemyWeaponDataListUnit> _weaponsWhichRotateTowardsPlayer;
 
-    #endregion
-
     [SerializeField] private int weaponIndex;
+
+    #endregion
 
     private void OnEnable()
     {
@@ -131,7 +151,8 @@ public abstract class Enemy : DamageableObject
         // Temporary for test usage only
         if (Input.GetKeyDown(KeyCode.O))
         {
-            Shoot(weaponIndex);
+            //Shoot(weaponIndex);
+            SelectWeaponAndShoot();
         }
 
         if (_weaponsWhichRotateTowardsPlayer.Count > 0)
@@ -141,10 +162,11 @@ public abstract class Enemy : DamageableObject
         // tem que usar a Overlap Area e ver se tá na distância permitida
         if (DetectedPlayer())
         {
-            if((State == EnemyState.Idle || State == EnemyState.Patrol) && 
-            (!IsUsingWeaponWhichRotates || (IsUsingWeaponWhichRotates && ReachedAttackDistance())))
+            //if((State == EnemyState.Idle || State == EnemyState.Patrol) && 
+            //(!IsUsingWeaponWhichRotates || (IsUsingWeaponWhichRotates && ReachedAttackDistance())))
+            if (State == EnemyState.Idle || State == EnemyState.Patrol)
             {
-                //print("Detected Player");
+                print("Detected Player");
                 ChangeState(EnemyState.ChasingPlayer);
                 return;
             }
@@ -189,6 +211,15 @@ public abstract class Enemy : DamageableObject
         {
             return WeaponController.WeaponDataList[0].WeaponGameObjectData
             .PlayerDetector.DetectedPlayerNearObjectUsingOverlapArea(transform.position, out _detectedPlayer);
+        }
+    }
+
+    protected void UpdateOverlapAreasPositions()
+    {
+        foreach (var weapon in WeaponController.WeaponDataList)
+        {
+            if(weapon.WeaponGameObjectData.gameObject.activeInHierarchy)
+                weapon.WeaponGameObjectData.PlayerDetector.UpdateOverlapAreaPosition(transform.position);
         }
     }
 
@@ -292,6 +323,19 @@ public abstract class Enemy : DamageableObject
 
     public virtual void Attack() { }
 
+    public void SelectWeaponAndShoot()
+    {
+        if(FireType == EnemyFireType.Individual)
+            Shoot(0); // Temporary, must change to weapon which is nearest from player's position.
+        else
+        {
+            for (int i = 0; i < WeaponController.WeaponDataList.Count; i++)
+            {
+                Shoot(i);
+            }
+        }
+    }
+
     public virtual void Shoot(int weaponIndex)
     {
         Transform spawnTransform = WeaponController.WeaponDataList[weaponIndex]
@@ -302,12 +346,12 @@ public abstract class Enemy : DamageableObject
         weapon.WeaponScriptableObject.Shoot(spawnTransform, direction);
     }    
 
-    protected virtual int GetDirection(bool useVerticalAxis = false)
+    protected virtual int GetDirection(bool calculateInVerticalAxis = false)
     {
-        if(!useVerticalAxis)
+        if(!calculateInVerticalAxis)
         {
             if (_detectedPlayer == null)
-                return _isLeft ? -1 : 1;
+                return IsLeft ? -1 : 1;
             else
             {
                 float distance = transform.position.x - _detectedPlayer.transform.position.x;
@@ -316,10 +360,13 @@ public abstract class Enemy : DamageableObject
         }
         else
         {
-            if (_detectedPlayer == null) 
-                return 1; // fire upwards by default
+            if (_detectedPlayer == null)
+                return IsDown ? -1 : 1;
             else
-                return IsLeft ? -1 : 1;
+            {
+                float distance = transform.position.y - _detectedPlayer.transform.position.y;
+                return distance > 0 ? 1 : -1;
+            }
         }
     }
 
@@ -378,6 +425,9 @@ public abstract class Enemy : DamageableObject
 
     protected virtual void Flip(int direction)
     {
+        if (!CanFlip)
+            return;
+
         if(direction < 0 && transform.localScale.x > 0)
         {
             _isLeft = true;
@@ -390,6 +440,11 @@ public abstract class Enemy : DamageableObject
             transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x), transform.localScale.y);
             WeaponController.FlipWeaponsPlayerDetectors(FlipType.Horizontal);
         }
+    }
+
+    protected virtual void FlipVerticalDirection()
+    {
+        _isDown = !_isDown;
     }
 
     protected virtual void Death() 

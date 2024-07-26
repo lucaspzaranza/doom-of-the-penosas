@@ -14,6 +14,9 @@ public class EnemyWeaponController
         WeaponDataList.ForEach(weaponData => {
             bool invertOverlap = !weaponData.WeaponGameObjectData.FireInVerticalAxis;
             weaponData.WeaponGameObjectData.PlayerDetector.Flip(type, invertOverlap);
+
+            if (weaponData.WeaponGameObjectData.UseRotationLimit)
+                weaponData.WeaponGameObjectData.UpdateRotationLimits();
         });
     }
 }

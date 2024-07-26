@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyWeaponGameObjectData : MonoBehaviour
 {
+    private const float LowerLimitDefault = 0.05f;
+
     [SerializeField] private Transform _spawnTransform;
     public Transform SpawnTransform => _spawnTransform;
 
@@ -48,16 +50,19 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
     private float _defaultZValue;
 
     [DrawIfBoolEqualsTo("_rotateTowardsPlayer", true)]
-    [SerializeField] 
-    //[DrawItDisabled]
+    [SerializeField]
+    [DrawItDisabled]
     private float _upperLimit;
 
     [DrawIfBoolEqualsTo("_rotateTowardsPlayer", true)]
-    [SerializeField] 
-    //[DrawItDisabled] 
+    [SerializeField]
+    [DrawItDisabled]
     private float _lowerLimit;
 
     private bool _hasFlipped;
+    private bool _playerChangedPosition;
+    private Vector2 _playerPrevPos;
+    private float _prevAngle;
 
     private void OnEnable()
     {
@@ -66,10 +71,19 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
 
         _defaultZValue = transform.rotation.eulerAngles.z;
 
+        if(RotationLowerLimit == 0f)
+            _rotationLowerLimit = LowerLimitDefault;
+
         _upperLimit = FireInVerticalAxis? RotationUpperLimit : _defaultZValue + RotationUpperLimit;
         _lowerLimit = FireInVerticalAxis? RotationLowerLimit : _defaultZValue + RotationLowerLimit;
 
         _hasFlipped = false;
+
+        if(_playerDetector == null)
+            _playerDetector = GetComponent<PlayerDetector>();
+
+        _playerPrevPos = Vector2.zero;
+        _playerChangedPosition = false;
     }
 
     public void SetWeaponSprite(Sprite newSprite)
@@ -85,6 +99,12 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
         if (!RotateTowardsPlayer)
             return;
 
+        if(PlayerDetector == null)
+        {
+            Debug.LogWarning("Player Detector not found. You must add this component to make the rotation detection.");
+            return;
+        }
+
         _hasDetectedPlayer = 
                 PlayerDetector.DetectedPlayerNearObjectUsingOverlapArea(transform.position, out _detectedPlayer);
 
@@ -95,13 +115,16 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
                 _detectedPlayer.transform.position - transform.position;
 
             _playerAngle = Mathf.Atan2(directionVector.y, directionVector.x) * Mathf.Rad2Deg;
+            _playerChangedPosition = _detectedPlayer.transform.position.y != _playerPrevPos.y;
+
+            _playerPrevPos = _detectedPlayer.transform.position;
         }
     }
 
     public void RotateWeaponTowardsPlayer()
     {
         if (!RotateTowardsPlayer)
-            return;
+            return;                
 
         if(_hasDetectedPlayer)
         {
@@ -113,7 +136,7 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
 
             current = Mathf.MoveTowardsAngle(current, _playerAngle, RotationSpeed);
 
-            if(UseRotationLimit)
+            if (UseRotationLimit)
             {
                 UpdateRotationLimits(current);
                 current = Mathf.Clamp(current, _lowerLimit, _upperLimit);
@@ -121,15 +144,16 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
 
             Quaternion newRotation = Quaternion.AngleAxis(current, Vector3.forward);
             transform.rotation = newRotation;
+            _prevAngle = current;
         }
     }
 
     /// <summary>
-    /// Updates the _upper and _lower limits to the rotations based on the direction, i.e., if it's left oriented or not, <br/>
+    /// Updates the upper and lower limits to the rotations based on the direction, i.e., if it's left oriented or not, <br/>
     /// if is a vertical or an horizontal weapon, and, if necessary, the enemy rotation as well.
     /// </summary>
     /// <param name="current"></param>
-    private void UpdateRotationLimits(float current)
+    public void UpdateRotationLimits(float current = 0f)
     {
         if (PlayerDetector.IsLeft && !_hasFlipped) // Left rotation
         {

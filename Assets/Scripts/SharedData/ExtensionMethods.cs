@@ -81,7 +81,7 @@ public static class ExtensionMethods
     /// and the <i>foundComponent</i> instance.</returns>
     public static bool GetComponentInAnyParent<T>(this MonoBehaviour thisObject, out T foundComponent)
     {
-        foundComponent = default(T);
+        foundComponent = default;
 
         GameObject parent = thisObject.transform.parent?.gameObject;
 
