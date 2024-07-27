@@ -123,6 +123,8 @@ public abstract class Enemy : DamageableObject
     protected Collider2D _enemyCollider;
     protected bool _collidedWithPlayer = false;
     protected bool _attackCanceled = false;
+    protected bool _moveFlyingOnHorizontal = false;
+    protected bool _moveFlyingOnVertical = false;
     protected List<EnemyWeaponDataListUnit> _weaponsWhichRotateTowardsPlayer;
 
     [SerializeField] private int weaponIndex;
@@ -139,6 +141,11 @@ public abstract class Enemy : DamageableObject
         _weaponsWhichRotateTowardsPlayer = WeaponController.WeaponDataList.
             Where(weapon => weapon.WeaponGameObjectData.RotateTowardsPlayer).
             ToList();
+    }
+
+    protected void Start()
+    {
+        SetRandomFlyingMixedMovement();
     }
 
     private void OnDisable()
@@ -202,25 +209,8 @@ public abstract class Enemy : DamageableObject
 
     protected virtual bool DetectedPlayer()
     {
-        if (!IsUsingWeaponWhichRotates)
-        {
-            return WeaponController.WeaponDataList[0].WeaponGameObjectData
-            .PlayerDetector.DetectedPlayerNearObject(transform.position, out _detectedPlayer);
-        }
-        else
-        {
-            return WeaponController.WeaponDataList[0].WeaponGameObjectData
-            .PlayerDetector.DetectedPlayerNearObjectUsingOverlapArea(transform.position, out _detectedPlayer);
-        }
-    }
-
-    protected void UpdateOverlapAreasPositions()
-    {
-        foreach (var weapon in WeaponController.WeaponDataList)
-        {
-            if(weapon.WeaponGameObjectData.gameObject.activeInHierarchy)
-                weapon.WeaponGameObjectData.PlayerDetector.UpdateOverlapAreaPosition(transform.position);
-        }
+        return WeaponController.WeaponDataList[0].WeaponGameObjectData
+            .PlayerDetector.DetectedPlayerNearObject(out _detectedPlayer);
     }
 
     protected void UpdateWeaponSprites()
@@ -365,7 +355,7 @@ public abstract class Enemy : DamageableObject
             else
             {
                 float distance = transform.position.y - _detectedPlayer.transform.position.y;
-                return distance > 0 ? 1 : -1;
+                return distance > 0 ? -1 : 1;
             }
         }
     }
@@ -445,6 +435,24 @@ public abstract class Enemy : DamageableObject
     protected virtual void FlipVerticalDirection()
     {
         _isDown = !_isDown;
+    }
+
+    /// <summary>
+    /// Sets randomically if the enemy flies at horizontal and vertical axis.
+    /// </summary>
+    protected void SetRandomFlyingMixedMovement()
+    {
+        if (EnemyType == EnemyType.Flying && FlyingChaseMode == FlyingChaseMode.Mixed)
+        {
+            _moveFlyingOnHorizontal = SharedFunctions.GetRandomBoolean();
+
+            if (_moveFlyingOnHorizontal)
+                _moveFlyingOnVertical = SharedFunctions.GetRandomBoolean();
+            else
+                _moveFlyingOnVertical = true;
+
+            print($"Move Horizontal? {_moveFlyingOnHorizontal}. Move on Vertical? {_moveFlyingOnVertical}");
+        }
     }
 
     protected virtual void Death() 

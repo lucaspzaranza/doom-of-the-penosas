@@ -106,11 +106,11 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
         }
 
         _hasDetectedPlayer = 
-                PlayerDetector.DetectedPlayerNearObjectUsingOverlapArea(transform.position, out _detectedPlayer);
+                PlayerDetector.DetectedPlayerNearObject(out _detectedPlayer);
 
         if(_hasDetectedPlayer)
         {
-            Vector2 directionVector = PlayerDetector.IsLeft ?
+            Vector2 directionVector = PlayerDetector.EnemyComponent.IsLeft ?
                 transform.position - _detectedPlayer.transform.position :
                 _detectedPlayer.transform.position - transform.position;
 
@@ -155,7 +155,7 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
     /// <param name="current"></param>
     public void UpdateRotationLimits(float current = 0f)
     {
-        if (PlayerDetector.IsLeft && !_hasFlipped) // Left rotation
+        if (PlayerDetector.EnemyComponent.IsLeft && !_hasFlipped) // Left rotation
         {
             if (!FireInVerticalAxis) // Left and Horizontal
             {
@@ -172,7 +172,7 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
                     _upperLimit = -RotationLowerLimit;
                     _lowerLimit = -RotationUpperLimit;
                 }
-                else if(zAngle > 0f)
+                else if (zAngle > 0f)
                 {
                     _upperLimit = RotationUpperLimit - 180f;
                     _lowerLimit = RotationLowerLimit - 180f;
@@ -185,7 +185,8 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
                 _hasFlipped = true;
             }
         }
-        else if (!PlayerDetector.IsLeft && _hasFlipped) // Right rotation
+        else
+        if (!PlayerDetector.EnemyComponent.IsLeft && _hasFlipped) // Right rotation
         {
             if(!FireInVerticalAxis) // Right and Horizontal
             {
@@ -200,5 +201,10 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
                 _hasFlipped = false;
             }
         }
+    }
+
+    public void FlipSpriteRendererX()
+    {
+        WeaponSpriteRenderer.flipX = !WeaponSpriteRenderer.flipX;
     }
 }

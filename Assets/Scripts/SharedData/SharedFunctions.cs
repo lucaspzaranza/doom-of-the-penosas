@@ -38,5 +38,15 @@ public static class SharedFunctions
             dmgObject.TryGetComponent(out Penosa penosa) ||         // Is a player?
             (dmgObject.TryGetComponent(out RideArmor rideArmor) &&  // Or is it a Ride Armor... 
             rideArmor.Player != null);                              // ... with some player inside?
-    }    
+    }   
+    
+    public static Vector2 GetRoundedVector2(Vector2 vectorToRound)
+    {
+        return new Vector2((float)Math.Round(vectorToRound.x, 2), (float)Math.Round(vectorToRound.y, 2));
+    }
+
+    public static bool GetRandomBoolean()
+    {
+        return UnityEngine.Random.Range(1, 3) % 2 == 0; // 50% of chance
+    }
 }

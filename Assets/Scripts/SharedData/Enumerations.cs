@@ -89,7 +89,8 @@ namespace SharedData.Enumerations
     {
         Horizontal,
         Vertical,
-        Both
+        Diagonal,
+        Mixed
     }
 
     public enum EnemyState

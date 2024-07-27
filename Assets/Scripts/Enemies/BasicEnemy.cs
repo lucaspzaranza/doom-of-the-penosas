@@ -47,11 +47,28 @@ public class BasicEnemy : Enemy
                 _movementTimeCounter = 0;
                 _timeToInvertMovementTimeCounter = 0;
 
-                if (EnemyType == EnemyType.Land ||
-                (EnemyType == EnemyType.Flying && FlyingChaseMode != FlyingChaseMode.Vertical))
+                if(EnemyType == EnemyType.Flying)
+                {
+                    if(FlyingChaseMode == FlyingChaseMode.Diagonal)
+                    {
+                        FlipVerticalDirection();
+                        Flip(transform.localScale.x < 0 ? 1 : -1);
+                    }
+                    else if (FlyingChaseMode == FlyingChaseMode.Vertical)
+                        FlipVerticalDirection();
+                    else if(FlyingChaseMode == FlyingChaseMode.Mixed)
+                    {
+                        SetRandomFlyingMixedMovement();
+
+                        if (_moveFlyingOnHorizontal)
+                            Flip(transform.localScale.x < 0 ? 1 : -1);
+                        
+                        if(_moveFlyingOnVertical)
+                            FlipVerticalDirection();
+                    }
+                }
+                else // Land Character or Horizontal Chase Mode
                     Flip(transform.localScale.x < 0 ? 1 : -1);
-                else // Flying type and Vertical movement
-                    FlipVerticalDirection();
 
                 EnemyStateGeneralData.SetCurrentActionAsPerformed();
             }
@@ -114,8 +131,6 @@ public class BasicEnemy : Enemy
             Vector2 direction = new Vector2(_xDirection, Rigidbody.velocity.y);
             Rigidbody.velocity = direction;
             Flip((int)_xDirection);
-
-            UpdateOverlapAreasPositions();
         }
         else
             _isMoving = false;
@@ -123,8 +138,8 @@ public class BasicEnemy : Enemy
 
     protected virtual void MoveFlyingEnemy()
     {
-        print("Moving flying enemy");
-        if (Rigidbody != null && !SharedFunctions.HitSomething(_flyingCharacterProps.FlyingCheckCollider,
+        if (Rigidbody != null && !SharedFunctions.HitSomething(
+            _flyingCharacterProps.FlyingCheckCollider,
             _flyingCharacterProps.FlyingLayerMask,
             out Collider2D hitWall))
         {
@@ -132,18 +147,25 @@ public class BasicEnemy : Enemy
             _xDirection = 0f;
             _yDirection = 0f;
 
-            if(FlyingChaseMode == FlyingChaseMode.Horizontal || FlyingChaseMode == FlyingChaseMode.Both)
+            if(FlyingChaseMode == FlyingChaseMode.Horizontal)
                 _xDirection = GetDirection() * _speed;
-
-            if(FlyingChaseMode == FlyingChaseMode.Vertical || FlyingChaseMode == FlyingChaseMode.Both)
+            else if(FlyingChaseMode == FlyingChaseMode.Vertical)
                 _yDirection = GetDirection(calculateInVerticalAxis: true) * _speed;
+            else if (FlyingChaseMode == FlyingChaseMode.Diagonal)
+            {
+                _xDirection = GetDirection() * _speed;
+                _yDirection = GetDirection(calculateInVerticalAxis: true) * _speed;
+            }
+            else if (FlyingChaseMode == FlyingChaseMode.Mixed)
+            {
+                _xDirection = _moveFlyingOnHorizontal ? GetDirection() * _speed : 0f;
+                _yDirection = _moveFlyingOnVertical? GetDirection(calculateInVerticalAxis: true) * _speed : 0f;
+            }
 
             Vector2 direction = new Vector2(_xDirection, _yDirection);
             transform.Translate(direction * Time.deltaTime);
 
             Flip((int)_xDirection);
-
-            UpdateOverlapAreasPositions();
         }
         else
             _isMoving = false;
