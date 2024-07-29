@@ -87,9 +87,22 @@ namespace SharedData.Enumerations
 
     public enum FlyingChaseMode
     {
+        /// <summary>
+        /// Enemy will fly only at X Axis.
+        /// </summary>
         Horizontal,
+        /// <summary>
+        /// Enemy will fly only at Y Axis.
+        /// </summary>
         Vertical,
+        /// <summary>
+        /// Enemy will fly on both axes.
+        /// </summary>
         Diagonal,
+        /// <summary>
+        /// Enemy will fly on both axes, but it may vary its pattern and sometimes
+        /// it may choose only one axis to fly.
+        /// </summary>
         Mixed
     }
 

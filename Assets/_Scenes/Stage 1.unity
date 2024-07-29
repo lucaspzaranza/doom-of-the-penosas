@@ -763,6 +763,7 @@ MonoBehaviour:
   _movementDuration: 1.5
   _timeToInvertMovement: 0.5
   _intervalBetweenAttacks: 1
+  _distanceFromAxes: 0
 --- !u!61 &41362123
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6220,7 +6221,7 @@ MonoBehaviour:
   _canFlip: 1
   _stateToForceChangeIfIdle: 1
   _instantAttack: 0
-  _attackDistance: 1
+  _attackDistance: 2
   _attackMinDistance: 0.5
   _changeStateAfterDamage: 1
   _stateAfterDamage: 1
@@ -6318,6 +6319,7 @@ MonoBehaviour:
   _movementDuration: 1.5
   _timeToInvertMovement: 0.5
   _intervalBetweenAttacks: 1
+  _distanceFromAxes: 0.4
 --- !u!61 &622523154
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15175,6 +15177,7 @@ MonoBehaviour:
   _movementDuration: 1.5
   _timeToInvertMovement: 0.5
   _intervalBetweenAttacks: 1
+  _distanceFromAxes: 0
 --- !u!61 &1695985665
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16208,7 +16211,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1807384361
 Transform:
   m_ObjectHideFlags: 0
@@ -17400,6 +17403,7 @@ MonoBehaviour:
   _movementDuration: 1.5
   _timeToInvertMovement: 0.5
   _intervalBetweenAttacks: 1
+  _distanceFromAxes: 0
 --- !u!61 &1931408750
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -17846,6 +17850,7 @@ MonoBehaviour:
   _movementDuration: 1.5
   _timeToInvertMovement: 0.5
   _intervalBetweenAttacks: 1
+  _distanceFromAxes: 0
 --- !u!61 &1960022816
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -18069,7 +18074,7 @@ PrefabInstance:
     - target: {fileID: 6308189612586907316, guid: 615435ddce9d73f4ebfabf8a85c07f8c,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -18810,6 +18815,7 @@ MonoBehaviour:
   _movementDuration: 1.5
   _timeToInvertMovement: 0.5
   _intervalBetweenAttacks: 1
+  _distanceFromAxes: 0
 --- !u!4 &2046103757
 Transform:
   m_ObjectHideFlags: 0

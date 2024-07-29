@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SharedData.Enumerations;
 using UnityEngine.UIElements;
+using Unity.Mathematics;
 
 public class BasicEnemy : Enemy
 {
@@ -10,6 +11,11 @@ public class BasicEnemy : Enemy
     [SerializeField] protected float _movementDuration;
     [SerializeField] protected float _timeToInvertMovement;    
     [SerializeField] protected float _intervalBetweenAttacks;
+
+    [DrawIfEnumEqualsTo("_flyingChaseMode", new FlyingChaseMode(), FlyingChaseMode.Mixed)]
+    [Tooltip("The distance limit from X and Y Axis used by an enemy with Mixed Flying Chase Mode. " +
+    "If the distance is greater than this value, the enemy will choose the axis with the longer distance.")]
+    [SerializeField] protected float _distanceFromAxes;
 
     protected float _intervalBetweenAttacksTimeCounter;
     protected float _attackDurationTimeCounter;
@@ -66,8 +72,10 @@ public class BasicEnemy : Enemy
                         if(_moveFlyingOnVertical)
                             FlipVerticalDirection();
                     }
+                    else // Horizontal chasing mode
+                        Flip(transform.localScale.x < 0 ? 1 : -1);
                 }
-                else // Land Character or Horizontal Chase Mode
+                else // Land Character
                     Flip(transform.localScale.x < 0 ? 1 : -1);
 
                 EnemyStateGeneralData.SetCurrentActionAsPerformed();
@@ -102,7 +110,12 @@ public class BasicEnemy : Enemy
             if (EnemyType == EnemyType.Land)
                 MoveLandEnemy();
             else if (EnemyType == EnemyType.Flying)
-                MoveFlyingEnemy();
+            {
+                if (FlyingChaseMode != FlyingChaseMode.Mixed)
+                    MoveFlyingEnemy();
+                else
+                    ChasePlayerFlyingOnMixedMode();
+            }
         }
     }
 
@@ -166,6 +179,57 @@ public class BasicEnemy : Enemy
             transform.Translate(direction * Time.deltaTime);
 
             Flip((int)_xDirection);
+            if(_yDirection != 0f)
+                _isDown = _yDirection < 0f;
+        }
+        else
+            _isMoving = false;
+    }
+
+    protected override void ChasePlayerFlyingOnMixedMode()
+    {
+        if (Rigidbody != null && !SharedFunctions.HitSomething(
+            _flyingCharacterProps.FlyingCheckCollider,
+            _flyingCharacterProps.FlyingLayerMask,
+            out Collider2D hitWall))
+        {
+            _isMoving = true;
+            _xDirection = 0f;
+            _yDirection = 0f;
+
+            float xDistance = Mathf.Abs(transform.position.x - _detectedPlayer.transform.position.x);
+            float yDistance = Mathf.Abs(transform.position.y - _detectedPlayer.transform.position.y);
+            float axisDistance = xDistance - yDistance;
+
+            if (Mathf.Abs(axisDistance) > _distanceFromAxes)
+            {
+                if(axisDistance >= 0f) 
+                {
+                    _moveFlyingOnHorizontal = true;
+                    _moveFlyingOnVertical = false;
+                    _xDirection = GetDirection() * _speed;
+                }
+                else if (axisDistance < 0f)
+                {
+                    _moveFlyingOnHorizontal = false;
+                    _moveFlyingOnVertical = true;
+                    _yDirection = GetDirection(calculateInVerticalAxis: true) * _speed;
+                }
+            }
+            else if(!ReachedAttackDistance())
+            {
+                _moveFlyingOnHorizontal = true;
+                _moveFlyingOnVertical = true;
+                _xDirection = GetDirection() * _speed;
+                _yDirection = GetDirection(calculateInVerticalAxis: true) * _speed;
+            }
+
+            Vector2 direction = new Vector2(_xDirection, _yDirection);
+            transform.Translate(direction * Time.deltaTime);
+
+            Flip((int)_xDirection);
+            if (_yDirection != 0f)
+                _isDown = _yDirection < 0f;
         }
         else
             _isMoving = false;

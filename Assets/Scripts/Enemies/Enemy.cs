@@ -30,7 +30,7 @@ public abstract class Enemy : DamageableObject
     public EnemyType EnemyType => _enemyType;
 
     [DrawIfEnumEqualsTo("_enemyType", new EnemyType(), EnemyType.Flying)]
-    [SerializeField] private FlyingChaseMode _flyingChaseMode;
+    [SerializeField] protected FlyingChaseMode _flyingChaseMode;
     public FlyingChaseMode FlyingChaseMode => _flyingChaseMode;
 
     [SerializeField] protected EnemyFireType _fireType;
@@ -299,12 +299,22 @@ public abstract class Enemy : DamageableObject
 
     public virtual void ChasePlayer() { }
 
+    protected virtual void ChasePlayerFlyingOnMixedMode() { }
+
+    protected float GetDistanceFromPlayer()
+    {
+        if (_detectedPlayer == null)
+            return float.PositiveInfinity;
+
+        return Vector2.Distance(_detectedPlayer.transform.position, transform.position);
+    }
+
     public virtual bool ReachedAttackDistance()
     {
         if (_detectedPlayer == null)
             return false;
 
-        float distance = Vector2.Distance(_detectedPlayer.transform.position, transform.position);
+        float distance = GetDistanceFromPlayer();
         //print($"atk distance: {distance}. Ideal Distance is less or equal than: {AttackDistance}");
         bool reachedAtkdistance = distance <= AttackDistance;
 
