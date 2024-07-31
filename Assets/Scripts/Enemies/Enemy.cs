@@ -323,7 +323,7 @@ public abstract class Enemy : DamageableObject
 
     public virtual void Attack() { }
 
-    public void SelectWeaponAndShoot()
+    public virtual void SelectWeaponAndShoot()
     {
         if(FireType == EnemyFireType.Individual)
             Shoot(0); // Temporary, must change to weapon which is nearest from player's position.
@@ -342,10 +342,15 @@ public abstract class Enemy : DamageableObject
             .WeaponGameObjectData.SpawnTransform;
         EnemyWeaponDataListUnit weapon = WeaponController.WeaponDataList[weaponIndex];
 
-        int direction = GetDirection(weapon.WeaponGameObjectData.FireInVerticalAxis);
+        int direction = GetShotDirection(weapon.WeaponGameObjectData);
         weapon.WeaponScriptableObject.Shoot(spawnTransform, direction);
     }    
 
+    /// <summary>
+    /// Get direction for moving purposes.
+    /// </summary>
+    /// <param name="calculateInVerticalAxis"></param>
+    /// <returns></returns>
     protected virtual int GetDirection(bool calculateInVerticalAxis = false)
     {
         if(!calculateInVerticalAxis)
@@ -368,6 +373,30 @@ public abstract class Enemy : DamageableObject
                 return distance > 0 ? -1 : 1;
             }
         }
+    }
+
+    /// <summary>
+    /// Get direction fot shooting purposes.
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    protected virtual int GetShotDirection(EnemyWeaponGameObjectData data)
+    {        
+        int direction = 1;
+        if(!data.FireInVerticalAxis)
+            direction = data.WeaponSpriteRenderer.transform.position.x <= data.SpawnTransform.position.x ? 1 : -1;
+        else
+        {
+            direction = data.WeaponSpriteRenderer.transform.position.y <= data.SpawnTransform.position.y ? 1 : -1;
+            direction *= IsLeft ? -1 : 1; // invert the previous result due the inverted weapon X scale when IsLeft is true
+        }
+
+        //print($"Spawn position: {data.SpawnTransform.position}, " +
+        //    $"weapon position: {data.WeaponSpriteRenderer.transform.position} + " +
+        //    $"Red Axis is: {data.transform.right}, " +
+        //    $"direction is {direction}");
+
+        return direction;
     }
 
     protected int GetIndexFromClosestWeaponFromPlayer()
