@@ -248,7 +248,7 @@ public class BasicEnemy : Enemy
                 if(_fireRateCounter >
                     WeaponController.WeaponDataList[0].WeaponScriptableObject.GetFireRate())
                 {
-                    SelectWeaponAndShoot();
+                    //SelectWeaponAndShoot();
                     //print("SHOOT");
                     _fireRateCounter = 0;
                 }

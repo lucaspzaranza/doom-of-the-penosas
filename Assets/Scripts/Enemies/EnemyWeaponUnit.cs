@@ -56,7 +56,7 @@ public class EnemyWeaponUnit : ScriptableObject
         Vector2 coordinates = spawnTransform.position;
         Quaternion newRotation = spawnTransform.rotation;
 
-        if(UsePooling) 
+        if (UsePooling) 
         {
             if(_gameControllerInstance == null)
                 _gameControllerInstance = FindObjectOfType<GameController>();

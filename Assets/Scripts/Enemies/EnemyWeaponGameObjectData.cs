@@ -1,16 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Transactions;
 using UnityEngine;
 
 public class EnemyWeaponGameObjectData : MonoBehaviour
 {
     private const float LowerLimitDefault = 0.05f;
 
+    [SerializeField] private bool _isBackWeapon;
+    public bool IsBackWeapon => _isBackWeapon;
+
+    [SerializeField] private Transform _referencePoint;
+    public Transform ReferencePoint => _referencePoint;
+
     [SerializeField] private Transform _spawnTransform;
     public Transform SpawnTransform => _spawnTransform;
-
+    
     [SerializeField] private SpriteRenderer _weaponSpriteRenderer;
     public SpriteRenderer WeaponSpriteRenderer => _weaponSpriteRenderer;
+
+    [SerializeField] private GameObject _rotationPivot;
+    public GameObject RotationPivot => _rotationPivot;
 
     [SerializeField] private PlayerDetector _playerDetector;
     public PlayerDetector PlayerDetector => _playerDetector;
@@ -51,14 +61,15 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
 
     [DrawIfBoolEqualsTo("_rotateTowardsPlayer", true)]
     [SerializeField]
-    [DrawItDisabled]
+    //[DrawItDisabled]
     private float _upperLimit;
 
     [DrawIfBoolEqualsTo("_rotateTowardsPlayer", true)]
     [SerializeField]
-    [DrawItDisabled]
+    //[DrawItDisabled]
     private float _lowerLimit;
 
+    [SerializeField]
     private bool _hasFlipped;
     private bool _playerChangedPosition;
     private Vector2 _playerPrevPos;
@@ -69,15 +80,24 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
         if(_weaponSpriteRenderer == null)
             _weaponSpriteRenderer = GetComponent<SpriteRenderer>();
 
-        _defaultZValue = transform.rotation.eulerAngles.z;
+        _defaultZValue = RotationPivot.transform.rotation.eulerAngles.z;
 
         if(RotationLowerLimit == 0f)
             _rotationLowerLimit = LowerLimitDefault;
 
-        _upperLimit = FireInVerticalAxis? RotationUpperLimit : _defaultZValue + RotationUpperLimit;
-        _lowerLimit = FireInVerticalAxis? RotationLowerLimit : _defaultZValue + RotationLowerLimit;
+        _upperLimit = FireInVerticalAxis ? RotationUpperLimit : _defaultZValue + RotationUpperLimit;
+        _lowerLimit = FireInVerticalAxis ? RotationLowerLimit : _defaultZValue + RotationLowerLimit;
 
-        _hasFlipped = false;
+        if(IsBackWeapon && WeaponIsLeftOriented())
+        {
+            _upperLimit = -RotationLowerLimit;
+            _lowerLimit = -RotationUpperLimit;
+        }
+
+        if(!FireInVerticalAxis)
+            _hasFlipped = IsBackWeapon? WeaponIsLeftOriented() : false;
+        else
+            _hasFlipped = !WeaponIsUpOriented();
 
         if(_playerDetector == null)
             _playerDetector = GetComponent<PlayerDetector>();
@@ -96,12 +116,14 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
 
     private void Update()
     {
+        //print("WeaponIsUpOriented? " + WeaponIsUpOriented());
+
         if (!RotateTowardsPlayer)
             return;
 
         if(PlayerDetector == null)
         {
-            Debug.LogWarning("Player Detector not found. You must add this component to make the rotation detection.");
+            WarningMessages.PlayerDetectorNotFound();
             return;
         }
 
@@ -110,15 +132,37 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
 
         if(_hasDetectedPlayer)
         {
-            Vector2 directionVector = PlayerDetector.EnemyComponent.IsLeft ?
-                transform.position - _detectedPlayer.transform.position :
-                _detectedPlayer.transform.position - transform.position;
+            Vector2 directionVector = RotationPivot.transform.position - _detectedPlayer.transform.position;
+
+            if(!FireInVerticalAxis)
+            {
+                directionVector = WeaponIsLeftOriented() ?
+                    RotationPivot.transform.position - _detectedPlayer.transform.position:
+                    _detectedPlayer.transform.position - RotationPivot.transform.position;
+            }
+            else
+            {
+                directionVector = WeaponIsUpOriented() ?
+                    RotationPivot.transform.position - _detectedPlayer.transform.position:
+                    _detectedPlayer.transform.position - RotationPivot.transform.position;
+            }
 
             _playerAngle = Mathf.Atan2(directionVector.y, directionVector.x) * Mathf.Rad2Deg;
             _playerChangedPosition = _detectedPlayer.transform.position.y != _playerPrevPos.y;
 
             _playerPrevPos = _detectedPlayer.transform.position;
         }
+    }
+
+    public virtual bool WeaponIsLeftOriented()
+    {
+        return RotationPivot.transform.position.x > ReferencePoint.transform.position.x;
+    }
+
+    public virtual bool WeaponIsUpOriented()
+    {
+        //print("rotation: " + RotationPivot.transform.position.y + " reference: " + ReferencePoint.transform.position.y);
+        return RotationPivot.transform.position.y > ReferencePoint.transform.position.y;
     }
 
     public void RotateWeaponTowardsPlayer()
@@ -128,83 +172,61 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
 
         if(_hasDetectedPlayer)
         {
-            float current = (transform.rotation.z >= 0) ? transform.rotation.eulerAngles.z :
-                transform.rotation.eulerAngles.z - 360f;
+            float current = RotationPivot.transform.rotation.eulerAngles.z;
+
+            if (FireInVerticalAxis)
+                current -= 360f;
+            else if (WeaponIsLeftOriented())
+                current -= 360f;
 
             if (current == _playerAngle)
                 return;
 
+            //print($"current before: {current}, player angle: {_playerAngle}");
             current = Mathf.MoveTowardsAngle(current, _playerAngle, RotationSpeed);
+            //print($"current after: {current}, player angle: {_playerAngle}");
 
             if (UseRotationLimit)
             {
-                UpdateRotationLimits(current);
+                UpdateRotationLimits();
                 current = Mathf.Clamp(current, _lowerLimit, _upperLimit);
             }
 
-            Quaternion newRotation = Quaternion.AngleAxis(current, Vector3.forward);
-            transform.rotation = newRotation;
-            _prevAngle = current;
+            SetRotation(current);
         }
     }
 
-    /// <summary>
-    /// Updates the upper and lower limits to the rotations based on the direction, i.e., if it's left oriented or not, <br/>
-    /// if is a vertical or an horizontal weapon, and, if necessary, the enemy rotation as well.
-    /// </summary>
-    /// <param name="current"></param>
-    public void UpdateRotationLimits(float current = 0f)
+    private void SetRotation(float value)
     {
-        if (PlayerDetector.EnemyComponent.IsLeft && !_hasFlipped) // Left rotation
+        Quaternion newRotation = Quaternion.AngleAxis(value, Vector3.forward);
+        RotationPivot.transform.rotation = newRotation;
+        _prevAngle = value;
+    }
+
+    public void UpdateRotationLimits()
+    {
+        if (!FireInVerticalAxis) // Horizontal weapon
         {
-            if (!FireInVerticalAxis) // Left and Horizontal
+            if (WeaponIsLeftOriented() && !_hasFlipped) // Horizontal weapon has flipped to the left <-
             {
                 float sum = _upperLimit + _lowerLimit;
                 _upperLimit -= sum;
                 _lowerLimit -= sum;
+
                 _hasFlipped = true;
             }
-            else if (this.GetComponentInAnyParent(out Enemy enemyComponent)) // Left and Vertical
-            {
-                float zAngle = enemyComponent.gameObject.transform.rotation.eulerAngles.z;
-                if (zAngle == ConstantNumbers.UpsideDownAngle)
-                {
-                    _upperLimit = -RotationLowerLimit;
-                    _lowerLimit = -RotationUpperLimit;
-                }
-                else if (zAngle > 0f)
-                {
-                    _upperLimit = RotationUpperLimit - 180f;
-                    _lowerLimit = RotationLowerLimit - 180f;
-                }
-                else if (zAngle == 0f)
-                {
-                    _upperLimit = RotationUpperLimit + 180f;
-                    _lowerLimit = RotationLowerLimit + 180f;
-                }
-                _hasFlipped = true;
-            }
-        }
-        else
-        if (!PlayerDetector.EnemyComponent.IsLeft && _hasFlipped) // Right rotation
-        {
-            if(!FireInVerticalAxis) // Right and Horizontal
+            else if (!WeaponIsLeftOriented() && _hasFlipped) // Horizontal weapon has flipped to the right -> 
             {
                 _upperLimit = _defaultZValue + RotationUpperLimit;
                 _lowerLimit = _defaultZValue + RotationLowerLimit;
                 _hasFlipped = false;
             }
-            else // Right and Vertical
-            {
-                _upperLimit = RotationUpperLimit;
-                _lowerLimit = RotationLowerLimit;
-                _hasFlipped = false;
-            }
         }
     }
 
-    public void FlipSpriteRendererX()
+    public void Flip()
     {
-        WeaponSpriteRenderer.flipX = !WeaponSpriteRenderer.flipX;
+        if (FireInVerticalAxis)
+            transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y); 
     }
 }

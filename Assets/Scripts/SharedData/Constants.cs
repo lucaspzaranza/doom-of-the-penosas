@@ -99,6 +99,17 @@ public static class WarningMessages
         Debug.LogWarning($"Could not find a proper action to perform for the {enemyState} enemy state. " +
             $"Did you add it at the Inspector correctly?");
     }
+
+    public static void EnemyWeaponIsInactive(string enemyName, string weaponName)
+    {
+        Debug.LogWarning($"{enemyName} could not shoot with {weaponName} because the weapon is inactive. " +
+            $"Did you forget to change to an active weapon at the Inspector?");
+    }
+
+    public static void PlayerDetectorNotFound()
+    {
+        Debug.LogWarning("Player Detector not found. You must add this component to make the rotation detection.");
+    }
 }
 
 public static class InputStrings

@@ -108,8 +108,7 @@ public abstract class Enemy : DamageableObject
     [SerializeField] protected EnemyStateGeneralData _enemyStateGeneralData;
     public EnemyStateGeneralData EnemyStateGeneralData => _enemyStateGeneralData;
 
-    protected bool IsUsingWeaponWhichRotates =>
-        WeaponController.WeaponDataList[0].WeaponGameObjectData.RotateTowardsPlayer;
+    protected bool IsUsingWeaponWhichRotates => WeaponController.HasWeaponWhichRotates();
 
     [SerializeField] protected bool _isLeft;
     public bool IsLeft => _isLeft;
@@ -326,7 +325,13 @@ public abstract class Enemy : DamageableObject
     public virtual void SelectWeaponAndShoot()
     {
         if(FireType == EnemyFireType.Individual)
-            Shoot(0); // Temporary, must change to weapon which is nearest from player's position.
+        {
+            int weaponIndex = _detectedPlayer is not null ?
+                WeaponController.GetClosestWeaponIndexFrom(_detectedPlayer.transform.position) 
+                : 0;
+               
+            Shoot(weaponIndex);
+        }
         else
         {
             for (int i = 0; i < WeaponController.WeaponDataList.Count; i++)
@@ -340,10 +345,16 @@ public abstract class Enemy : DamageableObject
     {
         Transform spawnTransform = WeaponController.WeaponDataList[weaponIndex]
             .WeaponGameObjectData.SpawnTransform;
+
         EnemyWeaponDataListUnit weapon = WeaponController.WeaponDataList[weaponIndex];
 
-        int direction = GetShotDirection(weapon.WeaponGameObjectData);
-        weapon.WeaponScriptableObject.Shoot(spawnTransform, direction);
+        if(weapon.WeaponGameObjectData.gameObject.activeInHierarchy)
+        {
+            int direction = GetShotDirection(weapon.WeaponGameObjectData);
+            weapon.WeaponScriptableObject.Shoot(spawnTransform, direction);
+        }
+        else
+            WarningMessages.EnemyWeaponIsInactive(name, weapon.WeaponGameObjectData.name);
     }    
 
     /// <summary>
@@ -383,25 +394,31 @@ public abstract class Enemy : DamageableObject
     protected virtual int GetShotDirection(EnemyWeaponGameObjectData data)
     {        
         int direction = 1;
-        if(!data.FireInVerticalAxis)
-            direction = data.WeaponSpriteRenderer.transform.position.x <= data.SpawnTransform.position.x ? 1 : -1;
+
+        Vector2 weaponWorldPos = data.WeaponSpriteRenderer.transform.position;
+        Vector2 weaponPivotPos = data.RotationPivot.transform.position;
+        Vector2 referenceWorldPos = data.ReferencePoint.transform.position;
+
+        if (!data.FireInVerticalAxis)
+        {
+            if(!data.RotateTowardsPlayer || (data.RotateTowardsPlayer && !data.IsBackWeapon))
+                direction = referenceWorldPos.x <= weaponWorldPos.x ? -1 : 1;
+            else // A back weapon which rotates towards player has inverted direction logic due is rotation values
+                direction = referenceWorldPos.x <= weaponWorldPos.x ? 1 : -1;
+        }
         else
         {
-            direction = data.WeaponSpriteRenderer.transform.position.y <= data.SpawnTransform.position.y ? 1 : -1;
-            direction *= IsLeft ? -1 : 1; // invert the previous result due the inverted weapon X scale when IsLeft is true
+            direction = referenceWorldPos.y <= weaponPivotPos.y ? 1 : -1;
+            //direction *= IsLeft ? -1 : 1; // invert the previous result due the inverted weapon X scale when IsLeft is true
+            print("direction: " + direction);
         }
 
-        //print($"Spawn position: {data.SpawnTransform.position}, " +
-        //    $"weapon position: {data.WeaponSpriteRenderer.transform.position} + " +
+        //print($"reference position: {referenceWorldPos}, " +
+        //    $"weapon position: {weaponWorldPos} + " +
         //    $"Red Axis is: {data.transform.right}, " +
         //    $"direction is {direction}");
 
         return direction;
-    }
-
-    protected int GetIndexFromClosestWeaponFromPlayer()
-    {
-        return 0;
     }
 
     protected virtual void CheckForNewRandomState(EnemyState enemyState) 
@@ -461,13 +478,13 @@ public abstract class Enemy : DamageableObject
         {
             _isLeft = true;
             transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x) * -1, transform.localScale.y);
-            WeaponController.FlipWeaponsPlayerDetectors(FlipType.Horizontal);
+            WeaponController.FlipWeaponsPlayerDetectors();
         }
         else if(direction > 0 && transform.localScale.x < 0)
         {
             _isLeft = false;
             transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x), transform.localScale.y);
-            WeaponController.FlipWeaponsPlayerDetectors(FlipType.Horizontal);
+            WeaponController.FlipWeaponsPlayerDetectors();
         }
     }
 
@@ -490,7 +507,7 @@ public abstract class Enemy : DamageableObject
             else
                 _moveFlyingOnVertical = true;
 
-            print($"Move Horizontal? {_moveFlyingOnHorizontal}. Move on Vertical? {_moveFlyingOnVertical}");
+            //print($"Move Horizontal? {_moveFlyingOnHorizontal}. Move on Vertical? {_moveFlyingOnVertical}");
         }
     }
 
