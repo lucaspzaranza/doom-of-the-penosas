@@ -69,8 +69,7 @@ public class EnemyWeaponUnit : ScriptableObject
             }
             else
             {
-                Debug.LogWarning("Could not find GameController instance, " +
-                    "so the pooling won't work as expected.");
+                WarningMessages.EnemyWeaponUnitCouldNotFoundGameControllerInstance();
                 return;
             }
         }

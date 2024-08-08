@@ -13,6 +13,7 @@ using UnityEngine.TextCore.Text;
 
 public class GameController : Controller
 {
+    #region Vars and Props
     // Singleton instance
     private static GameController instance;
 
@@ -59,7 +60,9 @@ public class GameController : Controller
     public SceneController SceneController => _sceneController;
 
     [SerializeField] private StageController _stageController;
-    public StageController StageController => _stageController;    
+    public StageController StageController => _stageController;
+
+    #endregion
 
     private void Awake()
     {
@@ -102,6 +105,7 @@ public class GameController : Controller
         PauseMenu.OnResume += ResumeGame;
         PauseMenu.OnBackToMainMenu += BackToMainMenuButton;
         WalkTalk.OnWalkTalk += HandleOnWalkTalk;
+        Enemy.OnEnemyDeath += HandleOnEnemyDefeated;
     }
 
     public override void Dispose()
@@ -124,6 +128,7 @@ public class GameController : Controller
         PauseMenu.OnResume -= ResumeGame;
         PauseMenu.OnBackToMainMenu -= BackToMainMenuButton;
         WalkTalk.OnWalkTalk -= HandleOnWalkTalk;
+        Enemy.OnEnemyDeath -= HandleOnEnemyDefeated;
 
         PlayerController.Dispose();
         UIController.Dispose();
@@ -418,5 +423,11 @@ public class GameController : Controller
     public void HandleOnPlayersExchanged(IReadOnlyList<Penosas> characters)
     {
         _characterSelectionList = new List<Penosas>(characters);
+    }
+
+    public void HandleOnEnemyDefeated(Enemy defeatedEnemy)
+    {
+        if (defeatedEnemy.IsBoss)
+            print("You defeated a boss! Congratulations.");
     }
 }

@@ -16,12 +16,18 @@ public abstract class Enemy : DamageableObject
     [SerializeField] private bool _isBoss;
     public bool IsBoss => _isBoss;
 
+    [SerializeField] protected bool _isCritical;
+    public bool IsCritical => _isCritical;
+
     [SerializeField] private bool _canMove;
     public bool CanMove => _canMove;
 
     [DrawItDisabled]
     [SerializeField] protected bool _isMoving;
     public bool IsMoving => _isMoving;
+
+    [SerializeField] protected bool _hasAttackWaves;
+    public bool HasAttackWaves => _hasAttackWaves;
 
     [SerializeField] protected float _speed;
     public float Speed => _speed;
@@ -47,9 +53,6 @@ public abstract class Enemy : DamageableObject
 
     [SerializeField] protected float _timeToCheckNewState;
     public float TimeToCheckNewState => _timeToCheckNewState;
-
-    [SerializeField] protected bool _isCritical;
-    public bool IsCritical => _isCritical;
 
     [SerializeField] protected bool _fireEventWhenDead;
     public bool FireEventWhenDead => _fireEventWhenDead;
@@ -87,6 +90,11 @@ public abstract class Enemy : DamageableObject
     [SerializeField] protected EnemyState _stateAfterDamage;
     public EnemyState StateAfterDamage => _stateAfterDamage;
 
+    [DrawIfBoolEqualsTo("_hasAttackWaves", true)]
+    [SerializeField]
+    protected AttackWavesController _attackWaveController;
+    public AttackWavesController AttackWavesController => _attackWaveController;
+
     // Basic fields
 
     [SerializeField] private EnemyWeaponController _weaponController;
@@ -117,6 +125,13 @@ public abstract class Enemy : DamageableObject
     [SerializeField] protected bool _isDown;
     public bool IsDown => _isDown;
 
+    protected int _selectedWeaponIndex;
+    public int SelectedWeaponIndex
+    {
+        get => _selectedWeaponIndex;
+        protected set => _selectedWeaponIndex = value;
+    }
+
     protected DamageableObject _detectedPlayer;
     protected EnemyState _previousState;
     protected Collider2D _enemyCollider;
@@ -140,6 +155,12 @@ public abstract class Enemy : DamageableObject
         _weaponsWhichRotateTowardsPlayer = WeaponController.WeaponDataList.
             Where(weapon => weapon.WeaponGameObjectData.RotateTowardsPlayer).
             ToList();
+
+        if (_hasAttackWaves)
+        {
+            AttackWavesController.SetWeaponController(WeaponController);
+            AttackWavesController.ChooseAttackWave(0);
+        }
     }
 
     protected void Start()
@@ -324,21 +345,26 @@ public abstract class Enemy : DamageableObject
 
     public virtual void SelectWeaponAndShoot()
     {
-        if(FireType == EnemyFireType.Individual)
+        if (!HasAttackWaves)
         {
-            int weaponIndex = _detectedPlayer is not null ?
-                WeaponController.GetClosestWeaponIndexFrom(_detectedPlayer.transform.position) 
-                : 0;
-               
-            Shoot(weaponIndex);
-        }
-        else
-        {
-            for (int i = 0; i < WeaponController.WeaponDataList.Count; i++)
+            if (FireType == EnemyFireType.Individual)
             {
-                Shoot(i);
+                SelectedWeaponIndex = _detectedPlayer is not null ?
+                    WeaponController.GetClosestWeaponIndexFrom(_detectedPlayer.transform.position)
+                    : 0;
+
+                Shoot(SelectedWeaponIndex);
+            }
+            else
+            {
+                for (int i = 0; i < WeaponController.WeaponDataList.Count; i++)
+                {
+                    Shoot(i);
+                }
             }
         }
+        else
+            AttackWavesController.StartAttackWave();
     }
 
     public virtual void Shoot(int weaponIndex)
@@ -391,7 +417,7 @@ public abstract class Enemy : DamageableObject
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
-    protected virtual int GetShotDirection(EnemyWeaponGameObjectData data)
+    public virtual int GetShotDirection(EnemyWeaponGameObjectData data)
     {        
         int direction = 1;
 

@@ -240,16 +240,16 @@ public class BasicEnemy : Enemy
         EnemyActionStatus status = EnemyStateGeneralData.CurrentState.Action.Status;
         //print("Attack(); status: " + status + " Current state: " + EnemyStateGeneralData.CurrentState.EnemyState);
         
-        if (status == EnemyActionStatus.Started)
+        if (status == EnemyActionStatus.Started) // Single weapon logic. Expand to suport multiple weapons
         {
             if (_attackDurationTimeCounter <= 
-                WeaponController.WeaponDataList[0].WeaponScriptableObject.AttackDuration)
+                WeaponController.WeaponDataList[SelectedWeaponIndex].WeaponScriptableObject.AttackDuration)
             {
                 if(_fireRateCounter >
-                    WeaponController.WeaponDataList[0].WeaponScriptableObject.GetFireRate())
+                    WeaponController.WeaponDataList[SelectedWeaponIndex].WeaponScriptableObject.GetFireRate())
                 {
-                    //SelectWeaponAndShoot();
                     //print("SHOOT");
+                    SelectWeaponAndShoot();
                     _fireRateCounter = 0;
                 }
                 else

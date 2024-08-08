@@ -61,16 +61,18 @@ public class EnemyWeaponGameObjectData : MonoBehaviour
 
     [DrawIfBoolEqualsTo("_rotateTowardsPlayer", true)]
     [SerializeField]
-    //[DrawItDisabled]
+    [DrawItDisabled]
     private float _upperLimit;
 
     [DrawIfBoolEqualsTo("_rotateTowardsPlayer", true)]
     [SerializeField]
-    //[DrawItDisabled]
+    [DrawItDisabled]
     private float _lowerLimit;
 
     [SerializeField]
+    [DrawItDisabled]
     private bool _hasFlipped;
+
     private bool _playerChangedPosition;
     private Vector2 _playerPrevPos;
     private float _prevAngle;

@@ -110,6 +110,12 @@ public static class WarningMessages
     {
         Debug.LogWarning("Player Detector not found. You must add this component to make the rotation detection.");
     }
+
+    public static void EnemyWeaponUnitCouldNotFoundGameControllerInstance()
+    {
+        Debug.LogWarning("Could not find GameController instance, " +
+                    "so the pooling won't work as expected.");
+    }
 }
 
 public static class InputStrings
