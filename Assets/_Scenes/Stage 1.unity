@@ -1620,13 +1620,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63a0c86bb6d96b147b2848d41bde8b32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: Simple Attack Wave
+  _name: Critical Attack Wave
   _waveType: 0
   _criticalAttackWave: 1
   _description: A critical attack wave using a single weapon with continuous fire.
   _weaponsUsed:
-  - _overwriteWeaponData: 0
-    _overwrittenData: {fileID: 0}
+  - _overwriteWeaponData: 1
+    _newDataToUse: {fileID: 11400000, guid: e2c934826ead98544ae1e69b951a4130, type: 2}
     _usedWeapon: {fileID: 1284975012}
 --- !u!1 &81062904
 GameObject:
@@ -7854,7 +7854,7 @@ MonoBehaviour:
   _description: A simple attack wave using a single weapon.
   _weaponsUsed:
   - _overwriteWeaponData: 0
-    _overwrittenData: {fileID: 0}
+    _newDataToUse: {fileID: 0}
     _usedWeapon: {fileID: 0}
 --- !u!4 &611356640
 Transform:
@@ -23539,7 +23539,7 @@ MonoBehaviour:
     _enemy: {fileID: 1931408749}
     _currentWave: {fileID: 76265757}
     _attackWaves:
-    - {fileID: 611356639}
+    - {fileID: 76265757}
   _weaponController:
     _weaponDataList:
     - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,

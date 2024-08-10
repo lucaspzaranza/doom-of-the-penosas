@@ -9,10 +9,7 @@ using UnityEngine;
 /// </summary>
 [System.Serializable]
 public class AttackWavesController
-{
-    [SerializeField] private Enemy _enemy;
-    public Enemy Enemy => _enemy;
-
+{    
     private EnemyWeaponController _weaponController;
     public EnemyWeaponController WeaponController => _weaponController;
 
@@ -41,14 +38,7 @@ public class AttackWavesController
 
     public void StartAttackWave()
     {
-        Debug.Log("StartAttackWave");
-        foreach (var weapon in CurrentWave.WeaponsUsed)
-        {
-            int weaponIndex = Enemy.WeaponController.WeaponDataList.
-                FindIndex(weaponData => weaponData.WeaponGameObjectData.Equals(weapon));
-            //int direction = Enemy.GetShotDirection(weapon);
-            //Enemy.WeaponController.WeaponDataList[weaponIndex].WeaponScriptableObject.Shoot(CurrentWave.SpawnTransform, direction);
-            Enemy.Shoot(weaponIndex);
-        }
+        if(!CurrentWave.WaveStarted)
+            CurrentWave.StartWave();
     }
 }
