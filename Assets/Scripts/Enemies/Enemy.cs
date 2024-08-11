@@ -436,7 +436,7 @@ public abstract class Enemy : DamageableObject
         {
             direction = referenceWorldPos.y <= weaponPivotPos.y ? 1 : -1;
             //direction *= IsLeft ? -1 : 1; // invert the previous result due the inverted weapon X scale when IsLeft is true
-            print("direction: " + direction);
+            //print("direction: " + direction);
         }
 
         //print($"reference position: {referenceWorldPos}, " +

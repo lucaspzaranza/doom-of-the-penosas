@@ -246,7 +246,7 @@ public class BasicEnemy : Enemy
                 WeaponController.WeaponDataList[SelectedWeaponIndex].WeaponScriptableObject.AttackDuration)
             {
                 if(_fireRateCounter >
-                    WeaponController.WeaponDataList[SelectedWeaponIndex].WeaponScriptableObject.GetFireRate())
+                    WeaponController.WeaponDataList[SelectedWeaponIndex].WeaponScriptableObject.FireRate)
                 {
                     //print("SHOOT");
                     SelectWeaponAndShoot();

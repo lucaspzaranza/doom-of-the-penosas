@@ -482,7 +482,6 @@ MonoBehaviour:
   _changeStateAfterDamage: 1
   _stateAfterDamage: 1
   _attackWaveController:
-    _enemy: {fileID: 0}
     _currentWave: {fileID: 0}
     _attackWaves: []
   _weaponController:
@@ -1041,7 +1040,6 @@ MonoBehaviour:
   _changeStateAfterDamage: 1
   _stateAfterDamage: 1
   _attackWaveController:
-    _enemy: {fileID: 0}
     _currentWave: {fileID: 0}
     _attackWaves: []
   _weaponController:
@@ -1621,13 +1619,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _name: Critical Attack Wave
+  _description: A critical attack wave using a single weapon with continuous fire.
+  _enemy: {fileID: 0}
   _waveType: 0
   _criticalAttackWave: 1
-  _description: A critical attack wave using a single weapon with continuous fire.
+  _waveStarted: 0
   _weaponsUsed:
   - _overwriteWeaponData: 1
     _newDataToUse: {fileID: 11400000, guid: e2c934826ead98544ae1e69b951a4130, type: 2}
     _usedWeapon: {fileID: 1284975012}
+  _changeWeaponInterval: 0
 --- !u!1 &81062904
 GameObject:
   m_ObjectHideFlags: 0
@@ -7849,13 +7850,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _name: Simple Attack Wave
+  _description: A simple attack wave using a single weapon.
+  _enemy: {fileID: 1931408749}
   _waveType: 0
   _criticalAttackWave: 0
-  _description: A simple attack wave using a single weapon.
+  _waveStarted: 0
   _weaponsUsed:
   - _overwriteWeaponData: 0
     _newDataToUse: {fileID: 0}
-    _usedWeapon: {fileID: 0}
+    _usedWeapon: {fileID: 1284975012}
+  - _overwriteWeaponData: 1
+    _newDataToUse: {fileID: 11400000, guid: e2c934826ead98544ae1e69b951a4130, type: 2}
+    _usedWeapon: {fileID: 1284975012}
+  _changeWeaponInterval: 2
 --- !u!4 &611356640
 Transform:
   m_ObjectHideFlags: 0
@@ -8202,7 +8209,6 @@ MonoBehaviour:
   _changeStateAfterDamage: 1
   _stateAfterDamage: 1
   _attackWaveController:
-    _enemy: {fileID: 0}
     _currentWave: {fileID: 0}
     _attackWaves: []
   _weaponController:
@@ -15099,7 +15105,6 @@ MonoBehaviour:
   _changeStateAfterDamage: 1
   _stateAfterDamage: 1
   _attackWaveController:
-    _enemy: {fileID: 0}
     _currentWave: {fileID: 0}
     _attackWaves: []
   _weaponController:
@@ -20373,7 +20378,6 @@ MonoBehaviour:
   _changeStateAfterDamage: 1
   _stateAfterDamage: 1
   _attackWaveController:
-    _enemy: {fileID: 0}
     _currentWave: {fileID: 0}
     _attackWaves: []
   _weaponController:
@@ -21452,7 +21456,6 @@ MonoBehaviour:
   _changeStateAfterDamage: 1
   _stateAfterDamage: 1
   _attackWaveController:
-    _enemy: {fileID: 0}
     _currentWave: {fileID: 0}
     _attackWaves: []
   _weaponController:
@@ -22452,7 +22455,6 @@ MonoBehaviour:
   _changeStateAfterDamage: 1
   _stateAfterDamage: 1
   _attackWaveController:
-    _enemy: {fileID: 0}
     _currentWave: {fileID: 0}
     _attackWaves: []
   _weaponController:
@@ -23536,9 +23538,9 @@ MonoBehaviour:
   _changeStateAfterDamage: 0
   _stateAfterDamage: 1
   _attackWaveController:
-    _enemy: {fileID: 1931408749}
     _currentWave: {fileID: 76265757}
     _attackWaves:
+    - {fileID: 611356639}
     - {fileID: 76265757}
   _weaponController:
     _weaponDataList:
@@ -24023,7 +24025,6 @@ MonoBehaviour:
   _changeStateAfterDamage: 1
   _stateAfterDamage: 1
   _attackWaveController:
-    _enemy: {fileID: 0}
     _currentWave: {fileID: 0}
     _attackWaves: []
   _weaponController:
@@ -25245,7 +25246,6 @@ MonoBehaviour:
   _changeStateAfterDamage: 1
   _stateAfterDamage: 1
   _attackWaveController:
-    _enemy: {fileID: 0}
     _currentWave: {fileID: 0}
     _attackWaves: []
   _weaponController:

@@ -24,19 +24,24 @@ public class EnemyWeaponUnit : ScriptableObject
     [SerializeField] private float _attackDuration;
     public float AttackDuration => _attackDuration;
 
-    [Tooltip("Check this if this weapon has continuous fire, like a machinegun, for example.")]
-    [SerializeField] private bool _isContinuous;
-    public bool IsContinuous => _isContinuous;
+    //[Tooltip("Check this if this weapon has continuous fire, like a machinegun, for example.")]
+    //[SerializeField] private bool _isContinuous;
+    //public bool IsContinuous => _isContinuous;
 
     [Tooltip("It'll be used only when the \"Is Continuous\" option be unchecked.")]
-    [DrawIfBoolEqualsTo("_isContinuous", comparedValue: false, elseDrawItDisabled: true)]
+    //[DrawIfBoolEqualsTo("_isContinuous", comparedValue: false, elseDrawItDisabled: true)]
     [SerializeField] private float _fireRate;
     public float FireRate => _fireRate;
 
-    [Tooltip("It'll be used only when the \"Is Continuous\" option be marked.")]
-    [DrawIfBoolEqualsTo("_isContinuous", comparedValue: true, elseDrawItDisabled: true)]
-    [SerializeField] private float _continuousFireRate;
-    public float ContinuousFireRate => _continuousFireRate;    
+    //[Tooltip("It'll be used only when the \"Is Continuous\" option be marked.")]
+    //[DrawIfBoolEqualsTo("_isContinuous", comparedValue: true, elseDrawItDisabled: true)]
+    //[SerializeField] private float _continuousFireRate;
+    //public float ContinuousFireRate => _continuousFireRate;
+
+    [Tooltip("If some value from this vector is diferent from zero, it'll be randomly " +
+    "used from -value to the value of the spawn position when instantiating a new shot.")]
+    [SerializeField] private Vector2 _spawnOffset;
+    public Vector2 SpawnOffset => _spawnOffset;
 
     [SerializeField] private int _damageHit;
     public int DamageHit => _damageHit;
@@ -48,12 +53,18 @@ public class EnemyWeaponUnit : ScriptableObject
         _gameControllerInstance = FindObjectOfType<GameController>();
     }
 
-    public float GetFireRate() => IsContinuous ? ContinuousFireRate : FireRate;
+    //public float GetFireRate() => IsContinuous ? ContinuousFireRate : FireRate;
 
     public void Shoot(Transform spawnTransform, int currentDirection)
     {
         GameObject newProjectile = null;
         Vector2 coordinates = spawnTransform.position;
+        if(SpawnOffset != Vector2.zero)
+        {
+            float offsetX = Random.Range(-SpawnOffset.x, SpawnOffset.x);
+            float offsetY = Random.Range(-SpawnOffset.y, SpawnOffset.y);
+            coordinates = new Vector2(coordinates.x + offsetX, coordinates.y + offsetY);
+        }
         Quaternion newRotation = spawnTransform.rotation;
 
         if (UsePooling) 

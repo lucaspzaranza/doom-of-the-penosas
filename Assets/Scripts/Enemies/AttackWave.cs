@@ -22,9 +22,20 @@ public class AttackWaveWeaponData
     public EnemyWeaponGameObjectData UsedWeapon => _usedWeapon;
 }
 
+public struct WaveData
+{
+    public AttackWaveWeaponData Weapon { get; set; }
+    public int Direction { get; set; }
+    public Transform Spawn { get; set; }
+    public EnemyWeaponUnit ScriptableObject { get; set; }
+}
+
 public class AttackWave : MonoBehaviour
 {
     [SerializeField] private string _name;
+
+    [TextArea]
+    [SerializeField] private string _description;
 
     [SerializeField] private Enemy _enemy;
     public Enemy Enemy => _enemy;
@@ -39,16 +50,22 @@ public class AttackWave : MonoBehaviour
     [SerializeField]
     [DrawItDisabled]
     private bool _waveStarted;
-    public bool WaveStarted => _waveStarted;
-
-    [TextArea]
-    [SerializeField] private string _description;
+    public bool WaveStarted => _waveStarted;    
 
     [SerializeField] private List<AttackWaveWeaponData> _weaponsUsed;
     public IReadOnlyList<AttackWaveWeaponData> WeaponsUsed => _weaponsUsed;
 
+    [DrawIfEnumEqualsTo("_waveType", new AttackWaveType(), AttackWaveType.Sequence)]
+    [Tooltip("The needed time to use the next weapon at a sequence wave.")]
+    [SerializeField] private float _changeWeaponInterval;
+    public float ChangeWeaponInterval => _changeWeaponInterval;
+
     private int _weaponUsedIndex;
-    private float _timeCounter; 
+    private int _prevWeaponUsedIndex;
+    private float _atkDurationtimeCounter; 
+    private float _fireRateAtkCounter;
+    private float _timeToChangeWeapon;
+    private WaveData _waveData;
 
     private void OnEnable()
     {
@@ -58,20 +75,27 @@ public class AttackWave : MonoBehaviour
 
     public void StartWave()
     {
+        _waveData = GetWaveData(_weaponUsedIndex);
+        _fireRateAtkCounter = _waveData.ScriptableObject.FireRate;
+        _prevWeaponUsedIndex = _weaponUsedIndex;
         _waveStarted = true;
-
         print("StartAttackWave");
     }
 
     private void Update()
     {
-        if (!WaveStarted)
+        if (!WaveStarted || _waveData.ScriptableObject == null)
             return;
 
-        if (_weaponUsedIndex == WeaponsUsed.Count)
-            _waveStarted = false;
+        if (WaveType == AttackWaveType.Sequence)
+            SequenceAttackWave();
+        else
+            CombinedAttackWave();
+    }
 
-        AttackWaveWeaponData weapon = WeaponsUsed[_weaponUsedIndex];
+    private WaveData GetWaveData(int index)
+    {
+        AttackWaveWeaponData weapon = WeaponsUsed[index];
 
         int weaponIndex = Enemy.WeaponController.WeaponDataList.
             FindIndex(weaponData => weaponData.WeaponGameObjectData.gameObject.Equals(weapon.UsedWeapon.gameObject));
@@ -79,24 +103,64 @@ public class AttackWave : MonoBehaviour
 
         int direction = Enemy.GetShotDirection(weapon.UsedWeapon);
         Transform spawn = weaponDataListUnit.WeaponGameObjectData.SpawnTransform;
-        EnemyWeaponUnit scriptableObject = weapon.OverwriteWeaponData? weapon.NewDataToUse : weaponDataListUnit.WeaponScriptableObject;
+        EnemyWeaponUnit scriptableObject = weapon.OverwriteWeaponData ? weapon.NewDataToUse : weaponDataListUnit.WeaponScriptableObject;
 
-        if (!scriptableObject.IsContinuous)
+        return new WaveData()
         {
-            scriptableObject.Shoot(spawn, direction);
-            _weaponUsedIndex++;
+            Weapon = weapon,
+            Direction = direction,
+            Spawn = spawn,
+            ScriptableObject = scriptableObject
+        };
+    }
+
+    private void SequenceAttackWave()
+    {
+        if (_weaponUsedIndex == WeaponsUsed.Count)
+        {
+            print("All attack waves were successfully performed.");
+            _waveStarted = false;
+            _weaponUsedIndex = 0;
+            return;
+        }
+
+        if(_prevWeaponUsedIndex != _weaponUsedIndex)
+        {
+            _waveData = GetWaveData(_weaponUsedIndex);
+            _fireRateAtkCounter = _waveData.ScriptableObject.FireRate;
+        }
+       
+        _atkDurationtimeCounter += Time.deltaTime;
+        if (_atkDurationtimeCounter >= _waveData.ScriptableObject.AttackDuration)
+        {
+            _timeToChangeWeapon += Time.deltaTime;
+            if (_timeToChangeWeapon >= ChangeWeaponInterval)
+            {
+                _atkDurationtimeCounter = 0f;
+                _timeToChangeWeapon = 0f;
+                _weaponUsedIndex++;
+                print("End of attack wave, going to the next one.");
+                return;
+            }
         }
         else
         {
-            _timeCounter += Time.deltaTime;
-            if(_timeCounter >= scriptableObject.ContinuousFireRate)
+            _fireRateAtkCounter += Time.deltaTime;
+            if (_fireRateAtkCounter >= _waveData.ScriptableObject.FireRate)
             {
-                scriptableObject.Shoot(spawn, direction);
-                _timeCounter = 0;
+                _waveData.ScriptableObject.Shoot(_waveData.Spawn, _waveData.Direction);
+                _fireRateAtkCounter = 0;
             }
         }
 
-        if (weapon.OverwriteWeaponData)
+        if (_waveData.Weapon.OverwriteWeaponData)
             print("using overwritten data...");
+
+        _prevWeaponUsedIndex = _weaponUsedIndex;
+    }
+
+    private void CombinedAttackWave()
+    {
+
     }
 }

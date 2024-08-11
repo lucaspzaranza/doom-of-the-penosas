@@ -138,20 +138,15 @@ namespace SharedData.Enumerations
     public enum AttackWaveType
     {
         /// <summary>
-        /// Use this value to fire a simple attack using a single weapon.
+        /// Use this value to make a sequence of one or more weapons fire their attacks in a row. <br/>
+        /// The sequence will follow the element order of the WeaponsUsed List.
         /// </summary>
-        Simple,
+        Sequence,
 
         /// <summary>
         /// Use this value to fire a combined attack using two or more weapons. <br/>
         /// The weapons inside the WeaponsUsed list will be used at the same time.
         /// </summary>
-        Combined,
-
-        /// <summary>
-        /// Use this value to make a sequence of weapons fire their attacks in a row. <br/>
-        /// The sequence will follow the element order of the WeaponsUsed List.
-        /// </summary>
-        Sequence
+        Combined
     }
 }
