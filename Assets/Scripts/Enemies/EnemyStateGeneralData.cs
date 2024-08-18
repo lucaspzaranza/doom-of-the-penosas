@@ -132,7 +132,7 @@ public class EnemyStateGeneralData
         //Debug.Log("newStateToChange.EnemyState: " + newStateToChange.EnemyState);
         //Debug.Log("_currentState == null: " + (_currentState == null).ToString());
 
-        if(newStateToChange == null)
+        if (newStateToChange == null)
         {
             _enemy.ReturnToPreviousState();
             WarningMessages.EnemyActionNotFound(newState);
@@ -146,18 +146,26 @@ public class EnemyStateGeneralData
         }
 
         if (_currentState.Action.CanBeCanceled)
+            StartNewState(newStateToChange);
+        else // Schedule another action if the current action is still in progress. Otherwise, start the new action.
         {
-            if (!_currentState.Equals(newStateToChange))
-                _changedState = true;
+            if(_currentState.Action.Status != EnemyActionStatus.Performed)
+            {
+                //Debug.Log($"Action can't be immediately canceled, so let's schedule the {newState} action");
+                _scheduledStateData = newStateToChange;
+            }
+            else
+                StartNewState(newStateToChange);
+        }
+    }
 
-            _currentState.Action.SetActionStatusCanceled();
-            newStateToChange.Action.SetActionStatusStarted();
-            OnStateChangedSuccess?.Invoke(newStateToChange.EnemyState);
-        }
-        else
-        {
-            //Debug.Log($"Action can't be immediately canceled, so let's schedule the {newState} action");
-            _scheduledStateData = newStateToChange;
-        }
+    private void StartNewState(EnemyStateDataUnit newStateToChange)
+    {
+        if (!_currentState.Equals(newStateToChange))
+            _changedState = true;
+
+        _currentState.Action.SetActionStatusCanceled();
+        newStateToChange.Action.SetActionStatusStarted();
+        OnStateChangedSuccess?.Invoke(newStateToChange.EnemyState);
     }
 }

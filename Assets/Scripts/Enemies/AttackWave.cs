@@ -1,4 +1,5 @@
 using SharedData.Enumerations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,11 +13,11 @@ public class AttackWaveWeaponData
     [SerializeField] private bool _overwriteWeaponData;
     public bool OverwriteWeaponData => _overwriteWeaponData;
 
-    [SerializeField] private EnemyWeaponUnit _newDataToUse;
+    [SerializeField] private EnemyWeaponUnit _dataToOverwrite;
     /// <summary>
     /// The new data to use with the weapon instead its default data.
     /// </summary>
-    public EnemyWeaponUnit NewDataToUse => _newDataToUse;
+    public EnemyWeaponUnit DataToOverwrite => _dataToOverwrite;
 
     [SerializeField] private EnemyWeaponGameObjectData _usedWeapon;
     public EnemyWeaponGameObjectData UsedWeapon => _usedWeapon;
@@ -32,6 +33,8 @@ public struct WaveData
 
 public class AttackWave : MonoBehaviour
 {
+    public Action<AttackWave> OnAttackWaveEnd;
+
     [SerializeField] private string _name;
 
     [TextArea]
@@ -39,9 +42,6 @@ public class AttackWave : MonoBehaviour
 
     [SerializeField] private Enemy _enemy;
     public Enemy Enemy => _enemy;
-
-    [SerializeField] private AttackWaveType _waveType;
-    public AttackWaveType WaveType => _waveType;
 
     [Tooltip("Check this option if this attack wave should be used only when the enemy is in Critical Mode.")]
     [SerializeField] private bool _criticalAttackWave;
@@ -55,10 +55,12 @@ public class AttackWave : MonoBehaviour
     [SerializeField] private List<AttackWaveWeaponData> _weaponsUsed;
     public IReadOnlyList<AttackWaveWeaponData> WeaponsUsed => _weaponsUsed;
 
-    [DrawIfEnumEqualsTo("_waveType", new AttackWaveType(), AttackWaveType.Sequence)]
-    [Tooltip("The needed time to use the next weapon at a sequence wave.")]
+    [Tooltip("The needed time to use the next weapon in a sequence wave.")]
     [SerializeField] private float _changeWeaponInterval;
     public float ChangeWeaponInterval => _changeWeaponInterval;
+
+    private float _totalTimeElapsed;
+    public float TotalTimeElapsed => _totalTimeElapsed;
 
     private int _weaponUsedIndex;
     private int _prevWeaponUsedIndex;
@@ -66,20 +68,23 @@ public class AttackWave : MonoBehaviour
     private float _fireRateAtkCounter;
     private float _timeToChangeWeapon;
     private WaveData _waveData;
+    private bool _updateShotDirection = false;
 
     private void OnEnable()
     {
         this.GetComponentInAnyParent(out _enemy);
         _weaponUsedIndex = 0;
+        Enemy.OnEnemyFlip += HandleOnFlip;
     }
 
-    public void StartWave()
+    private void OnDisable()
     {
-        _waveData = GetWaveData(_weaponUsedIndex);
-        _fireRateAtkCounter = _waveData.ScriptableObject.FireRate;
-        _prevWeaponUsedIndex = _weaponUsedIndex;
-        _waveStarted = true;
-        print("StartAttackWave");
+        Enemy.OnEnemyFlip -= HandleOnFlip;
+    }
+
+    private void OnDestroy()
+    {
+        Enemy.OnEnemyFlip -= HandleOnFlip;
     }
 
     private void Update()
@@ -87,10 +92,23 @@ public class AttackWave : MonoBehaviour
         if (!WaveStarted || _waveData.ScriptableObject == null)
             return;
 
-        if (WaveType == AttackWaveType.Sequence)
-            SequenceAttackWave();
-        else
-            CombinedAttackWave();
+        PerformAttackWave();
+        _totalTimeElapsed += Time.deltaTime;
+    }
+
+    public void StartWave()
+    {
+        _waveData = GetWaveData(_weaponUsedIndex);
+        _totalTimeElapsed = 0f;
+        _fireRateAtkCounter = _waveData.ScriptableObject.FireRate;
+        _prevWeaponUsedIndex = _weaponUsedIndex;
+        _waveStarted = true;
+        //print("StartAttackWave");
+    }
+
+    private void HandleOnFlip()
+    {
+        _updateShotDirection = true;
     }
 
     private WaveData GetWaveData(int index)
@@ -103,7 +121,7 @@ public class AttackWave : MonoBehaviour
 
         int direction = Enemy.GetShotDirection(weapon.UsedWeapon);
         Transform spawn = weaponDataListUnit.WeaponGameObjectData.SpawnTransform;
-        EnemyWeaponUnit scriptableObject = weapon.OverwriteWeaponData ? weapon.NewDataToUse : weaponDataListUnit.WeaponScriptableObject;
+        EnemyWeaponUnit scriptableObject = weapon.OverwriteWeaponData ? weapon.DataToOverwrite : weaponDataListUnit.WeaponScriptableObject;
 
         return new WaveData()
         {
@@ -114,13 +132,15 @@ public class AttackWave : MonoBehaviour
         };
     }
 
-    private void SequenceAttackWave()
+    private void PerformAttackWave()
     {
         if (_weaponUsedIndex == WeaponsUsed.Count)
         {
-            print("All attack waves were successfully performed.");
+            //print("All attack waves were successfully performed.");
             _waveStarted = false;
             _weaponUsedIndex = 0;
+
+            OnAttackWaveEnd?.Invoke(this);
             return;
         }
 
@@ -128,6 +148,12 @@ public class AttackWave : MonoBehaviour
         {
             _waveData = GetWaveData(_weaponUsedIndex);
             _fireRateAtkCounter = _waveData.ScriptableObject.FireRate;
+        }
+
+        if(_updateShotDirection)
+        {
+            _waveData.Direction = Enemy.GetShotDirection(_waveData.Weapon.UsedWeapon);
+            _updateShotDirection = false;
         }
        
         _atkDurationtimeCounter += Time.deltaTime;
@@ -139,7 +165,7 @@ public class AttackWave : MonoBehaviour
                 _atkDurationtimeCounter = 0f;
                 _timeToChangeWeapon = 0f;
                 _weaponUsedIndex++;
-                print("End of attack wave, going to the next one.");
+                //print("End of attack wave, going to the next one.");
                 return;
             }
         }
@@ -153,14 +179,9 @@ public class AttackWave : MonoBehaviour
             }
         }
 
-        if (_waveData.Weapon.OverwriteWeaponData)
-            print("using overwritten data...");
+        //if (_waveData.Weapon.OverwriteWeaponData)
+        //    print("using overwritten data...");
 
         _prevWeaponUsedIndex = _weaponUsedIndex;
-    }
-
-    private void CombinedAttackWave()
-    {
-
     }
 }

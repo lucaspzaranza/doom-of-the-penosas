@@ -18,8 +18,6 @@ MonoBehaviour:
   _projectile: {fileID: 1617454459024769971, guid: a2358c609baf3da43b95a70e8bd1a1fa,
     type: 3}
   _attackDuration: 1
-  _isContinuous: 0
   _fireRate: 1
-  _continuousFireRate: 0
   _spawnOffset: {x: 0, y: 0}
   _damageHit: 20

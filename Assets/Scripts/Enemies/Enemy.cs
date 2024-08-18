@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public abstract class Enemy : DamageableObject
+public class Enemy : DamageableObject
 {
     #region Vars
 
     public static Action<Enemy> OnEnemyDeath;
     public Action<EnemyState> OnEnemyChangedState;
+    public Action OnEnemyFlip;
 
     [Header("Enemy General Variables")]
     [SerializeField] private bool _isBoss;
@@ -103,9 +104,6 @@ public abstract class Enemy : DamageableObject
     [SerializeField] protected Rigidbody2D _rigidbody;
     public Rigidbody2D Rigidbody => _rigidbody;
 
-    [SerializeField] protected List<SpriteRenderer> _enemySprites;
-    public List<SpriteRenderer> EnemySprites => _enemySprites;
-
     protected float _checkNewStateTimeCounter;
     protected float CheckForNewStateTimeCounter
     {
@@ -132,6 +130,18 @@ public abstract class Enemy : DamageableObject
         protected set => _selectedWeaponIndex = value;
     }
 
+    [SerializeField] protected float _movementDuration;
+    [SerializeField] protected float _timeToInvertMovement;
+    [SerializeField] protected float _intervalBetweenAttacks;
+
+    [DrawIfEnumEqualsTo("_flyingChaseMode", new FlyingChaseMode(), FlyingChaseMode.Mixed)]
+    [Tooltip("The distance limit from X and Y Axis used by an enemy with Mixed Flying Chase Mode. " +
+    "If the distance is greater than this value, the enemy will choose the axis with the longer distance.")]
+    [SerializeField] protected float _distanceFromAxes;
+
+    protected float _intervalBetweenAttacksTimeCounter;
+    protected float _attackDurationTimeCounter;
+    protected float _fireRateCounter;
     protected DamageableObject _detectedPlayer;
     protected EnemyState _previousState;
     protected Collider2D _enemyCollider;
@@ -140,12 +150,18 @@ public abstract class Enemy : DamageableObject
     protected bool _moveFlyingOnHorizontal = false;
     protected bool _moveFlyingOnVertical = false;
     protected List<EnemyWeaponDataListUnit> _weaponsWhichRotateTowardsPlayer;
+    protected float _xDirection;
+    protected float _yDirection;
+    protected float _movementTimeCounter;
+    protected float _timeToInvertMovementTimeCounter;
 
-    [SerializeField] private int weaponIndex;
+    [Tooltip("This is the weapon which will be used for detect the player's presence in common enemies.")]
+    [SerializeField] protected int _frontalWeaponIndex;
+    public int FrontalWeaponIndex => _frontalWeaponIndex;
 
     #endregion
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         EnemyStateGeneralData.EventHandlerSetup(this);
         UpdateWeaponSprites();
@@ -179,7 +195,7 @@ public abstract class Enemy : DamageableObject
         if (Input.GetKeyDown(KeyCode.O))
         {
             //Shoot(weaponIndex);
-            SelectWeaponAndShoot();
+            SelectWeaponOrWaveAndAttack();
         }
 
         if (_weaponsWhichRotateTowardsPlayer.Count > 0)
@@ -189,8 +205,6 @@ public abstract class Enemy : DamageableObject
         // tem que usar a Overlap Area e ver se tá na distância permitida
         if (DetectedPlayer())
         {
-            //if((State == EnemyState.Idle || State == EnemyState.Patrol) && 
-            //(!IsUsingWeaponWhichRotates || (IsUsingWeaponWhichRotates && ReachedAttackDistance())))
             if (State == EnemyState.Idle || State == EnemyState.Patrol)
             {
                 print("Detected Player");
@@ -229,7 +243,7 @@ public abstract class Enemy : DamageableObject
 
     protected virtual bool DetectedPlayer()
     {
-        return WeaponController.WeaponDataList[0].WeaponGameObjectData
+        return WeaponController.WeaponDataList[FrontalWeaponIndex].WeaponGameObjectData
             .PlayerDetector.DetectedPlayerNearObject(out _detectedPlayer);
     }
 
@@ -313,13 +327,214 @@ public abstract class Enemy : DamageableObject
         }
     }
 
-    public virtual void Patrol() { }
-    
-    protected virtual void Move() { }
+    public virtual void Patrol()
+    {
+        if (CanMove)
+            Move();
+    }
 
-    public virtual void ChasePlayer() { }
+    protected virtual void Move()
+    {
+        if (_movementTimeCounter < _movementDuration)
+        {
+            _movementTimeCounter += Time.deltaTime;
 
-    protected virtual void ChasePlayerFlyingOnMixedMode() { }
+            if (EnemyType == EnemyType.Land)
+                MoveLandEnemy();
+            else if (EnemyType == EnemyType.Flying)
+                MoveFlyingEnemy();
+        }
+        else
+        {
+            _timeToInvertMovementTimeCounter += Time.deltaTime;
+            _isMoving = false;
+
+            if (_timeToInvertMovementTimeCounter > _timeToInvertMovement)
+            {
+                _movementTimeCounter = 0;
+                _timeToInvertMovementTimeCounter = 0;
+
+                if (EnemyType == EnemyType.Flying)
+                {
+                    if (FlyingChaseMode == FlyingChaseMode.Diagonal)
+                    {
+                        FlipVerticalDirection();
+                        Flip(transform.localScale.x < 0 ? 1 : -1);
+                    }
+                    else if (FlyingChaseMode == FlyingChaseMode.Vertical)
+                        FlipVerticalDirection();
+                    else if (FlyingChaseMode == FlyingChaseMode.Mixed)
+                    {
+                        SetRandomFlyingMixedMovement();
+
+                        if (_moveFlyingOnHorizontal)
+                            Flip(transform.localScale.x < 0 ? 1 : -1);
+
+                        if (_moveFlyingOnVertical)
+                            FlipVerticalDirection();
+                    }
+                    else // Horizontal chasing mode
+                        Flip(transform.localScale.x < 0 ? 1 : -1);
+                }
+                else // Land Character
+                    Flip(transform.localScale.x < 0 ? 1 : -1);
+
+                EnemyStateGeneralData.SetCurrentActionAsPerformed();
+            }
+        }
+    }
+    protected virtual void MoveLandEnemy()
+    {
+        if (Rigidbody != null && !SharedFunctions.HitSomething(
+            _landCharacterProps.WallCheckCollider,
+            _landCharacterProps.TerrainWithoutPlatformLayerMask,
+            out Collider2D hitWall)
+        )
+        {
+            _isMoving = true;
+            _xDirection = GetDirection() * _speed;
+
+            Vector2 direction = new Vector2(_xDirection, Rigidbody.velocity.y);
+            Rigidbody.velocity = direction;
+            Flip((int)_xDirection);
+        }
+        else
+            _isMoving = false;
+    }
+
+    protected virtual void MoveFlyingEnemy()
+    {
+        if (Rigidbody != null && !SharedFunctions.HitSomething(
+            _flyingCharacterProps.FlyingCheckCollider,
+            _flyingCharacterProps.FlyingLayerMask,
+            out Collider2D hitWall))
+        {
+            _isMoving = true;
+            _xDirection = 0f;
+            _yDirection = 0f;
+
+            if (FlyingChaseMode == FlyingChaseMode.Horizontal)
+                _xDirection = GetDirection() * _speed;
+            else if (FlyingChaseMode == FlyingChaseMode.Vertical)
+                _yDirection = GetDirection(calculateInVerticalAxis: true) * _speed;
+            else if (FlyingChaseMode == FlyingChaseMode.Diagonal)
+            {
+                _xDirection = GetDirection() * _speed;
+                _yDirection = GetDirection(calculateInVerticalAxis: true) * _speed;
+            }
+            else if (FlyingChaseMode == FlyingChaseMode.Mixed)
+            {
+                _xDirection = _moveFlyingOnHorizontal ? GetDirection() * _speed : 0f;
+                _yDirection = _moveFlyingOnVertical ? GetDirection(calculateInVerticalAxis: true) * _speed : 0f;
+            }
+
+            Vector2 direction = new Vector2(_xDirection, _yDirection);
+            transform.Translate(direction * Time.deltaTime);
+
+            Flip((int)_xDirection);
+            if (_yDirection != 0f)
+                _isDown = _yDirection < 0f;
+        }
+        else
+            _isMoving = false;
+    }
+
+
+    public virtual void ChasePlayer()
+    {
+        print("ChasePlayer");
+        if (_detectedPlayer == null)
+        {
+            print("Lost player from sight. Returning to initial state...");
+            ChangeState(EnemyStateGeneralData.InitialState);
+            _isMoving = false;
+            return;
+        }
+
+        if (ReachedAttackDistance())
+        {
+            print("Reached attack distance, so let's attack.");
+            if (_collidedWithPlayer)
+            {
+                float distance = transform.position.x - _detectedPlayer.transform.position.x;
+                Flip(distance < 0 ? 1 : -1);
+            }
+            _isMoving = false;
+            ChangeState(EnemyState.Attacking);
+        }
+        else if (CanMove)
+        {
+            if (EnemyType == EnemyType.Land)
+                MoveLandEnemy();
+            else if (EnemyType == EnemyType.Flying)
+            {
+                if (FlyingChaseMode != FlyingChaseMode.Mixed)
+                    MoveFlyingEnemy();
+                else
+                    ChasePlayerFlyingOnMixedMode();
+            }
+        }
+    }
+
+    public override void TakeDamage(int damage, bool force = false)
+    {
+        base.TakeDamage(damage, force);
+
+        if (_tookDamage && ChangeStateAfterDamage && State == EnemyState.Idle)
+        {
+            //print($"Took damage, changing state to {StateAfterDamage}...");
+            ChangeState(StateAfterDamage);
+        }
+    }
+
+    protected virtual void ChasePlayerFlyingOnMixedMode()
+    {
+        if (Rigidbody != null && !SharedFunctions.HitSomething(
+            _flyingCharacterProps.FlyingCheckCollider,
+            _flyingCharacterProps.FlyingLayerMask,
+            out Collider2D hitWall))
+        {
+            _isMoving = true;
+            _xDirection = 0f;
+            _yDirection = 0f;
+
+            float xDistance = Mathf.Abs(transform.position.x - _detectedPlayer.transform.position.x);
+            float yDistance = Mathf.Abs(transform.position.y - _detectedPlayer.transform.position.y);
+            float axisDistance = xDistance - yDistance;
+
+            if (Mathf.Abs(axisDistance) > _distanceFromAxes)
+            {
+                if (axisDistance >= 0f)
+                {
+                    _moveFlyingOnHorizontal = true;
+                    _moveFlyingOnVertical = false;
+                    _xDirection = GetDirection() * _speed;
+                }
+                else if (axisDistance < 0f)
+                {
+                    _moveFlyingOnHorizontal = false;
+                    _moveFlyingOnVertical = true;
+                    _yDirection = GetDirection(calculateInVerticalAxis: true) * _speed;
+                }
+            }
+            else if (!ReachedAttackDistance())
+            {
+                _moveFlyingOnHorizontal = true;
+                _moveFlyingOnVertical = true;
+                _xDirection = GetDirection() * _speed;
+                _yDirection = GetDirection(calculateInVerticalAxis: true) * _speed;
+            }
+
+            Vector2 direction = new Vector2(_xDirection, _yDirection);
+            transform.Translate(direction * Time.deltaTime);
+
+            Flip((int)_xDirection);
+            if (_yDirection != 0f)
+                _isDown = _yDirection < 0f;
+        }
+        else
+            _isMoving = false;
+    }
 
     protected float GetDistanceFromPlayer()
     {
@@ -341,9 +556,98 @@ public abstract class Enemy : DamageableObject
         return reachedAtkdistance;
     }
 
-    public virtual void Attack() { }
+    public virtual void Attack()
+    {
+        EnemyActionStatus status = EnemyStateGeneralData.CurrentState.Action.Status;
+        //print("Attack(); status: " + status + " Current state: " + EnemyStateGeneralData.CurrentState.EnemyState);
+        //print("SelectedWeaponIndex: " + SelectedWeaponIndex);
 
-    public virtual void SelectWeaponAndShoot()
+        if (status == EnemyActionStatus.Started) // Single weapon logic. Expand to suport multiple weapons
+        {
+            if (_attackDurationTimeCounter <=
+                WeaponController.WeaponDataList[SelectedWeaponIndex].WeaponScriptableObject.AttackDuration)
+            {
+                if (_fireRateCounter >
+                    WeaponController.WeaponDataList[SelectedWeaponIndex].WeaponScriptableObject.FireRate)
+                {
+                    //print("SHOOT");
+                    SelectWeaponOrWaveAndAttack();
+                    _fireRateCounter = 0;
+                }
+                else
+                    _fireRateCounter += Time.deltaTime;
+
+                _attackDurationTimeCounter += Time.deltaTime;
+            }
+            else
+            {
+                //print("End of attack wave.");
+                EnemyStateGeneralData.SetCurrentActionAsPerformed();
+                return;
+            }
+        }
+        else if (status == EnemyActionStatus.Performed)
+        {
+            _intervalBetweenAttacksTimeCounter += Time.deltaTime;
+
+            if (_intervalBetweenAttacksTimeCounter >= _intervalBetweenAttacks)
+            {
+                //print("Starting another attack wave...");
+                _intervalBetweenAttacksTimeCounter = 0;
+                _attackDurationTimeCounter = 0;
+                _fireRateCounter = 0;
+                EnemyStateGeneralData.CurrentState.Action.SetActionStatusStarted();
+                return;
+            }
+        }
+
+        if (!_attackCanceled && LostPlayerFromSight())
+        {
+            _attackCanceled = true;
+            _fireRateCounter = 0;
+            _attackDurationTimeCounter = 0;
+
+            if (InstantAttack)
+            {
+                print("Couldn't attack player anymore, so let's return to Initial State.");
+                ChangeState(EnemyStateGeneralData.InitialState);
+            }
+            else
+            {
+                print("Couldn't attack player anymore, so let's chase him.");
+                ChangeState(EnemyState.ChasingPlayer);
+            }
+        }
+    }
+
+    protected virtual bool LostPlayerFromSight()
+    {
+        if (!IsUsingWeaponWhichRotates)
+        {
+            // If it's NOT an InstantAttack, it means the enemy must approach the player to start the attack.
+            // Therefore it must detect if the player is out of a strikeable distance to set him lost from sight.
+            if (!InstantAttack)
+                return !ReachedAttackDistance();
+            // Else, it means the enemy mustn't calculate any distance from player to start its attack.
+            // As soon the enemy detects players presence, it'll start attacking.
+            // So the detection will be on player's presence without any need of attack calculation distance.
+            else
+                return !DetectedPlayer();
+        }
+        else
+        {
+            // If the weapon rotates towards player and if the enemy doesn't detect any player's presence, 
+            // it means the enemy lost him from sight;
+            if (!DetectedPlayer())
+                return true;
+
+            // Else and there's some player detected, the enemy must check if the player is out of some
+            // strikeable distance to lose him from sight.
+            return !ReachedAttackDistance();
+        }
+    }
+
+    public virtual void SelectWeaponOrWaveAndAttack()
     {
         if (!HasAttackWaves)
         {
@@ -363,8 +667,11 @@ public abstract class Enemy : DamageableObject
                 }
             }
         }
-        else
+        else if(!AttackWavesController.CurrentWave.WaveStarted)
+        {
+            AttackWavesController.ChooseRandomAttackWave(IsCritical);
             AttackWavesController.StartAttackWave();
+        }
     }
 
     public virtual void Shoot(int weaponIndex)
@@ -449,7 +756,6 @@ public abstract class Enemy : DamageableObject
 
     protected virtual void CheckForNewRandomState(EnemyState enemyState) 
     {
-
         if (EnemyStateGeneralData.HasStateChangeScheduled)
             return;
 
@@ -478,7 +784,7 @@ public abstract class Enemy : DamageableObject
     public virtual bool CollidedWithPlayer(out DamageableObject _detectedPlayer)
     {
         DamageableObject damageableObject = null;
-        LayerMask layerMask = WeaponController.WeaponDataList[0].WeaponGameObjectData.PlayerDetector.RaycastLayer;
+        LayerMask layerMask = WeaponController.WeaponDataList[FrontalWeaponIndex].WeaponGameObjectData.PlayerDetector.RaycastLayer;
 
         if (SharedFunctions.HitSomething(_enemyCollider, layerMask, out Collider2D hit)
         && hit.TryGetComponent(out damageableObject) && SharedFunctions.DamageableObjectIsPlayer(damageableObject))
@@ -500,17 +806,19 @@ public abstract class Enemy : DamageableObject
         if (!CanFlip)
             return;
 
-        if(direction < 0 && transform.localScale.x > 0)
+        if(direction < 0 && transform.localScale.x > 0 && !IsLeft)
         {
             _isLeft = true;
             transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x) * -1, transform.localScale.y);
             WeaponController.FlipWeaponsPlayerDetectors();
+            OnEnemyFlip?.Invoke();
         }
-        else if(direction > 0 && transform.localScale.x < 0)
+        else if(direction > 0 && transform.localScale.x < 0 && IsLeft)
         {
             _isLeft = false;
             transform.localScale = new Vector2(Mathf.Abs(transform.localScale.x), transform.localScale.y);
             WeaponController.FlipWeaponsPlayerDetectors();
+            OnEnemyFlip?.Invoke();
         }
     }
 

@@ -116,6 +116,16 @@ public static class WarningMessages
         Debug.LogWarning("Could not find GameController instance, " +
                     "so the pooling won't work as expected.");
     }
+
+    public static void BossHasNoAttackWaves()
+    {
+        Debug.LogWarning("Boss has no attack waves. Did you forgot to setup some waves for it?");
+    }
+
+    public static void BossHasNoCurrentWaveSelected()
+    {
+        Debug.LogWarning("Boss has no current wave selected. Please select one from the attack waves list.");
+    }
 }
 
 public static class InputStrings

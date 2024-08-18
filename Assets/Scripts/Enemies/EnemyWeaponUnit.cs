@@ -24,19 +24,9 @@ public class EnemyWeaponUnit : ScriptableObject
     [SerializeField] private float _attackDuration;
     public float AttackDuration => _attackDuration;
 
-    //[Tooltip("Check this if this weapon has continuous fire, like a machinegun, for example.")]
-    //[SerializeField] private bool _isContinuous;
-    //public bool IsContinuous => _isContinuous;
-
     [Tooltip("It'll be used only when the \"Is Continuous\" option be unchecked.")]
-    //[DrawIfBoolEqualsTo("_isContinuous", comparedValue: false, elseDrawItDisabled: true)]
     [SerializeField] private float _fireRate;
     public float FireRate => _fireRate;
-
-    //[Tooltip("It'll be used only when the \"Is Continuous\" option be marked.")]
-    //[DrawIfBoolEqualsTo("_isContinuous", comparedValue: true, elseDrawItDisabled: true)]
-    //[SerializeField] private float _continuousFireRate;
-    //public float ContinuousFireRate => _continuousFireRate;
 
     [Tooltip("If some value from this vector is diferent from zero, it'll be randomly " +
     "used from -value to the value of the spawn position when instantiating a new shot.")]
@@ -52,8 +42,6 @@ public class EnemyWeaponUnit : ScriptableObject
     {
         _gameControllerInstance = FindObjectOfType<GameController>();
     }
-
-    //public float GetFireRate() => IsContinuous ? ContinuousFireRate : FireRate;
 
     public void Shoot(Transform spawnTransform, int currentDirection)
     {

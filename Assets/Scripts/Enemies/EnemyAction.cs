@@ -12,8 +12,13 @@ public class EnemyAction
     public Action<EnemyAction> OnActionStarted;
     public Action<bool> OnActionPerformed;
 
-    [SerializeField] private EnemyActionStatus _status;
-    public EnemyActionStatus Status => _status;
+    [SerializeField]
+    private EnemyActionStatus _status;
+    public EnemyActionStatus Status
+    {
+        get => _status;
+        set => _status = value;
+    }
 
     [Tooltip("If checked, the action may be interrupted by another when another Enemy State be chosen. " +
     "If not, the next state will start only when this action ends.")]
@@ -28,7 +33,7 @@ public class EnemyAction
 
     public void SetActionStatusStarted()
     {
-        _status = EnemyActionStatus.Started;
+        Status = EnemyActionStatus.Started;
         OnActionStarted?.Invoke(this);
     }
 
@@ -36,14 +41,14 @@ public class EnemyAction
     /// this action stars right after it reached its end.</param>
     public void SetActionStatusPerformed(bool instantLoop = false)
     {
-        _status = EnemyActionStatus.Performed;
+        Status = EnemyActionStatus.Performed;
         OnActionPerformed?.Invoke(instantLoop);
     }
 
     public void SetActionStatusCanceled()
     {
         if (_canBeCanceled)
-            _status = EnemyActionStatus.Canceled;
+            Status = EnemyActionStatus.Canceled;
     }
 
     public void DoAction()

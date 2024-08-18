@@ -4,8 +4,8 @@ using UnityEngine;
 public class LandCharacterProps
 {
     public Transform GroundCheck = null;
-    public Collider2D CharacterCollider = null;
     public Collider2D GroundCheckCollider = null;
+    public Collider2D CharacterCollider = null;
     public Collider2D WallCheckCollider = null;
 
     [Tooltip("It'll be used to detect if the character is in the ground.")]

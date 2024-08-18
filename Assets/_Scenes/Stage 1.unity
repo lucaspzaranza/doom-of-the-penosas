@@ -380,7 +380,7 @@ GameObject:
   m_Component:
   - component: {fileID: 33988896}
   - component: {fileID: 33988895}
-  - component: {fileID: 33988894}
+  - component: {fileID: 33988897}
   - component: {fileID: 33988893}
   m_Layer: 9
   m_Name: BasicEnemy [FLYING OMNI DIRECTIONAL WEAPONS]
@@ -416,178 +416,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &33988894
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 33988892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c2ce4271eb287438a66893bec7fab6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sprites:
-  - {fileID: 2067427325}
-  - {fileID: 0}
-  _blinkDuration: 2
-  _glowDuration: 0.1
-  _1stColor: {r: 1, g: 0, b: 0, a: 1}
-  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
-  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  _life: 100
-  _isBoss: 0
-  _isCritical: 0
-  _canMove: 0
-  _isMoving: 0
-  _hasAttackWaves: 0
-  _speed: 2
-  _enemyType: 1
-  _flyingChaseMode: 3
-  _fireType: 0
-  _landCharacterProps:
-    GroundCheck: {fileID: 1720292397}
-    CharacterCollider: {fileID: 33988895}
-    GroundCheckCollider: {fileID: 1720292396}
-    WallCheckCollider: {fileID: 1987121726}
-    TerrainLayerMask:
-      serializedVersion: 2
-      m_Bits: 400
-    TerrainWithoutPlatformLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-    WaterLayerMask:
-      serializedVersion: 2
-      m_Bits: 16
-    PlatformOnlyLayerMask:
-      serializedVersion: 2
-      m_Bits: 128
-    IsGrounded: 0
-    IsOnPlatform: 0
-  _flyingCharacterProps:
-    FlyingCheckCollider: {fileID: 1987121726}
-    FlyingLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-  _state: 0
-  _timeToCheckNewState: 1
-  _fireEventWhenDead: 1
-  _canStayIdle: 1
-  _canFlip: 1
-  _stateToForceChangeIfIdle: 1
-  _instantAttack: 0
-  _attackDistance: 1
-  _attackMinDistance: 0.5
-  _changeStateAfterDamage: 1
-  _stateAfterDamage: 1
-  _attackWaveController:
-    _currentWave: {fileID: 0}
-    _attackWaves: []
-  _weaponController:
-    _weaponDataList:
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 1300274690}
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 933151449}
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 2120994035}
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 1553094595}
-  _rigidbody: {fileID: 33988893}
-  _enemySprites:
-  - {fileID: 2067427325}
-  - {fileID: 0}
-  _enemyStateGeneralData:
-    _initialState: 0
-    _statesList:
-    - _name: Idle
-      _enemyState: 0
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls: []
-      _changeRate: 30
-      _possiblesStatesToRandomlyChange: 01000000
-    - _name: Patroling
-      _enemyState: 1
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 33988894}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: Patrol
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 20
-      _possiblesStatesToRandomlyChange: 00000000
-    - _name: Chasing Player
-      _enemyState: 2
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 33988894}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: ChasePlayer
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-    - _name: Attacking Player
-      _enemyState: 3
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 33988894}
-              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
-              m_MethodName: Attack
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-  _isLeft: 0
-  _isDown: 0
-  weaponIndex: 0
-  _movementDuration: 1.5
-  _timeToInvertMovement: 0.5
-  _intervalBetweenAttacks: 1
-  _distanceFromAxes: 0
 --- !u!61 &33988895
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -660,6 +488,178 @@ Transform:
   - {fileID: 1553094597}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &33988897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33988892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e940002640530541936af261ade8c30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprites:
+  - {fileID: 2067427325}
+  - {fileID: 1500061754}
+  - {fileID: 2065376787}
+  - {fileID: 1372030973}
+  - {fileID: 1623024149}
+  _blinkDuration: 2
+  _glowDuration: 0.1
+  _1stColor: {r: 1, g: 0, b: 0, a: 1}
+  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _life: 100
+  _isBoss: 0
+  _isCritical: 0
+  _canMove: 0
+  _isMoving: 0
+  _hasAttackWaves: 0
+  _speed: 2
+  _enemyType: 1
+  _flyingChaseMode: 0
+  _fireType: 0
+  _landCharacterProps:
+    GroundCheck: {fileID: 2137795402}
+    GroundCheckCollider: {fileID: 2137795403}
+    CharacterCollider: {fileID: 2046103759}
+    WallCheckCollider: {fileID: 285566019}
+    TerrainLayerMask:
+      serializedVersion: 2
+      m_Bits: 400
+    TerrainWithoutPlatformLayerMask:
+      serializedVersion: 2
+      m_Bits: 4368
+    WaterLayerMask:
+      serializedVersion: 2
+      m_Bits: 16
+    PlatformOnlyLayerMask:
+      serializedVersion: 2
+      m_Bits: 128
+    IsGrounded: 0
+    IsOnPlatform: 0
+  _flyingCharacterProps:
+    FlyingCheckCollider: {fileID: 1987121726}
+    FlyingLayerMask:
+      serializedVersion: 2
+      m_Bits: 4368
+  _state: 0
+  _timeToCheckNewState: 1
+  _fireEventWhenDead: 1
+  _canStayIdle: 1
+  _canFlip: 1
+  _stateToForceChangeIfIdle: 0
+  _instantAttack: 0
+  _attackDistance: 1
+  _attackMinDistance: 0.5
+  _changeStateAfterDamage: 1
+  _stateAfterDamage: 1
+  _attackWaveController:
+    _currentWave: {fileID: 0}
+    _attackWaves: []
+  _weaponController:
+    _weaponDataList:
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 1300274690}
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 933151449}
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 2120994035}
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 1553094595}
+  _rigidbody: {fileID: 33988893}
+  _enemyStateGeneralData:
+    _initialState: 0
+    _statesList:
+    - _name: Idle
+      _enemyState: 0
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls: []
+      _changeRate: 30
+      _possiblesStatesToRandomlyChange: 01000000
+    - _name: Patrolling
+      _enemyState: 1
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 33988897}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Patrol
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 20
+      _possiblesStatesToRandomlyChange: 00000000
+    - _name: Chasing Player
+      _enemyState: 2
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 33988897}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: ChasePlayer
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+    - _name: Attacking Player
+      _enemyState: 3
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 33988897}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Attack
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+  _isLeft: 0
+  _isDown: 0
+  _movementDuration: 1.5
+  _timeToInvertMovement: 0.5
+  _intervalBetweenAttacks: 1
+  _distanceFromAxes: 0
+  _frontalWeaponIndex: 0
 --- !u!1 &36643282
 GameObject:
   m_ObjectHideFlags: 0
@@ -938,7 +938,7 @@ GameObject:
   m_Component:
   - component: {fileID: 41362124}
   - component: {fileID: 41362123}
-  - component: {fileID: 41362122}
+  - component: {fileID: 41362125}
   - component: {fileID: 41362121}
   m_Layer: 9
   m_Name: BasicEnemy [UPSIDE DOWN VERTICAL WEAPON]
@@ -974,169 +974,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &41362122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 41362120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c2ce4271eb287438a66893bec7fab6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sprites:
-  - {fileID: 1661765491}
-  - {fileID: 0}
-  _blinkDuration: 2
-  _glowDuration: 0.1
-  _1stColor: {r: 1, g: 0, b: 0, a: 1}
-  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
-  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  _life: 100
-  _isBoss: 0
-  _isCritical: 0
-  _canMove: 0
-  _isMoving: 0
-  _hasAttackWaves: 0
-  _speed: 2
-  _enemyType: 0
-  _flyingChaseMode: 0
-  _fireType: 0
-  _landCharacterProps:
-    GroundCheck: {fileID: 2146146647}
-    CharacterCollider: {fileID: 41362123}
-    GroundCheckCollider: {fileID: 2146146646}
-    WallCheckCollider: {fileID: 1602770926}
-    TerrainLayerMask:
-      serializedVersion: 2
-      m_Bits: 400
-    TerrainWithoutPlatformLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-    WaterLayerMask:
-      serializedVersion: 2
-      m_Bits: 16
-    PlatformOnlyLayerMask:
-      serializedVersion: 2
-      m_Bits: 128
-    IsGrounded: 0
-    IsOnPlatform: 0
-  _flyingCharacterProps:
-    FlyingCheckCollider: {fileID: 1602770926}
-    FlyingLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-  _state: 0
-  _timeToCheckNewState: 1
-  _fireEventWhenDead: 1
-  _canStayIdle: 1
-  _canFlip: 1
-  _stateToForceChangeIfIdle: 1
-  _instantAttack: 1
-  _attackDistance: 5
-  _attackMinDistance: 0.5
-  _changeStateAfterDamage: 1
-  _stateAfterDamage: 1
-  _attackWaveController:
-    _currentWave: {fileID: 0}
-    _attackWaves: []
-  _weaponController:
-    _weaponDataList:
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 1482822347}
-  _rigidbody: {fileID: 41362121}
-  _enemySprites:
-  - {fileID: 1661765491}
-  - {fileID: 0}
-  _enemyStateGeneralData:
-    _initialState: 0
-    _statesList:
-    - _name: Idle
-      _enemyState: 0
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls: []
-      _changeRate: 30
-      _possiblesStatesToRandomlyChange: 01000000
-    - _name: Patroling
-      _enemyState: 1
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 41362122}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: Patrol
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 20
-      _possiblesStatesToRandomlyChange: 00000000
-    - _name: Chasing Player
-      _enemyState: 2
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 41362122}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: ChasePlayer
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-    - _name: Attacking Player
-      _enemyState: 3
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 41362122}
-              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
-              m_MethodName: Attack
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-  _isLeft: 0
-  _isDown: 0
-  weaponIndex: 0
-  _movementDuration: 1.5
-  _timeToInvertMovement: 0.5
-  _intervalBetweenAttacks: 1
-  _distanceFromAxes: 0
 --- !u!61 &41362123
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1204,6 +1041,166 @@ Transform:
   - {fileID: 1482822349}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &41362125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41362120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e940002640530541936af261ade8c30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprites:
+  - {fileID: 1661765491}
+  - {fileID: 862182023}
+  _blinkDuration: 2
+  _glowDuration: 0.1
+  _1stColor: {r: 1, g: 0, b: 0, a: 1}
+  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _life: 100
+  _isBoss: 0
+  _isCritical: 0
+  _canMove: 0
+  _isMoving: 0
+  _hasAttackWaves: 0
+  _speed: 2
+  _enemyType: 0
+  _flyingChaseMode: 0
+  _fireType: 0
+  _landCharacterProps:
+    GroundCheck: {fileID: 2146146647}
+    GroundCheckCollider: {fileID: 2146146646}
+    CharacterCollider: {fileID: 41362123}
+    WallCheckCollider: {fileID: 1602770926}
+    TerrainLayerMask:
+      serializedVersion: 2
+      m_Bits: 400
+    TerrainWithoutPlatformLayerMask:
+      serializedVersion: 2
+      m_Bits: 4368
+    WaterLayerMask:
+      serializedVersion: 2
+      m_Bits: 16
+    PlatformOnlyLayerMask:
+      serializedVersion: 2
+      m_Bits: 128
+    IsGrounded: 0
+    IsOnPlatform: 0
+  _flyingCharacterProps:
+    FlyingCheckCollider: {fileID: 0}
+    FlyingLayerMask:
+      serializedVersion: 2
+      m_Bits: 0
+  _state: 0
+  _timeToCheckNewState: 1
+  _fireEventWhenDead: 1
+  _canStayIdle: 1
+  _canFlip: 1
+  _stateToForceChangeIfIdle: 0
+  _instantAttack: 0
+  _attackDistance: 1
+  _attackMinDistance: 0.5
+  _changeStateAfterDamage: 1
+  _stateAfterDamage: 1
+  _attackWaveController:
+    _currentWave: {fileID: 0}
+    _attackWaves: []
+  _weaponController:
+    _weaponDataList:
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 1482822347}
+  _rigidbody: {fileID: 41362121}
+  _enemyStateGeneralData:
+    _initialState: 0
+    _statesList:
+    - _name: Idle
+      _enemyState: 0
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls: []
+      _changeRate: 30
+      _possiblesStatesToRandomlyChange: 01000000
+    - _name: Patrolling
+      _enemyState: 1
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 41362125}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Patrol
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 20
+      _possiblesStatesToRandomlyChange: 00000000
+    - _name: Chasing Player
+      _enemyState: 2
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 41362125}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: ChasePlayer
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+    - _name: Attacking Player
+      _enemyState: 3
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 41362125}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Attack
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+  _isLeft: 0
+  _isDown: 0
+  _movementDuration: 1.5
+  _timeToInvertMovement: 0.5
+  _intervalBetweenAttacks: 1
+  _distanceFromAxes: 0
+  _frontalWeaponIndex: 0
 --- !u!1 &49243372
 GameObject:
   m_ObjectHideFlags: 0
@@ -1500,7 +1497,7 @@ GameObject:
   - component: {fileID: 68498515}
   - component: {fileID: 68498516}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Weapon Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -1621,12 +1618,11 @@ MonoBehaviour:
   _name: Critical Attack Wave
   _description: A critical attack wave using a single weapon with continuous fire.
   _enemy: {fileID: 0}
-  _waveType: 0
   _criticalAttackWave: 1
   _waveStarted: 0
   _weaponsUsed:
   - _overwriteWeaponData: 1
-    _newDataToUse: {fileID: 11400000, guid: e2c934826ead98544ae1e69b951a4130, type: 2}
+    _dataToOverwrite: {fileID: 11400000, guid: e2c934826ead98544ae1e69b951a4130, type: 2}
     _usedWeapon: {fileID: 1284975012}
   _changeWeaponInterval: 0
 --- !u!1 &81062904
@@ -2141,83 +2137,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &161406190
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 161406192}
-  - component: {fileID: 161406191}
-  m_Layer: 0
-  m_Name: PlayerDetectorCollider [VERTICAL]
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!61 &161406191
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 161406190}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 2.21}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 5, y: 1.5}
-  m_EdgeRadius: 0
---- !u!4 &161406192
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 161406190}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0.134, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1826445851}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &163095379
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2442,91 +2361,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &168032493
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 168032495}
-  - component: {fileID: 168032494}
-  m_Layer: 0
-  m_Name: EnemySprite
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!212 &168032494
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 168032493}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6,
-    type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
---- !u!4 &168032495
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 168032493}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1826445851}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &179200327
 GameObject:
   m_ObjectHideFlags: 0
@@ -4282,37 +4116,6 @@ MonoBehaviour:
   _interactableLayerMask:
     serializedVersion: 2
     m_Bits: 4864
---- !u!1 &313805329
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 313805330}
-  m_Layer: 0
-  m_Name: Spawn Position
-  m_TagString: Untagged
-  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &313805330
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 313805329}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.44, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 876063814}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!850595691 &322337058
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -4444,91 +4247,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1960022817}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &329895804
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 329895805}
-  - component: {fileID: 329895806}
-  m_Layer: 0
-  m_Name: Sprite
-  m_TagString: Untagged
-  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &329895805
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 329895804}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.25, y: 0, z: 0}
-  m_LocalScale: {x: 0.125, y: 0.1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 443882996}
-  m_Father: {fileID: 603847643}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &329895806
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 329895804}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: d0c0f2c3fda87da42a337a8947d4f910, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 4.02, y: 3.4}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!1 &340037392
 GameObject:
   m_ObjectHideFlags: 0
@@ -5909,37 +5627,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1695985666}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &443882995
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 443882996}
-  m_Layer: 0
-  m_Name: Spawn Position
-  m_TagString: Untagged
-  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &443882996
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 443882995}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.44, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 329895805}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &445591887
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7036,73 +6723,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1960022817}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &533008087
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 533008089}
-  - component: {fileID: 533008088}
-  m_Layer: 0
-  m_Name: Wall Check
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!70 &533008088
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 533008087}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.13371024, y: 0.69348204}
-  m_Direction: 0
---- !u!4 &533008089
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 533008087}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.379, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1826445851}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &552798182
 GameObject:
   m_ObjectHideFlags: 0
@@ -7736,38 +7356,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &603847642
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 603847643}
-  m_Layer: 0
-  m_Name: Rotation Pivot
-  m_TagString: Untagged
-  m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &603847643
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 603847642}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.591, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 329895805}
-  m_Father: {fileID: 1987741094}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &609361296
 GameObject:
   m_ObjectHideFlags: 0
@@ -7831,7 +7419,7 @@ GameObject:
   - component: {fileID: 611356640}
   - component: {fileID: 611356639}
   m_Layer: 9
-  m_Name: Simple Atk Wave
+  m_Name: Simple Atk Wave Pattern 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7851,18 +7439,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Simple Attack Wave
   _description: A simple attack wave using a single weapon.
-  _enemy: {fileID: 1931408749}
-  _waveType: 0
+  _enemy: {fileID: 0}
   _criticalAttackWave: 0
   _waveStarted: 0
   _weaponsUsed:
   - _overwriteWeaponData: 0
-    _newDataToUse: {fileID: 0}
+    _dataToOverwrite: {fileID: 0}
     _usedWeapon: {fileID: 1284975012}
-  - _overwriteWeaponData: 1
-    _newDataToUse: {fileID: 11400000, guid: e2c934826ead98544ae1e69b951a4130, type: 2}
-    _usedWeapon: {fileID: 1284975012}
-  _changeWeaponInterval: 2
+  _changeWeaponInterval: 0
 --- !u!4 &611356640
 Transform:
   m_ObjectHideFlags: 0
@@ -8023,7 +7607,7 @@ GameObject:
   - component: {fileID: 615664953}
   - component: {fileID: 615664954}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Weapon 1 Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -8107,7 +7691,7 @@ GameObject:
   m_Component:
   - component: {fileID: 622523155}
   - component: {fileID: 622523154}
-  - component: {fileID: 622523153}
+  - component: {fileID: 622523156}
   - component: {fileID: 622523152}
   m_Layer: 9
   m_Name: BasicEnemy [FLYING TYPE]
@@ -8143,169 +7727,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &622523153
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 622523151}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c2ce4271eb287438a66893bec7fab6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sprites:
-  - {fileID: 1961017794}
-  - {fileID: 0}
-  _blinkDuration: 2
-  _glowDuration: 0.1
-  _1stColor: {r: 1, g: 0, b: 0, a: 1}
-  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
-  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  _life: 100
-  _isBoss: 0
-  _isCritical: 0
-  _canMove: 0
-  _isMoving: 0
-  _hasAttackWaves: 0
-  _speed: 2
-  _enemyType: 1
-  _flyingChaseMode: 0
-  _fireType: 0
-  _landCharacterProps:
-    GroundCheck: {fileID: 58317274}
-    CharacterCollider: {fileID: 622523154}
-    GroundCheckCollider: {fileID: 58317273}
-    WallCheckCollider: {fileID: 340550661}
-    TerrainLayerMask:
-      serializedVersion: 2
-      m_Bits: 400
-    TerrainWithoutPlatformLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-    WaterLayerMask:
-      serializedVersion: 2
-      m_Bits: 16
-    PlatformOnlyLayerMask:
-      serializedVersion: 2
-      m_Bits: 128
-    IsGrounded: 0
-    IsOnPlatform: 0
-  _flyingCharacterProps:
-    FlyingCheckCollider: {fileID: 340550661}
-    FlyingLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-  _state: 0
-  _timeToCheckNewState: 1
-  _fireEventWhenDead: 1
-  _canStayIdle: 1
-  _canFlip: 1
-  _stateToForceChangeIfIdle: 1
-  _instantAttack: 0
-  _attackDistance: 2
-  _attackMinDistance: 0.5
-  _changeStateAfterDamage: 1
-  _stateAfterDamage: 1
-  _attackWaveController:
-    _currentWave: {fileID: 0}
-    _attackWaves: []
-  _weaponController:
-    _weaponDataList:
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 1876271372}
-  _rigidbody: {fileID: 622523152}
-  _enemySprites:
-  - {fileID: 1961017794}
-  - {fileID: 0}
-  _enemyStateGeneralData:
-    _initialState: 0
-    _statesList:
-    - _name: Idle
-      _enemyState: 0
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls: []
-      _changeRate: 30
-      _possiblesStatesToRandomlyChange: 01000000
-    - _name: Patroling
-      _enemyState: 1
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 622523153}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: Patrol
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 20
-      _possiblesStatesToRandomlyChange: 00000000
-    - _name: Chasing Player
-      _enemyState: 2
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 622523153}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: ChasePlayer
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-    - _name: Attacking Player
-      _enemyState: 3
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 622523153}
-              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
-              m_MethodName: Attack
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-  _isLeft: 0
-  _isDown: 0
-  weaponIndex: 0
-  _movementDuration: 1.5
-  _timeToInvertMovement: 0.5
-  _intervalBetweenAttacks: 1
-  _distanceFromAxes: 0.4
 --- !u!61 &622523154
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8371,6 +7792,166 @@ Transform:
   - {fileID: 1876271374}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &622523156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 622523151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e940002640530541936af261ade8c30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprites:
+  - {fileID: 1961017794}
+  - {fileID: 68498516}
+  _blinkDuration: 2
+  _glowDuration: 0.1
+  _1stColor: {r: 1, g: 0, b: 0, a: 1}
+  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _life: 100
+  _isBoss: 0
+  _isCritical: 0
+  _canMove: 0
+  _isMoving: 0
+  _hasAttackWaves: 0
+  _speed: 2
+  _enemyType: 1
+  _flyingChaseMode: 0
+  _fireType: 0
+  _landCharacterProps:
+    GroundCheck: {fileID: 2146146647}
+    GroundCheckCollider: {fileID: 2146146646}
+    CharacterCollider: {fileID: 41362123}
+    WallCheckCollider: {fileID: 1602770926}
+    TerrainLayerMask:
+      serializedVersion: 2
+      m_Bits: 400
+    TerrainWithoutPlatformLayerMask:
+      serializedVersion: 2
+      m_Bits: 4368
+    WaterLayerMask:
+      serializedVersion: 2
+      m_Bits: 16
+    PlatformOnlyLayerMask:
+      serializedVersion: 2
+      m_Bits: 128
+    IsGrounded: 0
+    IsOnPlatform: 0
+  _flyingCharacterProps:
+    FlyingCheckCollider: {fileID: 340550661}
+    FlyingLayerMask:
+      serializedVersion: 2
+      m_Bits: 4368
+  _state: 0
+  _timeToCheckNewState: 1
+  _fireEventWhenDead: 1
+  _canStayIdle: 1
+  _canFlip: 1
+  _stateToForceChangeIfIdle: 0
+  _instantAttack: 0
+  _attackDistance: 1
+  _attackMinDistance: 0.5
+  _changeStateAfterDamage: 1
+  _stateAfterDamage: 1
+  _attackWaveController:
+    _currentWave: {fileID: 0}
+    _attackWaves: []
+  _weaponController:
+    _weaponDataList:
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 1876271372}
+  _rigidbody: {fileID: 622523152}
+  _enemyStateGeneralData:
+    _initialState: 0
+    _statesList:
+    - _name: Idle
+      _enemyState: 0
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls: []
+      _changeRate: 30
+      _possiblesStatesToRandomlyChange: 01000000
+    - _name: Patrolling
+      _enemyState: 1
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 622523156}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Patrol
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 20
+      _possiblesStatesToRandomlyChange: 00000000
+    - _name: Chasing Player
+      _enemyState: 2
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 622523156}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: ChasePlayer
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+    - _name: Attacking Player
+      _enemyState: 3
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 622523156}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Attack
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+  _isLeft: 0
+  _isDown: 0
+  _movementDuration: 1.5
+  _timeToInvertMovement: 0.5
+  _intervalBetweenAttacks: 1
+  _distanceFromAxes: 0
+  _frontalWeaponIndex: 0
 --- !u!1001 &637905185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8460,7 +8041,7 @@ GameObject:
   - component: {fileID: 638876945}
   - component: {fileID: 638876946}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Weapon 2 Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -8611,6 +8192,66 @@ Transform:
   m_Children: []
   m_Father: {fileID: 33988896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &641996083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 641996084}
+  - component: {fileID: 641996085}
+  m_Layer: 9
+  m_Name: Simple Atk Wave Pattern 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &641996084
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641996083}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1514770909}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &641996085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641996083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63a0c86bb6d96b147b2848d41bde8b32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _name: Simple Attack Wave
+  _description: A simple attack wave using a single weapon.
+  _enemy: {fileID: 0}
+  _criticalAttackWave: 0
+  _waveStarted: 0
+  _weaponsUsed:
+  - _overwriteWeaponData: 0
+    _dataToOverwrite: {fileID: 0}
+    _usedWeapon: {fileID: 1284975012}
+  - _overwriteWeaponData: 0
+    _dataToOverwrite: {fileID: 0}
+    _usedWeapon: {fileID: 1284975012}
+  - _overwriteWeaponData: 0
+    _dataToOverwrite: {fileID: 0}
+    _usedWeapon: {fileID: 1284975012}
+  _changeWeaponInterval: 0
 --- !u!1 &658502844
 GameObject:
   m_ObjectHideFlags: 0
@@ -9401,7 +9042,7 @@ GameObject:
   - component: {fileID: 719416468}
   - component: {fileID: 719416469}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Weapon 3 Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -10770,7 +10411,7 @@ GameObject:
   - component: {fileID: 862182022}
   - component: {fileID: 862182023}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Weapon Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -10844,174 +10485,12 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &863490067
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 863490069}
-  - component: {fileID: 863490068}
-  m_Layer: 0
-  m_Name: PlayerDetectorCollider [BACK]
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!61 &863490068
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 863490067}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -1.5, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 3, y: 4}
-  m_EdgeRadius: 0
---- !u!4 &863490069
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 863490067}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.7, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1826445851}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &866069113 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5405324850216297520, guid: 3583131a4b5668e4dad8bed6d458cfc7,
     type: 3}
   m_PrefabInstance: {fileID: 5692964087305053316}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &876063813
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 876063814}
-  - component: {fileID: 876063815}
-  m_Layer: 0
-  m_Name: Sprite
-  m_TagString: Untagged
-  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &876063814
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 876063813}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.25, y: 0, z: 0}
-  m_LocalScale: {x: 0.125, y: 0.1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 313805330}
-  m_Father: {fileID: 1527079668}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &876063815
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 876063813}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: d0c0f2c3fda87da42a337a8947d4f910, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 4.02, y: 3.4}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!1 &898726639
 GameObject:
   m_ObjectHideFlags: 0
@@ -11943,7 +11422,7 @@ Transform:
   m_GameObject: {fileID: 993575781}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.23, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11981,7 +11460,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 1.5, y: 0}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -11992,7 +11471,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3, y: 3}
+  m_Size: {x: 10, y: 5}
   m_EdgeRadius: 0
 --- !u!1 &994317924
 GameObject:
@@ -12354,73 +11833,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1030106327
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1030106329}
-  - component: {fileID: 1030106328}
-  m_Layer: 0
-  m_Name: Ground Check
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!58 &1030106328
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030106327}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.03
---- !u!4 &1030106329
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030106327}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.418, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1826445851}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1049405591
 GameObject:
   m_ObjectHideFlags: 0
@@ -13222,12 +12634,12 @@ PrefabInstance:
     - target: {fileID: 849103225893220652, guid: 9b5eba5ce4625384b9b194bed19c82cb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.1829956
+      value: -2.72
       objectReference: {fileID: 0}
     - target: {fileID: 849103225893220652, guid: 9b5eba5ce4625384b9b194bed19c82cb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.3926862
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 849103225893220652, guid: 9b5eba5ce4625384b9b194bed19c82cb,
         type: 3}
@@ -13478,7 +12890,7 @@ GameObject:
   - component: {fileID: 1188152336}
   - component: {fileID: 1188152337}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Water Weapon Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -14006,7 +13418,7 @@ PrefabInstance:
     - target: {fileID: 849103225893220654, guid: 90da3cd1c267a904abbdbe9421062f66,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14085,7 +13497,7 @@ Transform:
   m_GameObject: {fileID: 1284975011}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.491, y: 0, z: 0}
+  m_LocalPosition: {x: 1.57, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -14463,7 +13875,7 @@ GameObject:
   - component: {fileID: 1306931872}
   - component: {fileID: 1306931873}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Weapon Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -14548,7 +13960,7 @@ GameObject:
   - component: {fileID: 1339203372}
   - component: {fileID: 1339203373}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Weapon 1 Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -14782,7 +14194,7 @@ GameObject:
   - component: {fileID: 1372030972}
   - component: {fileID: 1372030973}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Weapon 3 Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -14919,7 +14331,7 @@ GameObject:
   - component: {fileID: 1393650137}
   - component: {fileID: 1393650138}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Weapon Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -15003,7 +14415,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1401782344}
   - component: {fileID: 1401782343}
-  - component: {fileID: 1401782342}
+  - component: {fileID: 1401782345}
   - component: {fileID: 1401782341}
   m_Layer: 9
   m_Name: BasicEnemy [OMNI DIRECTIONAL WEAPONS]
@@ -15039,178 +14451,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1401782342
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1401782340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c2ce4271eb287438a66893bec7fab6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sprites:
-  - {fileID: 1987580629}
-  - {fileID: 0}
-  _blinkDuration: 2
-  _glowDuration: 0.1
-  _1stColor: {r: 1, g: 0, b: 0, a: 1}
-  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
-  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  _life: 100
-  _isBoss: 0
-  _isCritical: 0
-  _canMove: 0
-  _isMoving: 0
-  _hasAttackWaves: 0
-  _speed: 2
-  _enemyType: 0
-  _flyingChaseMode: 0
-  _fireType: 0
-  _landCharacterProps:
-    GroundCheck: {fileID: 1851379073}
-    CharacterCollider: {fileID: 1401782343}
-    GroundCheckCollider: {fileID: 1851379072}
-    WallCheckCollider: {fileID: 1479839949}
-    TerrainLayerMask:
-      serializedVersion: 2
-      m_Bits: 400
-    TerrainWithoutPlatformLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-    WaterLayerMask:
-      serializedVersion: 2
-      m_Bits: 16
-    PlatformOnlyLayerMask:
-      serializedVersion: 2
-      m_Bits: 128
-    IsGrounded: 0
-    IsOnPlatform: 0
-  _flyingCharacterProps:
-    FlyingCheckCollider: {fileID: 1479839949}
-    FlyingLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-  _state: 0
-  _timeToCheckNewState: 1
-  _fireEventWhenDead: 1
-  _canStayIdle: 1
-  _canFlip: 1
-  _stateToForceChangeIfIdle: 1
-  _instantAttack: 0
-  _attackDistance: 1
-  _attackMinDistance: 0.5
-  _changeStateAfterDamage: 1
-  _stateAfterDamage: 1
-  _attackWaveController:
-    _currentWave: {fileID: 0}
-    _attackWaves: []
-  _weaponController:
-    _weaponDataList:
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 1775891645}
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 480616702}
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 583862393}
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 1644567056}
-  _rigidbody: {fileID: 1401782341}
-  _enemySprites:
-  - {fileID: 1987580629}
-  - {fileID: 0}
-  _enemyStateGeneralData:
-    _initialState: 0
-    _statesList:
-    - _name: Idle
-      _enemyState: 0
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls: []
-      _changeRate: 30
-      _possiblesStatesToRandomlyChange: 01000000
-    - _name: Patroling
-      _enemyState: 1
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1401782342}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: Patrol
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 20
-      _possiblesStatesToRandomlyChange: 00000000
-    - _name: Chasing Player
-      _enemyState: 2
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1401782342}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: ChasePlayer
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-    - _name: Attacking Player
-      _enemyState: 3
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1401782342}
-              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
-              m_MethodName: Attack
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-  _isLeft: 0
-  _isDown: 0
-  weaponIndex: 0
-  _movementDuration: 1.5
-  _timeToInvertMovement: 0.5
-  _intervalBetweenAttacks: 1
-  _distanceFromAxes: 0
 --- !u!61 &1401782343
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15283,6 +14523,178 @@ Transform:
   - {fileID: 1644567054}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1401782345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1401782340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e940002640530541936af261ade8c30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprites:
+  - {fileID: 1987580629}
+  - {fileID: 615664954}
+  - {fileID: 638876946}
+  - {fileID: 719416469}
+  - {fileID: 1655419179}
+  _blinkDuration: 2
+  _glowDuration: 0.1
+  _1stColor: {r: 1, g: 0, b: 0, a: 1}
+  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _life: 100
+  _isBoss: 0
+  _isCritical: 0
+  _canMove: 0
+  _isMoving: 0
+  _hasAttackWaves: 0
+  _speed: 2
+  _enemyType: 0
+  _flyingChaseMode: 0
+  _fireType: 0
+  _landCharacterProps:
+    GroundCheck: {fileID: 1851379073}
+    GroundCheckCollider: {fileID: 1851379072}
+    CharacterCollider: {fileID: 1754320703}
+    WallCheckCollider: {fileID: 1479839949}
+    TerrainLayerMask:
+      serializedVersion: 2
+      m_Bits: 400
+    TerrainWithoutPlatformLayerMask:
+      serializedVersion: 2
+      m_Bits: 4368
+    WaterLayerMask:
+      serializedVersion: 2
+      m_Bits: 16
+    PlatformOnlyLayerMask:
+      serializedVersion: 2
+      m_Bits: 128
+    IsGrounded: 0
+    IsOnPlatform: 0
+  _flyingCharacterProps:
+    FlyingCheckCollider: {fileID: 0}
+    FlyingLayerMask:
+      serializedVersion: 2
+      m_Bits: 0
+  _state: 0
+  _timeToCheckNewState: 1
+  _fireEventWhenDead: 1
+  _canStayIdle: 1
+  _canFlip: 1
+  _stateToForceChangeIfIdle: 0
+  _instantAttack: 0
+  _attackDistance: 1
+  _attackMinDistance: 0.5
+  _changeStateAfterDamage: 1
+  _stateAfterDamage: 1
+  _attackWaveController:
+    _currentWave: {fileID: 0}
+    _attackWaves: []
+  _weaponController:
+    _weaponDataList:
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 1775891645}
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 480616702}
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 583862393}
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 1644567056}
+  _rigidbody: {fileID: 1401782341}
+  _enemyStateGeneralData:
+    _initialState: 0
+    _statesList:
+    - _name: Idle
+      _enemyState: 0
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls: []
+      _changeRate: 30
+      _possiblesStatesToRandomlyChange: 01000000
+    - _name: Patrolling
+      _enemyState: 1
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1401782345}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Patrol
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 20
+      _possiblesStatesToRandomlyChange: 00000000
+    - _name: Chasing Player
+      _enemyState: 2
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1401782345}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: ChasePlayer
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+    - _name: Attacking Player
+      _enemyState: 3
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1401782345}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Attack
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+  _isLeft: 0
+  _isDown: 0
+  _movementDuration: 1.5
+  _timeToInvertMovement: 0.5
+  _intervalBetweenAttacks: 1
+  _distanceFromAxes: 0
+  _frontalWeaponIndex: 0
 --- !u!1 &1403033035
 GameObject:
   m_ObjectHideFlags: 0
@@ -16969,7 +16381,7 @@ GameObject:
   - component: {fileID: 1500061753}
   - component: {fileID: 1500061754}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Weapon 1 Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -17131,7 +16543,7 @@ GameObject:
   - component: {fileID: 1506079464}
   - component: {fileID: 1506079463}
   m_Layer: 0
-  m_Name: EnemySprite
+  m_Name: BossSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17177,7 +16589,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -17288,7 +16700,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1514770909}
   m_Layer: 9
-  m_Name: Attack Waves Object
+  m_Name: Attack Waves
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17308,6 +16720,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 611356640}
+  - {fileID: 641996084}
   - {fileID: 76265756}
   m_Father: {fileID: 1931408751}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -17600,7 +17013,7 @@ GameObject:
   - component: {fileID: 1524828401}
   - component: {fileID: 1524828402}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Weapon 2 Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -17674,38 +17087,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1527079667
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1527079668}
-  m_Layer: 0
-  m_Name: Rotation Pivot
-  m_TagString: Untagged
-  m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1527079668
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1527079667}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.591, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 876063814}
-  m_Father: {fileID: 1788340395}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1530362332
 GameObject:
   m_ObjectHideFlags: 0
@@ -18773,7 +18154,7 @@ GameObject:
   - component: {fileID: 1623024148}
   - component: {fileID: 1623024149}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Weapon 4 Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -19636,7 +19017,7 @@ GameObject:
   - component: {fileID: 1655419178}
   - component: {fileID: 1655419179}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Weapon 4 Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -20097,91 +19478,6 @@ MonoBehaviour:
   _upperLimit: 0
   _lowerLimit: 0
   _hasFlipped: 0
---- !u!1 &1677113336
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1677113337}
-  - component: {fileID: 1677113338}
-  m_Layer: 9
-  m_Name: Triangle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1677113337
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1677113336}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.44, y: 0, z: 0}
-  m_LocalScale: {x: 0.26, y: 0.55, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1826445851}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
---- !u!212 &1677113338
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1677113336}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224,
-    type: 3}
-  m_Color: {r: 0.07075471, g: 0.788147, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!1 &1689235961
 GameObject:
   m_ObjectHideFlags: 0
@@ -20206,14 +19502,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1689235961}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.591, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1306931872}
   m_Father: {fileID: 1284975014}
-  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1690725386
 GameObject:
   m_ObjectHideFlags: 0
@@ -20276,7 +19572,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1695985666}
   - component: {fileID: 1695985665}
-  - component: {fileID: 1695985664}
+  - component: {fileID: 1695985667}
   - component: {fileID: 1695985663}
   m_Layer: 9
   m_Name: BasicEnemy [WATER TYPE]
@@ -20312,169 +19608,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1695985664
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1695985662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c2ce4271eb287438a66893bec7fab6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sprites:
-  - {fileID: 437331090}
-  - {fileID: 0}
-  _blinkDuration: 2
-  _glowDuration: 0.1
-  _1stColor: {r: 1, g: 0, b: 0, a: 1}
-  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
-  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  _life: 100
-  _isBoss: 0
-  _isCritical: 0
-  _canMove: 1
-  _isMoving: 0
-  _hasAttackWaves: 0
-  _speed: 2
-  _enemyType: 0
-  _flyingChaseMode: 0
-  _fireType: 0
-  _landCharacterProps:
-    GroundCheck: {fileID: 1523775129}
-    CharacterCollider: {fileID: 1695985665}
-    GroundCheckCollider: {fileID: 1523775128}
-    WallCheckCollider: {fileID: 2136468105}
-    TerrainLayerMask:
-      serializedVersion: 2
-      m_Bits: 400
-    TerrainWithoutPlatformLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-    WaterLayerMask:
-      serializedVersion: 2
-      m_Bits: 16
-    PlatformOnlyLayerMask:
-      serializedVersion: 2
-      m_Bits: 128
-    IsGrounded: 0
-    IsOnPlatform: 0
-  _flyingCharacterProps:
-    FlyingCheckCollider: {fileID: 2136468105}
-    FlyingLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-  _state: 0
-  _timeToCheckNewState: 1
-  _fireEventWhenDead: 1
-  _canStayIdle: 1
-  _canFlip: 1
-  _stateToForceChangeIfIdle: 1
-  _instantAttack: 0
-  _attackDistance: 2
-  _attackMinDistance: 0.5
-  _changeStateAfterDamage: 1
-  _stateAfterDamage: 1
-  _attackWaveController:
-    _currentWave: {fileID: 0}
-    _attackWaves: []
-  _weaponController:
-    _weaponDataList:
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 190209924}
-  _rigidbody: {fileID: 1695985663}
-  _enemySprites:
-  - {fileID: 437331090}
-  - {fileID: 0}
-  _enemyStateGeneralData:
-    _initialState: 0
-    _statesList:
-    - _name: Idle
-      _enemyState: 0
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls: []
-      _changeRate: 30
-      _possiblesStatesToRandomlyChange: 01000000
-    - _name: Patroling
-      _enemyState: 1
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1695985664}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: Patrol
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 20
-      _possiblesStatesToRandomlyChange: 00000000
-    - _name: Chasing Player
-      _enemyState: 2
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1695985664}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: ChasePlayer
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-    - _name: Attacking Player
-      _enemyState: 3
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1695985664}
-              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
-              m_MethodName: Attack
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-  _isLeft: 0
-  _isDown: 0
-  weaponIndex: 0
-  _movementDuration: 1.5
-  _timeToInvertMovement: 0.5
-  _intervalBetweenAttacks: 1
-  _distanceFromAxes: 0
 --- !u!61 &1695985665
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -20540,6 +19673,166 @@ Transform:
   - {fileID: 190209926}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1695985667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1695985662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e940002640530541936af261ade8c30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprites:
+  - {fileID: 437331090}
+  - {fileID: 1188152337}
+  _blinkDuration: 2
+  _glowDuration: 0.1
+  _1stColor: {r: 1, g: 0, b: 0, a: 1}
+  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _life: 100
+  _isBoss: 0
+  _isCritical: 0
+  _canMove: 0
+  _isMoving: 0
+  _hasAttackWaves: 0
+  _speed: 2
+  _enemyType: 0
+  _flyingChaseMode: 0
+  _fireType: 0
+  _landCharacterProps:
+    GroundCheck: {fileID: 1523775129}
+    GroundCheckCollider: {fileID: 1523775128}
+    CharacterCollider: {fileID: 1695985665}
+    WallCheckCollider: {fileID: 2136468105}
+    TerrainLayerMask:
+      serializedVersion: 2
+      m_Bits: 400
+    TerrainWithoutPlatformLayerMask:
+      serializedVersion: 2
+      m_Bits: 4368
+    WaterLayerMask:
+      serializedVersion: 2
+      m_Bits: 16
+    PlatformOnlyLayerMask:
+      serializedVersion: 2
+      m_Bits: 128
+    IsGrounded: 0
+    IsOnPlatform: 0
+  _flyingCharacterProps:
+    FlyingCheckCollider: {fileID: 0}
+    FlyingLayerMask:
+      serializedVersion: 2
+      m_Bits: 0
+  _state: 0
+  _timeToCheckNewState: 1
+  _fireEventWhenDead: 1
+  _canStayIdle: 1
+  _canFlip: 1
+  _stateToForceChangeIfIdle: 0
+  _instantAttack: 0
+  _attackDistance: 1
+  _attackMinDistance: 0.5
+  _changeStateAfterDamage: 1
+  _stateAfterDamage: 1
+  _attackWaveController:
+    _currentWave: {fileID: 0}
+    _attackWaves: []
+  _weaponController:
+    _weaponDataList:
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 190209924}
+  _rigidbody: {fileID: 1695985663}
+  _enemyStateGeneralData:
+    _initialState: 0
+    _statesList:
+    - _name: Idle
+      _enemyState: 0
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls: []
+      _changeRate: 30
+      _possiblesStatesToRandomlyChange: 01000000
+    - _name: Patrolling
+      _enemyState: 1
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1695985667}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Patrol
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 20
+      _possiblesStatesToRandomlyChange: 00000000
+    - _name: Chasing Player
+      _enemyState: 2
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1695985667}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: ChasePlayer
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+    - _name: Attacking Player
+      _enemyState: 3
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1695985667}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Attack
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+  _isLeft: 0
+  _isDown: 0
+  _movementDuration: 1.5
+  _timeToInvertMovement: 0.5
+  _intervalBetweenAttacks: 1
+  _distanceFromAxes: 0
+  _frontalWeaponIndex: 0
 --- !u!1 &1703212126
 GameObject:
   m_ObjectHideFlags: 0
@@ -21354,7 +20647,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1754320704}
   - component: {fileID: 1754320703}
-  - component: {fileID: 1754320702}
+  - component: {fileID: 1754320705}
   - component: {fileID: 1754320701}
   m_Layer: 9
   m_Name: BasicEnemy [BACK WEAPON]
@@ -21390,172 +20683,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1754320702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1754320700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c2ce4271eb287438a66893bec7fab6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sprites:
-  - {fileID: 1713876931}
-  - {fileID: 0}
-  _blinkDuration: 2
-  _glowDuration: 0.1
-  _1stColor: {r: 1, g: 0, b: 0, a: 1}
-  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
-  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  _life: 100
-  _isBoss: 0
-  _isCritical: 0
-  _canMove: 0
-  _isMoving: 0
-  _hasAttackWaves: 0
-  _speed: 2
-  _enemyType: 0
-  _flyingChaseMode: 0
-  _fireType: 0
-  _landCharacterProps:
-    GroundCheck: {fileID: 1521266987}
-    CharacterCollider: {fileID: 1754320703}
-    GroundCheckCollider: {fileID: 1521266986}
-    WallCheckCollider: {fileID: 1524745462}
-    TerrainLayerMask:
-      serializedVersion: 2
-      m_Bits: 400
-    TerrainWithoutPlatformLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-    WaterLayerMask:
-      serializedVersion: 2
-      m_Bits: 16
-    PlatformOnlyLayerMask:
-      serializedVersion: 2
-      m_Bits: 128
-    IsGrounded: 0
-    IsOnPlatform: 0
-  _flyingCharacterProps:
-    FlyingCheckCollider: {fileID: 1524745462}
-    FlyingLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-  _state: 0
-  _timeToCheckNewState: 1
-  _fireEventWhenDead: 1
-  _canStayIdle: 1
-  _canFlip: 1
-  _stateToForceChangeIfIdle: 1
-  _instantAttack: 0
-  _attackDistance: 1
-  _attackMinDistance: 0.5
-  _changeStateAfterDamage: 1
-  _stateAfterDamage: 1
-  _attackWaveController:
-    _currentWave: {fileID: 0}
-    _attackWaves: []
-  _weaponController:
-    _weaponDataList:
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 772305492}
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 22485377}
-  _rigidbody: {fileID: 1754320701}
-  _enemySprites:
-  - {fileID: 1713876931}
-  - {fileID: 0}
-  _enemyStateGeneralData:
-    _initialState: 0
-    _statesList:
-    - _name: Idle
-      _enemyState: 0
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls: []
-      _changeRate: 30
-      _possiblesStatesToRandomlyChange: 01000000
-    - _name: Patroling
-      _enemyState: 1
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1754320702}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: Patrol
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 20
-      _possiblesStatesToRandomlyChange: 00000000
-    - _name: Chasing Player
-      _enemyState: 2
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1754320702}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: ChasePlayer
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-    - _name: Attacking Player
-      _enemyState: 3
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1754320702}
-              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
-              m_MethodName: Attack
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-  _isLeft: 0
-  _isDown: 0
-  weaponIndex: 0
-  _movementDuration: 1.5
-  _timeToInvertMovement: 0.5
-  _intervalBetweenAttacks: 1
-  _distanceFromAxes: 0
 --- !u!61 &1754320703
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -21626,6 +20753,170 @@ Transform:
   - {fileID: 1634021727}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1754320705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1754320700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e940002640530541936af261ade8c30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprites:
+  - {fileID: 1713876931}
+  - {fileID: 1339203373}
+  - {fileID: 1524828402}
+  _blinkDuration: 2
+  _glowDuration: 0.1
+  _1stColor: {r: 1, g: 0, b: 0, a: 1}
+  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _life: 100
+  _isBoss: 0
+  _isCritical: 0
+  _canMove: 0
+  _isMoving: 0
+  _hasAttackWaves: 0
+  _speed: 2
+  _enemyType: 0
+  _flyingChaseMode: 0
+  _fireType: 0
+  _landCharacterProps:
+    GroundCheck: {fileID: 1521266987}
+    GroundCheckCollider: {fileID: 1521266986}
+    CharacterCollider: {fileID: 1754320703}
+    WallCheckCollider: {fileID: 1524745462}
+    TerrainLayerMask:
+      serializedVersion: 2
+      m_Bits: 400
+    TerrainWithoutPlatformLayerMask:
+      serializedVersion: 2
+      m_Bits: 4368
+    WaterLayerMask:
+      serializedVersion: 2
+      m_Bits: 16
+    PlatformOnlyLayerMask:
+      serializedVersion: 2
+      m_Bits: 128
+    IsGrounded: 0
+    IsOnPlatform: 0
+  _flyingCharacterProps:
+    FlyingCheckCollider: {fileID: 0}
+    FlyingLayerMask:
+      serializedVersion: 2
+      m_Bits: 0
+  _state: 0
+  _timeToCheckNewState: 1
+  _fireEventWhenDead: 1
+  _canStayIdle: 1
+  _canFlip: 1
+  _stateToForceChangeIfIdle: 0
+  _instantAttack: 0
+  _attackDistance: 1
+  _attackMinDistance: 0.5
+  _changeStateAfterDamage: 1
+  _stateAfterDamage: 1
+  _attackWaveController:
+    _currentWave: {fileID: 0}
+    _attackWaves: []
+  _weaponController:
+    _weaponDataList:
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 772305492}
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 22485377}
+  _rigidbody: {fileID: 1754320701}
+  _enemyStateGeneralData:
+    _initialState: 0
+    _statesList:
+    - _name: Idle
+      _enemyState: 0
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls: []
+      _changeRate: 30
+      _possiblesStatesToRandomlyChange: 01000000
+    - _name: Patrolling
+      _enemyState: 1
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1754320705}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Patrol
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 20
+      _possiblesStatesToRandomlyChange: 00000000
+    - _name: Chasing Player
+      _enemyState: 2
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1754320705}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: ChasePlayer
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+    - _name: Attacking Player
+      _enemyState: 3
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1754320705}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Attack
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+  _isLeft: 0
+  _isDown: 0
+  _movementDuration: 1.5
+  _timeToInvertMovement: 0.5
+  _intervalBetweenAttacks: 1
+  _distanceFromAxes: 0
+  _frontalWeaponIndex: 0
 --- !u!1 &1763085775
 GameObject:
   m_ObjectHideFlags: 0
@@ -22070,85 +21361,6 @@ MonoBehaviour:
   _interactableLayerMask:
     serializedVersion: 2
     m_Bits: 4864
---- !u!1 &1788340392
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1788340395}
-  - component: {fileID: 1788340393}
-  - component: {fileID: 1788340394}
-  m_Layer: 0
-  m_Name: Weapon 1 [FRONT]
-  m_TagString: Untagged
-  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1788340393
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1788340392}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86516d10d2e39624087ff265c255b3f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isBackWeapon: 0
-  _referencePoint: {fileID: 1788340395}
-  _spawnTransform: {fileID: 313805330}
-  _weaponSpriteRenderer: {fileID: 876063815}
-  _rotationPivot: {fileID: 1527079667}
-  _playerDetector: {fileID: 1788340394}
-  _fireInVerticalAxis: 0
-  _overwriteScale: 1
-  _weaponScale: {x: 0.125, y: 0.1}
-  _rotateTowardsPlayer: 0
-  _rotationSpeed: 7
-  _useRotationLimit: 1
-  _rotationUpperLimit: 60
-  _rotationLowerLimit: 0
-  _upperLimit: 0
-  _lowerLimit: 0
-  _hasFlipped: 0
---- !u!114 &1788340394
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1788340392}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4719b7817d426784092b464f9ae861e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hitLayer:
-    serializedVersion: 2
-    m_Bits: 8200
-  _collider: {fileID: 2019736631}
---- !u!4 &1788340395
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1788340392}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.9, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1527079668}
-  m_Father: {fileID: 1826445851}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1807384360
 GameObject:
   m_ObjectHideFlags: 0
@@ -22158,6 +21370,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1807384361}
+  - component: {fileID: 1807384365}
+  - component: {fileID: 1807384364}
+  - component: {fileID: 1807384363}
   - component: {fileID: 1807384362}
   m_Layer: 12
   m_Name: Edges
@@ -22175,14 +21390,14 @@ Transform:
   m_GameObject: {fileID: 1807384360}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.92, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 676096181}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!68 &1807384362
-EdgeCollider2D:
+--- !u!61 &1807384362
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -22213,18 +21428,154 @@ EdgeCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -7, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 11}
   m_EdgeRadius: 0
-  m_Points:
-  - {x: -5, y: 2}
-  - {x: 5, y: 2}
-  - {x: 5, y: -6}
-  - {x: -5, y: -6}
-  - {x: -5, y: 2}
-  m_AdjacentStartPoint: {x: 0, y: 0}
-  m_AdjacentEndPoint: {x: 0, y: 0}
-  m_UseAdjacentStartPoint: 0
-  m_UseAdjacentEndPoint: 0
+--- !u!61 &1807384363
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807384360}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 7, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 11}
+  m_EdgeRadius: 0
+--- !u!61 &1807384364
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807384360}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -5}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 13, y: 1}
+  m_EdgeRadius: 0
+--- !u!61 &1807384365
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807384360}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 5}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 13, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &1808565160
 GameObject:
   m_ObjectHideFlags: 0
@@ -22343,287 +21694,6 @@ MonoBehaviour:
   _gameOverContainerObject: {fileID: 0}
   _title: {fileID: 0}
   _countdown: {fileID: 0}
---- !u!1 &1826445847
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1826445851}
-  - component: {fileID: 1826445850}
-  - component: {fileID: 1826445849}
-  - component: {fileID: 1826445848}
-  m_Layer: 9
-  m_Name: BasicEnemy [MULTIPLE WEAPONS]
-  m_TagString: Enemy
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!50 &1826445848
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826445847}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1.5
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!114 &1826445849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826445847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c2ce4271eb287438a66893bec7fab6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sprites:
-  - {fileID: 168032494}
-  - {fileID: 0}
-  _blinkDuration: 2
-  _glowDuration: 0.1
-  _1stColor: {r: 1, g: 0, b: 0, a: 1}
-  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
-  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  _life: 100
-  _isBoss: 0
-  _isCritical: 0
-  _canMove: 0
-  _isMoving: 0
-  _hasAttackWaves: 0
-  _speed: 2
-  _enemyType: 0
-  _flyingChaseMode: 0
-  _fireType: 0
-  _landCharacterProps:
-    GroundCheck: {fileID: 1030106329}
-    CharacterCollider: {fileID: 1826445850}
-    GroundCheckCollider: {fileID: 1030106328}
-    WallCheckCollider: {fileID: 533008088}
-    TerrainLayerMask:
-      serializedVersion: 2
-      m_Bits: 400
-    TerrainWithoutPlatformLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-    WaterLayerMask:
-      serializedVersion: 2
-      m_Bits: 16
-    PlatformOnlyLayerMask:
-      serializedVersion: 2
-      m_Bits: 128
-    IsGrounded: 0
-    IsOnPlatform: 0
-  _flyingCharacterProps:
-    FlyingCheckCollider: {fileID: 533008088}
-    FlyingLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-  _state: 0
-  _timeToCheckNewState: 1
-  _fireEventWhenDead: 1
-  _canStayIdle: 1
-  _canFlip: 1
-  _stateToForceChangeIfIdle: 1
-  _instantAttack: 0
-  _attackDistance: 1
-  _attackMinDistance: 0.5
-  _changeStateAfterDamage: 1
-  _stateAfterDamage: 1
-  _attackWaveController:
-    _currentWave: {fileID: 0}
-    _attackWaves: []
-  _weaponController:
-    _weaponDataList:
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 1788340393}
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 1987741096}
-  _rigidbody: {fileID: 1826445848}
-  _enemySprites:
-  - {fileID: 168032494}
-  - {fileID: 0}
-  _enemyStateGeneralData:
-    _initialState: 0
-    _statesList:
-    - _name: Idle
-      _enemyState: 0
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls: []
-      _changeRate: 30
-      _possiblesStatesToRandomlyChange: 01000000
-    - _name: Patroling
-      _enemyState: 1
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1826445849}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: Patrol
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 20
-      _possiblesStatesToRandomlyChange: 00000000
-    - _name: Chasing Player
-      _enemyState: 2
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1826445849}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: ChasePlayer
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-    - _name: Attacking Player
-      _enemyState: 3
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1826445849}
-              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
-              m_MethodName: Attack
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-  _isLeft: 0
-  _isDown: 0
-  weaponIndex: 0
-  _movementDuration: 1.5
-  _timeToInvertMovement: 0.5
-  _intervalBetweenAttacks: 1
-  _distanceFromAxes: 0
---- !u!61 &1826445850
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826445847}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.75, y: 0.75}
-  m_EdgeRadius: 0
---- !u!4 &1826445851
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826445847}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 168032495}
-  - {fileID: 1030106329}
-  - {fileID: 533008089}
-  - {fileID: 1677113337}
-  - {fileID: 2019736632}
-  - {fileID: 161406192}
-  - {fileID: 863490069}
-  - {fileID: 1788340395}
-  - {fileID: 1987741094}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1826555278
 GameObject:
   m_ObjectHideFlags: 0
@@ -23436,7 +22506,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1931408751}
   - component: {fileID: 1931408750}
-  - component: {fileID: 1931408749}
+  - component: {fileID: 1931408752}
   - component: {fileID: 1931408748}
   m_Layer: 9
   m_Name: Boss
@@ -23472,171 +22542,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1931408749
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1931408747}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c2ce4271eb287438a66893bec7fab6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sprites:
-  - {fileID: 1506079463}
-  - {fileID: 1306931873}
-  _blinkDuration: 2
-  _glowDuration: 0.1
-  _1stColor: {r: 1, g: 0, b: 0, a: 1}
-  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
-  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  _life: 100
-  _isBoss: 1
-  _isCritical: 0
-  _canMove: 0
-  _isMoving: 0
-  _hasAttackWaves: 1
-  _speed: 2
-  _enemyType: 0
-  _flyingChaseMode: 0
-  _fireType: 0
-  _landCharacterProps:
-    GroundCheck: {fileID: 467918785}
-    CharacterCollider: {fileID: 1931408750}
-    GroundCheckCollider: {fileID: 467918784}
-    WallCheckCollider: {fileID: 389725169}
-    TerrainLayerMask:
-      serializedVersion: 2
-      m_Bits: 400
-    TerrainWithoutPlatformLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-    WaterLayerMask:
-      serializedVersion: 2
-      m_Bits: 16
-    PlatformOnlyLayerMask:
-      serializedVersion: 2
-      m_Bits: 128
-    IsGrounded: 0
-    IsOnPlatform: 0
-  _flyingCharacterProps:
-    FlyingCheckCollider: {fileID: 389725169}
-    FlyingLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-  _state: 0
-  _timeToCheckNewState: 1
-  _fireEventWhenDead: 1
-  _canStayIdle: 1
-  _canFlip: 0
-  _stateToForceChangeIfIdle: 1
-  _instantAttack: 1
-  _attackDistance: 1
-  _attackMinDistance: 0.5
-  _changeStateAfterDamage: 0
-  _stateAfterDamage: 1
-  _attackWaveController:
-    _currentWave: {fileID: 76265757}
-    _attackWaves:
-    - {fileID: 611356639}
-    - {fileID: 76265757}
-  _weaponController:
-    _weaponDataList:
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 1284975012}
-  _rigidbody: {fileID: 1931408748}
-  _enemySprites:
-  - {fileID: 1506079463}
-  - {fileID: 1306931873}
-  _enemyStateGeneralData:
-    _initialState: 0
-    _statesList:
-    - _name: Idle
-      _enemyState: 0
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls: []
-      _changeRate: 30
-      _possiblesStatesToRandomlyChange: 01000000
-    - _name: Patroling
-      _enemyState: 1
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1931408749}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: Patrol
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 20
-      _possiblesStatesToRandomlyChange: 00000000
-    - _name: Chasing Player
-      _enemyState: 2
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1931408749}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: ChasePlayer
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-    - _name: Attacking Player
-      _enemyState: 3
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1931408749}
-              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
-              m_MethodName: Attack
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-  _isLeft: 0
-  _isDown: 0
-  weaponIndex: 0
-  _movementDuration: 1.5
-  _timeToInvertMovement: 0.5
-  _intervalBetweenAttacks: 1
-  _distanceFromAxes: 0
 --- !u!61 &1931408750
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -23692,7 +22597,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.144, y: 0.89, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1514770909}
@@ -23703,6 +22608,125 @@ Transform:
   - {fileID: 1284975014}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1931408752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931408747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4845cd143cc5c3b40ae01a86f0b4614e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprites:
+  - {fileID: 1506079463}
+  - {fileID: 1306931873}
+  _blinkDuration: 2
+  _glowDuration: 0.1
+  _1stColor: {r: 1, g: 0, b: 0, a: 1}
+  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _life: 500
+  _isBoss: 1
+  _isCritical: 0
+  _canMove: 0
+  _isMoving: 0
+  _hasAttackWaves: 1
+  _speed: 2
+  _enemyType: 0
+  _flyingChaseMode: 0
+  _fireType: 0
+  _landCharacterProps:
+    GroundCheck: {fileID: 467918785}
+    GroundCheckCollider: {fileID: 467918784}
+    CharacterCollider: {fileID: 1931408750}
+    WallCheckCollider: {fileID: 389725169}
+    TerrainLayerMask:
+      serializedVersion: 2
+      m_Bits: 400
+    TerrainWithoutPlatformLayerMask:
+      serializedVersion: 2
+      m_Bits: 4368
+    WaterLayerMask:
+      serializedVersion: 2
+      m_Bits: 16
+    PlatformOnlyLayerMask:
+      serializedVersion: 2
+      m_Bits: 128
+    IsGrounded: 0
+    IsOnPlatform: 0
+  _flyingCharacterProps:
+    FlyingCheckCollider: {fileID: 0}
+    FlyingLayerMask:
+      serializedVersion: 2
+      m_Bits: 0
+  _state: 0
+  _timeToCheckNewState: 2
+  _fireEventWhenDead: 1
+  _canStayIdle: 1
+  _canFlip: 1
+  _stateToForceChangeIfIdle: 0
+  _instantAttack: 1
+  _attackDistance: 1
+  _attackMinDistance: 0.5
+  _changeStateAfterDamage: 0
+  _stateAfterDamage: 0
+  _attackWaveController:
+    _currentWave: {fileID: 0}
+    _attackWaves:
+    - {fileID: 611356639}
+    - {fileID: 76265757}
+  _weaponController:
+    _weaponDataList:
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 1284975012}
+  _rigidbody: {fileID: 1931408748}
+  _enemyStateGeneralData:
+    _initialState: 0
+    _statesList:
+    - _name: Idle
+      _enemyState: 0
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls: []
+      _changeRate: 100
+      _possiblesStatesToRandomlyChange: 03000000
+    - _name: Attack
+      _enemyState: 3
+      _action:
+        _status: 0
+        _canBeCanceled: 0
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1931408752}
+              m_TargetAssemblyTypeName: Boss, Assembly-CSharp
+              m_MethodName: Attack
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 100
+      _possiblesStatesToRandomlyChange: 00000000
+  _isLeft: 1
+  _isDown: 0
+  _movementDuration: 1.5
+  _timeToInvertMovement: 0.5
+  _intervalBetweenAttacks: 1
+  _distanceFromAxes: 0
+  _frontalWeaponIndex: 0
+  _criticalModeLife: 100
 --- !u!1 &1933345906
 GameObject:
   m_ObjectHideFlags: 0
@@ -23923,7 +22947,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1960022817}
   - component: {fileID: 1960022816}
-  - component: {fileID: 1960022815}
+  - component: {fileID: 1960022818}
   - component: {fileID: 1960022814}
   m_Layer: 9
   m_Name: BasicEnemy [VERTICAL WEAPON]
@@ -23959,169 +22983,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1960022815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1960022813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c2ce4271eb287438a66893bec7fab6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sprites:
-  - {fileID: 532278921}
-  - {fileID: 0}
-  _blinkDuration: 2
-  _glowDuration: 0.1
-  _1stColor: {r: 1, g: 0, b: 0, a: 1}
-  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
-  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  _life: 100
-  _isBoss: 0
-  _isCritical: 0
-  _canMove: 0
-  _isMoving: 0
-  _hasAttackWaves: 0
-  _speed: 2
-  _enemyType: 0
-  _flyingChaseMode: 0
-  _fireType: 0
-  _landCharacterProps:
-    GroundCheck: {fileID: 1138778265}
-    CharacterCollider: {fileID: 1960022816}
-    GroundCheckCollider: {fileID: 1138778264}
-    WallCheckCollider: {fileID: 329170516}
-    TerrainLayerMask:
-      serializedVersion: 2
-      m_Bits: 400
-    TerrainWithoutPlatformLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-    WaterLayerMask:
-      serializedVersion: 2
-      m_Bits: 16
-    PlatformOnlyLayerMask:
-      serializedVersion: 2
-      m_Bits: 128
-    IsGrounded: 0
-    IsOnPlatform: 0
-  _flyingCharacterProps:
-    FlyingCheckCollider: {fileID: 329170516}
-    FlyingLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-  _state: 0
-  _timeToCheckNewState: 1
-  _fireEventWhenDead: 1
-  _canStayIdle: 1
-  _canFlip: 1
-  _stateToForceChangeIfIdle: 1
-  _instantAttack: 1
-  _attackDistance: 5
-  _attackMinDistance: 0.5
-  _changeStateAfterDamage: 1
-  _stateAfterDamage: 1
-  _attackWaveController:
-    _currentWave: {fileID: 0}
-    _attackWaves: []
-  _weaponController:
-    _weaponDataList:
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 1537384121}
-  _rigidbody: {fileID: 1960022814}
-  _enemySprites:
-  - {fileID: 532278921}
-  - {fileID: 0}
-  _enemyStateGeneralData:
-    _initialState: 0
-    _statesList:
-    - _name: Idle
-      _enemyState: 0
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls: []
-      _changeRate: 30
-      _possiblesStatesToRandomlyChange: 01000000
-    - _name: Patroling
-      _enemyState: 1
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1960022815}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: Patrol
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 20
-      _possiblesStatesToRandomlyChange: 00000000
-    - _name: Chasing Player
-      _enemyState: 2
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1960022815}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: ChasePlayer
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-    - _name: Attacking Player
-      _enemyState: 3
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 1960022815}
-              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
-              m_MethodName: Attack
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-  _isLeft: 0
-  _isDown: 0
-  weaponIndex: 0
-  _movementDuration: 1.5
-  _timeToInvertMovement: 0.5
-  _intervalBetweenAttacks: 1
-  _distanceFromAxes: 0
 --- !u!61 &1960022816
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -24188,6 +23049,166 @@ Transform:
   - {fileID: 1537384123}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1960022818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1960022813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e940002640530541936af261ade8c30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprites:
+  - {fileID: 532278921}
+  - {fileID: 1393650138}
+  _blinkDuration: 2
+  _glowDuration: 0.1
+  _1stColor: {r: 1, g: 0, b: 0, a: 1}
+  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _life: 100
+  _isBoss: 0
+  _isCritical: 0
+  _canMove: 0
+  _isMoving: 0
+  _hasAttackWaves: 0
+  _speed: 2
+  _enemyType: 0
+  _flyingChaseMode: 0
+  _fireType: 0
+  _landCharacterProps:
+    GroundCheck: {fileID: 1138778265}
+    GroundCheckCollider: {fileID: 1138778264}
+    CharacterCollider: {fileID: 1960022816}
+    WallCheckCollider: {fileID: 329170516}
+    TerrainLayerMask:
+      serializedVersion: 2
+      m_Bits: 400
+    TerrainWithoutPlatformLayerMask:
+      serializedVersion: 2
+      m_Bits: 4368
+    WaterLayerMask:
+      serializedVersion: 2
+      m_Bits: 16
+    PlatformOnlyLayerMask:
+      serializedVersion: 2
+      m_Bits: 128
+    IsGrounded: 0
+    IsOnPlatform: 0
+  _flyingCharacterProps:
+    FlyingCheckCollider: {fileID: 0}
+    FlyingLayerMask:
+      serializedVersion: 2
+      m_Bits: 0
+  _state: 0
+  _timeToCheckNewState: 1
+  _fireEventWhenDead: 1
+  _canStayIdle: 1
+  _canFlip: 1
+  _stateToForceChangeIfIdle: 0
+  _instantAttack: 0
+  _attackDistance: 1
+  _attackMinDistance: 0.5
+  _changeStateAfterDamage: 1
+  _stateAfterDamage: 1
+  _attackWaveController:
+    _currentWave: {fileID: 0}
+    _attackWaves: []
+  _weaponController:
+    _weaponDataList:
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 1537384121}
+  _rigidbody: {fileID: 1960022814}
+  _enemyStateGeneralData:
+    _initialState: 0
+    _statesList:
+    - _name: Idle
+      _enemyState: 0
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls: []
+      _changeRate: 30
+      _possiblesStatesToRandomlyChange: 01000000
+    - _name: Patrolling
+      _enemyState: 1
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1960022818}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Patrol
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 20
+      _possiblesStatesToRandomlyChange: 00000000
+    - _name: Chasing Player
+      _enemyState: 2
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1960022818}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: ChasePlayer
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+    - _name: Attacking Player
+      _enemyState: 3
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 1960022818}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Attack
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+  _isLeft: 0
+  _isDown: 0
+  _movementDuration: 1.5
+  _timeToInvertMovement: 0.5
+  _intervalBetweenAttacks: 1
+  _distanceFromAxes: 0
+  _frontalWeaponIndex: 0
 --- !u!1 &1961017793
 GameObject:
   m_ObjectHideFlags: 0
@@ -24676,85 +23697,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1401782344}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1987741093
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1987741094}
-  - component: {fileID: 1987741096}
-  - component: {fileID: 1987741095}
-  m_Layer: 0
-  m_Name: Weapon 2 [VERTICAL]
-  m_TagString: Untagged
-  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1987741094
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1987741093}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 0.914, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 603847643}
-  m_Father: {fileID: 1826445851}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!114 &1987741095
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1987741093}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4719b7817d426784092b464f9ae861e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hitLayer:
-    serializedVersion: 2
-    m_Bits: 8200
-  _collider: {fileID: 161406191}
---- !u!114 &1987741096
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1987741093}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86516d10d2e39624087ff265c255b3f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isBackWeapon: 0
-  _referencePoint: {fileID: 1987741094}
-  _spawnTransform: {fileID: 443882996}
-  _weaponSpriteRenderer: {fileID: 329895806}
-  _rotationPivot: {fileID: 603847642}
-  _playerDetector: {fileID: 1987741095}
-  _fireInVerticalAxis: 1
-  _overwriteScale: 1
-  _weaponScale: {x: 0.125, y: 0.1}
-  _rotateTowardsPlayer: 0
-  _rotationSpeed: 7
-  _useRotationLimit: 1
-  _rotationUpperLimit: 60
-  _rotationLowerLimit: 0
-  _upperLimit: 0
-  _lowerLimit: 0
-  _hasFlipped: 0
 --- !u!1 &1995102390
 GameObject:
   m_ObjectHideFlags: 0
@@ -25084,83 +24026,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 615435ddce9d73f4ebfabf8a85c07f8c, type: 3}
---- !u!1 &2019736630
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2019736632}
-  - component: {fileID: 2019736631}
-  m_Layer: 0
-  m_Name: PlayerDetectorCollider [FRONT]
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!61 &2019736631
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2019736630}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 1.5, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 3, y: 4}
-  m_EdgeRadius: 0
---- !u!4 &2019736632
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2019736630}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.4, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1826445851}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2046103754
 GameObject:
   m_ObjectHideFlags: 0
@@ -25171,7 +24036,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2046103757}
   - component: {fileID: 2046103759}
-  - component: {fileID: 2046103755}
+  - component: {fileID: 2046103760}
   - component: {fileID: 2046103758}
   m_Layer: 9
   m_Name: BasicEnemy
@@ -25180,169 +24045,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &2046103755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2046103754}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c2ce4271eb287438a66893bec7fab6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sprites:
-  - {fileID: 1016685582}
-  - {fileID: 0}
-  _blinkDuration: 2
-  _glowDuration: 0.1
-  _1stColor: {r: 1, g: 0, b: 0, a: 1}
-  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
-  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  _life: 100
-  _isBoss: 0
-  _isCritical: 0
-  _canMove: 0
-  _isMoving: 0
-  _hasAttackWaves: 0
-  _speed: 2
-  _enemyType: 0
-  _flyingChaseMode: 0
-  _fireType: 0
-  _landCharacterProps:
-    GroundCheck: {fileID: 2137795402}
-    CharacterCollider: {fileID: 2046103759}
-    GroundCheckCollider: {fileID: 2137795403}
-    WallCheckCollider: {fileID: 285566019}
-    TerrainLayerMask:
-      serializedVersion: 2
-      m_Bits: 400
-    TerrainWithoutPlatformLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-    WaterLayerMask:
-      serializedVersion: 2
-      m_Bits: 16
-    PlatformOnlyLayerMask:
-      serializedVersion: 2
-      m_Bits: 128
-    IsGrounded: 0
-    IsOnPlatform: 0
-  _flyingCharacterProps:
-    FlyingCheckCollider: {fileID: 285566019}
-    FlyingLayerMask:
-      serializedVersion: 2
-      m_Bits: 4368
-  _state: 0
-  _timeToCheckNewState: 1
-  _fireEventWhenDead: 1
-  _canStayIdle: 1
-  _canFlip: 1
-  _stateToForceChangeIfIdle: 1
-  _instantAttack: 0
-  _attackDistance: 1
-  _attackMinDistance: 0.5
-  _changeStateAfterDamage: 1
-  _stateAfterDamage: 1
-  _attackWaveController:
-    _currentWave: {fileID: 0}
-    _attackWaves: []
-  _weaponController:
-    _weaponDataList:
-    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
-        type: 2}
-      _weaponGameObjectData: {fileID: 1625006057}
-  _rigidbody: {fileID: 2046103758}
-  _enemySprites:
-  - {fileID: 1016685582}
-  - {fileID: 0}
-  _enemyStateGeneralData:
-    _initialState: 0
-    _statesList:
-    - _name: Idle
-      _enemyState: 0
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls: []
-      _changeRate: 30
-      _possiblesStatesToRandomlyChange: 01000000
-    - _name: Patroling
-      _enemyState: 1
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 2046103755}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: Patrol
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 20
-      _possiblesStatesToRandomlyChange: 00000000
-    - _name: Chasing Player
-      _enemyState: 2
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 2046103755}
-              m_TargetAssemblyTypeName: BasicEnemy, Assembly-CSharp
-              m_MethodName: ChasePlayer
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-    - _name: Attacking Player
-      _enemyState: 3
-      _action:
-        _status: 0
-        _canBeCanceled: 1
-        _actionToPerform:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 2046103755}
-              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
-              m_MethodName: Attack
-              m_Mode: 1
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
-      _changeRate: 0
-      _possiblesStatesToRandomlyChange: 
-  _isLeft: 0
-  _isDown: 0
-  weaponIndex: 0
-  _movementDuration: 1.5
-  _timeToInvertMovement: 0.5
-  _intervalBetweenAttacks: 1
-  _distanceFromAxes: 0
 --- !u!4 &2046103757
 Transform:
   m_ObjectHideFlags: 0
@@ -25436,6 +24138,166 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.75, y: 0.75}
   m_EdgeRadius: 0
+--- !u!114 &2046103760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046103754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e940002640530541936af261ade8c30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprites:
+  - {fileID: 1016685582}
+  - {fileID: 2065186292}
+  _blinkDuration: 2
+  _glowDuration: 0.1
+  _1stColor: {r: 1, g: 0, b: 0, a: 1}
+  _2ndColor: {r: 0, g: 0, b: 0, a: 1}
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _life: 100
+  _isBoss: 0
+  _isCritical: 0
+  _canMove: 0
+  _isMoving: 0
+  _hasAttackWaves: 0
+  _speed: 2
+  _enemyType: 0
+  _flyingChaseMode: 0
+  _fireType: 0
+  _landCharacterProps:
+    GroundCheck: {fileID: 2137795402}
+    GroundCheckCollider: {fileID: 2137795403}
+    CharacterCollider: {fileID: 2046103759}
+    WallCheckCollider: {fileID: 285566019}
+    TerrainLayerMask:
+      serializedVersion: 2
+      m_Bits: 400
+    TerrainWithoutPlatformLayerMask:
+      serializedVersion: 2
+      m_Bits: 4368
+    WaterLayerMask:
+      serializedVersion: 2
+      m_Bits: 16
+    PlatformOnlyLayerMask:
+      serializedVersion: 2
+      m_Bits: 128
+    IsGrounded: 0
+    IsOnPlatform: 0
+  _flyingCharacterProps:
+    FlyingCheckCollider: {fileID: 0}
+    FlyingLayerMask:
+      serializedVersion: 2
+      m_Bits: 0
+  _state: 0
+  _timeToCheckNewState: 1
+  _fireEventWhenDead: 1
+  _canStayIdle: 1
+  _canFlip: 1
+  _stateToForceChangeIfIdle: 0
+  _instantAttack: 0
+  _attackDistance: 2
+  _attackMinDistance: 1
+  _changeStateAfterDamage: 1
+  _stateAfterDamage: 1
+  _attackWaveController:
+    _currentWave: {fileID: 0}
+    _attackWaves: []
+  _weaponController:
+    _weaponDataList:
+    - _weaponScriptableObject: {fileID: 11400000, guid: f288b513ed251e54087fb2ddc905403b,
+        type: 2}
+      _weaponGameObjectData: {fileID: 1625006057}
+  _rigidbody: {fileID: 2046103758}
+  _enemyStateGeneralData:
+    _initialState: 0
+    _statesList:
+    - _name: Idle
+      _enemyState: 0
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls: []
+      _changeRate: 30
+      _possiblesStatesToRandomlyChange: 01000000
+    - _name: Patrolling
+      _enemyState: 1
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 2046103760}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Patrol
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 20
+      _possiblesStatesToRandomlyChange: 00000000
+    - _name: Chasing Player
+      _enemyState: 2
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 2046103760}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: ChasePlayer
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+    - _name: Attacking Player
+      _enemyState: 3
+      _action:
+        _status: 0
+        _canBeCanceled: 1
+        _actionToPerform:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 2046103760}
+              m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+              m_MethodName: Attack
+              m_Mode: 1
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+      _changeRate: 0
+      _possiblesStatesToRandomlyChange: 
+  _isLeft: 0
+  _isDown: 0
+  _movementDuration: 1.5
+  _timeToInvertMovement: 0.5
+  _intervalBetweenAttacks: 1
+  _distanceFromAxes: 0
+  _frontalWeaponIndex: 0
 --- !u!1 &2065186290
 GameObject:
   m_ObjectHideFlags: 0
@@ -25447,7 +24309,7 @@ GameObject:
   - component: {fileID: 2065186291}
   - component: {fileID: 2065186292}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Weapon 1 Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -25532,7 +24394,7 @@ GameObject:
   - component: {fileID: 2065376786}
   - component: {fileID: 2065376787}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Weapon 2 Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -26702,7 +25564,6 @@ SceneRoots:
   - {fileID: 1931408751}
   - {fileID: 2046103757}
   - {fileID: 1754320704}
-  - {fileID: 1826445851}
   - {fileID: 1401782344}
   - {fileID: 33988896}
   - {fileID: 1960022817}

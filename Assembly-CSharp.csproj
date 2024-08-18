@@ -69,7 +69,6 @@
     <Compile Include="Assets\Scripts\UI\CursorPosition.cs" />
     <Compile Include="Assets\Scripts\Inventory\SpecialItem.cs" />
     <Compile Include="Assets\Scripts\Scenes\SceneController.cs" />
-    <Compile Include="Assets\Scripts\Enemies\BasicEnemy.cs" />
     <Compile Include="Assets\Scripts\SharedData\Constants.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Enemies\AttackWavesController.cs" />
@@ -143,6 +142,7 @@
     <Compile Include="Assets\Scripts\UI\ContinueButtonSetInteractable.cs" />
     <Compile Include="Assets\Scripts\ControllerBackup\ControllerBackup.cs" />
     <Compile Include="Assets\Scripts\UI\MenuWithCursor.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Boss.cs" />
     <Compile Include="Assets\Scripts\Pooling\ObjectPool.cs" />
     <Compile Include="Assets\Scripts\Attributes\DrawIfBoolEqualsToAttribute.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyWeaponController.cs" />

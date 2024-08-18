@@ -53,7 +53,7 @@ public class PlayerDetector : MonoBehaviour
 
         if(Physics2D.OverlapCollider(_collider, _contactFilter, results) > 0)
         {
-            detectedPlayer = results.First(contactedObject =>
+            detectedPlayer = results.FirstOrDefault(contactedObject =>
                 contactedObject.TryGetComponent(out _damageableObject)          // ... and is something which the enemy can damage
                 && SharedFunctions.DamageableObjectIsPlayer(_damageableObject)  // ... and this object is a player.
             );
