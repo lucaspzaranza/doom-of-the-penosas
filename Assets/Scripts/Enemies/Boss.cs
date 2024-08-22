@@ -1,10 +1,13 @@
 using SharedData.Enumerations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Boss : Enemy
 {
+    public static Action OnBossDefeated;
+
     [Tooltip("The life value necessary to activate the Boss Critical Mode.")]
     [SerializeField] protected int _criticalModeLife;
     public int CriticalModeLife => _criticalModeLife;
@@ -99,18 +102,11 @@ public class Boss : Enemy
 
         if (status == EnemyActionStatus.Started)
             SelectWeaponOrWaveAndAttack();
-        //else if (status == EnemyActionStatus.Performed)
-        //{
-        //    _intervalBetweenAttacksTimeCounter += Time.deltaTime;
+    }
 
-        //    if (_intervalBetweenAttacksTimeCounter >= _intervalBetweenAttacks)
-        //    {
-        //        _intervalBetweenAttacksTimeCounter = 0;
-        //        _attackDurationTimeCounter = 0;
-        //        _fireRateCounter = 0;
-        //        EnemyStateGeneralData.CurrentState.Action.SetActionStatusStarted();
-        //        return;
-        //    }
-        //}
+    protected override void Death()
+    {
+        OnBossDefeated?.Invoke();
+        Destroy(gameObject);
     }
 }

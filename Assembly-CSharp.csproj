@@ -102,6 +102,7 @@
     <Compile Include="Assets\Scripts\Player\PlayerDataPrefabs.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemSlot.cs" />
     <Compile Include="Assets\Scripts\Weapons\TimeBomb.cs" />
+    <Compile Include="Assets\Scripts\Cut Scenes\CutSceneController.cs" />
     <Compile Include="Assets\Scripts\Inventory\Armor.cs" />
     <Compile Include="Assets\Scripts\Player\Parachute.cs" />
     <Compile Include="Assets\Scripts\Weapons\AutoRotate.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Assets\Scripts\Interfaces\IController.cs" />
     <Compile Include="Assets\Scripts\Weapons\Projectile.cs" />
     <Compile Include="Assets\Input System\PlayerInput.cs" />
+    <Compile Include="Assets\Scripts\Cut Scenes\CutSceneSO.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyAction.cs" />
     <Compile Include="Assets\Scripts\Inventory\Mayday.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IUIController.cs" />
