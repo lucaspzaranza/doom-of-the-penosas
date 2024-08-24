@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CutSceneController : Controller
 {
+    [SerializeField] private CutSceneSO _currentCutscene;
+    public CutSceneSO CurrentCutscene => _currentCutscene;
+
     public override void Dispose()
     {
         throw new System.NotImplementedException();
