@@ -157,7 +157,7 @@ public static class ConstantNumbers
 
 public static class ScenesBuildIndexes
 {
-    public const int MainMenu = 0;
+    public const int  MainMenu = 0;
     public const int MapaMundi = 1;
     public const int _1stStage = 2;
     public const int _2ndStage = 3;
@@ -165,6 +165,8 @@ public static class ScenesBuildIndexes
     public const int _4thStage = 5;
     public const int _5thStage = 6;
     public const int _6thStage = 7;
+    public const int   EndGame = 8;
+    public const int  CutScene = 9;
 }
 
 public static class PlayerConsts

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,12 @@ using UnityEngine.Video;
 [CreateAssetMenu(fileName = "CutScene", menuName = "ScriptableObjects/CutScenes")]
 public class CutSceneSO : ScriptableObject
 {
+    public static Action OnCutSceneSkip;
+    public static Action OnNextStepButtonPressed;
+
+    [SerializeField] private string _name;
+    public string Name => _name;
+
     [SerializeField] private bool _skippable;
     public bool Skippable => _skippable;
 
@@ -20,30 +27,41 @@ public class CutSceneSO : ScriptableObject
         _stepCounter = 0;
     }
 
-    private void OnDisable()
+    public void NextStepButtonPressed()
     {
-        _stepCounter = 0;
+        OnNextStepButtonPressed?.Invoke();
     }
 
     public void NextStep()
     {
         _stepCounter++;
+        if (_stepCounter >= Steps.Count)
+            Skip();
+        else
+            PlayStep(_stepCounter);
     }
 
-    public void ShowStep(int index)
+    public void PlayStep(int index)
     {
-
+        Steps[index].InitializeStep();
     }
 
     public void Skip()
     {
-
+        Debug.Log($"_stepCounter: {_stepCounter}, Steps.Count: {Steps.Count}");
+        if(_stepCounter >= Steps.Count || Skippable)
+        {
+            _stepCounter = 0;
+            OnCutSceneSkip.Invoke();
+        }
     }
 }
 
 [System.Serializable]
 public class CutSceneStep
 {
+    public static Action<CutSceneStep> OnStepInitialized;
+
     [SerializeField] private bool _useVideoInsteadSprite;
     public bool UseVideoInsteadSprite => _useVideoInsteadSprite;
 
@@ -62,4 +80,9 @@ public class CutSceneStep
     [TextArea]
     [SerializeField] private string _text;
     public string Text => _text;
+
+    public void InitializeStep()
+    {
+        OnStepInitialized?.Invoke(this);
+    }
 }

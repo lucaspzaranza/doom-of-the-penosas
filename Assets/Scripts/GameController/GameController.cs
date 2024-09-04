@@ -62,6 +62,9 @@ public class GameController : Controller
     [SerializeField] private StageController _stageController;
     public StageController StageController => _stageController;
 
+    [SerializeField] private CutSceneController _cutSceneController;
+    public CutSceneController CutSceneController => _cutSceneController;
+
     #endregion
 
     private void Awake()
@@ -86,6 +89,7 @@ public class GameController : Controller
         UIController.Setup();
         SceneController.Setup();
         PersistenceController.Setup();
+        CutSceneController.Setup();
 
         EventHandlerSetup();       
     }
@@ -101,6 +105,8 @@ public class GameController : Controller
         UIController.OnCountdownIsOver += GameOver;
 
         SceneController.OnSceneLoaded += HandleOnSceneLoaded;
+
+        CutSceneController.OnCutSceneSkipRequest += QuitCutScene;
 
         PauseMenu.OnResume += ResumeGame;
         PauseMenu.OnBackToMainMenu += BackToMainMenuButton;
@@ -124,6 +130,8 @@ public class GameController : Controller
         UIController.OnCountdownIsOver -= GameOver;
 
         SceneController.OnSceneLoaded -= HandleOnSceneLoaded;
+
+        CutSceneController.OnCutSceneSkipRequest += QuitCutScene;
 
         PauseMenu.OnResume -= ResumeGame;
         PauseMenu.OnBackToMainMenu -= BackToMainMenuButton;
@@ -179,14 +187,23 @@ public class GameController : Controller
     {
         UIController.DisposeLobbyController();
         SelectCharacters(characterSelectionList);
-        SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
+        SceneController.LoadScene(ScenesBuildIndexes.CutScene);
+    }
 
-        UIController.InstantiateMapaMundiController();
+    public void QuitCutScene()
+    {
+        print("QuitCutScene");
+        if(GameStatus == GameStatus.Cutscene)
+        {
+            SetGameStatus(GameStatus.Menu);
+            SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
+            UIController.InstantiateMapaMundiController();
+        }
     }
 
     private void HandleOnSceneLoaded(Scene scene)
     {
-        if(scene.buildIndex == ScenesBuildIndexes.MainMenu && GameStatus == GameStatus.Loading)
+        if (scene.buildIndex == ScenesBuildIndexes.MainMenu && GameStatus == GameStatus.Loading)
         {
             SetGameStatus(GameStatus.Menu);
 
@@ -197,12 +214,19 @@ public class GameController : Controller
         {
             InstantiateStageController();
         }
-        else if(scene.buildIndex >= ScenesBuildIndexes._1stStage && 
-        scene.buildIndex <= ScenesBuildIndexes._6thStage && 
+        else if (scene.buildIndex >= ScenesBuildIndexes._1stStage &&
+        scene.buildIndex <= ScenesBuildIndexes._6thStage &&
         GameStatus == GameStatus.Loading)
         {
             UIController.SelectGameSceneCanvas();
             PutPlayerOnStage(scene);
+        }
+        else if (scene.buildIndex == ScenesBuildIndexes.CutScene) 
+        {
+            SetGameStatus(GameStatus.Cutscene);
+            CutSceneController.gameObject.SetActive(true);
+            //CutSceneController.LoadCutSceneMediaComponents();
+            CutSceneController.PlayCutScene();
         }
     }
 
@@ -263,7 +287,11 @@ public class GameController : Controller
     private void InstantiateStageController()
     {
         if (_stageController != null)
+        {
+            _stageController.Setup();
+            _stageController.OnStageClear += HandleOnStageClear;
             return;
+        }
 
         var stagePrefab = GetControllerFromPrefabList<StageController>();
         if (_stageController == null && stagePrefab != null)

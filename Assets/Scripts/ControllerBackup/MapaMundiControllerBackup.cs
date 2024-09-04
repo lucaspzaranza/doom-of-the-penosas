@@ -31,7 +31,6 @@ public class MapaMundiControllerBackup : ControllerBackup
             mapaMundiController.FireBackToMainMenuEvent();
         });
 
-        // Man, I have to find a way to do this with some loop instead using these hard coded values...
         _stageButtons[0].onClick.AddListener(() =>
         {
             mapaMundiController.SelectSceneIndex(ScenesBuildIndexes._1stStage);

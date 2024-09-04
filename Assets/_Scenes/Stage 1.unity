@@ -16199,7 +16199,7 @@ PrefabInstance:
     - target: {fileID: 6435880766563690141, guid: f2bd2c97fcedbef4b94d7e2c1fd75773,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -23744,7 +23744,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1998760475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23772,6 +23772,7 @@ MonoBehaviour:
   _poolController: {fileID: 801533974}
   _sceneController: {fileID: 791162813}
   _stageController: {fileID: 215518619}
+  _cutSceneController: {fileID: 0}
 --- !u!4 &1998760476
 Transform:
   m_ObjectHideFlags: 0
