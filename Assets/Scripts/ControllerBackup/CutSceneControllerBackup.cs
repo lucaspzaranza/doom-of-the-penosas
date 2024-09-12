@@ -21,8 +21,14 @@ public class CutSceneControllerBackup : ControllerBackup
     [SerializeField] private VideoPlayer _videoPlayer;
     public VideoPlayer VideoPlayer => _videoPlayer;
 
+    [SerializeField] private GameObject _videoPlayerGameObject;
+    public GameObject VideoPlayerGameObject => _videoPlayerGameObject;
+
     [SerializeField] private Image _image;
     public Image Image => _image;
+
+    [SerializeField] private GameObject _fadeInOut;
+    public GameObject FadeInOut => _fadeInOut;
 
     protected override Type GetControllerType() => typeof(CutSceneController);
 
@@ -38,7 +44,8 @@ public class CutSceneControllerBackup : ControllerBackup
 
         _nextStepBtn.onClick.AddListener(() =>
         {
-            cutSceneController.CurrentCutscene.NextStepButtonPressed();
+            if(cutSceneController.CanNextStep)
+                cutSceneController.CurrentCutscene.NextStepButtonPressed();
         });
 
         _skipBtn.interactable = cutSceneController.CurrentCutscene.Skippable;

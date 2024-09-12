@@ -25,6 +25,8 @@ public class StageController : ControllerUnit
     [SerializeField] private RideArmorType _rideArmorRequired;
     public RideArmorType RideArmorRequired => _rideArmorRequired;
 
+    private bool _fKeyPressed = false;
+
     public override void Setup()
     {
         base.Setup();
@@ -39,7 +41,7 @@ public class StageController : ControllerUnit
     public override void Dispose()
     {
         RideArmor.OnRideArmorEquipped -= HandleOnRideArmorEquipped;
-        RideArmor.OnRideArmorChangedRequired += HandleOnRideArmorChangedRequired;
+        RideArmor.OnRideArmorChangedRequired -= HandleOnRideArmorChangedRequired;
 
         Boss.OnBossDefeated -= HandleOnBossDefeated;
     }
@@ -47,9 +49,15 @@ public class StageController : ControllerUnit
     // FOR TEST PURPOSES ONLY! REMOVE THIS!
     private void Update()
     {
+        if (_fKeyPressed)
+            return;
+
         if(Input.GetKeyDown(KeyCode.F) && 
             TryToGetGameControllerFromParent().GameStatus == GameStatus.InGame)
+        {
+            _fKeyPressed = true;
             HandleOnBossDefeated();
+        }
     }
     
     public void ResetAllStagesClear()
@@ -106,11 +114,12 @@ public class StageController : ControllerUnit
     /// </summary>
     public void HandleOnBossDefeated()
     {
-        print("HandleOnBossDefeated");
         StartCoroutine(nameof(StageClearEvent));
         OnStageClear?.Invoke(_currentStage);
 
         if(!_currentStage.StageClear)
             _currentStage.SetStageclear(true);
+
+        _fKeyPressed = false;
     }
 }

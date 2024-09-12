@@ -40,7 +40,6 @@ public class GameController : Controller
     public IReadOnlyList<InputDevice> SelectedDevices => _selectedDevices;
 
     public bool GameIsPaused => Time.timeScale == 0f;
-
     private bool IsSingleInstance => instance == this;
 
     [Header("Controllers")]
@@ -64,6 +63,8 @@ public class GameController : Controller
 
     [SerializeField] private CutSceneController _cutSceneController;
     public CutSceneController CutSceneController => _cutSceneController;
+
+    private int _nextStageIndex;
 
     #endregion
 
@@ -187,18 +188,23 @@ public class GameController : Controller
     {
         UIController.DisposeLobbyController();
         SelectCharacters(characterSelectionList);
-        SceneController.LoadScene(ScenesBuildIndexes.CutScene);
+        if(IsNewGame)
+            SceneController.LoadScene(ScenesBuildIndexes.CutScene);
+        else
+            InstantiateMapaMundiMenu();
     }
 
     public void QuitCutScene()
     {
-        print("QuitCutScene");
-        if(GameStatus == GameStatus.Cutscene)
-        {
-            SetGameStatus(GameStatus.Menu);
-            SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
-            UIController.InstantiateMapaMundiController();
-        }
+        if (GameStatus == GameStatus.Cutscene)
+            InstantiateMapaMundiMenu();
+    }
+
+    private void InstantiateMapaMundiMenu()
+    {        
+        SetGameStatus(GameStatus.Menu);
+        SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
+        UIController.InstantiateMapaMundiController();
     }
 
     private void HandleOnSceneLoaded(Scene scene)
@@ -225,8 +231,6 @@ public class GameController : Controller
         {
             SetGameStatus(GameStatus.Cutscene);
             CutSceneController.gameObject.SetActive(true);
-            //CutSceneController.LoadCutSceneMediaComponents();
-            CutSceneController.PlayCutScene();
         }
     }
 
@@ -263,14 +267,21 @@ public class GameController : Controller
             var instance = Instantiate(playerControllerPrefab, transform);
             _playerController = instance.GetComponent<PlayerController>();
             _playerController.Setup(_characterSelectionList, _selectedDevices);
-
-            _playerController.OnCountdownActivation += HandleOnCoutdownActivation;
-            _playerController.OnPlayerPause += HandleOnPlayerPause;            
-            _playerController.OnPlayerGameOver += GameOver;            
-            _playerController.OnPlayersExchanged += HandleOnPlayersExchanged;            
         }
         else
             _playerController.Setup(_characterSelectionList, _selectedDevices);
+
+        if(_playerController.OnCountdownActivation == null)
+            _playerController.OnCountdownActivation += HandleOnCoutdownActivation;
+
+        if(_playerController.OnPlayerPause == null)
+            _playerController.OnPlayerPause += HandleOnPlayerPause;
+
+        if(_playerController.OnPlayerGameOver == null)
+            _playerController.OnPlayerGameOver += GameOver;
+
+        if(_playerController.OnPlayersExchanged == null)
+            _playerController.OnPlayersExchanged += HandleOnPlayersExchanged;
     }
 
     private void InstantiatePoolController()
@@ -303,15 +314,6 @@ public class GameController : Controller
         }
     }
 
-    private IEnumerator WaitAndLoadNextStage(int nextStageIndex)
-    {
-        PlayerController.RemoveInputController();
-        yield return new WaitForSeconds(ConstantNumbers.TimeToShowStageClearTxt);
-
-        SetGameStatus(GameStatus.Loading);
-        SceneController.LoadScene(nextStageIndex);
-    }
-
     private void HandleOnStageClear(StageSO currentStageSO)
     {
         if(IsNewGame)
@@ -324,7 +326,17 @@ public class GameController : Controller
         }
 
         UIController.PlayerInGameUIController.Dispose();
-        StartCoroutine(WaitAndLoadNextStage(currentStageSO.SceneIndex + 1));
+        PlayerController.RemoveInputController();
+
+        _nextStageIndex = currentStageSO.SceneIndex + 1;
+        //print("_nextStageIndex: " + _nextStageIndex);
+        Invoke(nameof(LoadNextStage), ConstantNumbers.TimeToShowStageClearTxt);
+    }
+
+    private void LoadNextStage()
+    {
+        SetGameStatus(GameStatus.Loading);
+        SceneController.LoadScene(_nextStageIndex);
     }
 
     private void HandleOnGameSceneSelectedIndex(int buildIndex)
@@ -378,6 +390,14 @@ public class GameController : Controller
         }
 
         UIController.PlayerInGameUIController.Dispose();
+
+        //print(StageController == null);
+        if (StageController != null)
+        {
+            StageController.OnStageClear -= HandleOnStageClear;
+            StageController.Dispose();
+        }
+
         SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
     }
 

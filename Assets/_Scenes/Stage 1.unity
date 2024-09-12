@@ -8023,7 +8023,7 @@ PrefabInstance:
     - target: {fileID: 742759606539004931, guid: 54f11de70eea196468bf5d8408b554b7,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -22628,7 +22628,7 @@ MonoBehaviour:
   _1stColor: {r: 1, g: 0, b: 0, a: 1}
   _2ndColor: {r: 0, g: 0, b: 0, a: 1}
   _defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  _life: 500
+  _life: 60
   _isBoss: 1
   _isCritical: 0
   _canMove: 0
@@ -23942,7 +23942,7 @@ PrefabInstance:
     - target: {fileID: 742759606539004931, guid: f63c14b2c49b1ab4faf526b885493058,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

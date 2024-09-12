@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Jobs;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -22,11 +23,21 @@ public class CutSceneController : ControllerUnit
     public Image Image => _image;
 
     [DrawItDisabled, SerializeField] private VideoPlayer _videoPlayer;
-    public VideoPlayer VideoPlayer => _videoPlayer;
+    public VideoPlayer VideoPlayerProp => _videoPlayer;
+
+    [SerializeField] private GameObject _videoPlayerGameObject;
+    public GameObject VideoPlayerGameObject => _videoPlayerGameObject;
 
     [DrawItDisabled, SerializeField] private TextMeshProUGUI _stepText;
     public TextMeshProUGUI StepText => _stepText;
 
+    [SerializeField] private GameObject _fadeInOut;
+    public GameObject FadeInOut => _fadeInOut;
+
+    private bool _canNextStep;
+    public bool CanNextStep => _canNextStep;
+
+    private CutSceneControllerBackup _cutSceneBackup;
     private CutSceneStep _currentStep;
     private bool _showTextInProgress;
     private string _currentText;
@@ -43,6 +54,10 @@ public class CutSceneController : ControllerUnit
         CutSceneSO.OnNextStepButtonPressed += HandleOnNextStepButtonPressed;
         _showTextInProgress = false;
         _currentText = string.Empty;
+
+        NextStepAnimationEvent.OnNextStepAnimationEvent += ShowNextStep;
+
+        _canNextStep = true;
     }
 
     public override void Dispose()
@@ -51,6 +66,8 @@ public class CutSceneController : ControllerUnit
         CutSceneSO.OnCutSceneSkip -= HandleOnCutSceneSkip;
         CutSceneSO.OnNextStepButtonPressed -= HandleOnNextStepButtonPressed;
         CutSceneStep.OnStepInitialized -= HandleOnStepInitialized;
+
+        NextStepAnimationEvent.OnNextStepAnimationEvent -= ShowNextStep;
     }
 
     private void Update()
@@ -76,23 +93,19 @@ public class CutSceneController : ControllerUnit
     public override void LoadGameObjectsReferencesFromControllerBackup(ControllerBackup backup)
     {
         CutSceneControllerBackup cutSceneBackup = backup as CutSceneControllerBackup;
+        _cutSceneBackup = cutSceneBackup;
 
         _videoPlayer = cutSceneBackup.VideoPlayer;
         _image = cutSceneBackup.Image;
         _stepText = cutSceneBackup.CutSceneTMPro;
+        _fadeInOut = cutSceneBackup.FadeInOut;
+        _videoPlayerGameObject = cutSceneBackup.VideoPlayerGameObject;
 
         if (_stepText != null)
             _stepText.text = string.Empty;
-    }
 
-    //public void LoadCutSceneMediaComponents()
-    //{
-    //    _videoPlayer = FindObjectOfType<VideoPlayer>();
-    //    _image = FindObjectOfType<Image>();
-    //    _stepText = FindObjectOfType<TextMeshProUGUI>();
-    //    if(_stepText != null)
-    //        _stepText.text = string.Empty;
-    //}
+        PlayCutScene();
+    }
 
     private void ResetTextDisplayCounterData()
     {
@@ -114,12 +127,38 @@ public class CutSceneController : ControllerUnit
         ResetTextDisplayCounterData();
     }
 
+    private void ShowNextStep()
+    {
+        if (_currentStep.UseVideoInsteadSprite)
+        {
+            VideoPlayerProp.Stop();
+            VideoPlayerProp.frame = 0;
+        }
+
+        _currentCutscene.NextStep();
+        _canNextStep = true;
+    }
+
     private void HandleOnNextStepButtonPressed()
     {
         if (_showTextInProgress)
             _stepText.text = _currentStep.Text;
         else
-            _currentCutscene.NextStep();
+        {
+            // The Fade-In-Out animation triggers the ShowNextStep() by default.
+            if (CurrentCutscene.StepCounter < CurrentCutscene.Steps.Count - 1)
+            {
+                _canNextStep = false;
+                FadeInOut.SetActive(false);
+                FadeInOut.SetActive(true);
+            }
+            else if (CurrentCutscene.StepCounter == CurrentCutscene.Steps.Count - 1)
+            {
+                // Go to the Next Step bypassing any fade animation.
+                // Only used when you are at the last step which calls the Cut Scene skip.
+                ShowNextStep(); 
+            }
+        }
     }
 
     private void HandleOnStepInitialized(CutSceneStep step)
@@ -129,16 +168,26 @@ public class CutSceneController : ControllerUnit
 
         if (_currentStep.UseVideoInsteadSprite) 
         {
-            VideoPlayer.clip = _currentStep.VideoClip;
-            VideoPlayer.Play();
+            Image.gameObject.SetActive(false);
+            VideoPlayerGameObject.SetActive(true);
+            VideoPlayerProp.renderMode = VideoRenderMode.RenderTexture;
+            VideoPlayerProp.clip = _currentStep.VideoClip;
+            VideoPlayerProp.Play();
         }
         else
-            Image.sprite = _currentStep.Sprite;
+        {
+            if (_currentStep.Sprite != null)
+            {
+                VideoPlayerGameObject.SetActive(false);
+                Image.gameObject.SetActive(true);
+                Image.sprite = _currentStep.Sprite;
+            }
+            else
+                Image.gameObject.SetActive(false);
+        }
 
         if(!string.IsNullOrEmpty(_currentStep.Text))
-        {
             _showTextInProgress = true;
-        }
     }
 
     private void HandleOnCutSceneSkip()

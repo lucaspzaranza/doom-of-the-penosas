@@ -16,16 +16,26 @@ MonoBehaviour:
   _skippable: 1
   _steps:
   - _useVideoInsteadSprite: 0
+    _sprite: {fileID: 0}
+    _videoClip: {fileID: 0}
+    _showTextInSequence: 0
+    _sequenceSpeed: 0.05
+    _text: 'This is the text to show at Step 1
+
+      Alohaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+  - _useVideoInsteadSprite: 1
+    _sprite: {fileID: 0}
+    _videoClip: {fileID: 32900000, guid: 9295a48a4f8f13e4ba0b53ab829b2f72, type: 3}
+    _showTextInSequence: 0
+    _sequenceSpeed: 0.05
+    _text: 'Step 2
+
+      Alohaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+  - _useVideoInsteadSprite: 0
     _sprite: {fileID: 21300000, guid: 725a6a24fc42c224ebdd4b8c411ed1b8, type: 3}
     _videoClip: {fileID: 0}
     _showTextInSequence: 0
     _sequenceSpeed: 0.05
-    _text: "This is the text to show \nAlohaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  - _useVideoInsteadSprite: 0
-    _sprite: {fileID: -131691678, guid: 2cbf345c5f1abe54f80653df7947b324, type: 3}
-    _videoClip: {fileID: 0}
-    _showTextInSequence: 0
-    _sequenceSpeed: 0.05
-    _text: 'Step 2 text
+    _text: 'Step 3
 
       Alohaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'

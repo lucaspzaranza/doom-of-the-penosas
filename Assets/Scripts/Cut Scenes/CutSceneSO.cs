@@ -21,6 +21,7 @@ public class CutSceneSO : ScriptableObject
     public IReadOnlyList<CutSceneStep> Steps => _steps;
 
     private int _stepCounter;
+    public int StepCounter => _stepCounter;
 
     private void OnEnable()
     {
@@ -48,7 +49,7 @@ public class CutSceneSO : ScriptableObject
 
     public void Skip()
     {
-        Debug.Log($"_stepCounter: {_stepCounter}, Steps.Count: {Steps.Count}");
+        //Debug.Log($"_stepCounter: {_stepCounter}, Steps.Count: {Steps.Count}");
         if(_stepCounter >= Steps.Count || Skippable)
         {
             _stepCounter = 0;
