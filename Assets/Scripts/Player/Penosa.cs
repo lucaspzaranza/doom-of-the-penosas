@@ -75,6 +75,9 @@ public class Penosa : DamageableObject
     private bool _isInCountdown;
     private bool _canRideArmor;
     private AnimatorHashes _animHashes = new AnimatorHashes();
+    private Kawarimi _kawarimi;
+    private FallFromPlatform _lastPlatformLanded;
+    private FallFromPlatform _platform;
 
     [SerializeField] private SpriteRenderer _body;
     [SerializeField] private SpriteRenderer _legs;
@@ -159,6 +162,8 @@ public class Penosa : DamageableObject
         _inventory.OnInventoryCleared += HandleOnInventoryCleared;
 
         AutoRotate.OnSpinningProjectileEnabled += HandleOnSpinningProjectileEnabled;
+
+        _platform = null;
     }
 
     private void OnDisable()
@@ -226,12 +231,40 @@ public class Penosa : DamageableObject
         }
     }
 
-    private IEnumerator FallFromPlatform()
+    private bool CanFallFromPlatform()
     {
-        _landCharacterProps.CharacterCollider.enabled = false;
-        yield return new WaitForSeconds(
-            ConstantNumbers.TimeToReactivatePlayerColliderAfterFallingFromPlatform);
-        _landCharacterProps.CharacterCollider.enabled = true;
+        if (_platform == null)
+            return false;
+
+        return !_platform.HasTerrainAbovePlatform(transform.position);
+    }
+
+    private void FallFromPlatform()
+    {
+        Physics2D.IgnoreCollision(_landCharacterProps.CharacterCollider, _platform.Collider);
+    }
+
+    public void SetPlatform(FallFromPlatform platformToAssign)
+    {
+        if (_platform != null && Physics2D.GetIgnoreCollision(_landCharacterProps.CharacterCollider, _platform.Collider))
+        {
+            if(_lastPlatformLanded != null)
+                _lastPlatformLanded.PlayerDetector.OnPlayerTriggerExit = null;
+
+            _lastPlatformLanded = _platform;
+            _lastPlatformLanded.PlayerDetector.OnPlayerTriggerExit += HandleOnPlatformPlayerExit;
+        }
+        //else if (platformToAssign == null && _lastPlatformLanded != null && _platform != null
+        //    && Physics2D.GetIgnoreCollision(_landCharacterProps.CharacterCollider, _lastPlatformLanded.Collider))
+        //    Physics2D.IgnoreCollision(_landCharacterProps.CharacterCollider, _lastPlatformLanded.Collider, false);
+
+        _platform = platformToAssign;
+    }
+
+    private void HandleOnPlatformPlayerExit()
+    {
+        print($"Returning collision with {_lastPlatformLanded.name}");
+        Physics2D.IgnoreCollision(_landCharacterProps.CharacterCollider, _lastPlatformLanded.Collider, false);
     }
 
     public void PlayerLostALife()
@@ -446,9 +479,15 @@ public class Penosa : DamageableObject
             _rideArmor.Aim(vertical);
         }
 
-        if (_landCharacterProps.IsOnPlatform && !RideArmorEquipped && vertical < 0 &&
-            _landCharacterProps.CharacterCollider.enabled && Rigidbody2D.velocity.y == 0f)
-            StartCoroutine(nameof(FallFromPlatform));
+        if(_landCharacterProps.IsOnPlatform)
+        {
+            bool canFall = CanFallFromPlatform();
+
+            if (_landCharacterProps.IsOnPlatform && !RideArmorEquipped && vertical < 0 &&
+                _landCharacterProps.CharacterCollider.enabled && Rigidbody2D.velocity.y == 0f &&
+                canFall)
+                FallFromPlatform();
+        }
 
         SetMovementAnimators(vertical);
     }
@@ -646,8 +685,8 @@ public class Penosa : DamageableObject
             _currentGrenade.transform.localScale = new Vector2(_currentGrenade.transform.localScale.x * (_isLeft ? -1 : 1),
                                                                                 _currentGrenade.transform.localScale.y);
             currentGrenadeScript.CallThrowGrenade();
-            var kawarimi = _currentGrenade.GetComponent<Kawarimi>();
-            if (kawarimi != null) kawarimi.penosa = gameObject;
+            if (_currentGrenade.TryGetComponent(out _kawarimi))
+                _kawarimi.Penosa = gameObject;
 
             // Se a bomba for nivel 2, precisamos guardar a referência dela para futuras verificações
             if(PlayerData._2ndWeaponLevel == 1 && _currentGrenade != null) 
@@ -735,6 +774,13 @@ public class Penosa : DamageableObject
     {
         if (!IsBlinking || force)
         {
+            if(_kawarimi != null)
+            {
+                _kawarimi.KawarimiNoJutsu();
+                _kawarimi = null;
+                return;
+            }
+
             if (HasArmor) ArmorLife -= dmg;
             else if(RideArmorEquipped) RideArmorProp.Life -= dmg;
             else Life -= dmg;

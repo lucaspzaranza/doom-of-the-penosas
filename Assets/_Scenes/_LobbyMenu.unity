@@ -5265,7 +5265,7 @@ PrefabInstance:
     - target: {fileID: 5689653722252211062, guid: 910549fa2838514459f9efc0f880b7b5,
         type: 3}
       propertyPath: m_Name
-      value: GameController Instance
+      value: GameController
       objectReference: {fileID: 0}
     - target: {fileID: 5689653722252211062, guid: 910549fa2838514459f9efc0f880b7b5,
         type: 3}

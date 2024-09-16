@@ -90,7 +90,7 @@ public class GameController : Controller
         UIController.Setup();
         SceneController.Setup();
         PersistenceController.Setup();
-        CutSceneController.Setup();
+        CutSceneController?.Setup();
 
         EventHandlerSetup();       
     }
@@ -107,7 +107,8 @@ public class GameController : Controller
 
         SceneController.OnSceneLoaded += HandleOnSceneLoaded;
 
-        CutSceneController.OnCutSceneSkipRequest += QuitCutScene;
+        if(CutSceneController != null)
+            CutSceneController.OnCutSceneSkipRequest += QuitCutScene;
 
         PauseMenu.OnResume += ResumeGame;
         PauseMenu.OnBackToMainMenu += BackToMainMenuButton;
