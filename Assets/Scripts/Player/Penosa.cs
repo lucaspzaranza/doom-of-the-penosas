@@ -229,6 +229,18 @@ public class Penosa : DamageableObject
             Rigidbody2D.gravityScale = 0;
             Rigidbody2D.velocity = Vector2.zero;
         }
+
+        if(_landCharacterProps.IsGrounded && !_landCharacterProps.IsOnPlatform && 
+            _platform != null && HasPlatformIgnored(_platform.Collider))
+        {
+            Physics2D.IgnoreCollision(_landCharacterProps.CharacterCollider, _platform.Collider, false);
+            SetPlatform(null);
+        }
+    }
+
+    private bool HasPlatformIgnored(Collider2D collider)
+    {
+        return Physics2D.GetIgnoreCollision(_landCharacterProps.CharacterCollider, collider);
     }
 
     private bool CanFallFromPlatform()
@@ -246,25 +258,11 @@ public class Penosa : DamageableObject
 
     public void SetPlatform(FallFromPlatform platformToAssign)
     {
-        if (_platform != null && Physics2D.GetIgnoreCollision(_landCharacterProps.CharacterCollider, _platform.Collider))
-        {
-            if(_lastPlatformLanded != null)
-                _lastPlatformLanded.PlayerDetector.OnPlayerTriggerExit = null;
-
-            _lastPlatformLanded = _platform;
-            _lastPlatformLanded.PlayerDetector.OnPlayerTriggerExit += HandleOnPlatformPlayerExit;
-        }
-        //else if (platformToAssign == null && _lastPlatformLanded != null && _platform != null
-        //    && Physics2D.GetIgnoreCollision(_landCharacterProps.CharacterCollider, _lastPlatformLanded.Collider))
-        //    Physics2D.IgnoreCollision(_landCharacterProps.CharacterCollider, _lastPlatformLanded.Collider, false);
+        _lastPlatformLanded = _platform;
+        if(_lastPlatformLanded != null)
+            Physics2D.IgnoreCollision(_landCharacterProps.CharacterCollider, _lastPlatformLanded.Collider, false);
 
         _platform = platformToAssign;
-    }
-
-    private void HandleOnPlatformPlayerExit()
-    {
-        print($"Returning collision with {_lastPlatformLanded.name}");
-        Physics2D.IgnoreCollision(_landCharacterProps.CharacterCollider, _lastPlatformLanded.Collider, false);
     }
 
     public void PlayerLostALife()

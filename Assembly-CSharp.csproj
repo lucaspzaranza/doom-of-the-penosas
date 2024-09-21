@@ -147,7 +147,6 @@
     <Compile Include="Assets\Scripts\ControllerBackup\ControllerBackup.cs" />
     <Compile Include="Assets\Scripts\UI\MenuWithCursor.cs" />
     <Compile Include="Assets\Scripts\Enemies\Boss.cs" />
-    <Compile Include="Assets\Scripts\Terrain\PlatformPlayerDetector.cs" />
     <Compile Include="Assets\Scripts\Pooling\ObjectPool.cs" />
     <Compile Include="Assets\Scripts\Attributes\DrawIfBoolEqualsToAttribute.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyWeaponController.cs" />

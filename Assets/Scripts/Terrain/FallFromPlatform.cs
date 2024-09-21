@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * To prevent bugs when falling from one platform to another, please set the height distance to a mininum of 0.45f.
+ */
+
 public class FallFromPlatform : MonoBehaviour
 {
     [SerializeField] private LayerMask _playerLayer;
@@ -16,15 +20,11 @@ public class FallFromPlatform : MonoBehaviour
     private BoxCollider2D _collider;
     public BoxCollider2D Collider => _collider;
 
-    private PlatformPlayerDetector _playerDetector;
-    public PlatformPlayerDetector PlayerDetector => _playerDetector;
-
     private List<Penosa> _playersOnPlatform = new List<Penosa>();
 
     void OnEnable()
     {
         _collider = GetComponent<BoxCollider2D>();
-        _playerDetector = GetComponentInChildren<PlatformPlayerDetector>();
     }
 
     public void AddPlayerOnPlatform(Penosa player)
@@ -54,7 +54,9 @@ public class FallFromPlatform : MonoBehaviour
         if(other.gameObject.tag == ConstantStrings.PlayerTag)
         {
             var player = other.gameObject.GetComponent<Penosa>();
-            player.SetPlatform(null);
+            // The null assignment is being made at Penosa Script when the player touches the ground or another platform.
+            // See the FixedUpdate function at Penosa.cs to see it in action.
+            //player.SetPlatform(null);
             _playersOnPlatform.Remove(player);
         }
     }
