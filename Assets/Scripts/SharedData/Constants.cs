@@ -1,3 +1,4 @@
+using SharedData.Enumerations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Policy;
@@ -12,9 +13,10 @@ public static class ConstantStrings
     public const string Grenade = "Grenade";
     public const string Shuriken = "Shuriken";
     public const string FuumaShuriken = "Fuuma Shuriken";
+    public const string YarnShot = "Yarn shot";
 
     // Player
-    public const string PlayerTag = "Player";
+    public const string RideArmorTag = "RideArmor";
     public const string RideArmorCoreTag = "RideArmorCore";
 
     // Animator
@@ -40,8 +42,10 @@ public static class ConstantStrings
     public const string Joystick = "Joystick";
 
     // Tags
+    public const string PlayerTag = "Player";
     public const string CharacterSelectionButtonTag = "CharacterSelectionButton";
     public const string DeviceSelectionButtonTag = "DeviceSelectionButton";
+    public const string EnemyProjectileTag = "Enemy Projectile";
 
     // Menu Messages
     public const string HUDGameOver = "Wait until the stage is over.";
@@ -89,6 +93,39 @@ public static class WarningMessages
     {
         Debug.Log("Saving game progress from the beginning...");
     }
+
+    public static void EnemyActionNotFound(EnemyState enemyState)
+    {
+        Debug.LogWarning($"Could not find a proper action to perform for the {enemyState} enemy state. " +
+            $"Did you add it at the Inspector correctly?");
+    }
+
+    public static void EnemyWeaponIsInactive(string enemyName, string weaponName)
+    {
+        Debug.LogWarning($"{enemyName} could not shoot with {weaponName} because the weapon is inactive. " +
+            $"Did you forget to change to an active weapon at the Inspector?");
+    }
+
+    public static void PlayerDetectorNotFound()
+    {
+        Debug.LogWarning("Player Detector not found. You must add this component to make the rotation detection.");
+    }
+
+    public static void EnemyWeaponUnitCouldNotFoundGameControllerInstance()
+    {
+        Debug.LogWarning("Could not find GameController instance, " +
+                    "so the pooling won't work as expected.");
+    }
+
+    public static void BossHasNoAttackWaves()
+    {
+        Debug.LogWarning("Boss has no attack waves. Did you forgot to setup some waves for it?");
+    }
+
+    public static void BossHasNoCurrentWaveSelected()
+    {
+        Debug.LogWarning("Boss has no current wave selected. Please select one from the attack waves list.");
+    }
 }
 
 public static class InputStrings
@@ -113,11 +150,14 @@ public static class ConstantNumbers
     // Stage
     public const float TimeToShowStageClearTxt = 2f;
     public const float TimeToReturnToMapaMundiAfterGameOver = 3f;
+
+    // Enemy
+    public const float UpsideDownAngle = 180f;
 }   
 
 public static class ScenesBuildIndexes
 {
-    public const int MainMenu = 0;
+    public const int  MainMenu = 0;
     public const int MapaMundi = 1;
     public const int _1stStage = 2;
     public const int _2ndStage = 3;
@@ -125,6 +165,8 @@ public static class ScenesBuildIndexes
     public const int _4thStage = 5;
     public const int _5thStage = 6;
     public const int _6thStage = 7;
+    public const int   EndGame = 8;
+    public const int  CutScene = 9;
 }
 
 public static class PlayerConsts

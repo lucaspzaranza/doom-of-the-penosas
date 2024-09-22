@@ -72,4 +72,29 @@ public static class ExtensionMethods
 
         return button.tag == ConstantStrings.CharacterSelectionButtonTag;
     }
+
+    /// <summary>
+    /// Performs a loop into all object parents and returns the first <strong>T</strong> Component found. 
+    /// </summary>
+    /// <returns>If found nothing, returns <strong>false</strong> and <strong>null</strong> at the <i>foundComponent</i> param.
+    /// <br/>Otherwise, returns <strong>true</strong> 
+    /// and the <i>foundComponent</i> instance.</returns>
+    public static bool GetComponentInAnyParent<T>(this MonoBehaviour thisObject, out T foundComponent)
+    {
+        foundComponent = default;
+
+        GameObject parent = thisObject.transform.parent?.gameObject;
+
+        while (!parent.TryGetComponent(out foundComponent))
+        {
+            parent = parent.transform.parent?.gameObject;
+            if (parent == null)
+            {
+                Debug.LogWarning($"{typeof(T)} Component not found in any parent.");
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

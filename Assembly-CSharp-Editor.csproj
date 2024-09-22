@@ -60,7 +60,10 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Editor\DrawIfEnumEqualsPropertyDrawer.cs" />
+    <Compile Include="Assets\Editor\DrawIfTruePropertyDrawer.cs" />
     <Compile Include="Assets\Editor\CreateAssetBundles.cs" />
+    <Compile Include="Assets\Editor\DrawItDisabledAttributePropertyDrawer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -403,6 +406,10 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEditor.WebGL.Extensions">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\PlaybackEngines\WebGLSupport\UnityEditor.WebGL.Extensions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEditor.Android.Extensions">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\PlaybackEngines\AndroidPlayer\UnityEditor.Android.Extensions.dll</HintPath>
       <Private>False</Private>
@@ -437,6 +444,14 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="0Harmony_3.5">
+      <HintPath>Assets\CastVisualizer\Editor\HarmonyLib\0Harmony_3.5.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="0Harmony_4.5">
+      <HintPath>Assets\CastVisualizer\Editor\HarmonyLib\0Harmony_4.5.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="nunit.framework">
@@ -1112,6 +1127,18 @@
     <ProjectReference Include="Assembly-CSharp.csproj">
       <Project>{8E2F30AE-3632-70B2-99F4-C3C040B8886E}</Project>
       <Name>Assembly-CSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.CastVisualizer.Editor.csproj">
+      <Project>{19D841DC-5003-2D6B-F156-21F4B6C67C54}</Project>
+      <Name>Unity.CastVisualizer.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.CastVisualizer.Samples.SampleScenes.csproj">
+      <Project>{AC9843B8-3A24-B8C5-EE2A-064EFC71A807}</Project>
+      <Name>Unity.CastVisualizer.Samples.SampleScenes</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.CastVisualizer.Runtime.csproj">
+      <Project>{F2A80E5E-78B3-D1FB-C705-31311890735B}</Project>
+      <Name>Unity.CastVisualizer.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="ParrelSync.csproj">
       <Project>{EB7104E1-4DF3-E135-60CA-8AFFD44EF06F}</Project>

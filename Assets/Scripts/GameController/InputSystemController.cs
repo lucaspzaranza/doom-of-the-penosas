@@ -20,7 +20,7 @@ public class InputSystemController : ControllerUnit
 
     public override void Dispose()
     {
-        _playerInputManager = null;
+
     }
 
     public GameObject AddPlayerWithIDAndDevice(byte playerIndex, GameObject prefab, InputDevice device = null)

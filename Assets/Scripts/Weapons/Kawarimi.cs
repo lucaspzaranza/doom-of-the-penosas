@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class Kawarimi : Grenade
 {
     public float torque;
-    [HideInInspector] public GameObject penosa;
+    [HideInInspector] public GameObject Penosa { get; set; }
     private Collider2D coll2D;
 
     private PlayerInput playerInputActions;
@@ -41,6 +41,7 @@ public class Kawarimi : Grenade
     public override void Update()
     {
         if(kawarimiExplosionAction.triggered) KawarimiNoJutsu();
+
         if(rb2D.velocity == Vector2.zero)
         {
             if(!coll2D.isTrigger) coll2D.isTrigger = true;
@@ -53,14 +54,14 @@ public class Kawarimi : Grenade
         Destroy(gameObject);
     }
 
-    private void KawarimiNoJutsu()
+    public void KawarimiNoJutsu()
     {
-        if (penosa != null)
+        if (Penosa != null)
         {
             rb2D.bodyType = RigidbodyType2D.Dynamic;
             coll2D.isTrigger = false;
-            Vector3 penosaPosition = penosa.transform.position;
-            penosa.transform.position = transform.position;
+            Vector3 penosaPosition = Penosa.transform.position;
+            Penosa.transform.position = transform.position;
             transform.position = new Vector2(penosaPosition.x, penosaPosition.y);
             kawarimiExplosionAction.Disable();
         }

@@ -32,6 +32,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/EndGame.unity
     guid: 86078394fc7cfd146bc279b9c989a2bf
+  - enabled: 1
+    path: Assets/_Scenes/CutScenes.unity
+    guid: c4e8d316dbdb0db41b7cbf4eef57d4f3
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 84faa6226a7a9254b840e9e7e2075e30,
       type: 2}

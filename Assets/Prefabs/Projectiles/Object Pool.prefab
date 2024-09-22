@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7227303011715664623}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7227303011715664622
 MonoBehaviour:
@@ -50,4 +50,5 @@ MonoBehaviour:
   - {fileID: 1092687857533456297, guid: 8b0cb2b6e8c22f64b9c1a0033b9e97f7, type: 3}
   - {fileID: 2652151204235091336, guid: 40d6b29f2c1675146845205518d32812, type: 3}
   - {fileID: 3243487704828474248, guid: 70d390fe99ad475488d0de937cff9054, type: 3}
+  - {fileID: 1617454459024769971, guid: a2358c609baf3da43b95a70e8bd1a1fa, type: 3}
   poolInitialSize: 10

@@ -1,4 +1,4 @@
-using SharedData.Enumerations;
+    using SharedData.Enumerations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -47,6 +47,15 @@ public class CollectableItem : MonoBehaviour
             var player = other.gameObject.GetComponent<Penosa>();
             GetItem(player);
             Destroy(gameObject);
+        }
+        else if(other.gameObject.CompareTag(ConstantStrings.RideArmorTag))
+        {
+            var rideArmor = other.gameObject.GetComponent<RideArmor>();
+            if(rideArmor.Player != null)
+            {
+                GetItem(rideArmor.Player);
+                Destroy(gameObject);
+            }
         }
     }
 }

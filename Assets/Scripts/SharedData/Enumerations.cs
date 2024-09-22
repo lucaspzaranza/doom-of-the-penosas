@@ -78,4 +78,75 @@ namespace SharedData.Enumerations
         JetSkinha = 2,
         Chickencopter = 3
     }
+
+    public enum EnemyType
+    {
+        Land,
+        Flying
+    }
+
+    public enum FlyingChaseMode
+    {
+        /// <summary>
+        /// Enemy will fly only at X Axis.
+        /// </summary>
+        Horizontal,
+        /// <summary>
+        /// Enemy will fly only at Y Axis.
+        /// </summary>
+        Vertical,
+        /// <summary>
+        /// Enemy will fly on both axes.
+        /// </summary>
+        Diagonal,
+        /// <summary>
+        /// Enemy will fly on both axes, but it may vary its pattern and sometimes
+        /// it may choose only one axis to fly.
+        /// </summary>
+        Mixed
+    }
+
+    public enum EnemyState
+    {
+        Idle,
+        Patrol,
+        ChasingPlayer,
+        Attacking,
+    }
+
+    public enum EnemyActionStatus
+    {
+        None,
+        Started,
+        Performed,
+        Canceled
+    }
+
+    public enum FlipType
+    {
+        Horizontal,
+        Vertical,
+        Both
+    }
+
+    public enum EnemyFireType
+    {
+        Simultaneous,
+        Individual
+    }
+
+    public enum AttackWaveType
+    {
+        /// <summary>
+        /// Use this value to make a sequence of one or more weapons fire their attacks in a row. <br/>
+        /// The sequence will follow the element order of the WeaponsUsed List.
+        /// </summary>
+        Sequence,
+
+        /// <summary>
+        /// Use this value to fire a combined attack using two or more weapons. <br/>
+        /// The weapons inside the WeaponsUsed list will be used at the same time.
+        /// </summary>
+        Combined
+    }
 }

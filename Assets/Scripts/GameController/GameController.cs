@@ -13,6 +13,7 @@ using UnityEngine.TextCore.Text;
 
 public class GameController : Controller
 {
+    #region Vars and Props
     // Singleton instance
     private static GameController instance;
 
@@ -39,7 +40,6 @@ public class GameController : Controller
     public IReadOnlyList<InputDevice> SelectedDevices => _selectedDevices;
 
     public bool GameIsPaused => Time.timeScale == 0f;
-
     private bool IsSingleInstance => instance == this;
 
     [Header("Controllers")]
@@ -59,7 +59,14 @@ public class GameController : Controller
     public SceneController SceneController => _sceneController;
 
     [SerializeField] private StageController _stageController;
-    public StageController StageController => _stageController;    
+    public StageController StageController => _stageController;
+
+    [SerializeField] private CutSceneController _cutSceneController;
+    public CutSceneController CutSceneController => _cutSceneController;
+
+    private int _nextStageIndex;
+
+    #endregion
 
     private void Awake()
     {
@@ -83,6 +90,7 @@ public class GameController : Controller
         UIController.Setup();
         SceneController.Setup();
         PersistenceController.Setup();
+        CutSceneController?.Setup();
 
         EventHandlerSetup();       
     }
@@ -99,9 +107,13 @@ public class GameController : Controller
 
         SceneController.OnSceneLoaded += HandleOnSceneLoaded;
 
+        if(CutSceneController != null)
+            CutSceneController.OnCutSceneSkipRequest += QuitCutScene;
+
         PauseMenu.OnResume += ResumeGame;
         PauseMenu.OnBackToMainMenu += BackToMainMenuButton;
         WalkTalk.OnWalkTalk += HandleOnWalkTalk;
+        Enemy.OnEnemyDeath += HandleOnEnemyDefeated;
     }
 
     public override void Dispose()
@@ -121,9 +133,12 @@ public class GameController : Controller
 
         SceneController.OnSceneLoaded -= HandleOnSceneLoaded;
 
+        CutSceneController.OnCutSceneSkipRequest += QuitCutScene;
+
         PauseMenu.OnResume -= ResumeGame;
         PauseMenu.OnBackToMainMenu -= BackToMainMenuButton;
         WalkTalk.OnWalkTalk -= HandleOnWalkTalk;
+        Enemy.OnEnemyDeath -= HandleOnEnemyDefeated;
 
         PlayerController.Dispose();
         UIController.Dispose();
@@ -174,14 +189,28 @@ public class GameController : Controller
     {
         UIController.DisposeLobbyController();
         SelectCharacters(characterSelectionList);
-        SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
+        if(IsNewGame)
+            SceneController.LoadScene(ScenesBuildIndexes.CutScene);
+        else
+            InstantiateMapaMundiMenu();
+    }
 
+    public void QuitCutScene()
+    {
+        if (GameStatus == GameStatus.Cutscene)
+            InstantiateMapaMundiMenu();
+    }
+
+    private void InstantiateMapaMundiMenu()
+    {        
+        SetGameStatus(GameStatus.Menu);
+        SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
         UIController.InstantiateMapaMundiController();
     }
 
     private void HandleOnSceneLoaded(Scene scene)
     {
-        if(scene.buildIndex == ScenesBuildIndexes.MainMenu && GameStatus == GameStatus.Loading)
+        if (scene.buildIndex == ScenesBuildIndexes.MainMenu && GameStatus == GameStatus.Loading)
         {
             SetGameStatus(GameStatus.Menu);
 
@@ -192,12 +221,17 @@ public class GameController : Controller
         {
             InstantiateStageController();
         }
-        else if(scene.buildIndex >= ScenesBuildIndexes._1stStage && 
-        scene.buildIndex <= ScenesBuildIndexes._6thStage && 
+        else if (scene.buildIndex >= ScenesBuildIndexes._1stStage &&
+        scene.buildIndex <= ScenesBuildIndexes._6thStage &&
         GameStatus == GameStatus.Loading)
         {
             UIController.SelectGameSceneCanvas();
             PutPlayerOnStage(scene);
+        }
+        else if (scene.buildIndex == ScenesBuildIndexes.CutScene) 
+        {
+            SetGameStatus(GameStatus.Cutscene);
+            CutSceneController.gameObject.SetActive(true);
         }
     }
 
@@ -234,14 +268,21 @@ public class GameController : Controller
             var instance = Instantiate(playerControllerPrefab, transform);
             _playerController = instance.GetComponent<PlayerController>();
             _playerController.Setup(_characterSelectionList, _selectedDevices);
-
-            _playerController.OnCountdownActivation += HandleOnCoutdownActivation;
-            _playerController.OnPlayerPause += HandleOnPlayerPause;            
-            _playerController.OnPlayerGameOver += GameOver;            
-            _playerController.OnPlayersExchanged += HandleOnPlayersExchanged;            
         }
         else
             _playerController.Setup(_characterSelectionList, _selectedDevices);
+
+        if(_playerController.OnCountdownActivation == null)
+            _playerController.OnCountdownActivation += HandleOnCoutdownActivation;
+
+        if(_playerController.OnPlayerPause == null)
+            _playerController.OnPlayerPause += HandleOnPlayerPause;
+
+        if(_playerController.OnPlayerGameOver == null)
+            _playerController.OnPlayerGameOver += GameOver;
+
+        if(_playerController.OnPlayersExchanged == null)
+            _playerController.OnPlayersExchanged += HandleOnPlayersExchanged;
     }
 
     private void InstantiatePoolController()
@@ -258,7 +299,11 @@ public class GameController : Controller
     private void InstantiateStageController()
     {
         if (_stageController != null)
+        {
+            _stageController.Setup();
+            _stageController.OnStageClear += HandleOnStageClear;
             return;
+        }
 
         var stagePrefab = GetControllerFromPrefabList<StageController>();
         if (_stageController == null && stagePrefab != null)
@@ -268,15 +313,6 @@ public class GameController : Controller
             _stageController.Setup();
             _stageController.OnStageClear += HandleOnStageClear;
         }
-    }
-
-    private IEnumerator WaitAndLoadNextStage(int nextStageIndex)
-    {
-        PlayerController.RemoveInputController();
-        yield return new WaitForSeconds(ConstantNumbers.TimeToShowStageClearTxt);
-
-        SetGameStatus(GameStatus.Loading);
-        SceneController.LoadScene(nextStageIndex);
     }
 
     private void HandleOnStageClear(StageSO currentStageSO)
@@ -291,7 +327,17 @@ public class GameController : Controller
         }
 
         UIController.PlayerInGameUIController.Dispose();
-        StartCoroutine(WaitAndLoadNextStage(currentStageSO.SceneIndex + 1));
+        PlayerController.RemoveInputController();
+
+        _nextStageIndex = currentStageSO.SceneIndex + 1;
+        //print("_nextStageIndex: " + _nextStageIndex);
+        Invoke(nameof(LoadNextStage), ConstantNumbers.TimeToShowStageClearTxt);
+    }
+
+    private void LoadNextStage()
+    {
+        SetGameStatus(GameStatus.Loading);
+        SceneController.LoadScene(_nextStageIndex);
     }
 
     private void HandleOnGameSceneSelectedIndex(int buildIndex)
@@ -345,6 +391,14 @@ public class GameController : Controller
         }
 
         UIController.PlayerInGameUIController.Dispose();
+
+        //print(StageController == null);
+        if (StageController != null)
+        {
+            StageController.OnStageClear -= HandleOnStageClear;
+            StageController.Dispose();
+        }
+
         SceneController.LoadScene(ScenesBuildIndexes.MapaMundi);
     }
 
@@ -418,5 +472,11 @@ public class GameController : Controller
     public void HandleOnPlayersExchanged(IReadOnlyList<Penosas> characters)
     {
         _characterSelectionList = new List<Penosas>(characters);
+    }
+
+    public void HandleOnEnemyDefeated(Enemy defeatedEnemy)
+    {
+        if (defeatedEnemy.IsBoss)
+            print("You defeated a boss! Congratulations.");
     }
 }

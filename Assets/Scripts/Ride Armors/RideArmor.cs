@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public abstract class RideArmor : MonoBehaviour
+public abstract class RideArmor : DamageableObject
 {
     public static Action<RideArmor> OnRideArmorEquipped;
     public static Action<RideArmorType, bool> OnRideArmorChangedRequired;
@@ -21,27 +21,9 @@ public abstract class RideArmor : MonoBehaviour
     [SerializeField] private RideArmorType _type;
     public RideArmorType Type => _type;
 
-    [SerializeField][Range(0, PlayerConsts.Max_Life)] private int _life;
-    public int Life
-    {
-        get => _life;
-        set
-        {
-            if (_player == null)
-                return;
-
-            _life = Mathf.Clamp(value, 0, PlayerConsts.Max_Life); ;
-            OnRideArmorLifeChanged?.Invoke(_life);
-
-            if (_life == 0)
-                DestroyRideArmor();
-        }
-    }
-
     [Tooltip("Set this value if this Ride Armor is necessary to traverse the stage. For example, " +
     "a water stage must require the Jet Skinha, or an air stage will require the Chickencopter.")]
     [SerializeField] protected bool _required;
-    //public bool Required => _required;
     public bool Required
     {
         get => _required;
@@ -87,11 +69,6 @@ public abstract class RideArmor : MonoBehaviour
     public virtual void OnEnable()
     {
         _rb = GetComponent<Rigidbody2D>();
-    }
-
-    protected virtual void Update()
-    {
-        
     }
 
     public virtual void Move(Vector2 direction)
@@ -172,6 +149,26 @@ public abstract class RideArmor : MonoBehaviour
 
         if(_equippedPlayer != null)
             _equippedPlayer.GetComponent<SpriteRenderer>().color = newColor;
+    }
+
+    public override void TakeDamage(int damage, bool force = false)
+    {
+        if(Player == null) 
+            return;
+
+        base.TakeDamage(damage, force);
+    }
+
+    protected override void SetLife(int value)
+    {
+        if (Player == null)
+            return;
+
+        _life = Mathf.Clamp(value, 0, PlayerConsts.Max_Life); ;
+        OnRideArmorLifeChanged?.Invoke(_life);
+
+        if (_life == 0)
+            DestroyRideArmor();
     }
 
     protected void SetEquippedPlayerActivation(Penosa player, bool value)

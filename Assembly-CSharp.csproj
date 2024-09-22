@@ -60,77 +60,98 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Inventory\Armor.cs" />
-    <Compile Include="Assets\Scripts\Player\Parachute.cs" />
+    <Compile Include="Assets\Scripts\SharedData\DamageableObject.cs" />
     <Compile Include="Assets\Scripts\Pooling\PoolController.cs" />
     <Compile Include="Assets\Scripts\Weapons\Kawarimi.cs" />
-    <Compile Include="Assets\Scripts\Weapons\AutoRotate.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyStateDataUnit.cs" />
+    <Compile Include="Assets\Scripts\Enemies\AttackWave.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerLobby\PlayerLobbyUIController.cs" />
-    <Compile Include="Assets\Scripts\Inventory\InventoryData.cs" />
-    <Compile Include="Assets\ParrelSync\Examples\CustomArgumentExample.cs" />
     <Compile Include="Assets\Scripts\UI\CursorPosition.cs" />
     <Compile Include="Assets\Scripts\Inventory\SpecialItem.cs" />
-    <Compile Include="Assets\Scripts\UI\LoadingProgress.cs" />
     <Compile Include="Assets\Scripts\Scenes\SceneController.cs" />
-    <Compile Include="Assets\Scripts\Ride Armors\Chickencopter.cs" />
     <Compile Include="Assets\Scripts\SharedData\Constants.cs" />
-    <Compile Include="Assets\Scripts\Interfaces\IController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerData.cs" />
-    <Compile Include="Assets\Scripts\Weapons\Projectile.cs" />
-    <Compile Include="Assets\Input System\PlayerInput.cs" />
+    <Compile Include="Assets\Scripts\Enemies\AttackWavesController.cs" />
     <Compile Include="Assets\Scripts\MapaMundi\MapaMundiController.cs" />
-    <Compile Include="Assets\Scripts\Inventory\Mayday.cs" />
-    <Compile Include="Assets\Scripts\Interfaces\IUIController.cs" />
-    <Compile Include="Assets\Scripts\Inventory\AddLives.cs" />
+    <Compile Include="Assets\Scripts\Cut Scenes\NextStepAnimationEvent.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyWeaponGameObjectData.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IControllerBackup.cs" />
     <Compile Include="Assets\Scripts\Inventory\JetCopter.cs" />
-    <Compile Include="Assets\Scripts\GameController\Controller.cs" />
-    <Compile Include="Assets\Scripts\Inventory\WeaponLvlUp.cs" />
-    <Compile Include="Assets\Scripts\Ride Armors\TireMonoWheel.cs" />
-    <Compile Include="Assets\Scripts\Ride Armors\RideArmorActivator.cs" />
     <Compile Include="Assets\Scripts\UI\InGame\PlayerInGameUIController.cs" />
-    <Compile Include="Assets\Scripts\GameController\InputSystemController.cs" />
     <Compile Include="Assets\Scripts\Terrain\FallFromPlatform.cs" />
     <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
     <Compile Include="Assets\Scripts\UI\InputDevices\DevicePopupPanelUI.cs" />
-    <Compile Include="Assets\Scripts\SharedData\ExtensionMethods.cs" />
     <Compile Include="Assets\Scripts\ControllerBackup\MapaMundiControllerBackup.cs" />
     <Compile Include="Assets\Scripts\Persistence\PersistenceController.cs" />
     <Compile Include="Assets\Scripts\Inventory\Item.cs" />
-    <Compile Include="Assets\Scripts\UI\PlayerHUD.cs" />
-    <Compile Include="Assets\Scripts\UI\PlayerLobby\GameModeTitleSelector.cs" />
     <Compile Include="Assets\Scripts\Stages\StageSO.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyStateGeneralData.cs" />
     <Compile Include="Assets\Scripts\SharedData\SharedFunctions.cs" />
     <Compile Include="Assets\Scripts\UI\InputDevices\InputDevicesSelector.cs" />
-    <Compile Include="Assets\Scripts\UI\PauseMenu.cs" />
-    <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
-    <Compile Include="Assets\Scripts\ControllerBackup\LobbyControllerBackup.cs" />
-    <Compile Include="Assets\Scripts\SharedData\CustomEventArgs.cs" />
-    <Compile Include="Assets\Scripts\GameController\GameController.cs" />
     <Compile Include="Assets\Scripts\Player\Penosa.cs" />
-    <Compile Include="Assets\Scripts\GameController\ControllerUnit.cs" />
-    <Compile Include="Assets\Scripts\Ride Armors\SpringAnimation.cs" />
     <Compile Include="Assets\Scripts\SharedData\Enumerations.cs" />
+    <Compile Include="Assets\Scripts\Weapons\EnemyProjectile.cs" />
     <Compile Include="Assets\Scripts\Inventory\HealItem.cs" />
-    <Compile Include="Assets\Scripts\Inventory\SpriteAddedEventArgs.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerDeathZone.cs" />
-    <Compile Include="Assets\Scripts\Ride Armors\EggTank.cs" />
     <Compile Include="Assets\Scripts\Ride Armors\RideArmor.cs" />
     <Compile Include="Assets\Scripts\Inventory\Adrenaline.cs" />
-    <Compile Include="Assets\Scripts\UI\ContinueButtonSetInteractable.cs" />
-    <Compile Include="Assets\Scripts\ControllerBackup\ControllerBackup.cs" />
     <Compile Include="Assets\Scripts\Inventory\CollectableItem.cs" />
     <Compile Include="Assets\Scripts\UI\InputDevices\InputControlsPanel.cs" />
-    <Compile Include="Assets\Scripts\UI\MenuWithCursor.cs" />
     <Compile Include="Assets\Scripts\Weapons\Grenade.cs" />
     <Compile Include="Assets\Scripts\Stages\StageController.cs" />
     <Compile Include="Assets\Scripts\Ride Armors\JetSkinha.cs" />
-    <Compile Include="Assets\Scripts\Pooling\ObjectPool.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerDataPrefabs.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemSlot.cs" />
     <Compile Include="Assets\Scripts\Weapons\TimeBomb.cs" />
+    <Compile Include="Assets\Scripts\Cut Scenes\CutSceneController.cs" />
+    <Compile Include="Assets\Scripts\Inventory\Armor.cs" />
+    <Compile Include="Assets\Scripts\Player\Parachute.cs" />
+    <Compile Include="Assets\Scripts\Weapons\AutoRotate.cs" />
+    <Compile Include="Assets\Scripts\Attributes\DrawItDisabledAttribute.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Enemy.cs" />
+    <Compile Include="Assets\Scripts\Inventory\InventoryData.cs" />
+    <Compile Include="Assets\ParrelSync\Examples\CustomArgumentExample.cs" />
+    <Compile Include="Assets\Scripts\SharedData\LandCharacter.cs" />
+    <Compile Include="Assets\Scripts\UI\LoadingProgress.cs" />
+    <Compile Include="Assets\Scripts\Ride Armors\Chickencopter.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\IController.cs" />
+    <Compile Include="Assets\Scripts\Weapons\Projectile.cs" />
+    <Compile Include="Assets\Input System\PlayerInput.cs" />
+    <Compile Include="Assets\Scripts\Cut Scenes\CutSceneSO.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyAction.cs" />
+    <Compile Include="Assets\Scripts\Inventory\Mayday.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\IUIController.cs" />
+    <Compile Include="Assets\Scripts\Inventory\AddLives.cs" />
+    <Compile Include="Assets\Scripts\GameController\Controller.cs" />
+    <Compile Include="Assets\Scripts\SharedData\PlayerDetector.cs" />
+    <Compile Include="Assets\Scripts\Inventory\WeaponLvlUp.cs" />
+    <Compile Include="Assets\Scripts\Ride Armors\TireMonoWheel.cs" />
+    <Compile Include="Assets\Scripts\Ride Armors\RideArmorActivator.cs" />
+    <Compile Include="Assets\Scripts\GameController\InputSystemController.cs" />
+    <Compile Include="Assets\Scripts\SharedData\ExtensionMethods.cs" />
+    <Compile Include="Assets\Scripts\Attributes\DrawIfEnumEqualsToAttribute.cs" />
+    <Compile Include="Assets\Scripts\UI\PlayerHUD.cs" />
+    <Compile Include="Assets\Scripts\UI\PlayerLobby\GameModeTitleSelector.cs" />
+    <Compile Include="Assets\Scripts\UI\PauseMenu.cs" />
+    <Compile Include="Assets\Scripts\UI\UIController.cs" />
+    <Compile Include="Assets\Scripts\ControllerBackup\LobbyControllerBackup.cs" />
+    <Compile Include="Assets\Scripts\SharedData\CustomEventArgs.cs" />
+    <Compile Include="Assets\Scripts\GameController\GameController.cs" />
+    <Compile Include="Assets\Scripts\GameController\ControllerUnit.cs" />
+    <Compile Include="Assets\Scripts\Ride Armors\SpringAnimation.cs" />
+    <Compile Include="Assets\Scripts\Inventory\SpriteAddedEventArgs.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerDeathZone.cs" />
+    <Compile Include="Assets\Scripts\ControllerBackup\CutSceneControllerBackup.cs" />
+    <Compile Include="Assets\Scripts\Ride Armors\EggTank.cs" />
+    <Compile Include="Assets\Scripts\UI\ContinueButtonSetInteractable.cs" />
+    <Compile Include="Assets\Scripts\ControllerBackup\ControllerBackup.cs" />
+    <Compile Include="Assets\Scripts\UI\MenuWithCursor.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Boss.cs" />
+    <Compile Include="Assets\Scripts\Pooling\ObjectPool.cs" />
+    <Compile Include="Assets\Scripts\Attributes\DrawIfBoolEqualsToAttribute.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyWeaponController.cs" />
     <Compile Include="Assets\Scripts\Inventory\WalkTalk.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyWeaponUnit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
@@ -146,6 +167,7 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\CastVisualizer\Third-Party-Notices.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Mobile.shader" />
@@ -1152,6 +1174,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Unity.CastVisualizer.Editor.csproj">
+      <Project>{19D841DC-5003-2D6B-F156-21F4B6C67C54}</Project>
+      <Name>Unity.CastVisualizer.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.CastVisualizer.Samples.SampleScenes.csproj">
+      <Project>{AC9843B8-3A24-B8C5-EE2A-064EFC71A807}</Project>
+      <Name>Unity.CastVisualizer.Samples.SampleScenes</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.CastVisualizer.Runtime.csproj">
+      <Project>{F2A80E5E-78B3-D1FB-C705-31311890735B}</Project>
+      <Name>Unity.CastVisualizer.Runtime</Name>
+    </ProjectReference>
     <ProjectReference Include="ParrelSync.csproj">
       <Project>{EB7104E1-4DF3-E135-60CA-8AFFD44EF06F}</Project>
       <Name>ParrelSync</Name>
