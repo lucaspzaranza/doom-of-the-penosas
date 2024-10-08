@@ -58,6 +58,9 @@ public static class ConstantStrings
 
     // Persistence
     public const string CompletedStagesKey = "CompletedStages";
+
+    // Language Keys
+    public const string DeviceNameKey = "[deviceName]";
 }
 
 public static class WarningMessages

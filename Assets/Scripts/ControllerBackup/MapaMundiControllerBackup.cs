@@ -61,4 +61,9 @@ public class MapaMundiControllerBackup : ControllerBackup
             mapaMundiController.SelectSceneIndex(ScenesBuildIndexes._6thStage);
         });
     }
+
+    public override void UpdateLanguageTexts()
+    {
+        throw new NotImplementedException();
+    }
 }

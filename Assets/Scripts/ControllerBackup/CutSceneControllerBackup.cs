@@ -55,4 +55,9 @@ public class CutSceneControllerBackup : ControllerBackup
             cutSceneController.CurrentCutscene.Skip();
         });
     }
+
+    public override void UpdateLanguageTexts()
+    {
+        throw new NotImplementedException();
+    }
 }

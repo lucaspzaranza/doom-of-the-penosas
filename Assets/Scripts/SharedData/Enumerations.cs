@@ -149,4 +149,10 @@ namespace SharedData.Enumerations
         /// </summary>
         Combined
     }
+
+    public enum Language
+    {
+        English = 0,
+        Portuguese = 1
+    }
 }

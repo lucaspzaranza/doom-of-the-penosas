@@ -4960,6 +4960,10 @@ MonoBehaviour:
   - {fileID: 3978230461744049896, guid: 7f53ff92ebbf7394baaffc4c20d5dfea, type: 3}
   - {fileID: 6016839481724626518, guid: 055ccf01213307b45b765c3d4f632bc2, type: 3}
   _gameMode: 0
+  _language: 0
+  _gameLanguages:
+    _english: {fileID: 11400000, guid: 2a887d798bdec2e468754f1329eaa842, type: 2}
+    _portuguese: {fileID: 11400000, guid: f1478f221de0f284aabe5584dcc771e6, type: 2}
   _gameStatus: 2
   _isNewGame: 1
   _persistenceController: {fileID: 5689653721414296645}
@@ -7148,7 +7152,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1ba7e9ace6f19ba439059984dc62e7a6, type: 2}
   _image: {fileID: 0}
   _videoPlayer: {fileID: 0}
+  _videoPlayerGameObject: {fileID: 0}
   _stepText: {fileID: 0}
+  _fadeInOut: {fileID: 0}
 --- !u!1 &8159034403858821103
 GameObject:
   m_ObjectHideFlags: 0

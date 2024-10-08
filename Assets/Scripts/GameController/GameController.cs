@@ -18,11 +18,36 @@ public class GameController : Controller
     private static GameController instance;
 
     // Props
+
     [SerializeField] private GameMode _gameMode;
     /// <summary>
     /// Returns if game is singleplayer or multiplayer.
     /// </summary>
     public GameMode GameMode => _gameMode;
+
+    [SerializeField] private Language _language;
+    public Language Language => _language;
+
+    [SerializeField] private GameLanguages _gameLanguages;
+    public GameLanguages GameLanguages => _gameLanguages;
+
+    public LanguageSO CurrentLanguage
+    {
+        get
+        {
+            switch (Language)
+            {
+                case Language.English:
+                    return GameLanguages.English;
+
+                case Language.Portuguese:
+                    return GameLanguages.Portuguese;
+
+                default:
+                    return GameLanguages.English;
+            }
+        }
+    }
 
     [SerializeField] private GameStatus _gameStatus;
     /// <summary>
@@ -104,6 +129,7 @@ public class GameController : Controller
         UIController.OnUIBackToMainMenuFromMapaMundi += HandleOnUIBackToMainMenuFromMapaMundi;
         UIController.OnUISelectedDevices += HandleOnUISelectedDevices;
         UIController.OnCountdownIsOver += GameOver;
+        UIController.OnUISelectedLanguage += HandleOnSelectedLanguage;
 
         SceneController.OnSceneLoaded += HandleOnSceneLoaded;
 
@@ -130,6 +156,7 @@ public class GameController : Controller
         UIController.OnUIBackToMainMenuFromMapaMundi -= HandleOnUIBackToMainMenuFromMapaMundi;
         UIController.OnUISelectedDevices -= HandleOnUISelectedDevices;
         UIController.OnCountdownIsOver -= GameOver;
+        UIController.OnUISelectedLanguage -= HandleOnSelectedLanguage;
 
         SceneController.OnSceneLoaded -= HandleOnSceneLoaded;
 
@@ -476,7 +503,12 @@ public class GameController : Controller
 
     public void HandleOnEnemyDefeated(Enemy defeatedEnemy)
     {
-        if (defeatedEnemy.IsBoss)
-            print("You defeated a boss! Congratulations.");
+        print("OnEnemyDefeated");
+    }
+
+    private void HandleOnSelectedLanguage(Language language)
+    {
+        print($"Setting game language to {language}");
+        _language = language;
     }
 }

@@ -15,6 +15,7 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
     public Action<GameObject> OnGameReadyToStart;
     public Action<IReadOnlyList<Penosas>> OnLobbySelectedCharacters;
     public Action<IReadOnlyList<InputDevice>> OnLobbySelectedDevices;
+    public Action<Language> OnLobbySelectedLanguage;
     public Action<bool> OnLobbySetNewGame;
     public Action OnCancelSelection;
 
@@ -39,7 +40,7 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
     [SerializeField] private InputControlsPanel _inputControlsPanel;
 
     private List<CursorPosition> _cursors;
-    DevicePopupPanelUI _devicePanel;
+    private DevicePopupPanelUI _devicePanel;
 
     public void SelectButton(GameObject buttonToSelect)
     {
@@ -147,8 +148,10 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 
         if(HasRepeatedDeviceSelected(out string duplicatedDevice))
         {
+            LanguageSO lang = GetSelectedLanguage();
+
             _lobbyMessages.gameObject.SetActive(true);
-            _lobbyMessages.text = WarningMessages.InputDeviceChosenTwiceOrMoreMessage(duplicatedDevice);
+            _lobbyMessages.text = lang.GetDuplicatedDeviceMessage(duplicatedDevice);
             return;
         }
         else
@@ -263,6 +266,7 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
             }
         }
     }
+
     private void HandleOnCursorMoved(CursorPosition cursor, Vector2 coordinates)
     {
         if(!_lobbyMessages.gameObject.activeSelf)
@@ -292,14 +296,30 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
             }
         }
 
-        if(cursor.transform.parent.gameObject.IsCharacterSelectionButton())
-            _lobbyMessages.text = ConstantStrings.SelectCharacterMsg;
-        else if(cursor.transform.parent.gameObject.IsDeviceSelectionButton())
-            _lobbyMessages.text = ConstantStrings.SelectTheDeviceAndSeeTheControls;
+        UpdateLobbyMessages(cursor);
+    }
+
+    /// <summary>
+    /// Update Lobby Messages based upon cursor current position.
+    /// </summary>
+    /// <param name="cursor"></param>
+    private void UpdateLobbyMessages(CursorPosition cursor)
+    {
+        LanguageSO lang = GetSelectedLanguage();
+
+        if (cursor.transform.parent.gameObject.IsCharacterSelectionButton())
+            _lobbyMessages.text = lang.SelectYourCharacterToPlay;
+        else if (cursor.transform.parent.gameObject.IsDeviceSelectionButton())
+            _lobbyMessages.text = lang.SelectDeviceYouWishToUse;
     }
 
     public void SelectPlayersCharacters()
     {
         OnLobbySelectedCharacters?.Invoke(CharacterSelectionList);
+    }
+
+    public void SetGameLanguage(Language language)
+    {
+        OnLobbySelectedLanguage?.Invoke(language);
     }
 }

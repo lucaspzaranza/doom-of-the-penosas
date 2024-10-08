@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
- * To prevent bugs when falling from one platform to another, please set the height distance to a mininum of 0.45f.
+ * To prevent bugs when falling from one platform to another, please set the height distance to a 
+ * mininum of 0.45f into Inspector Transform Component.
  */
 
 public class FallFromPlatform : MonoBehaviour

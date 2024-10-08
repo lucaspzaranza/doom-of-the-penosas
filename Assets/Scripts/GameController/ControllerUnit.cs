@@ -65,4 +65,13 @@ public abstract class ControllerUnit: Controller
         else
             return ((ControllerUnit)_parentController).GetCharacterSelectionList();
     }
+
+    public LanguageSO GetSelectedLanguage()
+    {
+        GameController gameCtrl = TryToGetGameControllerFromParent();
+        if (gameCtrl != null)
+            return gameCtrl.CurrentLanguage;
+        else
+            return ((ControllerUnit)_parentController).GetSelectedLanguage();
+    }
 }

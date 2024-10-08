@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31ad69463663f564bacdbddfedaf51bb, type: 3}
+  m_Name: Portuguese
+  m_EditorClassIdentifier: 
+  _newGameBtn: Novo Jogo
+  _continueBtn: Continuar
+  _languageBtn: Idioma
+  _quitBtn: Sair do Jogo
+  _whichLanguage: "Com que idioma voc\xEA quer jogar?"
+  _english: "Ingl\xEAs"
+  _portuguese: "Portugu\xEAs"
+  _backFromLangMenu: Voltar
+  _newGameSubtitle: Novo Jogo
+  _continueSubtitle: Continuar
+  _singlePlayer: Um jogador
+  _multiplayer: Multiplayer
+  _selectYourPenosa: 'Escolha a sua Penosa:'
+  _selectInputDevice: 'Selecione o controle:'
+  _start: "Come\xE7ar"
+  _backToGameModeSelection: Voltar ao Menu
+  _selectYourCharacterToPlay: Escolha a penosa para jogar.
+  _selectDeviceYouWishToUse: "Escolha o dispositivo que voc\xEA quer usar com esse
+    jogador. Aperte Confirmar para ver um guia dos controles."
+  _cancelCharacterSelectionBtn: Cancelar
+  _duplicatedDeviceMessage: "O dispositivo [deviceName] est\xE1 sendo usado por mais
+    de um jogador. Por favor selecione outro dispositivo."
+  _inputControlsGuideTitle: Guia dos Controles
+  _closeButton: Fechar
+  _wasd: 'WASD: Andar'
+  _enterConfirm: 'Enter: Confirma'
+  _enterPause: 'Enter: Pausa'
+  _alt: 'Alt: Item Especial'
+  _qr: 'Q/R: Mudar Item'
+  _ctrl: "Ctrl: Tiro Prim\xE1rio"
+  _arrows: "\u2190\u2192: Move Bomba Rel\xF3gio"
+  _space: "Espa\xE7o: Pular"
+  _shift: "Shift: Tiro Secund\xE1rio"
+  _leftStick: "Anal\xF3gico Esquerdo: Andar"
+  _buttonSouthJump: "Bot\xE3o Sul: Confirma"
+  _buttonSouthConfirm: "Bot\xE3o Sul: Pular"
+  _buttonNorth: "Bot\xE3o Norte: Item Especial"
+  _rightAndLeftButtons: 'RB/LB: Mudar Item'
+  _buttonWest: "Bot\xE3o Oeste: Tiro Prim\xE1rio"
+  _dPad: "D-Pad: Move Bomba Rel\xF3gio"
+  _buttonEast: "Bot\xE3o Leste: Tiro Secund\xE1rio"
+  _startButton: 'Start: Pausa'

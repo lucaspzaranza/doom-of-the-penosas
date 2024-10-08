@@ -14,6 +14,7 @@ public class UIController : ControllerUnit
     public Action<bool> OnUISetNewGame;
     public Action<IReadOnlyList<Penosas>> OnUISelectedCharacters;
     public Action<IReadOnlyList<InputDevice>> OnUISelectedDevices;
+    public Action<Language> OnUISelectedLanguage;
     public Action<int> OnUIGameSelectedSceneIndex;
     public Action OnUIBackToMainMenuFromMapaMundi;
     public Action<byte> OnCountdownIsOver;
@@ -62,6 +63,7 @@ public class UIController : ControllerUnit
             PlayerLobbyUIController.OnLobbySelectedCharacters += HandleLobbyOnGameSelectedCharacters;
             PlayerLobbyUIController.OnLobbySetNewGame += HandleOnLobbySetNewGame;
             PlayerLobbyUIController.OnLobbySelectedDevices += HandleOnLobbySelectedDevices;
+            PlayerLobbyUIController.OnLobbySelectedLanguage += HandleOnLobbySelectedLanguage;
         }
 
         MenuWithCursor.OnMenuEnabled += HandleMenuWithCursorEnabled;
@@ -75,6 +77,7 @@ public class UIController : ControllerUnit
         PlayerLobbyUIController.OnLobbySelectedCharacters -= HandleLobbyOnGameSelectedCharacters;
         PlayerLobbyUIController.OnLobbySetNewGame -= HandleOnLobbySetNewGame;
         PlayerLobbyUIController.OnLobbySelectedDevices -= HandleOnLobbySelectedDevices;
+        PlayerLobbyUIController.OnLobbySelectedLanguage -= HandleOnLobbySelectedLanguage;
         PlayerLobbyUIController.Dispose();
 
         MenuWithCursor.OnMenuEnabled -= HandleMenuWithCursorEnabled;
@@ -238,5 +241,10 @@ public class UIController : ControllerUnit
     {
         _playerInGameUIController.HideHUDs();
         Instantiate(_gameOverContainer, _gameSceneCanvas.transform);
+    }
+
+    private void HandleOnLobbySelectedLanguage(Language language)
+    {
+        OnUISelectedLanguage?.Invoke(language);
     }
 }

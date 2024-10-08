@@ -10,9 +10,9 @@ public class GameModeTitleSelector : MonoBehaviour
     private void OnEnable()
     {
         var gameCtrl = FindAnyObjectByType<GameController>();
+        LanguageSO lang = gameCtrl.CurrentLanguage;
 
         if(gameCtrl != null)
-            _subtitle.text = gameCtrl.IsNewGame? ConstantStrings.NewGameSubtitle :
-                ConstantStrings.ContinueGameSubtitle;
+            _subtitle.text = gameCtrl.IsNewGame? lang.NewGameSubtitle : lang.ContinueSubtitle;
     }
 }

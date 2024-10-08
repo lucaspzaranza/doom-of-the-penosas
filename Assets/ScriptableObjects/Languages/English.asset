@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31ad69463663f564bacdbddfedaf51bb, type: 3}
+  m_Name: English
+  m_EditorClassIdentifier: 
+  _newGameBtn: New Game
+  _continueBtn: Continue
+  _languageBtn: Language
+  _quitBtn: Quit Game
+  _whichLanguage: Which language you want to play the game?
+  _english: English
+  _portuguese: Portuguese
+  _backFromLangMenu: Back
+  _newGameSubtitle: New Game
+  _continueSubtitle: Continue
+  _singlePlayer: Single Player
+  _multiplayer: Multiplayer
+  _selectYourPenosa: Select your Penosa
+  _selectInputDevice: 'Select the input device:'
+  _start: Start
+  _backToGameModeSelection: Back to Mode Selection
+  _selectYourCharacterToPlay: Select your character to play.
+  _selectDeviceYouWishToUse: 'Select the device you wish to use with this player.
+
+    Press
+    confirm to see a device control guide.'
+  _cancelCharacterSelectionBtn: Cancel
+  _duplicatedDeviceMessage: The [deviceName] device is being chosen by more than
+    one player. Please select another device.
+  _inputControlsGuideTitle: Input Controls Guide
+  _closeButton: Close
+  _wasd: 'WASD: Move'
+  _enterConfirm: 'Enter: Confirm'
+  _enterPause: 'Enter: Pause'
+  _alt: 'Alt: Special Item'
+  _qr: 'Q/R: Change Item'
+  _ctrl: 'Ctrl: Primary Shot'
+  _arrows: 'Arrows: Move Time Bomb'
+  _space: 'Space: Jump'
+  _shift: 'Shift: Secondary Shot'
+  _leftStick: 'Left Stick: Move'
+  _buttonSouthJump: 'Button South: Confirm'
+  _buttonSouthConfirm: 'Button South: Jump'
+  _buttonNorth: 'Button North: Special Item'
+  _rightAndLeftButtons: 'RB/LB: Change Item'
+  _buttonWest: 'Button West: Primary Shot'
+  _dPad: 'D-Pad: Move Time Bomb'
+  _buttonEast: 'Button East: Secondary Shot'
+  _startButton: 'Start: Pause'

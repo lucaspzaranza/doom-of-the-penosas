@@ -114,6 +114,7 @@ public class StageController : ControllerUnit
     /// </summary>
     public void HandleOnBossDefeated()
     {
+        print("You defeated a boss! Congratulations.");
         StartCoroutine(nameof(StageClearEvent));
         OnStageClear?.Invoke(_currentStage);
 
