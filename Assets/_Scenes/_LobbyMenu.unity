@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1578,6 +1577,7 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 0
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
+  m_ScrollDeltaPerTick: 6
 --- !u!1 &339081540
 GameObject:
   m_ObjectHideFlags: 0
@@ -3696,7 +3696,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -50.000046}
+  m_AnchoredPosition: {x: 0, y: -50.00003}
   m_SizeDelta: {x: 700, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &740456848
@@ -9403,6 +9403,93 @@ RectTransform:
   m_AnchoredPosition: {x: -124.7, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1803454643
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1803454645}
+  - component: {fileID: 1803454644}
+  m_Layer: 0
+  m_Name: LobbyMenuTranslator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1803454644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803454643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32c3c478f5fbc4041abe7f2df3144cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _startButton: {fileID: 863132952}
+  _backToGameModeMenuFromCharacterSelectionButton: {fileID: 56577408}
+  _cancelCharacterSelectionButton: {fileID: 1125681187}
+  _lobbyMessages: {fileID: 822284386}
+  _singlePlayerBtn: {fileID: 1486678891}
+  _multiplayerBtn: {fileID: 1975919572}
+  _newGameBtn: {fileID: 1926111778}
+  _continueBtn: {fileID: 375769130}
+  _backToMainMenuBtnFromGameMode: {fileID: 1891825834}
+  _quitGameBtn: {fileID: 0}
+  _languageMenuBtn: {fileID: 0}
+  _whichLangTxt: {fileID: 0}
+  _englishBtn: {fileID: 0}
+  _portugueseBtn: {fileID: 0}
+  _languageBackBtn: {fileID: 0}
+  _selectYourPenosa: {fileID: 0}
+  _selectInputDevice: {fileID: 0}
+  _newGameSubtitle: {fileID: 0}
+  _inputControlsGuideTitle: {fileID: 0}
+  _closeButton: {fileID: 0}
+  _wasd: {fileID: 0}
+  _enterConfirm: {fileID: 0}
+  _enterPause: {fileID: 0}
+  _alt: {fileID: 0}
+  _qr: {fileID: 0}
+  _ctrl: {fileID: 0}
+  _arrows: {fileID: 0}
+  _space: {fileID: 0}
+  _shift: {fileID: 0}
+  _leftStick: {fileID: 0}
+  _buttonSouthJump: {fileID: 0}
+  _buttonSouthConfirm: {fileID: 0}
+  _buttonNorth: {fileID: 0}
+  _rightAndLeftButtons: {fileID: 0}
+  _buttonWest: {fileID: 0}
+  _dPad: {fileID: 0}
+  _buttonEast: {fileID: 0}
+  _startButtonTxt: {fileID: 0}
+  _mainMenu: {fileID: 0}
+  _gameModeMenu: {fileID: 0}
+  _languageMenu: {fileID: 0}
+  _playerSelectionMenu: {fileID: 0}
+  _2PCursor: {fileID: 0}
+--- !u!4 &1803454645
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803454643}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1840205795
 GameObject:
   m_ObjectHideFlags: 0
@@ -11560,5 +11647,6 @@ SceneRoots:
   - {fileID: 965334990}
   - {fileID: 1179575835}
   - {fileID: 288345171}
+  - {fileID: 1803454645}
   - {fileID: 1563322874}
   - {fileID: 1168302452}

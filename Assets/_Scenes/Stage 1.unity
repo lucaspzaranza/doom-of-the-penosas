@@ -23878,6 +23878,10 @@ MonoBehaviour:
   - {fileID: 494667710214850738, guid: 05f476ac6291a804fb2fce0bcdf903ff, type: 3}
   - {fileID: 3978230461744049896, guid: 7f53ff92ebbf7394baaffc4c20d5dfea, type: 3}
   _gameMode: 0
+  _language: 0
+  _gameLanguages:
+    _english: {fileID: 0}
+    _portuguese: {fileID: 0}
   _gameStatus: 2
   _isNewGame: 1
   _persistenceController: {fileID: 1147128196}
@@ -24165,7 +24169,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2046103757
 Transform:
   m_ObjectHideFlags: 0

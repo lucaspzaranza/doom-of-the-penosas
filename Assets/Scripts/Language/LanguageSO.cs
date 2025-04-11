@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Language Texts", menuName = "ScriptableObjects/Language Texts")]
 public class LanguageSO : ScriptableObject
 {
+    #region Main Menu
+
     [Header("Main Menu")]
     [SerializeField] private string _newGameBtn;
     public string NewGameButton => _newGameBtn;
@@ -17,6 +19,11 @@ public class LanguageSO : ScriptableObject
 
     [SerializeField] private string _quitBtn;
     public string QuitButton => _quitBtn;
+
+
+    #endregion
+
+    #region Language Menu
 
     [Header("Language Menu")]
     [SerializeField] private string _whichLanguage;
@@ -31,6 +38,10 @@ public class LanguageSO : ScriptableObject
     [SerializeField] private string _backFromLangMenu;
     public string BackFromLangMenu => _backFromLangMenu;
 
+    #endregion
+
+    #region Game Mode Menu
+
     [Header("Game Mode Menu")]
     [SerializeField] private string _newGameSubtitle;
     public string NewGameSubtitle => _newGameSubtitle;
@@ -43,6 +54,10 @@ public class LanguageSO : ScriptableObject
 
     [SerializeField] private string _multiplayer;
     public string Multiplayer => _multiplayer;
+
+    #endregion
+
+    #region Player Selection Menu
 
     [Header("Player Selection Menu")]
     [SerializeField] private string _selectYourPenosa;
@@ -66,8 +81,13 @@ public class LanguageSO : ScriptableObject
     [SerializeField] private string _cancelCharacterSelectionBtn;
     public string CancelCharacterSelectionBtn => _cancelCharacterSelectionBtn;
 
+    [Tooltip("Use the [deviceName] key to be the placeholder for the Input Device name.")]
     [SerializeField] [TextArea] private string _duplicatedDeviceMessage;
     public string GetDuplicatedDeviceMessage(string deviceName) => _duplicatedDeviceMessage.Replace(ConstantStrings.DeviceNameKey, deviceName);
+
+    #endregion
+
+    #region Device Popup Menu - General Controls
 
     [Header("Device Popup Menu - General Controls")]
 
@@ -76,6 +96,10 @@ public class LanguageSO : ScriptableObject
 
     [SerializeField] private string _closeButton;
     public string CloseButton => _closeButton;
+
+    #endregion
+
+    #region Device Popup Menu - Keyboard
 
     [Header("Device Popup Menu - Keyboard")]
 
@@ -106,6 +130,10 @@ public class LanguageSO : ScriptableObject
     [SerializeField] private string _shift;
     public string Shift => _shift;
 
+    #endregion
+
+    #region Device Popup Menu - Joystick
+
     [Header("Device Popup Menu - Joystick")]
 
     [SerializeField] private string _leftStick;
@@ -134,4 +162,64 @@ public class LanguageSO : ScriptableObject
 
     [SerializeField] private string _startButton;
     public string StartButton => _startButton;
+
+    #endregion
+
+    #region Loading Menu
+
+    [Header("Loading Menu")]
+    [SerializeField] private string _loadingText;
+    public string LoadingText => _loadingText;
+
+    #endregion
+
+    #region Cut Scene Menu
+
+    [Header("Cut Scene Menu")]
+    [SerializeField] private string _nextBtn;
+    public string NextBtn => _nextBtn;
+
+    [SerializeField] private string _skipBtn;
+    public string SkipBtn => _skipBtn;
+
+    #endregion
+
+    #region Mapa Mundi Menu
+
+    [Header("Mapa Mundi Menu")]
+    [SerializeField] private string _mapaMundiTitle;
+    public string MapaMundiTitle => _mapaMundiTitle;
+
+    [SerializeField] private string _selectAStageToGo;
+    public string SelectAStageToGo => _selectAStageToGo;
+
+    [SerializeField] private string _stage;
+    public string Stage => _stage;
+
+    #endregion
+
+    #region Pause Menu
+
+    [Header("Pause Menu")]
+    [SerializeField] private string _pauseTitle;
+    public string PauseTitle => _pauseTitle;
+
+    [SerializeField] private string _resume;
+    public string Resume => _resume;
+
+    [SerializeField] private string _backToMapaMundi;
+    public string BackToMapaMundi => _backToMapaMundi;
+
+    #endregion
+
+    #region Player HUD
+
+    [Header("Player HUD")]
+    [SerializeField] private string _pressPauseToContinueTMPRO;
+    public string PressPauseToContinueTMPRO => _pressPauseToContinueTMPRO;
+
+    [SerializeField] private string _waitUntilStageOverTMPRO;
+    public string WaitUntilStageOverTMPRO => _waitUntilStageOverTMPRO;
+
+    #endregion
 }

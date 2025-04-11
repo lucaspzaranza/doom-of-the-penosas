@@ -44,7 +44,7 @@ MonoBehaviour:
   _alt: 'Alt: Special Item'
   _qr: 'Q/R: Change Item'
   _ctrl: 'Ctrl: Primary Shot'
-  _arrows: 'Arrows: Move Time Bomb'
+  _arrows: "\u2190\u2192: Move Time Bomb"
   _space: 'Space: Jump'
   _shift: 'Shift: Secondary Shot'
   _leftStick: 'Left Stick: Move'
@@ -56,3 +56,14 @@ MonoBehaviour:
   _dPad: 'D-Pad: Move Time Bomb'
   _buttonEast: 'Button East: Secondary Shot'
   _startButton: 'Start: Pause'
+  _loadingText: Loading...
+  _nextBtn: Next
+  _skipBtn: Skip
+  _mapaMundiTitle: Stage Selection
+  _selectAStageToGo: Select a stage to go
+  _stage: Stage
+  _pauseTitle: Pause
+  _resume: Resume
+  _backToMapaMundi: Back to Mapa Mundi
+  _pressPauseToContinueTMPRO: Press pause button to continue.
+  _waitUntilStageOverTMPRO: Wait until the stage is over.

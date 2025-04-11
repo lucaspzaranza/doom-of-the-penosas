@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,6 +14,10 @@ public class MapaMundiControllerBackup : ControllerBackup
 
     [SerializeField] private Button _backToMainMenuBtn;
     public Button BackToMainMenuButton => _backToMainMenuBtn;
+
+    [SerializeField] private TextMeshProUGUI _title;
+    [SerializeField] private TextMeshProUGUI _subtitle;
+    [SerializeField] private Button _backBtn;
 
     protected override Type GetControllerType() => typeof(MapaMundiController);
 
@@ -64,6 +69,17 @@ public class MapaMundiControllerBackup : ControllerBackup
 
     public override void UpdateLanguageTexts()
     {
-        throw new NotImplementedException();
+        LanguageSO selectedLang = _controller.GetSelectedLanguage();
+
+        _title.text = selectedLang.MapaMundiTitle;
+        _subtitle.text = selectedLang.SelectAStageToGo;
+        _backBtn.GetComponentInChildren<TextMeshProUGUI>().text = selectedLang.BackFromLangMenu;
+
+        int counter = 1;
+        StageButtons.ForEach(stageBtn =>
+        {
+            stageBtn.GetComponentInChildren<TextMeshProUGUI>().text = $"{selectedLang.Stage} {counter}";
+            counter++;
+        });
     }
 }

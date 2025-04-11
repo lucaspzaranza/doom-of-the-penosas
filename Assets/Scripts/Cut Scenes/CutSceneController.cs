@@ -37,12 +37,15 @@ public class CutSceneController : ControllerUnit
     private bool _canNextStep;
     public bool CanNextStep => _canNextStep;
 
+    private string CurrentSceneText => _currentStep.GetText(_gameCtrlInstance.Language);
+
     private CutSceneControllerBackup _cutSceneBackup;
     private CutSceneStep _currentStep;
     private bool _showTextInProgress;
     private string _currentText;
     private float _timeCounter;
     private int _charIndex;
+    private GameController _gameCtrlInstance;
 
     public override void Setup()
     {
@@ -58,6 +61,7 @@ public class CutSceneController : ControllerUnit
         NextStepAnimationEvent.OnNextStepAnimationEvent += ShowNextStep;
 
         _canNextStep = true;
+        _gameCtrlInstance = TryToGetGameControllerFromParent();
     }
 
     public override void Dispose()
@@ -73,9 +77,9 @@ public class CutSceneController : ControllerUnit
     private void Update()
     {
         if(!_showTextInProgress || _currentStep == null || _stepText == null ||
-            string.IsNullOrEmpty(_currentStep.Text)) return;
+            string.IsNullOrEmpty(CurrentSceneText)) return;
 
-        if (_stepText.text.Length == _currentStep.Text.Length)
+        if (_stepText.text.Length == CurrentSceneText.Length)
         {
             ResetTextDisplayCounterData();
             _showTextInProgress = false;
@@ -84,7 +88,7 @@ public class CutSceneController : ControllerUnit
         _timeCounter += Time.deltaTime;
         if(_timeCounter >= _currentStep.SequenceSpeed)
         {
-            _stepText.text += _currentStep.Text[_charIndex];
+            _stepText.text += CurrentSceneText[_charIndex];
             _timeCounter = 0;
             _charIndex++;
         }
@@ -142,7 +146,7 @@ public class CutSceneController : ControllerUnit
     private void HandleOnNextStepButtonPressed()
     {
         if (_showTextInProgress)
-            _stepText.text = _currentStep.Text;
+            _stepText.text = CurrentSceneText;
         else
         {
             // The Fade-In-Out animation triggers the ShowNextStep() by default.
@@ -186,7 +190,7 @@ public class CutSceneController : ControllerUnit
                 Image.gameObject.SetActive(false);
         }
 
-        if(!string.IsNullOrEmpty(_currentStep.Text))
+        if(!string.IsNullOrEmpty(CurrentSceneText))
             _showTextInProgress = true;
     }
 

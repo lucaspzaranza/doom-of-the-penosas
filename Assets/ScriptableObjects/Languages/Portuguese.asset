@@ -54,3 +54,14 @@ MonoBehaviour:
   _dPad: "D-Pad: Move Bomba Rel\xF3gio"
   _buttonEast: "Bot\xE3o Leste: Tiro Secund\xE1rio"
   _startButton: 'Start: Pausa'
+  _loadingText: Carregando...
+  _nextBtn: "Pr\xF3ximo"
+  _skipBtn: Pular
+  _mapaMundiTitle: "Sele\xE7\xE3o de Fase"
+  _selectAStageToGo: Escolha uma fase pra jogar
+  _stage: Fase
+  _pauseTitle: Pausa
+  _resume: Continuar
+  _backToMapaMundi: Voltar ao Mapa Mundi
+  _pressPauseToContinueTMPRO: Aperte Pausa para continuar.
+  _waitUntilStageOverTMPRO: "Espere at\xE9 a fase acabar."

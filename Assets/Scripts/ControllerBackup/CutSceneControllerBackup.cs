@@ -58,6 +58,8 @@ public class CutSceneControllerBackup : ControllerBackup
 
     public override void UpdateLanguageTexts()
     {
-        throw new NotImplementedException();
+        LanguageSO selectedLang = _controller.GetSelectedLanguage();
+        _nextStepBtn.GetComponentInChildren<TextMeshProUGUI>().text = selectedLang.NextBtn;
+        _skipBtn.GetComponentInChildren<TextMeshProUGUI>().text = selectedLang.SkipBtn;
     }
 }

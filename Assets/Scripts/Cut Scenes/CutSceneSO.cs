@@ -1,6 +1,9 @@
+using JetBrains.Annotations;
+using SharedData.Enumerations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -59,6 +62,19 @@ public class CutSceneSO : ScriptableObject
 }
 
 [System.Serializable]
+public class CutSceneLanguageText
+{
+    [SerializeField] private string _name;
+
+    [SerializeField] private Language _language;
+    public Language Language => _language;
+
+    [TextArea]
+    [SerializeField] private string _text;
+    public string Text => _text;
+}
+
+[System.Serializable]
 public class CutSceneStep
 {
     public static Action<CutSceneStep> OnStepInitialized;
@@ -78,12 +94,23 @@ public class CutSceneStep
     [SerializeField] private float _sequenceSpeed;
     public float SequenceSpeed => _sequenceSpeed;
 
-    [TextArea]
-    [SerializeField] private string _text;
-    public string Text => _text;
+    [Tooltip("The list of texts for each language used in the game for this step.")]
+    [SerializeField] private List<CutSceneLanguageText> _stepTexts;
 
     public void InitializeStep()
     {
         OnStepInitialized?.Invoke(this);
+    }
+
+    /// <summary>
+    /// Get cut scene text based upon the desired language passed as parameter.
+    /// </summary>
+    /// <returns></returns>
+    public string GetText(Language language)
+    {
+        return _stepTexts
+            .SingleOrDefault(langTxt => langTxt.Language.Equals(language)).Text 
+            ?? 
+            string.Empty;
     }
 }
