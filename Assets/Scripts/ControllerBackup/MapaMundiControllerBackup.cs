@@ -66,20 +66,4 @@ public class MapaMundiControllerBackup : ControllerBackup
             mapaMundiController.SelectSceneIndex(ScenesBuildIndexes._6thStage);
         });
     }
-
-    public override void UpdateLanguageTexts()
-    {
-        LanguageSO selectedLang = _controller.GetSelectedLanguage();
-
-        _title.text = selectedLang.MapaMundiTitle;
-        _subtitle.text = selectedLang.SelectAStageToGo;
-        _backBtn.GetComponentInChildren<TextMeshProUGUI>().text = selectedLang.BackFromLangMenu;
-
-        int counter = 1;
-        StageButtons.ForEach(stageBtn =>
-        {
-            stageBtn.GetComponentInChildren<TextMeshProUGUI>().text = $"{selectedLang.Stage} {counter}";
-            counter++;
-        });
-    }
 }

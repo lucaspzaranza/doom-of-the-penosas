@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class LobbyMenuTranslator : MenuTranslator
 {
+    #region Vars and Props
+
     [SerializeField] private GameObject _startButton;
     public GameObject StartButton => _startButton;
 
@@ -69,6 +71,8 @@ public class LobbyMenuTranslator : MenuTranslator
     [SerializeField] private GameObject _playerSelectionMenu;
     [SerializeField] private GameObject _2PCursor;
 
+    #endregion
+
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -76,6 +80,8 @@ public class LobbyMenuTranslator : MenuTranslator
 
     public override void Translate()
     {
+        base.Translate();
+
         // Main Menu
         _newGameBtn.GetComponentInChildren<Text>().text = lang.NewGameButton;
         _continueBtn.GetComponentInChildren<Text>().text = lang.ContinueButton;

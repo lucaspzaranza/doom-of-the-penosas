@@ -7763,6 +7763,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _controller: {fileID: 0}
+  _menuUITranslator: {fileID: 1803454644}
   _startButton: {fileID: 863132952}
   _backToGameModeMenuFromCharacterSelectionButton: {fileID: 56577408}
   _cancelCharacterSelectionButton: {fileID: 1125681187}
@@ -9441,40 +9442,40 @@ MonoBehaviour:
   _newGameBtn: {fileID: 1926111778}
   _continueBtn: {fileID: 375769130}
   _backToMainMenuBtnFromGameMode: {fileID: 1891825834}
-  _quitGameBtn: {fileID: 0}
-  _languageMenuBtn: {fileID: 0}
-  _whichLangTxt: {fileID: 0}
-  _englishBtn: {fileID: 0}
-  _portugueseBtn: {fileID: 0}
-  _languageBackBtn: {fileID: 0}
-  _selectYourPenosa: {fileID: 0}
-  _selectInputDevice: {fileID: 0}
-  _newGameSubtitle: {fileID: 0}
-  _inputControlsGuideTitle: {fileID: 0}
-  _closeButton: {fileID: 0}
-  _wasd: {fileID: 0}
-  _enterConfirm: {fileID: 0}
-  _enterPause: {fileID: 0}
-  _alt: {fileID: 0}
-  _qr: {fileID: 0}
-  _ctrl: {fileID: 0}
-  _arrows: {fileID: 0}
-  _space: {fileID: 0}
-  _shift: {fileID: 0}
-  _leftStick: {fileID: 0}
-  _buttonSouthJump: {fileID: 0}
-  _buttonSouthConfirm: {fileID: 0}
-  _buttonNorth: {fileID: 0}
-  _rightAndLeftButtons: {fileID: 0}
-  _buttonWest: {fileID: 0}
-  _dPad: {fileID: 0}
-  _buttonEast: {fileID: 0}
-  _startButtonTxt: {fileID: 0}
-  _mainMenu: {fileID: 0}
-  _gameModeMenu: {fileID: 0}
-  _languageMenu: {fileID: 0}
-  _playerSelectionMenu: {fileID: 0}
-  _2PCursor: {fileID: 0}
+  _quitGameBtn: {fileID: 30850733}
+  _languageMenuBtn: {fileID: 1357526235}
+  _whichLangTxt: {fileID: 1570345348}
+  _englishBtn: {fileID: 532297848}
+  _portugueseBtn: {fileID: 460367600}
+  _languageBackBtn: {fileID: 1012219727}
+  _selectYourPenosa: {fileID: 689893287}
+  _selectInputDevice: {fileID: 599002539}
+  _newGameSubtitle: {fileID: 1361594458}
+  _inputControlsGuideTitle: {fileID: 741150766}
+  _closeButton: {fileID: 633596600}
+  _wasd: {fileID: 2147357493}
+  _enterConfirm: {fileID: 154377232}
+  _enterPause: {fileID: 1535800265}
+  _alt: {fileID: 87746726}
+  _qr: {fileID: 1574972063}
+  _ctrl: {fileID: 1095710610}
+  _arrows: {fileID: 1694484582}
+  _space: {fileID: 1745285926}
+  _shift: {fileID: 1229345302}
+  _leftStick: {fileID: 1131364563}
+  _buttonSouthJump: {fileID: 492221701}
+  _buttonSouthConfirm: {fileID: 1036304264}
+  _buttonNorth: {fileID: 1976221460}
+  _rightAndLeftButtons: {fileID: 1996463864}
+  _buttonWest: {fileID: 1565330719}
+  _dPad: {fileID: 912969844}
+  _buttonEast: {fileID: 1968423479}
+  _startButtonTxt: {fileID: 1745288788}
+  _mainMenu: {fileID: 212022877}
+  _gameModeMenu: {fileID: 1443895881}
+  _languageMenu: {fileID: 1653968372}
+  _playerSelectionMenu: {fileID: 1706950218}
+  _2PCursor: {fileID: 2502137233522234294}
 --- !u!4 &1803454645
 Transform:
   m_ObjectHideFlags: 0

@@ -12,12 +12,12 @@ using UnityEngine.Events;
 public abstract class ControllerBackup : MonoBehaviour
 {
     [SerializeField] protected ControllerUnit _controller;
+    [SerializeField] protected MenuTranslator _menuUITranslator;
 
     public virtual void OnEnable()
     {
         var controllerType = GetControllerType();
         StartCoroutine(FindControllerForBackupCoroutine(controllerType));
-        Invoke(nameof(UpdateLanguageTexts), 0.2f);
     }
 
     /// <summary>
@@ -57,6 +57,4 @@ public abstract class ControllerBackup : MonoBehaviour
             }
         }
     }
-
-    public abstract void UpdateLanguageTexts();
 }

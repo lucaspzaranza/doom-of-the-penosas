@@ -111,8 +111,8 @@
     <Compile Include="Assets\Scripts\UI\InputDevices\DevicePopupPanelUI.cs" />
     <Compile Include="Assets\Scripts\SharedData\ExtensionMethods.cs" />
     <Compile Include="Assets\Scripts\ControllerBackup\MapaMundiControllerBackup.cs" />
-    <Compile Include="Assets\Scripts\Persistence\PersistenceController.cs" />
     <Compile Include="Assets\Scripts\Language\LobbyMenuTranslator.cs" />
+    <Compile Include="Assets\Scripts\Persistence\PersistenceController.cs" />
     <Compile Include="Assets\Scripts\Inventory\Item.cs" />
     <Compile Include="Assets\Scripts\Attributes\DrawIfEnumEqualsToAttribute.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerHUD.cs" />
@@ -121,6 +121,7 @@
     <Compile Include="Assets\Scripts\Enemies\EnemyStateGeneralData.cs" />
     <Compile Include="Assets\Scripts\SharedData\SharedFunctions.cs" />
     <Compile Include="Assets\Scripts\UI\InputDevices\InputDevicesSelector.cs" />
+    <Compile Include="Assets\Scripts\Language\MapaMundiMenuTranslator.cs" />
     <Compile Include="Assets\Scripts\UI\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\UI\UIController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
@@ -146,8 +147,8 @@
     <Compile Include="Assets\Scripts\UI\InputDevices\InputControlsPanel.cs" />
     <Compile Include="Assets\Scripts\UI\MenuWithCursor.cs" />
     <Compile Include="Assets\Scripts\Enemies\Boss.cs" />
-    <Compile Include="Assets\Scripts\Weapons\Grenade.cs" />
     <Compile Include="Assets\Scripts\Language\CutsceneTranslator.cs" />
+    <Compile Include="Assets\Scripts\Weapons\Grenade.cs" />
     <Compile Include="Assets\Scripts\Stages\StageController.cs" />
     <Compile Include="Assets\Scripts\Ride Armors\JetSkinha.cs" />
     <Compile Include="Assets\Scripts\Pooling\ObjectPool.cs" />

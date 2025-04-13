@@ -508,7 +508,7 @@ public class GameController : Controller
 
     private void HandleOnSelectedLanguage(Language language)
     {
-        print($"Setting game language to {language}");
+        //print($"Setting game language to {language}");
         _language = language;
     }
 }

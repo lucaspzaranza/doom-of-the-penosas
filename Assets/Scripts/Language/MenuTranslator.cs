@@ -12,9 +12,17 @@ public class MenuTranslator : MonoBehaviour
 
     protected virtual void OnEnable()
     {
+        UpdateControllerAndLanguageReferences();
+    }
+
+    public void UpdateControllerAndLanguageReferences()
+    {
         gameCtrl = FindAnyObjectByType<GameController>();
         lang = gameCtrl.CurrentLanguage;
     }
 
-    public virtual void Translate() { }
+    public virtual void Translate() 
+    {
+        UpdateControllerAndLanguageReferences();
+    }
 }

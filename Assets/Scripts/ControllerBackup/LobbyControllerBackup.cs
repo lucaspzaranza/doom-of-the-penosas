@@ -90,7 +90,7 @@ public class LobbyControllerBackup : ControllerBackup
     [SerializeField] private GameObject _gameModeMenu;
     [SerializeField] private GameObject _languageMenu;
     [SerializeField] private GameObject _playerSelectionMenu;
-    [SerializeField] private GameObject _2PCursor;
+    [SerializeField] private GameObject _2PCursor;    
 
     protected override Type GetControllerType() => typeof(PlayerLobbyUIController);
 
@@ -200,13 +200,15 @@ public class LobbyControllerBackup : ControllerBackup
         _englishBtn.onClick.AddListener(() =>
         {
             lobbyController.SetGameLanguage(Language.English);
-            UpdateLanguageTexts();
+            _menuUITranslator.Translate();
+            //UpdateLanguageTexts();
         });
 
         _portugueseBtn.onClick.AddListener(() =>
         {
             lobbyController.SetGameLanguage(Language.Portuguese);
-            UpdateLanguageTexts();
+            _menuUITranslator.Translate();
+            //UpdateLanguageTexts();
         });
 
         _languageBackBtn.onClick.AddListener(() =>
@@ -214,62 +216,5 @@ public class LobbyControllerBackup : ControllerBackup
             _mainMenu.SetActive(true);
             _languageMenu.SetActive(false);
         });
-    }
-
-    public override void UpdateLanguageTexts()
-    {
-        LanguageSO selectedLang = _controller.GetSelectedLanguage();
-
-        // Main Menu
-        _newGameBtn.GetComponentInChildren<Text>().text = selectedLang.NewGameButton;
-        _continueBtn.GetComponentInChildren<Text>().text = selectedLang.ContinueButton;
-        _languageMenuBtn.GetComponentInChildren<Text>().text = selectedLang.LanguageButton;
-        _quitGameBtn.GetComponentInChildren<Text>().text = selectedLang.QuitButton;
-
-        // Language Menu
-        _whichLangTxt.GetComponent<TextMeshProUGUI>().text = selectedLang.WhichLanguageTxt;
-        _englishBtn.GetComponentInChildren<Text>().text = selectedLang.English;
-        _portugueseBtn.GetComponentInChildren<Text>().text = selectedLang.Portuguese;
-        _languageBackBtn.GetComponentInChildren<Text>().text = selectedLang.BackFromLangMenu;
-
-        // Game Mode
-        _singlePlayerBtn.GetComponentInChildren<Text>().text = selectedLang.SinglePlayer;
-        _multiplayerBtn.GetComponentInChildren<Text>().text = selectedLang.Multiplayer;
-        _backToMainMenuBtnFromGameMode.GetComponentInChildren<Text>().text = selectedLang.BackFromLangMenu;
-        _newGameSubtitle.text = selectedLang.NewGameSubtitle;
-
-        // Player Selection Menu
-        _selectYourPenosa.text = selectedLang.SelectYourPenosa;
-        _selectInputDevice.text = selectedLang.SelectInputDevice;
-        _startButton.GetComponentInChildren<Text>().text = selectedLang.Start;
-        _backToGameModeMenuFromCharacterSelectionButton.GetComponentInChildren<Text>().text = selectedLang.BackToGameModeSelection;
-        LobbyMessages.text = selectedLang.SelectYourCharacterToPlay;
-        CancelCharacterSelectionButton.GetComponentInChildren<Text>().text = selectedLang.CancelCharacterSelectionBtn;
-
-        // Device Popup Menu - General Controls
-        _inputControlsGuideTitle.text = selectedLang.InputControlsGuideTitle;
-        _closeButton.text = selectedLang.CloseButton;
-
-        // Device Popup Menu - Keyboard
-        _wasd.text = selectedLang.WASD;
-        _enterConfirm.text = selectedLang.EnterConfirm;
-        _enterPause.text = selectedLang.EnterPause;
-        _alt.text = selectedLang.Alt;
-        _qr.text = selectedLang.QR;
-        _ctrl.text = selectedLang.CTRL;
-        _arrows.text = selectedLang.Arrows;
-        _space.text = selectedLang.Space;
-        _shift.text = selectedLang.Shift;
-
-        // Device Popup Menu - Joystick
-        _leftStick.text = selectedLang.LeftStick;
-        _buttonSouthJump.text = selectedLang.ButtonSouthJump;
-        _buttonSouthConfirm.text = selectedLang.ButtonSouthConfirm;
-        _buttonNorth.text = selectedLang.ButtonNorth;
-        _rightAndLeftButtons.text = selectedLang.RightAndLeftButtons;
-        _buttonWest.text = selectedLang.ButtonWest;
-        _dPad.text = selectedLang.DPad;
-        _buttonEast.text = selectedLang.ButtonEast;
-        _startButtonTxt.text = selectedLang.StartButton;
     }
 }

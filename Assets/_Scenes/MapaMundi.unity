@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1069,6 +1068,7 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 0
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
+  m_ScrollDeltaPerTick: 6
 --- !u!224 &600688992 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8591797532406808318, guid: b97a6b74ce7a85245889b1210474c4f1,
@@ -2011,6 +2011,60 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1959321530}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1133832781
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1133832783}
+  - component: {fileID: 1133832782}
+  m_Layer: 0
+  m_Name: MapaMundiMenuTranslator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1133832782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133832781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e552b65426cffbc40b7bfcb9b8871028, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stageButtons:
+  - {fileID: 1258072368}
+  - {fileID: 1459167209}
+  - {fileID: 700188141}
+  - {fileID: 484105437}
+  - {fileID: 853604641}
+  - {fileID: 1089418454}
+  _title: {fileID: 1808579945}
+  _subtitle: {fileID: 510092058}
+  _backBtn: {fileID: 1613919689}
+--- !u!4 &1133832783
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133832781}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1258072366
 GameObject:
   m_ObjectHideFlags: 0
@@ -2805,6 +2859,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _controller: {fileID: 0}
+  _menuUITranslator: {fileID: 0}
   _stageButtons:
   - {fileID: 1258072368}
   - {fileID: 1459167209}
@@ -3099,6 +3154,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1808674470}
   m_CullTransparentMesh: 1
+--- !u!1 &1826895168
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1826895170}
+  - component: {fileID: 1826895169}
+  m_Layer: 0
+  m_Name: MapaMundiMenuTranslator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1826895169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826895168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e552b65426cffbc40b7bfcb9b8871028, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stageButtons:
+  - {fileID: 1258072368}
+  - {fileID: 1459167209}
+  - {fileID: 700188141}
+  - {fileID: 484105437}
+  - {fileID: 853604641}
+  - {fileID: 1089418454}
+  _title: {fileID: 1808579945}
+  _subtitle: {fileID: 510092058}
+  _backBtn: {fileID: 1613919689}
+--- !u!4 &1826895170
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826895168}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1904391628
 GameObject:
   m_ObjectHideFlags: 0
@@ -3674,4 +3783,6 @@ SceneRoots:
   - {fileID: 143419768}
   - {fileID: 1058758240}
   - {fileID: 559346953}
+  - {fileID: 1826895170}
   - {fileID: 1669915591}
+  - {fileID: 1133832783}

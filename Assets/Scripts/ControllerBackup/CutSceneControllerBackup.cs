@@ -55,11 +55,4 @@ public class CutSceneControllerBackup : ControllerBackup
             cutSceneController.CurrentCutscene.Skip();
         });
     }
-
-    public override void UpdateLanguageTexts()
-    {
-        LanguageSO selectedLang = _controller.GetSelectedLanguage();
-        _nextStepBtn.GetComponentInChildren<TextMeshProUGUI>().text = selectedLang.NextBtn;
-        _skipBtn.GetComponentInChildren<TextMeshProUGUI>().text = selectedLang.SkipBtn;
-    }
 }

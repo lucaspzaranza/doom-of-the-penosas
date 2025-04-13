@@ -12,11 +12,13 @@ public class PauseMenuTranslator : MenuTranslator
 
     protected override void OnEnable()
     {
-        base.OnEnable();
+        Translate();
     }
 
     public override void Translate()
     {
+        base.Translate();
+
         _pauseTitle.text = lang.PauseTitle;
         _resumeBtn.GetComponentInChildren<TextMeshProUGUI>().text = lang.Resume;
         _backToMapaMundiBtn.GetComponentInChildren<TextMeshProUGUI>().text = lang.BackToMapaMundi;
