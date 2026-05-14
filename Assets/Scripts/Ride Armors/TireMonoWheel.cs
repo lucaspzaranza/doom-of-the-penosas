@@ -41,7 +41,7 @@ public class TireMonoWheel : RideArmor
         _isGrounded = Physics2D.OverlapCircle(_groundCheck.position,
             PlayerConsts.OverlapCircleDiameter, _terrainLayerMask);
 
-        if(_isGrounded && _rb.velocity.y < 0 && 
+        if(_isGrounded && _rb.linearVelocity.y < 0 && 
             !_tireAndWheelContainer.activeSelf && _collider.sharedMaterial == null)
         {
             ChangeTireAndWheelContainers(true);
@@ -65,7 +65,7 @@ public class TireMonoWheel : RideArmor
         if (SharedFunctions.HitSomething(_wallCheckCollider, _terrainWithoutPlatformLayerMask, out Collider2D hitWall))
             return;
 
-        RigiBody2DComponent.velocity = new Vector2(direction.x, RigiBody2DComponent.velocity.y);
+        RigiBody2DComponent.linearVelocity = new Vector2(direction.x, RigiBody2DComponent.linearVelocity.y);
         if (direction.x != 0)
         {
             if (_tireAndWheelChangedPivotContainer.activeSelf && !_jumped && !_springAnimation.Activated)

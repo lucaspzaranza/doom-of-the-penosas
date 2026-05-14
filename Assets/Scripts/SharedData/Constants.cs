@@ -35,6 +35,8 @@ public static class ConstantStrings
     public const string NewGameSubtitle = "New Game";
     public const string ContinueGameSubtitle = "Continue";
     public const string HUD = "HUD";
+    public const string Singleplayer = "Singleplayer";
+    public const string Multiplayer = "Multiplayer";
 
     // Devices
     public const string Mouse = "Mouse";
@@ -153,6 +155,8 @@ public static class ConstantNumbers
     // Stage
     public const float TimeToShowStageClearTxt = 2f;
     public const float TimeToReturnToMapaMundiAfterGameOver = 3f;
+    public const float CameraScreenLimitWidth = 1.2f;
+    public const float CameraScreenLimitWidthSpeed = 0.5f;
 
     // Enemy
     public const float UpsideDownAngle = 180f;

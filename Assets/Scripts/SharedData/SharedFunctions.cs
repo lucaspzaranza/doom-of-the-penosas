@@ -22,7 +22,7 @@ public static class SharedFunctions
         ContactFilter2D contactFilter = new ContactFilter2D();
         Collider2D[] results = new Collider2D[1];
         contactFilter.SetLayerMask(layerMask);
-        colliderToCheck.OverlapCollider(contactFilter, results);
+        colliderToCheck.Overlap(contactFilter, results);
         hitSomething = results[0];
         return hitSomething != null;
     }

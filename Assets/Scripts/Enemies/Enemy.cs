@@ -201,8 +201,8 @@ public class Enemy : DamageableObject
         if (_weaponsWhichRotateTowardsPlayer.Count > 0)
             RotateWeaponsTowardsPlayer();
 
-        // Detecção do jogador aqui é diferente. Se rotacionar atrás do jogador,
-        // tem que usar a Overlap Area e ver se tá na distância permitida
+        // Detecï¿½ï¿½o do jogador aqui ï¿½ diferente. Se rotacionar atrï¿½s do jogador,
+        // tem que usar a Overlap Area e ver se tï¿½ na distï¿½ncia permitida
         if (DetectedPlayer())
         {
             if (State == EnemyState.Idle || State == EnemyState.Patrol)
@@ -394,8 +394,8 @@ public class Enemy : DamageableObject
             _isMoving = true;
             _xDirection = GetDirection() * _speed;
 
-            Vector2 direction = new Vector2(_xDirection, Rigidbody.velocity.y);
-            Rigidbody.velocity = direction;
+            Vector2 direction = new Vector2(_xDirection, Rigidbody.linearVelocity.y);
+            Rigidbody.linearVelocity = direction;
             Flip((int)_xDirection);
         }
         else

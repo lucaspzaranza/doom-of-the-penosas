@@ -10,6 +10,7 @@ using UnityEngine.InputSystem;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEditor;
 using UnityEngine.TextCore.Text;
+using Cinemachine;
 
 public class GameController : Controller
 {
@@ -89,6 +90,10 @@ public class GameController : Controller
     [SerializeField] private CutSceneController _cutSceneController;
     public CutSceneController CutSceneController => _cutSceneController;
 
+    [Space]
+    [SerializeField] private CinemachineVirtualCamera _camera;
+    public CinemachineVirtualCamera Camera => _camera;
+    
     private int _nextStageIndex;
 
     #endregion

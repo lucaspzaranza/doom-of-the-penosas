@@ -20,7 +20,7 @@ public class PlayerDeathZone : MonoBehaviour
             if(playerScript != null)
             {
                 playerScript.PlayerLostALife();
-                playerScript.Rigidbody2D.velocity = Vector2.zero;
+                playerScript.Rigidbody2D.linearVelocity = Vector2.zero;
                 if(playerScript.PlayerData.Lives > 0)
                     playerScript.gameObject.transform.position = _playerController.PlayerStartPosition;
             }

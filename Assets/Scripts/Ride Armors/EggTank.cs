@@ -9,7 +9,7 @@ public class EggTank : RideArmor
         if (SharedFunctions.HitSomething(_wallCheckCollider, _terrainWithoutPlatformLayerMask, out Collider2D hitWall))
             return;
 
-        RigiBody2DComponent.velocity = new Vector2(direction.x, RigiBody2DComponent.velocity.y);
+        RigiBody2DComponent.linearVelocity = new Vector2(direction.x, RigiBody2DComponent.linearVelocity.y);
         if (direction.x != 0)
             base.Move(direction);
     }
@@ -17,6 +17,6 @@ public class EggTank : RideArmor
     public override void Eject()
     {
         base.Eject();
-        RigiBody2DComponent.velocity = Vector2.zero;
+        RigiBody2DComponent.linearVelocity = Vector2.zero;
     }
 }

@@ -8,7 +8,7 @@ public class Grenade : Projectile
 
     protected bool IsOnAir
     {
-        get { return rb2D.velocity.y != 0; }
+        get { return rb2D.linearVelocity.y != 0; }
     }
 
     public override void Update()

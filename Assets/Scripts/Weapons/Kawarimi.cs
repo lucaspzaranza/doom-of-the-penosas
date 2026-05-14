@@ -42,7 +42,7 @@ public class Kawarimi : Grenade
     {
         if(kawarimiExplosionAction.triggered) KawarimiNoJutsu();
 
-        if(rb2D.velocity == Vector2.zero)
+        if(rb2D.linearVelocity == Vector2.zero)
         {
             if(!coll2D.isTrigger) coll2D.isTrigger = true;
             rb2D.bodyType = RigidbodyType2D.Static;

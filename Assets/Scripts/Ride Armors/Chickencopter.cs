@@ -48,7 +48,7 @@ public class Chickencopter : RideArmor
     {
         base.Equip(player, playerController);
         RigiBody2DComponent.gravityScale = 0f;
-        player.Rigidbody2D.velocity = Vector2.zero;
+        player.Rigidbody2D.linearVelocity = Vector2.zero;
         _propellerAnimator.enabled = true;
     }
 
@@ -90,7 +90,7 @@ public class Chickencopter : RideArmor
             GetComponent<BoxCollider2D>().enabled = false;
             _abandonedCheckCollider.gameObject.SetActive(true);
             _chickencopterAbandoned = true;
-            RigiBody2DComponent.velocity = _currentDirection * _fallRate;
+            RigiBody2DComponent.linearVelocity = _currentDirection * _fallRate;
         }
     }
 
