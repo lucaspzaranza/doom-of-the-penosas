@@ -40,7 +40,7 @@ public class EnemyWeaponUnit : ScriptableObject
 
     private void OnEnable()
     {
-        _gameControllerInstance = FindObjectOfType<GameController>();
+        _gameControllerInstance = FindFirstObjectByType<GameController>();
     }
 
     public void Shoot(Transform spawnTransform, int currentDirection)
@@ -58,7 +58,7 @@ public class EnemyWeaponUnit : ScriptableObject
         if (UsePooling) 
         {
             if(_gameControllerInstance == null)
-                _gameControllerInstance = FindObjectOfType<GameController>();
+                _gameControllerInstance = FindFirstObjectByType<GameController>();
 
             if (_gameControllerInstance != null)
             {

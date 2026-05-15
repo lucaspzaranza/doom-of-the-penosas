@@ -105,7 +105,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""d0028c6e-5ed8-4121-9db9-2d39b6c8fcda"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -123,7 +123,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""name"": ""ChangeSpecialItem"",
                     ""type"": ""Value"",
                     ""id"": ""6facd9bd-8bf1-47c7-811f-f5f33c9273e9"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true

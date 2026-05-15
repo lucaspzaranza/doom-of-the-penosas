@@ -39,7 +39,9 @@ public class InputSystemController : ControllerUnit
             lastPlayerInputUser.UnpairDevice(lastDevice);
         }
 
-        var playersInputs = FindObjectsOfType<UnityEngine.InputSystem.PlayerInput>().ToList();
+        var playersInputs =
+            FindObjectsByType<UnityEngine.InputSystem.PlayerInput>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)
+            .ToList();
         var player = playersInputs.SingleOrDefault(input => input.playerIndex == playerIndex)?.gameObject;
         return player;
     }

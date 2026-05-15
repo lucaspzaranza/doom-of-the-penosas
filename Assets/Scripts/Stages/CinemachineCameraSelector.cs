@@ -30,7 +30,7 @@ public class CinemachineCameraSelector : MonoBehaviour
         var cineBrain = Camera.main.GetComponent<CinemachineBrain>();
         if (!cineBrain) return;
 
-        var virtualCams = FindObjectsOfType<CinemachineVirtualCamera>();
+        var virtualCams = FindObjectsByType<CinemachineVirtualCamera>(FindObjectsSortMode.None);    
 
         foreach (var cam in virtualCams)
         {
@@ -82,6 +82,7 @@ public class CinemachineCameraSelector : MonoBehaviour
 
     private void HandleOnPlayerInCameraEdge()
     {
+        print("HandleOnPlayerInCameraEdge");
         var transposer = GetTransposer();
 
         transposer.m_DeadZoneWidth = ConstantNumbers.CameraScreenLimitWidth;
@@ -90,7 +91,7 @@ public class CinemachineCameraSelector : MonoBehaviour
 
     private void HandleOnPlayerOutCameraEdge()
     {
-        //print("HandleOnPlayerOutCameraEdge");
+        print("HandleOnPlayerOutCameraEdge");
 
         var transposer = GetTransposer();
 

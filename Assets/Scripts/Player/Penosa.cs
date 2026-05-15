@@ -492,6 +492,23 @@ public class Penosa : DamageableObject
         return triggersX || triggersY;
     }
 
+    /// <summary>
+    /// AI Generated method to check if the players are too far apart on the screen, based on their viewport positions and a defined margin.
+    /// </summary>
+    /// <returns></returns>
+    private bool ArePlayersTooFarApart()
+    {
+        if (_otherPlayer == null || Camera.main == null)
+            return false;
+
+        Vector3 otherViewportPos = Camera.main.WorldToViewportPoint(_otherPlayer.transform.position);
+        float margin = 0.02f;
+
+        return
+            otherViewportPos.x <= margin || otherViewportPos.x >= 1f - margin ||
+            otherViewportPos.y <= margin || otherViewportPos.y >= 1f - margin;
+    }
+
     private bool DirectionWillSetPlayerApartFromOtherPlayer(float horizontal, float vertical)
     {
         if(horizontal != 0f && vertical == 0f)
@@ -524,7 +541,7 @@ public class Penosa : DamageableObject
         float margin = 0.02f;
         bool willSetApart = DirectionWillSetPlayerApartFromOtherPlayer(horizontal, vertical);
 
-        if(!willSetApart)
+        if (!willSetApart && !ArePlayersTooFarApart())
             return true;
 
         return
@@ -532,17 +549,34 @@ public class Penosa : DamageableObject
             viewportPos.y > 0f + margin && viewportPos.y < 1f - margin;
     }
 
+    //private bool PlayerLeftSoftZone()
+    //{
+    //    if (_cameraSelector == null)
+    //        return false;
+
+    //    float softZoneWidth = _cameraSelector.SoftZoneWidth;
+    //    float result = Mathf.Abs(transform.position.x - _transposer.m_SoftZoneWidth);
+    //    Vector3 camWorldPointEdge = Camera.main.ViewportToWorldPoint(Vector2.one);
+    //    print(camWorldPointEdge);
+
+    //    return result <= softZoneWidth;
+    //}
+
+    /// <summary>
+    /// AI Generated version of PlayerLeftSoftZone, since the original one was not working as intended.
+    /// It checks if the player is outside of the soft zone by comparing the player's viewport position with the soft zone boundaries.
+    /// </summary>
+    /// <returns></returns>
     private bool PlayerLeftSoftZone()
     {
-        if (_cameraSelector == null)
+        if (_cameraSelector == null || Camera.main == null)
             return false;
 
         float softZoneWidth = _cameraSelector.SoftZoneWidth;
-        float result = Mathf.Abs(transform.position.x - _transposer.m_SoftZoneWidth);
-        Vector3 camWorldPointEdge = Camera.main.ViewportToWorldPoint(Vector2.one);
-        print(camWorldPointEdge);
+        Vector3 viewportPos = Camera.main.WorldToViewportPoint(transform.position);
 
-        return result <= softZoneWidth;
+        float distanceFromCenter = Mathf.Abs(viewportPos.x - 0.5f) * 2f; // 0 = center, 1 = edge
+        return distanceFromCenter > softZoneWidth;
     }
 
     private void Move()
@@ -551,7 +585,7 @@ public class Penosa : DamageableObject
         float vertical = VerticalInput;
 
         if(_cameraSelector == null)
-            _cameraSelector = FindObjectOfType<CinemachineCameraSelector>();
+            _cameraSelector = FindFirstObjectByType<CinemachineCameraSelector>();
 
         _transposer = _cameraSelector?.GetTransposer();
 
@@ -561,13 +595,22 @@ public class Penosa : DamageableObject
             {
                 if (!WillPlayerBeVisible(_otherPlayer.transform, horizontal, vertical))
                 {
-                    OnPlayerInCameraEdge?.Invoke();
-                    if (!WillPlayerBeVisible(transform, horizontal, vertical))
+                    bool p1MovingAway = DirectionWillSetPlayerApartFromOtherPlayer(horizontal, vertical);
+
+                    if ((horizontal != 0f || vertical != 0f) && p1MovingAway)
+                        OnPlayerInCameraEdge?.Invoke();
+
+                    else if ((horizontal != 0f || vertical != 0f) && !p1MovingAway)
+                        OnPlayerOutCameraEdge?.Invoke();
+
+                    if (!WillPlayerBeVisible(transform, horizontal, vertical) && p1MovingAway)
                     {
                         horizontal = 0f;
                         vertical = 0f;
-                        //print("Stop movement with movement: " + horizontal);
                     }
+
+                    if ((horizontal != 0f || vertical != 0f) && !p1MovingAway && !ArePlayersTooFarApart())
+                        OnResetCameraBounds?.Invoke();
                 }
                 else
                 { 
@@ -579,7 +622,8 @@ public class Penosa : DamageableObject
                         OnResetCameraBounds?.Invoke();
                 }
             }
-            else if(!WillPlayerBeVisible(transform, horizontal, vertical)) // If Player 2 move will leave the cam view
+            else if (!WillPlayerBeVisible(transform, horizontal, vertical) &&
+                    DirectionWillSetPlayerApartFromOtherPlayer(horizontal, vertical))
             {
                 horizontal = 0f;
                 vertical = 0f;

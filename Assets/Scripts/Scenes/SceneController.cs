@@ -67,7 +67,7 @@ public class SceneController : ControllerUnit
             yield return null;
         }
 
-        var menuTranslator = FindObjectOfType<MenuTranslator>();
+        var menuTranslator = FindFirstObjectByType<MenuTranslator>();       
         menuTranslator?.Translate(); 
 
         _loadingScreenProgress.Fade(false);
