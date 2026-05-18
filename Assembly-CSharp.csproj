@@ -54,6 +54,7 @@
     <Compile Include="Assets\Scripts\Enemies\EnemyStateDataUnit.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerLobby\PlayerLobbyUIController.cs" />
     <Compile Include="Assets\Scripts\Language\MenuTranslator.cs" />
+    <Compile Include="Assets\Scripts\DialogBox\NextStepAnimationEvent.cs" />
     <Compile Include="Assets\Scripts\Enemies\AttackWavesController.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyWeaponGameObjectData.cs" />
     <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
@@ -78,7 +79,6 @@
     <Compile Include="Assets\Scripts\Enemies\Enemy.cs" />
     <Compile Include="Assets\Scripts\Inventory\InventoryData.cs" />
     <Compile Include="Assets\Scripts\SharedData\LandCharacter.cs" />
-    <Compile Include="Assets\Scripts\Cut Scenes\CutSceneSO.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyAction.cs" />
     <Compile Include="Assets\Scripts\Inventory\AddLives.cs" />
     <Compile Include="Assets\Scripts\GameController\Controller.cs" />
@@ -105,7 +105,6 @@
     <Compile Include="Assets\Scripts\Player\PlayerData.cs" />
     <Compile Include="Assets\Scripts\Language\GameLanguages.cs" />
     <Compile Include="Assets\Scripts\MapaMundi\MapaMundiController.cs" />
-    <Compile Include="Assets\Scripts\Cut Scenes\NextStepAnimationEvent.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IControllerBackup.cs" />
     <Compile Include="Assets\Scripts\Inventory\JetCopter.cs" />
     <Compile Include="Assets\Scripts\UI\InGame\PlayerInGameUIController.cs" />
@@ -126,17 +125,21 @@
     <Compile Include="Assets\Scripts\Language\PlayerHUDTranslator.cs" />
     <Compile Include="Assets\Scripts\Weapons\AutoRotate.cs" />
     <Compile Include="Assets\Scripts\Attributes\DrawItDisabledAttribute.cs" />
+    <Compile Include="Assets\Scripts\DialogBox\DialogTextSO.cs" />
     <Compile Include="Assets\ParrelSync\Examples\CustomArgumentExample.cs" />
+    <Compile Include="Assets\Scripts\DialogBox\DialogBox.cs" />
     <Compile Include="Assets\Scripts\UI\LoadingProgress.cs" />
     <Compile Include="Assets\Scripts\Ride Armors\Chickencopter.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IController.cs" />
     <Compile Include="Assets\Scripts\Weapons\Projectile.cs" />
     <Compile Include="Assets\Input System\PlayerInput.cs" />
+    <Compile Include="Assets\Scripts\DialogBox\CutSceneSO.cs" />
     <Compile Include="Assets\Scripts\Inventory\Mayday.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IUIController.cs" />
     <Compile Include="Assets\Scripts\SharedData\PlayerDetector.cs" />
     <Compile Include="Assets\Scripts\Inventory\WeaponLvlUp.cs" />
     <Compile Include="Assets\Scripts\Ride Armors\TireMonoWheel.cs" />
+    <Compile Include="Assets\Scripts\DialogBox\TextSOBase.cs" />
     <Compile Include="Assets\Scripts\SharedData\ExtensionMethods.cs" />
     <Compile Include="Assets\Scripts\Language\LobbyMenuTranslator.cs" />
     <Compile Include="Assets\Scripts\UI\PauseMenu.cs" />
@@ -147,6 +150,7 @@
     <Compile Include="Assets\Scripts\Ride Armors\EggTank.cs" />
     <Compile Include="Assets\Scripts\UI\ContinueButtonSetInteractable.cs" />
     <Compile Include="Assets\Scripts\ControllerBackup\ControllerBackup.cs" />
+    <Compile Include="Assets\Scripts\DialogBox\Step.cs" />
     <Compile Include="Assets\Scripts\Attributes\DrawIfBoolEqualsToAttribute.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyWeaponController.cs" />
     <Compile Include="Assets\Scripts\Inventory\WalkTalk.cs" />

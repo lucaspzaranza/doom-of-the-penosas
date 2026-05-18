@@ -28,8 +28,11 @@ public class CutSceneController : ControllerUnit
     [SerializeField] private GameObject _videoPlayerGameObject;
     public GameObject VideoPlayerGameObject => _videoPlayerGameObject;
 
-    [DrawItDisabled, SerializeField] private TextMeshProUGUI _stepText;
-    public TextMeshProUGUI StepText => _stepText;
+    //[DrawItDisabled, SerializeField] private TextMeshProUGUI _stepText;
+    //public TextMeshProUGUI StepText => _stepText;
+
+    [DrawItDisabled, SerializeField] private DialogBox _dialogBox;
+    public DialogBox DialogBox => _dialogBox;
 
     [SerializeField] private GameObject _fadeInOut;
     public GameObject FadeInOut => _fadeInOut;
@@ -41,7 +44,7 @@ public class CutSceneController : ControllerUnit
 
     private CutSceneControllerBackup _cutSceneBackup;
     private CutSceneStep _currentStep;
-    private bool _showTextInProgress;
+    //private bool _showTextInProgress;
     private string _currentText;
     private float _timeCounter;
     private int _charIndex;
@@ -52,10 +55,9 @@ public class CutSceneController : ControllerUnit
         CutSceneSO introCutScene = CutScenes.FirstOrDefault(cutScene => cutScene.name.Contains("Intro"));
         SetCutScene(introCutScene);
 
-        CutSceneStep.OnStepInitialized += HandleOnStepInitialized;
-        CutSceneSO.OnCutSceneSkip += HandleOnCutSceneSkip;
-        CutSceneSO.OnNextStepButtonPressed += HandleOnNextStepButtonPressed;
-        _showTextInProgress = false;
+        Step.OnStepInitialized += HandleOnStepInitialized;
+        DialogBox.OnNextButtonPressed+= HandleOnNextStepButtonPressed;
+        DialogBox.OnSkipButtonPressed += HandleOnCutSceneSkip;
         _currentText = string.Empty;
 
         NextStepAnimationEvent.OnNextStepAnimationEvent += ShowNextStep;
@@ -67,31 +69,11 @@ public class CutSceneController : ControllerUnit
     public override void Dispose()
     {
         SetCutScene(null);
-        CutSceneSO.OnCutSceneSkip -= HandleOnCutSceneSkip;
-        CutSceneSO.OnNextStepButtonPressed -= HandleOnNextStepButtonPressed;
-        CutSceneStep.OnStepInitialized -= HandleOnStepInitialized;
+        DialogBox.OnSkipButtonPressed -= HandleOnCutSceneSkip;
+        DialogBox.OnNextButtonPressed -= HandleOnNextStepButtonPressed;
+        Step.OnStepInitialized -= HandleOnStepInitialized;
 
         NextStepAnimationEvent.OnNextStepAnimationEvent -= ShowNextStep;
-    }
-
-    private void Update()
-    {
-        if(!_showTextInProgress || _currentStep == null || _stepText == null ||
-            string.IsNullOrEmpty(CurrentSceneText)) return;
-
-        if (_stepText.text.Length == CurrentSceneText.Length)
-        {
-            ResetTextDisplayCounterData();
-            _showTextInProgress = false;
-        }
-
-        _timeCounter += Time.deltaTime;
-        if(_timeCounter >= _currentStep.SequenceSpeed)
-        {
-            _stepText.text += CurrentSceneText[_charIndex];
-            _timeCounter = 0;
-            _charIndex++;
-        }
     }
 
     public override void LoadGameObjectsReferencesFromControllerBackup(ControllerBackup backup)
@@ -101,34 +83,23 @@ public class CutSceneController : ControllerUnit
 
         _videoPlayer = cutSceneBackup.VideoPlayer;
         _image = cutSceneBackup.Image;
-        _stepText = cutSceneBackup.CutSceneTMPro;
+        _dialogBox = cutSceneBackup.DialogBox;
         _fadeInOut = cutSceneBackup.FadeInOut;
         _videoPlayerGameObject = cutSceneBackup.VideoPlayerGameObject;
 
-        if (_stepText != null)
-            _stepText.text = string.Empty;
+        if (!_canNextStep)
+            _canNextStep = true;
 
         PlayCutScene();
     }
 
-    private void ResetTextDisplayCounterData()
-    {
-        _charIndex = 0;
-        _timeCounter = 0;
-    }
-
     public void PlayCutScene()
     {
-        if(CurrentCutscene != null)
+        if (CurrentCutscene != null)
         {
-            ResetTextDisplayCounterData();
-            CurrentCutscene.PlayStep(0);
+            DialogBox.SetTextSO(CurrentCutscene);
+            DialogBox.PlayStep(0);
         }
-    }
-
-    public void Stop() 
-    {
-        ResetTextDisplayCounterData();
     }
 
     private void ShowNextStep()
@@ -139,24 +110,22 @@ public class CutSceneController : ControllerUnit
             VideoPlayerProp.frame = 0;
         }
 
-        _currentCutscene.NextStep();
+        DialogBox.NextStep();
         _canNextStep = true;
     }
 
     private void HandleOnNextStepButtonPressed()
     {
-        if (_showTextInProgress)
-            _stepText.text = CurrentSceneText;
-        else
+        if (!DialogBox.ShowTextInProgress)
         {
             // The Fade-In-Out animation triggers the ShowNextStep() by default.
-            if (CurrentCutscene.StepCounter < CurrentCutscene.Steps.Count - 1)
+            if (DialogBox.StepCounter < CurrentCutscene.Steps.Count - 1)
             {
                 _canNextStep = false;
                 FadeInOut.SetActive(false);
                 FadeInOut.SetActive(true);
             }
-            else if (CurrentCutscene.StepCounter == CurrentCutscene.Steps.Count - 1)
+            else if (DialogBox.StepCounter == CurrentCutscene.Steps.Count - 1)
             {
                 // Go to the Next Step bypassing any fade animation.
                 // Only used when you are at the last step which calls the Cut Scene skip.
@@ -165,10 +134,9 @@ public class CutSceneController : ControllerUnit
         }
     }
 
-    private void HandleOnStepInitialized(CutSceneStep step)
+    private void HandleOnStepInitialized(Step step)
     {
-        _currentStep = step;
-        _stepText.text = string.Empty;
+        _currentStep = step as CutSceneStep;
 
         if (_currentStep.UseVideoInsteadSprite) 
         {
@@ -189,13 +157,10 @@ public class CutSceneController : ControllerUnit
             else
                 Image.gameObject.SetActive(false);
         }
-
-        if(!string.IsNullOrEmpty(CurrentSceneText))
-            _showTextInProgress = true;
     }
 
     private void HandleOnCutSceneSkip()
-    {
+    {        
         OnCutSceneSkipRequest?.Invoke();
     }
 

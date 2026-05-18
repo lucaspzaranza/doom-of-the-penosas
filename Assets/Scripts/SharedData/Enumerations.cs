@@ -155,4 +155,10 @@ namespace SharedData.Enumerations
         English = 0,
         Portuguese = 1
     }
+
+    public enum DialogBoxType
+    {
+        CutScene = 0,
+        Regular = 1
+    }
 }

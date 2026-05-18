@@ -18,6 +18,9 @@ public class CutSceneControllerBackup : ControllerBackup
     [SerializeField] private TextMeshProUGUI _cutSceneTMPro;
     public TextMeshProUGUI CutSceneTMPro => _cutSceneTMPro;
 
+    [SerializeField] private DialogBox _dialogBox;
+    public DialogBox DialogBox => _dialogBox;
+
     [SerializeField] private VideoPlayer _videoPlayer;
     public VideoPlayer VideoPlayer => _videoPlayer;
 
@@ -45,14 +48,14 @@ public class CutSceneControllerBackup : ControllerBackup
         _nextStepBtn.onClick.AddListener(() =>
         {
             if(cutSceneController.CanNextStep)
-                cutSceneController.CurrentCutscene.NextStepButtonPressed();
+                cutSceneController.DialogBox.NextButtonPressed();
         });
 
         _skipBtn.interactable = cutSceneController.CurrentCutscene.Skippable;
 
         _skipBtn.onClick.AddListener(() =>
         {
-            cutSceneController.CurrentCutscene.Skip();
+            cutSceneController.DialogBox.Skip();
         });
     }
 }

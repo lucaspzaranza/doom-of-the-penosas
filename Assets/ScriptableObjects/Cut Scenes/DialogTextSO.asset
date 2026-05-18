@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc23cef8e2033944eb96c2d7ddc6076f, type: 3}
+  m_Name: DialogTextSO
+  m_EditorClassIdentifier: Assembly-CSharp::DialogTextSO
+  _name: Dialog Test
+  _skippable: 0
+  _steps:
+  - _stepTexts:
+    - _name: PT-BR
+      _language: 1
+      _text: Texto teste da DiagBox.
+    - _name: ENG-US
+      _language: 0
+      _text: DiagBox Test Text.
+    _textSpeed: 0.05
