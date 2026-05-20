@@ -9,11 +9,6 @@ using UnityEngine.Video;
 public class CutSceneControllerBackup : ControllerBackup
 {
     [Header("Scene Buttons")]
-    [SerializeField] private Button _nextStepBtn;
-    public Button NextStepBtn => _nextStepBtn;
-
-    [SerializeField] private Button _skipBtn;
-    public Button SkipBtn => _skipBtn;
 
     [SerializeField] private TextMeshProUGUI _cutSceneTMPro;
     public TextMeshProUGUI CutSceneTMPro => _cutSceneTMPro;
@@ -33,6 +28,9 @@ public class CutSceneControllerBackup : ControllerBackup
     [SerializeField] private GameObject _fadeInOut;
     public GameObject FadeInOut => _fadeInOut;
 
+    [SerializeField] private DialogTrigger _dialogTrigger;
+    public DialogTrigger DialogTrigger => _dialogTrigger;
+
     protected override Type GetControllerType() => typeof(CutSceneController);
 
     protected override void ListenersSetup()
@@ -44,18 +42,5 @@ public class CutSceneControllerBackup : ControllerBackup
             WarningMessages.ControllerNotFoundOnBackupMessage(nameof(CutSceneController));
             return;
         }
-
-        _nextStepBtn.onClick.AddListener(() =>
-        {
-            if(cutSceneController.CanNextStep)
-                cutSceneController.DialogBox.NextButtonPressed();
-        });
-
-        _skipBtn.interactable = cutSceneController.CurrentCutscene.Skippable;
-
-        _skipBtn.onClick.AddListener(() =>
-        {
-            cutSceneController.DialogBox.Skip();
-        });
     }
 }

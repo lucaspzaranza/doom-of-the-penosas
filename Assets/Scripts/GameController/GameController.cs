@@ -95,6 +95,7 @@ public class GameController : Controller
     public CinemachineVirtualCamera Camera => _camera;
     
     private int _nextStageIndex;
+    private GameStatus _diagStatusBackup;
 
     #endregion
 
@@ -145,6 +146,8 @@ public class GameController : Controller
         PauseMenu.OnBackToMainMenu += BackToMainMenuButton;
         WalkTalk.OnWalkTalk += HandleOnWalkTalk;
         Enemy.OnEnemyDeath += HandleOnEnemyDefeated;
+        DialogTrigger.OnDialogBoxCreated += HandleOnDialogBoxCreated;
+        DialogTrigger.OnDialogBoxClosed += HandleOnDialogBoxClosed;
     }
 
     public override void Dispose()
@@ -515,5 +518,16 @@ public class GameController : Controller
     {
         //print($"Setting game language to {language}");
         _language = language;
+    }
+
+    private void HandleOnDialogBoxCreated()
+    {
+        _diagStatusBackup = GameStatus;
+        SetGameStatus(GameStatus.Cutscene);
+    }
+
+    private void HandleOnDialogBoxClosed()
+    {
+        SetGameStatus(_diagStatusBackup);
     }
 }

@@ -114,7 +114,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""name"": ""Parachute"",
                     ""type"": ""Button"",
                     ""id"": ""b51101f8-bcde-43bf-a872-870411dc6340"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
@@ -150,7 +150,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""name"": ""Fire2"",
                     ""type"": ""Button"",
                     ""id"": ""ca781ac6-61c2-4f7e-9564-b4ee45a60eef"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -559,7 +559,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""name"": ""CursorNavigation"",
                     ""type"": ""Button"",
                     ""id"": ""94da86c2-3ffd-4f8c-97c4-e868fb7c4051"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -568,7 +568,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""name"": ""SelectPlayer"",
                     ""type"": ""Button"",
                     ""id"": ""3f154ba5-69b4-488d-9b41-37654152bdfb"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -576,7 +576,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": ""D Pad"",
+                    ""name"": ""Joystick sticks"",
                     ""id"": ""7401294f-3e65-4ae1-bcd6-f16370c2160f"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",

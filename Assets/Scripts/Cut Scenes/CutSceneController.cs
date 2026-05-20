@@ -28,26 +28,21 @@ public class CutSceneController : ControllerUnit
     [SerializeField] private GameObject _videoPlayerGameObject;
     public GameObject VideoPlayerGameObject => _videoPlayerGameObject;
 
-    //[DrawItDisabled, SerializeField] private TextMeshProUGUI _stepText;
-    //public TextMeshProUGUI StepText => _stepText;
+    [SerializeField] private DialogTrigger _dialogTrigger;
+    public DialogTrigger DialogTrigger => _dialogTrigger;
+
 
     [DrawItDisabled, SerializeField] private DialogBox _dialogBox;
+
     public DialogBox DialogBox => _dialogBox;
 
     [SerializeField] private GameObject _fadeInOut;
     public GameObject FadeInOut => _fadeInOut;
 
-    private bool _canNextStep;
-    public bool CanNextStep => _canNextStep;
-
     private string CurrentSceneText => _currentStep.GetText(_gameCtrlInstance.Language);
 
     private CutSceneControllerBackup _cutSceneBackup;
     private CutSceneStep _currentStep;
-    //private bool _showTextInProgress;
-    private string _currentText;
-    private float _timeCounter;
-    private int _charIndex;
     private GameController _gameCtrlInstance;
 
     public override void Setup()
@@ -55,25 +50,12 @@ public class CutSceneController : ControllerUnit
         CutSceneSO introCutScene = CutScenes.FirstOrDefault(cutScene => cutScene.name.Contains("Intro"));
         SetCutScene(introCutScene);
 
-        Step.OnStepInitialized += HandleOnStepInitialized;
-        DialogBox.OnNextButtonPressed+= HandleOnNextStepButtonPressed;
-        DialogBox.OnSkipButtonPressed += HandleOnCutSceneSkip;
-        _currentText = string.Empty;
-
-        NextStepAnimationEvent.OnNextStepAnimationEvent += ShowNextStep;
-
-        _canNextStep = true;
         _gameCtrlInstance = TryToGetGameControllerFromParent();
     }
 
     public override void Dispose()
     {
-        SetCutScene(null);
-        DialogBox.OnSkipButtonPressed -= HandleOnCutSceneSkip;
-        DialogBox.OnNextButtonPressed -= HandleOnNextStepButtonPressed;
-        Step.OnStepInitialized -= HandleOnStepInitialized;
-
-        NextStepAnimationEvent.OnNextStepAnimationEvent -= ShowNextStep;
+        SetCutScene(null);        
     }
 
     public override void LoadGameObjectsReferencesFromControllerBackup(ControllerBackup backup)
@@ -83,12 +65,16 @@ public class CutSceneController : ControllerUnit
 
         _videoPlayer = cutSceneBackup.VideoPlayer;
         _image = cutSceneBackup.Image;
+        _dialogTrigger = cutSceneBackup.DialogTrigger;
         _dialogBox = cutSceneBackup.DialogBox;
         _fadeInOut = cutSceneBackup.FadeInOut;
         _videoPlayerGameObject = cutSceneBackup.VideoPlayerGameObject;
 
-        if (!_canNextStep)
-            _canNextStep = true;
+        Step.OnStepInitialized += HandleOnStepInitialized;
+        DialogBox.OnNextButtonPressed += HandleOnNextStepButtonPressed;
+        DialogBox.OnSkipButtonPressed += HandleOnCutSceneSkip;
+
+        NextStepAnimationEvent.OnNextStepAnimationEvent += ShowNextStep;
 
         PlayCutScene();
     }
@@ -97,8 +83,11 @@ public class CutSceneController : ControllerUnit
     {
         if (CurrentCutscene != null)
         {
-            DialogBox.SetTextSO(CurrentCutscene);
-            DialogBox.PlayStep(0);
+            DialogTrigger.SetText(CurrentCutscene);
+            DialogTrigger.CreateDialogBox();
+
+            //DialogBox.SetTextSO(CurrentCutscene);
+            //DialogBox.PlayStep(0);
         }
     }
 
@@ -111,7 +100,6 @@ public class CutSceneController : ControllerUnit
         }
 
         DialogBox.NextStep();
-        _canNextStep = true;
     }
 
     private void HandleOnNextStepButtonPressed()
@@ -121,7 +109,7 @@ public class CutSceneController : ControllerUnit
             // The Fade-In-Out animation triggers the ShowNextStep() by default.
             if (DialogBox.StepCounter < CurrentCutscene.Steps.Count - 1)
             {
-                _canNextStep = false;
+                DialogBox.SetCanNextStep(false);
                 FadeInOut.SetActive(false);
                 FadeInOut.SetActive(true);
             }
@@ -160,7 +148,13 @@ public class CutSceneController : ControllerUnit
     }
 
     private void HandleOnCutSceneSkip()
-    {        
+    {
+        DialogBox.OnSkipButtonPressed -= HandleOnCutSceneSkip;
+        DialogBox.OnNextButtonPressed -= HandleOnNextStepButtonPressed;
+        Step.OnStepInitialized -= HandleOnStepInitialized;
+
+        NextStepAnimationEvent.OnNextStepAnimationEvent -= ShowNextStep;
+
         OnCutSceneSkipRequest?.Invoke();
     }
 

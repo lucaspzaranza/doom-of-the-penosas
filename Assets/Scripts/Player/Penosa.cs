@@ -95,6 +95,7 @@ public class Penosa : DamageableObject
     private CinemachineFramingTransposer _transposer;
     private Penosa _otherPlayer;
     private GameController _gameCtrl;
+    public GameController GameCtrl => _gameCtrl;
 
     #endregion
 
@@ -127,6 +128,20 @@ public class Penosa : DamageableObject
 
     public bool Adrenaline => _speed > PlayerConsts.DefaultSpeed;
 
+    private bool _isNearInteractableObject;
+    public bool IsNearInteractableObject
+    {
+        get => _isNearInteractableObject;
+        set => _isNearInteractableObject = value;
+    }
+
+    private IInteractable _interactableObject;
+    public IInteractable InteractableObject
+    {
+        get => _interactableObject;
+        set => _interactableObject = value;
+    }
+
     public PlayerData PlayerData
     {
         get => _playerData;
@@ -147,7 +162,7 @@ public class Penosa : DamageableObject
 
     public bool IsLeft => _isLeft;
 
-    public bool Is1stPlayer => _playerData.LocalID == _gameCtrl.PlayerController.PlayersData[0].LocalID;
+    public bool Is1stPlayer => _playerData.LocalID == GameCtrl.PlayerController.PlayersData[0].LocalID;
 
     public bool RideArmorEquipped => _rideArmorEquipped;
 
@@ -197,16 +212,18 @@ public class Penosa : DamageableObject
 
         _gameCtrl = _playerController.TryToGetGameControllerFromParent();
 
-        if (!_playerController && !_gameCtrl) return;
+        if (!_playerController && !GameCtrl) return;
 
-        if (_gameCtrl.GameMode == GameMode.Multiplayer)
+        if (GameCtrl.GameMode == GameMode.Multiplayer)
             _otherPlayer = _playerController.PlayersData[SharedFunctions.GetComplementaryIndex(PlayerData.LocalID)].Player;
     }
 
     void Update()
     {
         if (_playerController != null && 
-            _playerController.GameIsPaused() || _isInCountdown)
+            _playerController.GameIsPaused() 
+            || _isInCountdown 
+            || GameCtrl.GameStatus == GameStatus.Cutscene)
             return;
 
         Move();
@@ -340,6 +357,9 @@ public class Penosa : DamageableObject
 
     public void PauseMenu(InputAction.CallbackContext context)
     {
+        if(GameCtrl.GameStatus == GameStatus.Cutscene)
+            return;
+
         if(_isInCountdown)
             OnPlayerRespawn?.Invoke(PlayerData.LocalID);
         else if (!_playerController.GameIsPaused())
@@ -589,7 +609,7 @@ public class Penosa : DamageableObject
 
         _transposer = _cameraSelector?.GetTransposer();
 
-        if (_gameCtrl.GameMode == GameMode.Multiplayer)
+        if (GameCtrl.GameMode == GameMode.Multiplayer)
         {
             if(Is1stPlayer)
             {
@@ -664,8 +684,8 @@ public class Penosa : DamageableObject
     }
 
     private void Jump(InputAction.CallbackContext context)
-    {
-        if (_playerController.GameIsPaused())
+    {        
+        if (_playerController.GameIsPaused() || GameCtrl.GameStatus != GameStatus.InGame)
             return;
 
         if (RideArmorEquipped)
@@ -894,6 +914,14 @@ public class Penosa : DamageableObject
     {
         bool fire1ButtonPressed = _fire1Action.ReadValue<float>() > 0;
 
+        if (fire1ButtonPressed && IsNearInteractableObject && GameCtrl.GameStatus == GameStatus.InGame)
+        {
+            Rigidbody2D.linearVelocity = new Vector2(0, Rigidbody2D.linearVelocity.y);
+            SetMovementAnimators(0);
+            InteractableObject.Interact();
+            return;
+        }
+
         if (RideArmorEquipped && fire1ButtonPressed)
         {
             _rideArmor.Shoot();
@@ -1006,7 +1034,7 @@ public class Penosa : DamageableObject
         Inventory.gameObject.SetActive(val);
     }
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == ConstantStrings.RideArmorCoreTag && !JetCopterActivated &&
             !_canRideArmor && !RideArmorEquipped)
@@ -1019,14 +1047,30 @@ public class Penosa : DamageableObject
             if(_rideArmorActivator.RideArmor.Type == RideArmorType.JetSkinha)
                 RideArmor(_rideArmorActivator.RideArmor);
         }
+
+        if(other.gameObject.CompareTag(ConstantStrings.InteractableTag))
+        {
+            _interactableObject = other.GetComponent<IInteractable>();
+            if (InteractableObject != null)
+                IsNearInteractableObject = true;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.tag == ConstantStrings.RideArmorCoreTag)
+        if (other.CompareTag(ConstantStrings.RideArmorCoreTag))
         {
             _canRideArmor = false;
             _rideArmorActivator = null;
+        }
+
+        if(other.CompareTag(ConstantStrings.InteractableTag))
+        {
+            if (InteractableObject != null)
+            {
+                InteractableObject = null;
+                IsNearInteractableObject = false;
+            }
         }
     }
 }

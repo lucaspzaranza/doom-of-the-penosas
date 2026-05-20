@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DialogTextSO
   m_EditorClassIdentifier: Assembly-CSharp::DialogTextSO
   _name: Dialog Test
-  _skippable: 0
+  _skippable: 1
   _steps:
   - _stepTexts:
     - _name: PT-BR
@@ -22,4 +22,12 @@ MonoBehaviour:
     - _name: ENG-US
       _language: 0
       _text: DiagBox Test Text.
+    _textSpeed: 0.05
+  - _stepTexts:
+    - _name: PT-BR
+      _language: 1
+      _text: Passo 2 da Diag Box.
+    - _name: ENG-US
+      _language: 0
+      _text: Step 2 Diag Box.
     _textSpeed: 0.05

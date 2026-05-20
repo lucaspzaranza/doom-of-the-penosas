@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using UnityEngine.Video;
 
 [System.Serializable]
@@ -24,11 +25,20 @@ public class DialogBox : MonoBehaviour
     private bool _showTextInProgress;
     public bool ShowTextInProgress => _showTextInProgress;
 
+    [SerializeField] private Button _nextStepBtn;
+    public Button NextStepBtn => _nextStepBtn;
+
+    [SerializeField] private Button _skipBtn;
+    public Button SkipBtn => _skipBtn;
+
     [SerializeField] private TextSOBase _textSO;
     public TextSOBase TextSO => _textSO;
 
     [SerializeField] private Step _currentStep;
     public Step CurrentStep => _currentStep;
+
+    private bool _canNextStep;
+    public bool CanNextStep => _canNextStep;
 
     private int _stepCounter;
     public int StepCounter => _stepCounter;
@@ -49,6 +59,9 @@ public class DialogBox : MonoBehaviour
             NewStepSetup(TextSO.Steps[0]);
 
         _stepCounter = 0;
+
+        if (!CanNextStep)
+            SetCanNextStep(true);
     }
 
     void Update()
@@ -73,6 +86,27 @@ public class DialogBox : MonoBehaviour
         }
     }
 
+    public void SetCanNextStep(bool val) => _canNextStep = val;
+
+    public void ListernersSetup()
+    {
+        NextStepBtn.onClick.RemoveAllListeners();
+        SkipBtn.onClick.RemoveAllListeners();
+
+        NextStepBtn.onClick.AddListener(() =>
+        {
+            if (CanNextStep)
+                NextButtonPressed();
+        });
+
+        _skipBtn.interactable = TextSO.Skippable;
+
+        SkipBtn.onClick.AddListener(() =>
+        {
+            Skip();
+        });
+    }
+
     private void ResetTextDisplayCounterData()
     {
         _charIndex = 0;
@@ -83,6 +117,7 @@ public class DialogBox : MonoBehaviour
     {
         _currentStep = step;
         DiagBoxTxt.text = string.Empty;
+        _canNextStep = true;
     }
 
     public void SetTextSO(TextSOBase textSO)
@@ -104,6 +139,7 @@ public class DialogBox : MonoBehaviour
     public void NextStep()
     {
         _stepCounter++;
+        //Debug.Log($"_stepCounter: {_stepCounter}, TextSO.Steps.Count: {TextSO.Steps.Count}");
         if (_stepCounter >= TextSO.Steps.Count)
             Skip();
         else
@@ -116,8 +152,6 @@ public class DialogBox : MonoBehaviour
 
     public void PlayStep(int index)
     {
-        //print("Step is: " + index);
-        //print(_currentStep.GetText(_gameCtrlInstance.Language));
         TextSO.Steps[index].InitializeStep();
     }
 
@@ -129,11 +163,14 @@ public class DialogBox : MonoBehaviour
 
     public void Skip()
     {
-        //Debug.Log($"_stepCounter: {_stepCounter}, Steps.Count: {Steps.Count}");
+        //print("Skip");
+        //Debug.Log($"_stepCounter: {_stepCounter}, TextSO.Steps.Count: {TextSO.Steps.Count}");
         if (_stepCounter >= TextSO.Steps.Count || TextSO.Skippable)
         {
+            ResetTextDisplayCounterData();
             _stepCounter = 0;
             OnSkipButtonPressed.Invoke();
+            gameObject.SetActive(false);
         }
     }
 
