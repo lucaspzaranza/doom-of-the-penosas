@@ -5,12 +5,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using SharedData.Enumerations;
 
 public class PlayerHUD : MonoBehaviour
 {
     public Action<byte> OnCountdownIsOver;
 
-    [SerializeField] private Penosa player;
+    [SerializeField] private MonoBehaviour _playerMonoBehaviour;
     [SerializeField] private TMP_Text _nameTxt = null;
     [SerializeField] private TMP_Text _livesTxt = null;
     [SerializeField] private Image _lifebarImg = null;
@@ -44,6 +45,7 @@ public class PlayerHUD : MonoBehaviour
     private int _armorLife;
     private int _rideArmorLife;
     private bool _countdownActivated;
+    private IPlayerCharacter _player;
 
     public GameObject HUDContainer => _hudContainer;
     public GameObject ContinueContainer => _continueContainer;
@@ -115,15 +117,16 @@ public class PlayerHUD : MonoBehaviour
         }
     }
 
-    public Penosa Player
+    public IPlayerCharacter Player
     {
-        get => player;
+        get => _player;
         set
         {
-            player = value;
+            _player = value;
+            _playerMonoBehaviour = _player as MonoBehaviour;
 
-            if(player != null)
-                playerID = player.PlayerData.LocalID;
+            if (_player != null)
+                playerID = Player.PlayerData.LocalID;
         }
     }
 
@@ -148,66 +151,56 @@ public class PlayerHUD : MonoBehaviour
 
     public void SetSpecialItemIconSprite(Sprite newSprite)
     {
-        //try
-        //{
-        //    _specialItemImg.sprite = newSprite;
-        //    _specialItemImg.gameObject.SetActive(newSprite != null);
-        //}
-        //catch (Exception e)
-        //{
-        //    Debug.Log(e.Message);
-        //}
-
-        if(_specialItemImg != null)
+        if (_specialItemImg != null)
         {
             _specialItemImg.sprite = newSprite;
             _specialItemImg.gameObject.SetActive(newSprite != null);
         }
     }
-    
+
     public void UpdateHUDValues()
     {
-        Name = player.PlayerData.Character.ToString();
-        Lives = player.PlayerData.Lives;
-        Life = player.Life;
-        ArmorLife = player.ArmorLife;
+        Name = Player.PlayerData.Character.ToString();
+        Lives = Player.PlayerData.Lives;
+        Life = Player.Life;
+        ArmorLife = Player.ArmorLife;
 
-        UpdateWeaponAmmoText(WeaponType.Primary, player.PlayerData._1stWeaponAmmoProp);
-        UpdateWeaponLevelText(WeaponType.Primary, player.PlayerData._1stWeaponLevel);
+        UpdateWeaponAmmoText(WeaponType.Primary, Player.PlayerData._1stWeaponAmmoProp);
+        UpdateWeaponLevelText(WeaponType.Primary, Player.PlayerData._1stWeaponLevel);
 
-        UpdateWeaponAmmoText(WeaponType.Secondary, player.PlayerData._2ndWeaponAmmoProp);
-        UpdateWeaponLevelText(WeaponType.Secondary, player.PlayerData._2ndWeaponLevel);
+        UpdateWeaponAmmoText(WeaponType.Secondary, Player.PlayerData._2ndWeaponAmmoProp);
+        UpdateWeaponLevelText(WeaponType.Secondary, Player.PlayerData._2ndWeaponLevel);
 
-        if(player.Inventory.SelectedSlot != null)
-            SetSpecialItemIconSprite(player.Inventory.SelectedSlot.Sprite);
+        if (Player.Inventory.SelectedSlot != null)
+            SetSpecialItemIconSprite(Player.Inventory.SelectedSlot.Sprite);
     }
 
     public void EventSetup()
     {
-        if (player == null)
+        if (Player == null)
             return;
 
-        player.OnArmorLifeChanged += UpdateArmorLife;
-        player.PlayerData.OnLifeChanged += UpdateLife;
-        player.PlayerData.OnLivesChanged += UpdateLives;
-        player.PlayerData.OnWeaponLevelChanged += UpdateWeaponLevelText;
-        player.PlayerData.OnWeaponAmmoChanged += UpdateWeaponAmmoText;
+        Player.OnArmorLifeChanged += UpdateArmorLife;
+        Player.PlayerData.OnLifeChanged += UpdateLife;
+        Player.PlayerData.OnLivesChanged += UpdateLives;
+        Player.PlayerData.OnWeaponLevelChanged += UpdateWeaponLevelText;
+        Player.PlayerData.OnWeaponAmmoChanged += UpdateWeaponAmmoText;
 
-        player.Inventory.OnSpecialItemIconChanged += SetSpecialItemIconSprite;
+        Player.Inventory.OnSpecialItemIconChanged += SetSpecialItemIconSprite;
     }
 
     public void EventDispose()
     {
-        if (player == null) 
+        if (Player == null)
             return;
 
-        player.OnArmorLifeChanged -= UpdateArmorLife;
-        player.PlayerData.OnLifeChanged -= UpdateLife;
-        player.PlayerData.OnLivesChanged -= UpdateLives;
-        player.PlayerData.OnWeaponLevelChanged -= UpdateWeaponLevelText;
-        player.PlayerData.OnWeaponAmmoChanged -= UpdateWeaponAmmoText;
+        Player.OnArmorLifeChanged -= UpdateArmorLife;
+        Player.PlayerData.OnLifeChanged -= UpdateLife;
+        Player.PlayerData.OnLivesChanged -= UpdateLives;
+        Player.PlayerData.OnWeaponLevelChanged -= UpdateWeaponLevelText;
+        Player.PlayerData.OnWeaponAmmoChanged -= UpdateWeaponAmmoText;
 
-        player.Inventory.OnSpecialItemIconChanged -= SetSpecialItemIconSprite;
+        Player.Inventory.OnSpecialItemIconChanged -= SetSpecialItemIconSprite;
     }
 
     public void UpdateWeaponLevelText(WeaponType weaponType, int newLvl)
@@ -221,7 +214,7 @@ public class PlayerHUD : MonoBehaviour
     private void UpdateWeaponAmmoText(WeaponType weaponType, int newAmmo)
     {
         if (weaponType == WeaponType.Primary)
-            PrimaryWeaponAmmoText.text = player.PlayerData._1stWeaponLevel > 1? newAmmo.ToString() : "---";
+            PrimaryWeaponAmmoText.text = Player.PlayerData._1stWeaponLevel > 1 ? newAmmo.ToString() : "---";
         else
             SecondaryWeaponAmmoText.text = newAmmo.ToString();
     }

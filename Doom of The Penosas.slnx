@@ -1,8 +1,18 @@
 ﻿<Solution>
-  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Core.csproj" />
   <Project Path="Unity.CastVisualizer.Editor.csproj" />
+  <Project Path="Enemies.csproj" />
+  <Project Path="UI.csproj" />
+  <Project Path="Dialog.csproj" />
+  <Project Path="Player.csproj" />
+  <Project Path="Infrastructure.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="Controllers.csproj" />
+  <Project Path="Weapons.csproj" />
   <Project Path="ParrelSync.csproj" />
+  <Project Path="World.csproj" />
   <Project Path="Unity.CastVisualizer.Runtime.csproj" />
   <Project Path="Unity.CastVisualizer.Samples.SampleScenes.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="PlayerInputActions.csproj" />
 </Solution>

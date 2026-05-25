@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class Projectile : MonoBehaviour, IProjectile
 {
     public static Action<GameObject> OnReturnProjectileToPool;
 
@@ -24,7 +24,7 @@ public class Projectile : MonoBehaviour
 
     [SerializeField] protected LayerMask _interactableLayerMask;
     public LayerMask InteractableLayerMask => _interactableLayerMask;
-    
+
     public virtual void Update()
     {
         MoveProjectile();

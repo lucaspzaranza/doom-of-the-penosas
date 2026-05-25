@@ -36,18 +36,11 @@ public class EnemyWeaponUnit : ScriptableObject
     [SerializeField] private int _damageHit;
     public int DamageHit => _damageHit;
 
-    private GameController _gameControllerInstance;
-
-    private void OnEnable()
-    {
-        _gameControllerInstance = FindFirstObjectByType<GameController>();
-    }
-
     public void Shoot(Transform spawnTransform, int currentDirection)
     {
         GameObject newProjectile = null;
         Vector2 coordinates = spawnTransform.position;
-        if(SpawnOffset != Vector2.zero)
+        if (SpawnOffset != Vector2.zero)
         {
             float offsetX = Random.Range(-SpawnOffset.x, SpawnOffset.x);
             float offsetY = Random.Range(-SpawnOffset.y, SpawnOffset.y);
@@ -55,22 +48,11 @@ public class EnemyWeaponUnit : ScriptableObject
         }
         Quaternion newRotation = spawnTransform.rotation;
 
-        if (UsePooling) 
+        if (UsePooling)
         {
-            if(_gameControllerInstance == null)
-                _gameControllerInstance = FindFirstObjectByType<GameController>();
-
-            if (_gameControllerInstance != null)
-            {
-                newProjectile = _gameControllerInstance.GetProjectileFromPool(_projectile);
-                newProjectile.transform.position = coordinates;
-                newProjectile.transform.rotation = newRotation;
-            }
-            else
-            {
-                WarningMessages.EnemyWeaponUnitCouldNotFoundGameControllerInstance();
-                return;
-            }
+            newProjectile = PoolEvents.GetProjectileFromPool?.Invoke(_projectile);
+            newProjectile.transform.position = coordinates;
+            newProjectile.transform.rotation = newRotation;
         }
         else
             newProjectile = Instantiate(Projectile, coordinates, newRotation);

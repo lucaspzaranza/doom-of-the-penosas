@@ -9,22 +9,22 @@ using System.Linq;
 using System.Drawing.Printing;
 
 [Serializable]
-public class PlayerData
+public class PlayerData : IPlayerData
 {
-    public Action<int> OnLifeChanged;
-    public Action<int> OnLivesChanged;
-    public Action<WeaponType, int> OnWeaponLevelChanged;
-    public Action<WeaponType, int> OnWeaponAmmoChanged;
+    public event Action<int> OnLifeChanged;
+    public event Action<int> OnLivesChanged;
+    public event Action<WeaponType, int> OnWeaponLevelChanged;
+    public event Action<WeaponType, int> OnWeaponAmmoChanged;
 
     [SerializeField] private Penosas _character;
     [SerializeField] private InputDevice _inputDevice;
-    [SerializeField] private Penosa _playerScript = null;
+    [SerializeField] private IPlayerCharacter _playerScript = null;
     [SerializeField] private byte _localID;
     [SerializeField] private GameObject _playerGameObject = null;
     [SerializeField] private int _continues;
-    [SerializeField] [Range(0, PlayerConsts.Max_Lives)] private int _lives;
-    [SerializeField] [Range(1, PlayerConsts._1stWeaponMaxLvl)] private byte _1stWeaponLvl;
-    [SerializeField] [Range(1, PlayerConsts._2ndWeaponMaxLvl)] private byte _2ndWeaponLvl;
+    [SerializeField][Range(0, PlayerConsts.Max_Lives)] private int _lives;
+    [SerializeField][Range(1, PlayerConsts._1stWeaponMaxLvl)] private byte _1stWeaponLvl;
+    [SerializeField][Range(1, PlayerConsts._2ndWeaponMaxLvl)] private byte _2ndWeaponLvl;
     [SerializeField] private int _1stWeaponAmmo;
     [SerializeField] private int _2ndWeaponAmmo;
     [SerializeField] private List<GameObject> _1stShot;
@@ -60,7 +60,7 @@ public class PlayerData
     public byte _1stWeaponLevel
     {
         get => _1stWeaponLvl;
-        set 
+        set
         {
             if (value <= PlayerConsts._1stWeaponMaxLevel)
             {
@@ -87,8 +87,8 @@ public class PlayerData
     public byte _2ndWeaponLevel
     {
         get => _2ndWeaponLvl;
-        set 
-        { 
+        set
+        {
             if (value <= PlayerConsts._2ndWeaponMaxLevel)
             {
                 _2ndWeaponLvl = value;
@@ -128,7 +128,7 @@ public class PlayerData
         }
     }
 
-    public Penosa Player => _playerScript;
+    public IPlayerCharacter Player => _playerScript;
 
     public Penosas Character => _character;
 
@@ -138,7 +138,7 @@ public class PlayerData
         set => _inputDevice = value;
     }
 
-    public InventoryData InventoryData => _inventoryData;
+    public IInventoryData InventoryData => _inventoryData;
 
     public PlayerData(Penosas newCharacter, int localID, InputDevice device = null)
     {
@@ -177,9 +177,9 @@ public class PlayerData
         _2ndWeaponAmmo = newData._2ndWeaponAmmoProp;
         _1stShot = newData._1stShotProp;
         _2ndShot = newData._2ndShotProp;
-        _inventoryData = newData.InventoryData;
+        _inventoryData = newData.InventoryData as InventoryData;
         _gameOver = newData.GameOver;
-}
+    }
 
     public void SetProjectilesPrefabs(PlayerDataPrefabs prefabs)
     {
@@ -187,7 +187,7 @@ public class PlayerData
         _2ndShot = new List<GameObject>(prefabs.ListOf2ndShots);
     }
 
-    public void SetPlayerScriptFromInstance(Penosa playerScript)
+    public void SetPlayerScriptFromInstance(IPlayerCharacter playerScript)
     {
         _playerScript = playerScript;
     }
@@ -197,11 +197,16 @@ public class PlayerData
         _playerGameObject = playerGameObject;
     }
 
-    public void InventoryDataSetup(Penosa player, bool isNewGame)
+    public void InventoryDataSetup(IPlayerCharacter player, bool isNewGame)
     {
-        if(isNewGame || _inventoryData == null)
+        if (isNewGame || _inventoryData == null)
             _inventoryData = new InventoryData(player);
         else
             _inventoryData.SetPlayer(player);
+    }
+
+    public void FireOnLifeChanged(int newLife)
+    {
+        OnLifeChanged?.Invoke(newLife);
     }
 }

@@ -31,7 +31,7 @@ public struct WaveData
     public EnemyWeaponUnit ScriptableObject { get; set; }
 }
 
-public class AttackWave : MonoBehaviour
+public class AttackWave : MonoBehaviour, IAttackWave
 {
     public Action<AttackWave> OnAttackWaveEnd;
 

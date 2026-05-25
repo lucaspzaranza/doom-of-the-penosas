@@ -9,9 +9,6 @@ using System;
 
 public class PauseMenu : MonoBehaviour
 {
-    public static Action OnResume;
-    public static Action OnBackToMainMenu;
-
     [SerializeField] private Button _resumeBtn;
     [SerializeField] private Button _backToMainMenuBtn;
 
@@ -37,12 +34,12 @@ public class PauseMenu : MonoBehaviour
     {
         _resumeBtn.onClick.AddListener(() =>
         {
-            OnResume?.Invoke();
+            PauseMenuEvents.OnResume?.Invoke();
         });
 
         _backToMainMenuBtn.onClick.AddListener(() =>
         {
-            OnBackToMainMenu?.Invoke();
+            PauseMenuEvents.OnBackToMainMenu?.Invoke();
         });
     }
 

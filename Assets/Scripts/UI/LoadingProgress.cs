@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LoadingProgress : MonoBehaviour
+public class LoadingProgress : MonoBehaviour, ILoadingProgress
 {
     [SerializeField] private CanvasGroup _canvasGroup;
     [SerializeField] private Image _progressBar;

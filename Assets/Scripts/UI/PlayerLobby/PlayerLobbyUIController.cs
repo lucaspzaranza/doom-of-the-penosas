@@ -9,20 +9,20 @@ using System.Linq;
 using System;
 using UnityEngine.InputSystem;
 
-public class PlayerLobbyUIController : ControllerUnit, IUIController
+public class PlayerLobbyUIController : ControllerUnit, IPlayerLobbyUIController
 {
-    public Action<GameMode> OnGameModeButtonPressed;
-    public Action<GameObject> OnGameReadyToStart;
-    public Action<IReadOnlyList<Penosas>> OnLobbySelectedCharacters;
-    public Action<IReadOnlyList<InputDevice>> OnLobbySelectedDevices;
-    public Action<Language> OnLobbySelectedLanguage;
-    public Action<bool> OnLobbySetNewGame;
-    public Action OnCancelSelection;
+    public event Action<GameMode> OnGameModeButtonPressed;
+    public event Action<GameObject> OnGameReadyToStart;
+    public event Action<IReadOnlyList<Penosas>> OnLobbySelectedCharacters;
+    public event Action<IReadOnlyList<InputDevice>> OnLobbySelectedDevices;
+    public event Action<Language> OnLobbySelectedLanguage;
+    public event Action<bool> OnLobbySetNewGame;
+    public event Action OnCancelSelection;
 
     [Header("Chosen Characters")]
     [SerializeField] private List<Penosas> _characterSelectionList;
     public List<Penosas> CharacterSelectionList => _characterSelectionList;
-    
+
     // Vars
     [Space]
     [SerializeField] private LobbyState _lobbyState;
@@ -41,6 +41,8 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 
     private List<CursorPosition> _cursors;
     private DevicePopupPanelUI _devicePanel;
+
+    public GameObject GameObject => gameObject;
 
     public void SelectButton(GameObject buttonToSelect)
     {
@@ -78,7 +80,7 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
     {
         _characterSelectionList = null;
         ResetLobbyState();
-        
+
         _devicePanel.OnDeviceSelectorsAdded -= HandleOnDeviceSelectorsAdded;
         gameObject.SetActive(false);
     }
@@ -104,15 +106,15 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
         _devicePopupCloseButton = _inputControlsPanel.CloseButton;
     }
 
-    private void HandleOnDeviceSelectorsAdded(List<InputDevicesSelector> devices) 
+    private void HandleOnDeviceSelectorsAdded(List<InputDevicesSelector> devices)
     {
-        _deviceSelectors = devices.Where(device => device.gameObject.activeSelf).ToList();
+        _deviceSelectors = devices.Where(device => device.GameObject.activeSelf).ToList();
     }
 
     private void HandleOnInputControlsPanelActivated(bool active)
     {
         var UIController = _parentController as UIController;
-        if(active)
+        if (active)
         {
             UIController.CursorPositions[0].UpdateCursorPosition(_devicePopupCloseButton);
             UIController.CursorPositions[0].LockCursor();
@@ -146,7 +148,7 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
         if (_lobbyState != LobbyState.PlayerSelection)
             return;
 
-        if(HasRepeatedDeviceSelected(out string duplicatedDevice))
+        if (HasRepeatedDeviceSelected(out string duplicatedDevice))
         {
             LanguageSO lang = GetSelectedLanguage();
 
@@ -192,8 +194,8 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
             {
                 if (i == j)
                     continue;
-                
-                if (_deviceSelectors[j].SelectedDevice == selectedDevices[i] && 
+
+                if (_deviceSelectors[j].SelectedDevice == selectedDevices[i] &&
                     !repeateDevices.Contains(_deviceSelectors[j].SelectedDevice))
                 {
                     duplicatedDevice = _deviceSelectors[j].SelectedDevice.displayName;
@@ -232,7 +234,7 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
         else
             OnCancelSelection?.Invoke();
     }
-    
+
     public void ResetSelection()
     {
         _characterSelectionList = new List<Penosas>();
@@ -269,13 +271,13 @@ public class PlayerLobbyUIController : ControllerUnit, IUIController
 
     private void HandleOnCursorMoved(CursorPosition cursor, Vector2 coordinates)
     {
-        if(!_lobbyMessages.gameObject.activeSelf)
+        if (!_lobbyMessages.gameObject.activeSelf)
             _lobbyMessages.gameObject.SetActive(true);
 
-        if(_lobbyState == LobbyState.PlayerSelection)
+        if (_lobbyState == LobbyState.PlayerSelection)
         {
             // Only valid for 2 cursors at screen
-            if(GetGameMode() == GameMode.Multiplayer)
+            if (GetGameMode() == GameMode.Multiplayer)
             {
                 int index = _cursors.IndexOf(cursor);
                 int complementaryCursorIndex = SharedFunctions.GetComplementaryIndex(index);

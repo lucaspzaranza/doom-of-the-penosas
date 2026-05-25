@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31ad69463663f564bacdbddfedaf51bb, type: 3}
   m_Name: Portuguese
   m_EditorClassIdentifier: 
+  _language: 1
   _newGameBtn: Novo Jogo
   _continueBtn: Continuar
   _languageBtn: Idioma

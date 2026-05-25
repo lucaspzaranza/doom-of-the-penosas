@@ -56,5 +56,23 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Doom of The Penosas.sln"
+    "omnisharp.enableRoslynAnalyzers": false,
+    "omnisharp.enableEditorConfigSupport": false,
+    "files.watcherExclude": {
+        "**/Library/**": true,
+        "**/Temp/**": true,
+        "**/obj/**": true,
+        "**/Logs/**": true,
+        "**/build/**": true,
+        "**/Build/**": true
+    },
+    "search.exclude": {
+        "**/Library": true,
+        "**/Temp": true,
+        "**/obj": true,
+        "**/Logs": true,
+        "**/*.meta": true,
+        "**/*.asset": true
+    },
+    "dotnet.defaultSolution": "Doom of The Penosas.slnx"
 }

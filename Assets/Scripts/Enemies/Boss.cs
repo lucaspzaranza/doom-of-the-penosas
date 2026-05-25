@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class Boss : Enemy
 {
-    public static Action OnBossDefeated;
-
     [Tooltip("The life value necessary to activate the Boss Critical Mode.")]
     [SerializeField] protected int _criticalModeLife;
     public int CriticalModeLife => _criticalModeLife;
@@ -106,7 +104,7 @@ public class Boss : Enemy
 
     protected override void Death()
     {
-        OnBossDefeated?.Invoke();
+        EnemyEvents.OnBossDefeated?.Invoke();
         Destroy(gameObject);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class Grenade : Projectile
+public class Grenade : Projectile, IGrenade
 {
     protected Rigidbody2D rb2D;
     protected float YDecreaseOffset = 2f;
@@ -13,7 +13,7 @@ public class Grenade : Projectile
 
     public override void Update()
     {
-        if(SharedFunctions.HitSomething(_collider, InteractableLayerMask, out Collider2D hitObject))
+        if (SharedFunctions.HitSomething(_collider, InteractableLayerMask, out Collider2D hitObject))
         {
             DamageEnemy(ref hitObject);
             Explode();

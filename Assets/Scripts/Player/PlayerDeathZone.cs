@@ -4,13 +4,6 @@ using UnityEngine;
 
 public class PlayerDeathZone : MonoBehaviour
 {
-    private PlayerController _playerController;
-
-    private void OnEnable()
-    {
-        _playerController = FindFirstObjectByType<PlayerController>();
-    }
-
     private void OnCollisionEnter2D(Collision2D other)
     {
         if(other.gameObject.tag == ConstantStrings.PlayerTag)
@@ -22,7 +15,7 @@ public class PlayerDeathZone : MonoBehaviour
                 playerScript.PlayerLostALife();
                 playerScript.Rigidbody2D.linearVelocity = Vector2.zero;
                 if(playerScript.PlayerData.Lives > 0)
-                    playerScript.gameObject.transform.position = _playerController.PlayerStartPosition;
+                    playerScript.gameObject.transform.position = PlayerEvents.GetPlayerStartPosition?.Invoke() ?? Vector2.zero;
             }
         }
     }

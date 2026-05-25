@@ -17,26 +17,18 @@ public class AnimatorHashes
     public readonly int jetCopter = Animator.StringToHash(ConstantStrings.JetCopter);
 }
 
-public class Penosa : DamageableObject
+public class Penosa : DamageableObject, IPlayerCharacter
 {
-    public Action<byte> OnPlayerLostAllLives;
-    public Action<byte> OnPlayerLostAllContinues;
-    public Action<byte> OnPlayerRespawn;
-    public Action<byte> OnPlayerDeath;
-    public Action<int> OnArmorLifeChanged;
-    public static Action OnPlayerInCameraEdge;
-    public static Action OnPlayerOutCameraEdge;
-    public static Action OnResetCameraBounds;
-
-    /// <summary>
-    /// The boolean is to send to the event if you are equipping the rideArmor or ejecting it. <br/>
-    /// True for equipping, False for ejecting.
-    /// </summary>
-    public Action<byte, RideArmor, bool> OnPlayerRideArmor;
+    public event Action<byte> OnPlayerLostAllLives;
+    public event Action<byte> OnPlayerRespawn;
+    public event Action<byte> OnPlayerDeath;
+    public event Action<int> OnArmorLifeChanged;
+    public event Action<byte, IRideArmor, bool> OnPlayerRideArmor;
+    public Action<byte> OnPlayerLostAllContinues { get; set; }
 
     #region Vars
 
-    private UnityEngine.InputSystem.PlayerInput _playerInput;
+    private PlayerInput _playerInput;
     private InputAction _moveAction;
     private InputAction _pauseAction;
     private InputAction _jumpAction;
@@ -46,10 +38,10 @@ public class Penosa : DamageableObject
     private InputAction _fire2Action;
     private InputAction _fire3Action;
 
-    [SerializeField] private PlayerController _playerController;
+    [SerializeField] private IPlayerController _playerController;
     [SerializeField] private LandCharacterProps _landCharacterProps;
-    [SerializeField] private PlayerData _playerData;
-    private Inventory _inventory = null;
+    [SerializeField] private IPlayerData _playerData;
+
 
     [Header("Movement")]
     public float _speed;
@@ -79,9 +71,9 @@ public class Penosa : DamageableObject
     private bool _isInCountdown;
     private bool _canRideArmor;
     private AnimatorHashes _animHashes = new AnimatorHashes();
-    private Kawarimi _kawarimi;
-    private FallFromPlatform _lastPlatformLanded;
-    private FallFromPlatform _platform;
+    private IKawarimi _kawarimi;
+    private IPlatform _lastPlatformLanded;
+    private IPlatform _platform;
 
     [SerializeField] private SpriteRenderer _body;
     [SerializeField] private SpriteRenderer _legs;
@@ -91,15 +83,19 @@ public class Penosa : DamageableObject
     [SerializeField] private RideArmorActivator _rideArmorActivator;
     [SerializeField] private RideArmor _rideArmor;
 
-    private CinemachineCameraSelector _cameraSelector;
+    private ICameraSelector _cameraSelector;
     private CinemachineFramingTransposer _transposer;
     private Penosa _otherPlayer;
-    private GameController _gameCtrl;
-    public GameController GameCtrl => _gameCtrl;
+    //private IGameController _gameCtrl;
+    //public IGameController GameCtrl => _gameCtrl;
+    public IPlayerController PlayerController => _playerController;
 
     #endregion
 
     #region Props
+
+    public Transform Transform => transform;
+    public GameObject GameObject => gameObject;
 
     public bool HasArmor => ArmorLife > PlayerConsts.DeathLife;
 
@@ -120,7 +116,8 @@ public class Penosa : DamageableObject
 
     private bool Vertical => Mathf.Abs(_moveAction.ReadValue<Vector2>().y) > PlayerConsts.InputZeroValue;
 
-    public Inventory Inventory => _inventory;
+    private IInventory _inventory = null;
+    public IInventory Inventory => _inventory;
 
     public bool JetCopterActivated { get; set; }
 
@@ -142,7 +139,7 @@ public class Penosa : DamageableObject
         set => _interactableObject = value;
     }
 
-    public PlayerData PlayerData
+    public IPlayerData PlayerData
     {
         get => _playerData;
         set => _playerData = value;
@@ -152,7 +149,7 @@ public class Penosa : DamageableObject
     {
         get
         {
-            if(_rb == null)
+            if (_rb == null)
                 _rb = GetComponent<Rigidbody2D>();
             return _rb;
         }
@@ -162,7 +159,7 @@ public class Penosa : DamageableObject
 
     public bool IsLeft => _isLeft;
 
-    public bool Is1stPlayer => _playerData.LocalID == GameCtrl.PlayerController.PlayersData[0].LocalID;
+    public bool Is1stPlayer => _playerData.LocalID == PlayerController.PlayersData[0].LocalID;
 
     public bool RideArmorEquipped => _rideArmorEquipped;
 
@@ -190,9 +187,9 @@ public class Penosa : DamageableObject
         _inventory.OnInventorySpecialItemAdded += HandleOnInventorySpecialItemAdded;
         _inventory.OnInventoryCleared += HandleOnInventoryCleared;
 
-        AutoRotate.OnSpinningProjectileEnabled += HandleOnSpinningProjectileEnabled;
+        ProjectileEvents.OnSpinningProjectileEnabled += HandleOnSpinningProjectileEnabled;
 
-        _platform = null;        
+        _platform = null;
     }
 
     private void OnDisable()
@@ -200,7 +197,7 @@ public class Penosa : DamageableObject
         _inventory.OnInventorySpecialItemAdded -= HandleOnInventorySpecialItemAdded;
         _inventory.OnInventoryCleared -= HandleOnInventoryCleared;
 
-        AutoRotate.OnSpinningProjectileEnabled -= HandleOnSpinningProjectileEnabled;
+        ProjectileEvents.OnSpinningProjectileEnabled -= HandleOnSpinningProjectileEnabled;
 
         InputSystemReset();
     }
@@ -210,20 +207,16 @@ public class Penosa : DamageableObject
         _anim = GetComponent<Animator>();
         Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
 
-        _gameCtrl = _playerController.TryToGetGameControllerFromParent();
-
-        if (!_playerController && !GameCtrl) return;
-
-        if (GameCtrl.GameMode == GameMode.Multiplayer)
-            _otherPlayer = _playerController.PlayersData[SharedFunctions.GetComplementaryIndex(PlayerData.LocalID)].Player;
+        if (PlayerController != null && PlayerController.GameMode == GameMode.Multiplayer)
+            _otherPlayer = PlayerController.PlayersData[SharedFunctions.GetComplementaryIndex(PlayerData.LocalID)].Player as Penosa;
     }
 
     void Update()
     {
-        if (_playerController != null && 
-            _playerController.GameIsPaused() 
-            || _isInCountdown 
-            || GameCtrl.GameStatus == GameStatus.Cutscene)
+        if (_playerController != null &&
+            _playerController.GameIsPaused()
+            || _isInCountdown
+            || PlayerController.GameStatus == GameStatus.Cutscene)
             return;
 
         Move();
@@ -244,18 +237,18 @@ public class Penosa : DamageableObject
     {
         base.FixedUpdate();
 
-        _landCharacterProps.IsGrounded = Physics2D.OverlapCircle(_landCharacterProps.GroundCheck.position, 
+        _landCharacterProps.IsGrounded = Physics2D.OverlapCircle(_landCharacterProps.GroundCheck.position,
             PlayerConsts.OverlapCircleDiameter, _landCharacterProps.TerrainLayerMask);
         _landCharacterProps.IsGrounded &= Rigidbody2D.linearVelocity.y == 0;
         _anim.SetBool(_animHashes.isGrounded, _landCharacterProps.IsGrounded);
 
-        bool insideWater = Physics2D.OverlapCircle(_landCharacterProps.GroundCheck.position, 
+        bool insideWater = Physics2D.OverlapCircle(_landCharacterProps.GroundCheck.position,
             PlayerConsts.OverlapCircleDiameter, _landCharacterProps.WaterLayerMask);
-        if(insideWater && !IsBlinking && !RideArmorEquipped)
+        if (insideWater && !IsBlinking && !RideArmorEquipped)
             PlayerLostALife();
 
-        if (_landCharacterProps.IsGrounded && Rigidbody2D.gravityScale != PlayerConsts.DefaultGravity 
-            && !JetCopterActivated && !RideArmorEquipped) 
+        if (_landCharacterProps.IsGrounded && Rigidbody2D.gravityScale != PlayerConsts.DefaultGravity
+            && !JetCopterActivated && !RideArmorEquipped)
             ResetGravity();
 
         _landCharacterProps.IsOnPlatform = SharedFunctions.HitSomething(
@@ -268,7 +261,7 @@ public class Penosa : DamageableObject
             Rigidbody2D.linearVelocity = Vector2.zero;
         }
 
-        if(_landCharacterProps.IsGrounded && !_landCharacterProps.IsOnPlatform && 
+        if (_landCharacterProps.IsGrounded && !_landCharacterProps.IsOnPlatform &&
             _platform != null && HasPlatformIgnored(_platform.Collider))
         {
             Physics2D.IgnoreCollision(_landCharacterProps.CharacterCollider, _platform.Collider, false);
@@ -294,10 +287,10 @@ public class Penosa : DamageableObject
         Physics2D.IgnoreCollision(_landCharacterProps.CharacterCollider, _platform.Collider);
     }
 
-    public void SetPlatform(FallFromPlatform platformToAssign)
+    public void SetPlatform(IPlatform platformToAssign)
     {
         _lastPlatformLanded = _platform;
-        if(_lastPlatformLanded != null)
+        if (_lastPlatformLanded != null)
             Physics2D.IgnoreCollision(_landCharacterProps.CharacterCollider, _lastPlatformLanded.Collider, false);
 
         _platform = platformToAssign;
@@ -307,7 +300,7 @@ public class Penosa : DamageableObject
     {
         PlayerData.Lives--;
         ResetGravity();
-        Death();        
+        Death();
     }
 
     private void InputSystemSetup()
@@ -323,7 +316,7 @@ public class Penosa : DamageableObject
 
         _pauseAction = _playerInput.actions.FindAction(PlayerConsts.PauseMenu);
         _pauseAction.performed += PauseMenu;
-        
+
         _jumpAction = _playerInput.actions.FindAction(PlayerConsts.JumpAction);
         _jumpAction.performed += Jump;
         _jumpAction.canceled += Fall;
@@ -339,13 +332,13 @@ public class Penosa : DamageableObject
         _jumpAction.canceled -= Fall;
     }
 
-    private void HandleOnSpinningProjectileEnabled(AutoRotate projectile)
+    private void HandleOnSpinningProjectileEnabled(ISpinningProjectile projectile)
     {
-        if(_playerData.Character == Penosas.Dolores && _isLeft)
+        if (_playerData.Character == Penosas.Dolores && _isLeft)
             projectile.SetRotationDirection(-1);
     }
 
-    private void HandleOnInventorySpecialItemAdded(InventoryListItem inventoryListItem)
+    private void HandleOnInventorySpecialItemAdded(IInventoryListItem inventoryListItem)
     {
         _playerData.InventoryData.UpdateData(inventoryListItem);
     }
@@ -357,20 +350,21 @@ public class Penosa : DamageableObject
 
     public void PauseMenu(InputAction.CallbackContext context)
     {
-        if(GameCtrl.GameStatus == GameStatus.Cutscene)
+        if (PlayerController.GameStatus == GameStatus.Cutscene)
             return;
 
-        if(_isInCountdown)
+        if (_isInCountdown)
             OnPlayerRespawn?.Invoke(PlayerData.LocalID);
         else if (!_playerController.GameIsPaused())
-            _playerController.OnPlayerPause?.Invoke(true);
+            PlayerController.InvokeOnPlayerPause(true);
     }
-    
+
     public void Death()
     {
         if (JetCopterObject.activeSelf)
         {
-            var jetCopterScript = Inventory.SelectedSlot.Item.GetComponent<JetCopter>();
+            var item = Inventory.SelectedSlot.Item as MonoBehaviour;
+            var jetCopterScript = item.GetComponent<JetCopter>();
             jetCopterScript.SetJetCopterActivation(false);
             jetCopterScript.RemoveItemIfAmountEqualsZero();
         }
@@ -402,7 +396,18 @@ public class Penosa : DamageableObject
         {
             float value = _changespecialItemAction.ReadValue<float>();
             int length = Inventory.Slots.Count;
-            int index = Inventory.Slots.IndexOf(Inventory.SelectedSlot);
+            int index = -1;
+            //int index = Inventory.Slots.IndexOf(Inventory.SelectedSlot);
+
+            for (int i = 0; i < Inventory.Slots.Count; i++)
+            {
+                if (Inventory.Slots[i] == Inventory.SelectedSlot)
+                {
+                    index = i;
+                    break;
+                }
+            }
+
             if (value > 0 && index < length - 1) index++;
             else if (value < 0 && index > 0) index--;
             Inventory.SelectItem(index);
@@ -412,7 +417,7 @@ public class Penosa : DamageableObject
 
     private void UseSpecialItemOrRideArmor()
     {
-        if (!_canRideArmor && !RideArmorEquipped && Inventory.SelectedSlot != null && 
+        if (!_canRideArmor && !RideArmorEquipped && Inventory.SelectedSlot != null &&
             Inventory.SelectedSlot.Item != null && !Inventory.SelectedSlot.Item.ItemInUse)
             Inventory.SelectedSlot.Item.Use();
         else if (_canRideArmor)
@@ -427,23 +432,23 @@ public class Penosa : DamageableObject
             _parachute.GetComponent<Animator>().SetTrigger(ConstantStrings.TurnOff);
     }
 
-    public void RideArmor(RideArmor rideArmorToEquip)
+    public void RideArmor(IRideArmor rideArmorToEquip)
     {
-        if (rideArmorToEquip.Type == RideArmorType.Chickencopter && 
+        if (rideArmorToEquip.Type == RideArmorType.Chickencopter &&
             ((Chickencopter)rideArmorToEquip).ChickencopterAbandoned)
             return;
 
         DeactivateParachuteIfActive();
 
         Rigidbody2D.gravityScale = 0f;
-        if (!_landCharacterProps.IsGrounded && _parachute.activeSelf && 
+        if (!_landCharacterProps.IsGrounded && _parachute.activeSelf &&
             rideArmorToEquip.Type != RideArmorType.Chickencopter)
             Rigidbody2D.gravityScale = PlayerConsts.DefaultGravity;
 
-        _rideArmor = rideArmorToEquip;
+        _rideArmor = rideArmorToEquip as RideArmor;
         _rideArmor.Equip(this, _playerController);
 
-        if ((IsLeft && _rideArmor.transform.localScale.x > 0) || 
+        if ((IsLeft && _rideArmor.transform.localScale.x > 0) ||
         (!IsLeft && _rideArmor.transform.localScale.x < 0))
         {
             _rideArmor.transform.localScale = new Vector2(_rideArmor.transform.localScale.x * -1,
@@ -471,14 +476,14 @@ public class Penosa : DamageableObject
         _landCharacterProps.WallCheckCollider.enabled = value;
         gameObject.GetComponent<BoxCollider2D>().enabled = value;
 
-        if(changeGroundCheck)
+        if (changeGroundCheck)
             _landCharacterProps.GroundCheck.gameObject.SetActive(value);
     }
 
     public void EjectRideArmor()
     {
         // Can eject only ride armors with optional use and with some life
-        if (_rideArmor.Required && _rideArmor.Life > 0) 
+        if (_rideArmor.Required && _rideArmor.Life > 0)
             return;
 
         SetCollidersActivation(true);
@@ -531,18 +536,18 @@ public class Penosa : DamageableObject
 
     private bool DirectionWillSetPlayerApartFromOtherPlayer(float horizontal, float vertical)
     {
-        if(horizontal != 0f && vertical == 0f)
+        if (horizontal != 0f && vertical == 0f)
         {
-            if(_otherPlayer.transform.position.x < transform.position.x && horizontal > 0) // P2 << P1 -> P1 moves right
+            if (_otherPlayer.transform.position.x < transform.position.x && horizontal > 0) // P2 << P1 -> P1 moves right
                 return true;
 
             if (_otherPlayer.transform.position.x > transform.position.x && horizontal < 0) // P1 >> P2 -> P1 moves left
                 return true;
         }
-        else if(horizontal == 0f && vertical != 0f)
+        else if (horizontal == 0f && vertical != 0f)
         {                                                                                 // P1 -> P1 moves up
             if (_otherPlayer.transform.position.y < transform.position.y && vertical > 0) // P2 
-                return true;                                                                   
+                return true;
 
             if (_otherPlayer.transform.position.y > transform.position.y && vertical < 0) // P2
                 return true;                                                              // P1 -> P1 moves down
@@ -599,29 +604,31 @@ public class Penosa : DamageableObject
         return distanceFromCenter > softZoneWidth;
     }
 
+    public void SetCameraSelector(ICameraSelector cameraSelector)
+    {
+        _cameraSelector = cameraSelector;
+    }
+
     private void Move()
     {
         float horizontal = HorizontalInput;
         float vertical = VerticalInput;
 
-        if(_cameraSelector == null)
-            _cameraSelector = FindFirstObjectByType<CinemachineCameraSelector>();
-
         _transposer = _cameraSelector?.GetTransposer();
 
-        if (GameCtrl.GameMode == GameMode.Multiplayer)
+        if (PlayerController.GameMode == GameMode.Multiplayer)
         {
-            if(Is1stPlayer)
+            if (Is1stPlayer)
             {
                 if (!WillPlayerBeVisible(_otherPlayer.transform, horizontal, vertical))
                 {
                     bool p1MovingAway = DirectionWillSetPlayerApartFromOtherPlayer(horizontal, vertical);
 
                     if ((horizontal != 0f || vertical != 0f) && p1MovingAway)
-                        OnPlayerInCameraEdge?.Invoke();
+                        CameraEvents.OnPlayerInCameraEdge?.Invoke();
 
                     else if ((horizontal != 0f || vertical != 0f) && !p1MovingAway)
-                        OnPlayerOutCameraEdge?.Invoke();
+                        CameraEvents.OnPlayerOutCameraEdge?.Invoke();
 
                     if (!WillPlayerBeVisible(transform, horizontal, vertical) && p1MovingAway)
                     {
@@ -630,16 +637,16 @@ public class Penosa : DamageableObject
                     }
 
                     if ((horizontal != 0f || vertical != 0f) && !p1MovingAway && !ArePlayersTooFarApart())
-                        OnResetCameraBounds?.Invoke();
+                        CameraEvents.OnResetCameraBounds?.Invoke();
                 }
                 else
-                { 
-                    if ((horizontal == 0f && vertical == 0f) && 
+                {
+                    if ((horizontal == 0f && vertical == 0f) &&
                         (_otherPlayer.HorizontalInput != 0f || _otherPlayer.VerticalInput != 0f))
-                        OnPlayerOutCameraEdge?.Invoke();
+                        CameraEvents.OnPlayerOutCameraEdge?.Invoke();
 
-                    else if(WillPlayerBeVisible(transform, horizontal, vertical) && PlayerLeftSoftZone())
-                        OnResetCameraBounds?.Invoke();
+                    else if (WillPlayerBeVisible(transform, horizontal, vertical) && PlayerLeftSoftZone())
+                        CameraEvents.OnResetCameraBounds?.Invoke();
                 }
             }
             else if (!WillPlayerBeVisible(transform, horizontal, vertical) &&
@@ -656,12 +663,12 @@ public class Penosa : DamageableObject
         Vector2 direction = new Vector2(horizontal * _speed, Rigidbody2D.linearVelocity.y);
 
         if (!RideArmorEquipped && Rigidbody2D != null &&
-        !SharedFunctions.HitSomething(_landCharacterProps.WallCheckCollider, 
+        !SharedFunctions.HitSomething(_landCharacterProps.WallCheckCollider,
         _landCharacterProps.TerrainWithoutPlatformLayerMask, out Collider2D hitWall))
         {
             Rigidbody2D.linearVelocity = direction;
         }
-        else if(RideArmorEquipped)
+        else if (RideArmorEquipped)
         {
             if (_rideArmor.Type == RideArmorType.Chickencopter)
                 direction = new Vector2(direction.x, vertical * _speed);
@@ -670,7 +677,7 @@ public class Penosa : DamageableObject
             _rideArmor.Aim(vertical);
         }
 
-        if(_landCharacterProps.IsOnPlatform)
+        if (_landCharacterProps.IsOnPlatform)
         {
             bool canFall = CanFallFromPlatform();
 
@@ -684,8 +691,8 @@ public class Penosa : DamageableObject
     }
 
     private void Jump(InputAction.CallbackContext context)
-    {        
-        if (_playerController.GameIsPaused() || GameCtrl.GameStatus != GameStatus.InGame)
+    {
+        if (_playerController.GameIsPaused() || PlayerController.GameStatus != GameStatus.InGame)
             return;
 
         if (RideArmorEquipped)
@@ -737,7 +744,7 @@ public class Penosa : DamageableObject
     public void Flip()
     {
         _isLeft = !_isLeft;
-        if(!RideArmorEquipped)
+        if (!RideArmorEquipped)
         {
             transform.localScale = new Vector2
                 (transform.localScale.x * -1, transform.localScale.y);
@@ -749,7 +756,7 @@ public class Penosa : DamageableObject
                 (_rideArmor.transform.localScale.x * -1, _rideArmor.transform.localScale.y);
         }
 
-        Inventory.transform.localScale = new Vector2(_isLeft ? -1f : 1f, 1f);
+        Inventory.Transform.localScale = new Vector2(_isLeft ? -1f : 1f, 1f);
     }
 
     private void Parachute()
@@ -827,12 +834,12 @@ public class Penosa : DamageableObject
             GameObject newBullet = _playerController.RequestProjectileFromGameController(PlayerData.Current1stShot);
             newBullet.transform.position = currentTransform.position;
             newBullet.transform.rotation = currentRotation;
-            newBullet.transform.localScale = 
+            newBullet.transform.localScale =
                 new Vector2(newBullet.transform.localScale.x * currentDirection, newBullet.transform.localScale.y);
 
             if (PlayerData._1stWeaponLevel == 2) SetShotLevel2VariationRate(ref newBullet);
 
-            newBullet.GetComponent<Projectile>().Speed = _shotspeed * currentDirection;
+            newBullet.GetComponent<IProjectile>().Speed = _shotspeed * currentDirection;
 
             SetAmmo(WeaponType.Primary, PlayerData._1stWeaponAmmoProp - 1);
         }
@@ -868,10 +875,10 @@ public class Penosa : DamageableObject
             // Somente o nível 1 do Tiro 2 terá Pooling, já que o nível 2 só tem uma instância por vez na tela.
             if (PlayerData._2ndWeaponLevel == 1)
                 _currentGrenade = GetProjectileFromPool(PlayerData.Current2ndShot);
-            else if(fire2Level2Logic)
+            else if (fire2Level2Logic)
                 _currentGrenade = Instantiate(PlayerData.Current2ndShot, _secondaryShotSpawnCoordinates.position, Quaternion.identity);
 
-            var currentGrenadeScript = _currentGrenade.GetComponent<Grenade>();
+            var currentGrenadeScript = _currentGrenade.GetComponent<IGrenade>();
             currentGrenadeScript.Speed *= _isLeft ? -1 : 1;
             _currentGrenade.transform.localScale = new Vector2(_currentGrenade.transform.localScale.x * (_isLeft ? -1 : 1),
                                                                                 _currentGrenade.transform.localScale.y);
@@ -880,7 +887,7 @@ public class Penosa : DamageableObject
                 _kawarimi.Penosa = gameObject;
 
             // Se a bomba for nivel 2, precisamos guardar a referência dela para futuras verificações
-            if(PlayerData._2ndWeaponLevel == 1 && _currentGrenade != null) 
+            if (PlayerData._2ndWeaponLevel == 1 && _currentGrenade != null)
                 _currentGrenade = null;
 
             SetAmmo(WeaponType.Secondary, PlayerData._2ndWeaponAmmoProp - 1);
@@ -914,7 +921,7 @@ public class Penosa : DamageableObject
     {
         bool fire1ButtonPressed = _fire1Action.ReadValue<float>() > 0;
 
-        if (fire1ButtonPressed && IsNearInteractableObject && GameCtrl.GameStatus == GameStatus.InGame)
+        if (fire1ButtonPressed && IsNearInteractableObject && PlayerController.GameStatus == GameStatus.InGame)
         {
             Rigidbody2D.linearVelocity = new Vector2(0, Rigidbody2D.linearVelocity.y);
             SetMovementAnimators(0);
@@ -960,7 +967,7 @@ public class Penosa : DamageableObject
     protected override void SetLife(int value)
     {
         _life = Mathf.Clamp(value, 0, PlayerConsts.Max_Life);
-        _playerData.OnLifeChanged?.Invoke(_life);
+        _playerData.FireOnLifeChanged(_life);
 
         if (_life == 0 && !Adrenaline && !IsBlinking)
         {
@@ -973,7 +980,7 @@ public class Penosa : DamageableObject
     {
         if (!IsBlinking || force)
         {
-            if(_kawarimi != null)
+            if (_kawarimi != null)
             {
                 _kawarimi.KawarimiNoJutsu();
                 _kawarimi = null;
@@ -981,19 +988,19 @@ public class Penosa : DamageableObject
             }
 
             if (HasArmor) ArmorLife -= dmg;
-            else if(RideArmorEquipped) RideArmorProp.Life -= dmg;
+            else if (RideArmorEquipped) RideArmorProp.Life -= dmg;
             else Life -= dmg;
 
             StartGlow();
         }
     }
 
-    public void SetPlayerData(PlayerData newPlayerData)
+    public void SetPlayerData(IPlayerData newPlayerData)
     {
         _playerData = newPlayerData;
     }
 
-    public void SetPlayerController(PlayerController controller)
+    public void SetPlayerController(IPlayerController controller)
     {
         _playerController = controller;
     }
@@ -1009,7 +1016,7 @@ public class Penosa : DamageableObject
     {
         _isInCountdown = !val;
 
-        if(_isInCountdown)
+        if (_isInCountdown)
         {
             if (_parachute.activeSelf)
                 _parachute.SetActive(false);
@@ -1020,7 +1027,7 @@ public class Penosa : DamageableObject
             if (Adrenaline)
                 _speed = PlayerConsts.DefaultSpeed;
 
-            if(Inventory.SlotGameObject.activeSelf)
+            if (Inventory.SlotGameObject.activeSelf)
             {
                 Inventory.ResetTemporizerCounter();
                 Inventory.SlotGameObject.SetActive(false);
@@ -1031,8 +1038,10 @@ public class Penosa : DamageableObject
         _legs.gameObject.SetActive(val);
         _landCharacterProps.GroundCheck.gameObject.SetActive(val);
         _landCharacterProps.WallCheckCollider.gameObject.SetActive(val);
-        Inventory.gameObject.SetActive(val);
+        Inventory.GameObject.SetActive(val);
     }
+
+    // public new T GetComponent<T>() => GetComponent<T>();
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -1041,15 +1050,28 @@ public class Penosa : DamageableObject
         {
             _rideArmorActivator = other.GetComponent<RideArmorActivator>();
 
-            if(!_parachute.activeSelf)
+            if (!_parachute.activeSelf)
                 _canRideArmor = true;
 
-            if(_rideArmorActivator.RideArmor.Type == RideArmorType.JetSkinha)
+            if (_rideArmorActivator.RideArmor.Type == RideArmorType.JetSkinha)
                 RideArmor(_rideArmorActivator.RideArmor);
         }
+    }
 
-        if(other.gameObject.CompareTag(ConstantStrings.InteractableTag))
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (!other.gameObject.CompareTag(ConstantStrings.InteractableTag))
+            return;
+
+        if (InteractableObject != null)
         {
+            if (!other.gameObject.Equals(InteractableObject.GameObject))
+                return;
+            return;
+        }
+        else
+        {
+            // print($"pega o {other.gameObject.name}");
             _interactableObject = other.GetComponent<IInteractable>();
             if (InteractableObject != null)
                 IsNearInteractableObject = true;
@@ -1064,7 +1086,7 @@ public class Penosa : DamageableObject
             _rideArmorActivator = null;
         }
 
-        if(other.CompareTag(ConstantStrings.InteractableTag))
+        if (other.CompareTag(ConstantStrings.InteractableTag))
         {
             if (InteractableObject != null)
             {

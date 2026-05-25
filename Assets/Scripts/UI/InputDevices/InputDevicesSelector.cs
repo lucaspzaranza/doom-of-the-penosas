@@ -5,10 +5,9 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UI;
 
-public class InputDevicesSelector : MonoBehaviour
+public class InputDevicesSelector : MonoBehaviour, IInputDevicesSelector
 {
     private static int instancesCounter;
 
@@ -35,6 +34,8 @@ public class InputDevicesSelector : MonoBehaviour
 
     private bool _changeDeviceBtnPressed = false;
     private List<string> _devicesNames = new List<string>();
+
+    public GameObject GameObject => gameObject;
 
     private void OnEnable()
     {

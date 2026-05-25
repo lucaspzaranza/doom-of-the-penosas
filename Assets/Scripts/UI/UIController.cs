@@ -8,16 +8,17 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class UIController : ControllerUnit
+public class UIController : ControllerUnit, IUIController
 {
-    public Action<GameMode> OnUIGameModeSelected;
-    public Action<bool> OnUISetNewGame;
-    public Action<IReadOnlyList<Penosas>> OnUISelectedCharacters;
-    public Action<IReadOnlyList<InputDevice>> OnUISelectedDevices;
-    public Action<Language> OnUISelectedLanguage;
-    public Action<int> OnUIGameSelectedSceneIndex;
-    public Action OnUIBackToMainMenuFromMapaMundi;
-    public Action<byte> OnCountdownIsOver;
+    public event Action<GameMode> OnUIGameModeSelected;
+    public event Action<bool> OnUISetNewGame;
+    public event Action<IReadOnlyList<Penosas>> OnUISelectedCharacters;
+    public event Action<IReadOnlyList<InputDevice>> OnUISelectedDevices;
+    public event Action<Language> OnUISelectedLanguage;
+    public event Action<int> OnUIGameSelectedSceneIndex;
+    public event Action OnUIBackToMainMenuFromMapaMundi;
+    public Action<byte> OnCountdownIsOver { get; set; }
+    // public event Action<byte> OnCountdownIsOver;
 
     [Space]
     [Header("Variables")]
@@ -26,13 +27,13 @@ public class UIController : ControllerUnit
     [Space]
     [Header("UI Controllers")]
     [SerializeField] private PlayerLobbyUIController _playerLobbyUIController;
-    public PlayerLobbyUIController PlayerLobbyUIController => _playerLobbyUIController;
+    public IPlayerLobbyUIController PlayerLobbyUIController => _playerLobbyUIController;
 
     [SerializeField] private PlayerInGameUIController _playerInGameUIController;
-    public PlayerInGameUIController PlayerInGameUIController => _playerInGameUIController;
+    public IPlayerInGameUIController PlayerInGameUIController => _playerInGameUIController;
 
     [SerializeField] private MapaMundiController _mapaMundiController;
-    public MapaMundiController MapaMundiController => _mapaMundiController;
+    public IMapaMundiController MapaMundiController => _mapaMundiController;
 
     [Header("Cursor")]
     [SerializeField] private List<CursorPosition> _cursors;
@@ -53,8 +54,8 @@ public class UIController : ControllerUnit
 
         if (PlayerLobbyUIController != null)
         {
-            if(!PlayerLobbyUIController.gameObject.activeSelf)
-                PlayerLobbyUIController.gameObject.SetActive(true);
+            if (!PlayerLobbyUIController.GameObject.activeSelf)
+                PlayerLobbyUIController.GameObject.SetActive(true);
 
             PlayerLobbyUIController.Setup();
             PlayerLobbyUIController.OnGameModeButtonPressed += HandleLobbyOnGameModeButtonPressed;
@@ -102,7 +103,7 @@ public class UIController : ControllerUnit
     {
         _cursors.ForEach(cursor =>
         {
-            if(cursor != null)
+            if (cursor != null)
                 SetCursorPosition(cursor, cursor.DefaultCursorParent);
         });
     }
@@ -119,7 +120,7 @@ public class UIController : ControllerUnit
     {
         _cursors.ForEach(cursor =>
         {
-            if(cursor.LastPressed != null) 
+            if (cursor.LastPressed != null)
                 SetCursorPosition(cursor, cursor.LastPressed);
         });
     }
@@ -150,7 +151,7 @@ public class UIController : ControllerUnit
     {
         OnUISelectedCharacters?.Invoke(selectedCharacters);
     }
-   
+
     public void InGameUIControllerSetup()
     {
         _playerInGameUIController.Setup();
@@ -190,7 +191,7 @@ public class UIController : ControllerUnit
             var prefab = GetControllerFromPrefabList<PlayerInGameUIController>();
             var instance = Instantiate(prefab, transform);
             _playerInGameUIController = instance.GetComponent<PlayerInGameUIController>();
-            _playerInGameUIController.Setup(_gameSceneCanvas, 
+            _playerInGameUIController.Setup(_gameSceneCanvas,
                 TryToGetGameControllerFromParent().PlayerController.PlayersData);
         }
         else
@@ -228,7 +229,7 @@ public class UIController : ControllerUnit
 
     public void PauseMenuActivation(bool val)
     {
-        if(_pauseMenuInstance == null && val)
+        if (_pauseMenuInstance == null && val)
         {
             _pauseMenuInstance = Instantiate(_pauseMenuPrefab, _gameSceneCanvas.transform);
             return;

@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"omnisharp.enableEditorConfigSupport": false,
+		"dotnet.defaultSolution": "Doom of The Penosas.slnx"
+	}
+}

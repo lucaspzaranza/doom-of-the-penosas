@@ -5,11 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Enemy : DamageableObject
+public class Enemy : DamageableObject, IEnemy
 {
     #region Vars
 
-    public static Action<Enemy> OnEnemyDeath;
     public Action<EnemyState> OnEnemyChangedState;
     public Action OnEnemyFlip;
 
@@ -787,7 +786,7 @@ public class Enemy : DamageableObject
         LayerMask layerMask = WeaponController.WeaponDataList[FrontalWeaponIndex].WeaponGameObjectData.PlayerDetector.RaycastLayer;
 
         if (SharedFunctions.HitSomething(_enemyCollider, layerMask, out Collider2D hit)
-        && hit.TryGetComponent(out damageableObject) && SharedFunctions.DamageableObjectIsPlayer(damageableObject))
+        && hit.TryGetComponent(out damageableObject) && PlayerFunctions.DamageableObjectIsPlayer(damageableObject))
         {
             _detectedPlayer = damageableObject;
             _collidedWithPlayer = true;
@@ -848,7 +847,7 @@ public class Enemy : DamageableObject
     protected virtual void Death() 
     {
         if (FireEventWhenDead)
-            OnEnemyDeath?.Invoke(this);
+            EnemyEvents.OnEnemyDeath?.Invoke(this);
 
         Destroy(gameObject);
     }
